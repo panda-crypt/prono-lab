@@ -1,0 +1,100 @@
+22 Aug 2026|17:30|Udinese|Como|1-1
+22 Aug 2026|17:30|Inter|Monza|4-1
+22 Aug 2026|19:45|Parma|Cagliari|0-1
+22 Aug 2026|19:45|Genoa|Napoli|0-2
+23 Aug 2026|17:30|Venezia|Lecce|0-2
+23 Aug 2026|17:30|Frosinone|Juventus|0-1
+23 Aug 2026|19:45|Torino|AC Milan|1-2
+23 Aug 2026|19:45|Atalanta|Sassuolo|2-1
+24 Aug 2026|17:30|Bologna|Lazio|0-1
+24 Aug 2026|19:45|Roma|Fiorentina|4-0
+28 Aug 2026|19:45|AC Milan|Venezia|2-0
+29 Aug 2026|17:30|Sassuolo|Torino|2-1
+29 Aug 2026|17:30|Monza|Udinese|2-3
+29 Aug 2026|17:30|Fiorentina|Frosinone|0-3
+29 Aug 2026|19:45|Juventus|Parma|2-0
+30 Aug 2026|17:30|Napoli|Como|1-2
+30 Aug 2026|19:45|Lazio|Genoa|1-0
+30 Aug 2026|19:45|Cagliari|Inter|0-1
+31 Aug 2026|17:30|Lecce|Roma|0-4
+31 Aug 2026|19:45|Atalanta|Bologna|1-0
+4 Sep 2026|19:45|Genoa|Como|1-4
+5 Sep 2026|14:00|Fiorentina|Torino|1-2
+5 Sep 2026|17:00|Inter|Napoli|3-2
+5 Sep 2026|19:45|Roma|Atalanta|2-1
+6 Sep 2026|14:00|Parma|Monza|1-1
+6 Sep 2026|14:00|Frosinone|Venezia|3-2
+6 Sep 2026|17:00|Bologna|Sassuolo|2-2
+6 Sep 2026|19:45|Juventus|AC Milan|1-1
+7 Sep 2026|17:30|Cagliari|Lecce|1-0
+7 Sep 2026|19:45|Udinese|Lazio|1-2
+11 Sep 2026|19:45|Venezia|Fiorentina|2-4
+12 Sep 2026|14:00|Genoa|Frosinone|1-1
+12 Sep 2026|17:00|Lazio|AC Milan|2-2
+12 Sep 2026|19:45|Atalanta|Cagliari|1-2
+13 Sep 2026|14:00|Lecce|Monza|3-2
+13 Sep 2026|17:00|Napoli|Bologna|1-0
+13 Sep 2026|19:45|Sassuolo|Juventus|3-2
+14 Sep 2026|17:30|Torino|Roma|0-2
+14 Sep 2026|17:30|Como|Parma|2-1
+14 Sep 2026|19:45|Inter|Udinese|5-3
+18 Sep 2026|19:45|Monza|Sassuolo|2-1
+19 Sep 2026|14:00|Udinese|Cagliari|0-1
+19 Sep 2026|14:00|Bologna|Torino|1-1
+19 Sep 2026|17:00|Roma|Inter|2-2
+19 Sep 2026|19:45|Venezia|Lazio|0-2
+20 Sep 2026|11:30|Fiorentina|Napoli|1-1
+20 Sep 2026|14:00|Parma|Genoa|2-1
+20 Sep 2026|14:00|Frosinone|Como|2-0
+20 Sep 2026|17:00|Juventus|Atalanta|2-0
+20 Sep 2026|19:45|AC Milan|Lecce|3-0
+10 Oct 2026|14:00|Genoa|Fiorentina|2-1
+10 Oct 2026|17:00|Inter|Parma|3-0
+10 Oct 2026|19:45|Napoli|Frosinone|3-0
+11 Oct 2026|11:30|Como|Roma|0-0
+11 Oct 2026|14:00|Lecce|Bologna|1-2
+11 Oct 2026|14:00|Lazio|Monza|3-1
+11 Oct 2026|17:00|Sassuolo|AC Milan|1-1
+11 Oct 2026|19:45|Cagliari|Juventus|1-1
+12 Oct 2026|17:30|Atalanta|Venezia|3-1
+12 Oct 2026|19:45|Torino|Udinese|2-1
+16 Oct 2026|19:45|Frosinone|Sassuolo|4-2
+17 Oct 2026|14:00|Venezia|Napoli|1-0
+17 Oct 2026|17:00|Bologna|Inter|1-3
+17 Oct 2026|19:45|Roma|Genoa|2-0
+18 Oct 2026|11:30|Udinese|Lecce|0-3
+18 Oct 2026|14:00|Fiorentina|Como|1-3
+18 Oct 2026|17:00|AC Milan|Atalanta|3-2
+18 Oct 2026|19:45|Juventus|Lazio|0-3
+19 Oct 2026|17:30|Monza|Cagliari|4-0
+19 Oct 2026|19:45|Parma|Torino|0-3
+23 Oct 2026|19:45|Torino|Monza|
+24 Oct 2026|14:00|Como|Sassuolo|
+24 Oct 2026|14:00|Cagliari|Bologna|
+24 Oct 2026|17:00|Napoli|Roma|
+24 Oct 2026|19:45|Lazio|Parma|
+25 Oct 2026|11:30|Inter|Fiorentina|
+25 Oct 2026|14:00|Genoa|Venezia|
+25 Oct 2026|14:00|Atalanta|Frosinone|
+25 Oct 2026|17:00|Lecce|Juventus|
+25 Oct 2026|19:45|Udinese|AC Milan|
+27 Oct 2026|17:30|Sassuolo|Lazio|
+27 Oct 2026|19:45|Torino|Como|
+27 Oct 2026|19:45|Roma|Cagliari|
+28 Oct 2026|17:30|Venezia|Inter|
+28 Oct 2026|17:30|Parma|Udinese|
+28 Oct 2026|17:30|AC Milan|Bologna|
+28 Oct 2026|19:45|Monza|Napoli|
+28 Oct 2026|19:45|Genoa|Juventus|
+29 Oct 2026|17:30|Frosinone|Lecce|
+29 Oct 2026|19:45|Fiorentina|Atalanta|
+31 Oct 2026|14:00|Bologna|Monza|
+31 Oct 2026|17:00|Udinese|Roma|
+31 Oct 2026|19:45|AC Milan|Inter|
+1 Nov 2026|11:30|Como|Venezia|
+1 Nov 2026|14:00|Lazio|Cagliari|
+1 Nov 2026|14:00|Frosinone|Torino|
+1 Nov 2026|17:00|Lecce|Genoa|
+1 Nov 2026|19:45|Juventus|Napoli|
+2 Nov 2026|17:30|Sassuolo|Fiorentina|
+2 Nov 2026|19:45|Atalanta|Parma|

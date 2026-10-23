@@ -1,0 +1,77 @@
+name: Compiler l'APK
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - "app.html"
+      - "build_app.py"
+      - "android/**"
+      - ".github/workflows/build-apk.yml"
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  apk:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: "17"
+
+      - uses: android-actions/setup-android@v3
+
+      - uses: gradle/actions/setup-gradle@v4
+        with:
+          gradle-version: "8.7"
+
+      - name: Préparer la page de l'application
+        run: |
+          python3 build_app.py "https://raw.githubusercontent.com/${{ github.repository }}/main/data.json"
+          mkdir -p android/app/src/main/assets
+          cp dist/index.html android/app/src/main/assets/index.html
+
+      - name: Clé de signature
+        env:
+          KEYSTORE_B64: ${{ secrets.KEYSTORE_B64 }}
+          KS_PASS: ${{ secrets.KS_PASS }}
+        run: |
+          if [ -n "$KEYSTORE_B64" ] && [ -n "$KS_PASS" ]; then
+            echo "$KEYSTORE_B64" | base64 -d > android/release.jks
+            echo "KS_PASS=$KS_PASS" >> "$GITHUB_ENV"
+          else
+            echo "::warning::Secrets KEYSTORE_B64/KS_PASS absents : clé temporaire (il faudra désinstaller avant chaque mise à jour de l'APK)."
+            keytool -genkeypair -keystore android/release.jks -alias pronolab -keyalg RSA -keysize 2048 -validity 10000 \
+              -storepass pronolab -keypass pronolab -dname "CN=Prono Lab, C=FR"
+            echo "KS_PASS=pronolab" >> "$GITHUB_ENV"
+          fi
+
+      - name: Compiler
+        working-directory: android
+        env:
+          VERSION_CODE: ${{ github.run_number }}
+        run: gradle assembleRelease --no-daemon --stacktrace
+
+      - name: Renommer
+        run: cp android/app/build/outputs/apk/release/app-release.apk prono-lab.apk
+
+      - uses: actions/upload-artifact@v4
+        with:
+          name: prono-lab-apk
+          path: prono-lab.apk
+
+      - name: Publier la version
+        uses: softprops/action-gh-release@v2
+        with:
+          tag_name: v2.${{ github.run_number }}
+          name: Prono Lab 2.${{ github.run_number }}
+          body: |
+            Téléchargez **prono-lab.apk** ci-dessous depuis votre téléphone Android, puis ouvrez le fichier pour l'installer.
+            Les données (matchs, cotes, statistiques) se mettent à jour toutes seules depuis internet : pas besoin de réinstaller pour ça.
+          files: prono-lab.apk
+          make_latest: true

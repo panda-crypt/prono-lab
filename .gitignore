@@ -1,0 +1,9 @@
+dist/
+android/.gradle/
+android/build/
+android/app/build/
+android/app/src/main/assets/
+android/release.jks
+android/local.properties
+*.apk
+__pycache__/
