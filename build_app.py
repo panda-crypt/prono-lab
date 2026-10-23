@@ -3,13 +3,16 @@
   python3 build_app.py <remote_data_url>   -> dist/index.html (APK / standalone, fetches updates from the URL)
   python3 build_app.py                      -> dist/index.html without online updates
 """
-import sys, pathlib
+import os, sys, pathlib
 ROOT = pathlib.Path(__file__).parent
 remote = sys.argv[1] if len(sys.argv) > 1 else ""
 html = (ROOT / "app.html").read_text(encoding="utf-8")
 data = (ROOT / "data.json").read_text(encoding="utf-8").replace("</", "<\\/")
 assert "/*DATA*/null" in html and '"/*REMOTE*/"' in html
 html = html.replace("/*DATA*/null", data, 1)
+build = os.environ.get("VERSION_CODE", "0")
+assert "/*BUILD*/0" in html
+html = html.replace("/*BUILD*/0", str(int(build)), 1)
 if remote:
     html = html.replace('"/*REMOTE*/"', '"' + remote + '"', 1)
 out = ROOT / "dist"

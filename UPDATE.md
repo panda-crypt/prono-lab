@@ -25,7 +25,10 @@ Les noms d'équipes doivent être **exactement** ceux de statz.ai (ceux déjà p
    - Un match reporté : supprimer sa ligne s'il n'a plus de date.
 2. **xG.** Lire `https://statz.ai/competitions/<slug>/xg` (même méthode) et mettre à jour `xg` et `xgAsOf` dans `raw/meta.py`.
 3. **Cotes.** Chercher les cotes 1/N/2 des matchs à venir (par ex. les articles hebdomadaires de rg.org « … picks / odds »,
-   oddscalendar.com, ou tout comparateur lisible). Une seule source par match ; noter le bookmaker.
+   oddscalendar.com, ou tout comparateur lisible). Une seule source par marché et par match ; noter le bookmaker.
+   Quand elles sont disponibles, ajouter aussi plus/moins de 2,5 buts et « les deux équipes marquent » :
+   `("Domicile","Extérieur"): {"1x2": ("Bookmaker", [c1, cN, c2]), "ou": ("Bookmaker", [plus, moins]), "btts": ("Bookmaker", [oui, non])}`
+   (l'ancienne forme `("Bookmaker", [c1, cN, c2])` reste acceptée). Préférer la meilleure cote disponible.
    Cotes américaines : `+150` → 2,50 ; `-200` → 1,50 (formule : `+X` → 1 + X/100, `-X` → 1 + 100/X).
    Supprimer les cotes des matchs déjà joués (le script les ignore de toute façon).
 4. **Construire et vérifier.**

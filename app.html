@@ -214,6 +214,7 @@ table{border-collapse:collapse;width:100%}
       <div class="fresh"><span id="freshTxt">Données…</span><br><button type="button" id="refreshBtn">Mettre à jour</button></div>
     </div>
     <div class="chips" id="leagueChips" role="group" aria-label="Championnat"></div>
+    <p id="apkBanner" hidden style="margin:0 0 10px;font-size:13px">Une nouvelle version de l'application est disponible : <a id="apkLink" href="#" style="color:inherit;font-weight:600" target="_blank" rel="noopener">télécharger la mise à jour</a></p>
   </div>
 </header>
 
@@ -240,8 +241,9 @@ table{border-collapse:collapse;width:100%}
       <div class="stack">
         <p class="hint">Un pari a de la valeur quand sa probabilité multipliée par la cote dépasse 1. Par prudence, la valeur est calculée avec une probabilité qui mélange le modèle (60 %) et le marché (40 %) : les bookmakers sont bien informés, et un modèle seul surestime souvent ses chances. Seuls les matchs dont les cotes ont été relevées apparaissent ici.</p>
         <div class="row">
-          <label class="check"><input type="checkbox" id="vOnly" checked> Seulement les paris à valeur (≥ 4 %)</label>
+          <label class="check"><input type="checkbox" id="vOnly" checked> Seulement les paris à valeur (≥ 4 %, cote ≤ 6)</label>
         </div>
+        <p id="vSummary" style="margin:0"></p>
         <div class="panel scroll" style="padding:0 8px"><table class="vtable"><thead><tr>
           <th class="l">Match</th><th class="l">Pari</th><th>Cote</th><th>Modèle</th><th>Marché</th><th>Valeur prudente</th><th>Mise conseillée</th><th></th></tr></thead>
           <tbody id="vBody"></tbody></table></div>
@@ -275,6 +277,13 @@ table{border-collapse:collapse;width:100%}
               <label class="field"><span>2</span><input type="number" id="ao2" step="0.01" min="1.01" inputmode="decimal" placeholder="—"></label>
             </div>
             <div class="odds3" id="aEdges"></div>
+            <div class="odds3" style="grid-template-columns:repeat(2,minmax(0,1fr))">
+              <label class="field"><span>Plus de 2,5</span><input type="number" id="aoO" step="0.01" min="1.01" inputmode="decimal" placeholder="—"></label>
+              <label class="field"><span>Moins de 2,5</span><input type="number" id="aoU" step="0.01" min="1.01" inputmode="decimal" placeholder="—"></label>
+              <label class="field"><span>Les 2 marquent : oui</span><input type="number" id="aoY" step="0.01" min="1.01" inputmode="decimal" placeholder="—"></label>
+              <label class="field"><span>Les 2 marquent : non</span><input type="number" id="aoNo" step="0.01" min="1.01" inputmode="decimal" placeholder="—"></label>
+            </div>
+            <div class="odds3" id="aEdges2" style="grid-template-columns:repeat(2,minmax(0,1fr))"></div>
             <p class="hint" id="aOddsSrc"></p>
           </div>
         </aside>
@@ -325,9 +334,10 @@ table{border-collapse:collapse;width:100%}
             <label class="field"><span>Bankroll de départ (€)</span><input type="number" id="sBank" min="0" step="10" inputmode="decimal"></label>
             <label class="field"><span>Limite de mises / 7 jours (€)</span><input type="number" id="sWeek" min="0" step="5" inputmode="decimal"></label>
             <label class="field"><span>Méthode de mise</span><select id="sMethod"><option value="kelly">Kelly fractionné (¼)</option><option value="flat">Mise fixe (1 %)</option></select></label>
-            <label class="field"><span>Mise maximale (% bankroll)</span><input type="number" id="sMax" min="0.5" max="10" step="0.5" inputmode="decimal"></label>
+            <label class="field"><span>Mise maximale par pari (% bankroll)</span><input type="number" id="sMax" min="0.5" max="10" step="0.5" inputmode="decimal"></label>
+            <label class="field"><span>Exposition maximale (% bankroll en jeu)</span><input type="number" id="sExpo" min="1" max="50" step="1" inputmode="decimal"></label>
           </div>
-          <p class="hint" style="margin-top:10px">Kelly fractionné : la mise grandit avec l'écart de valeur, divisée par 4 par prudence, plafonnée au maximum choisi. Elle utilise une probabilité prudente (60 % modèle, 40 % marché).</p>
+          <p class="hint" style="margin-top:10px">Kelly fractionné : la mise grandit avec l'écart de valeur, divisée par 4 par prudence, plafonnée par pari et pour l'ensemble des paris en cours. Elle utilise une probabilité prudente (60 % modèle, 40 % marché). Pour une bankroll de 100 €, le plafond d'exposition de 15 % limite à 15 € la somme des paris en attente.</p>
         </div>
         <div>
           <div class="row" style="justify-content:space-between;margin-bottom:8px"><p class="label" style="margin:0">Historique</p>
@@ -337,6 +347,7 @@ table{border-collapse:collapse;width:100%}
         <div class="panel">
           <p class="label">Mes paris sont-ils bien estimés ?</p>
           <p class="hint" id="pCalibTxt"></p>
+          <p class="hint" style="margin-top:8px"><strong>Le CLV, meilleur indicateur.</strong> Notez la cote juste avant le coup d'envoi (« cote à la clôture »). Si vous obtenez régulièrement une meilleure cote que celle de la clôture, vous battez le marché, même pendant une mauvaise série. Les résultats mettent des centaines de paris à se stabiliser ; le CLV se lit en quelques dizaines.</p>
         </div>
         <div class="row"><button class="btn ghost sm" id="pExport" type="button">Copier mes paris (sauvegarde)</button><button class="btn ghost sm" id="pImport" type="button">Restaurer une sauvegarde</button></div>
       </div>
@@ -361,14 +372,19 @@ table{border-collapse:collapse;width:100%}
           </div>
         </div>
         <div class="panel">
+          <p class="label">Annoncé ou observé, par marché</p>
+          <table class="mk"><thead><tr><th>Marché</th><th class="r">Annoncé</th><th class="r">Observé</th><th class="r"></th></tr></thead><tbody id="fMarkets"></tbody></table>
+          <p class="hint" style="margin-top:8px">« Dans la marge » : l'écart est inférieur à ce que le hasard produit sur ce nombre de matchs (deux écarts-types).</p>
+        </div>
+        <div class="panel">
           <p class="label">Ce que ce test ne dit pas</p>
-          <p class="hint">Battre le hasard n'est pas battre les bookmakers. Sans historique de cotes, seule votre page « Mes paris » mesure la rentabilité réelle. Comptez au moins une centaine de paris avant de conclure quoi que ce soit.</p>
+          <p class="hint">Battre le hasard n'est pas battre les bookmakers. Sans historique de cotes, seule votre page « Mes paris » mesure la rentabilité réelle, et le CLV la mesure plus vite. Les réglages du modèle ont été choisis sur ces mêmes matchs : le score réel sur les matchs futurs sera un peu moins bon. Comptez au moins une centaine de paris avant de conclure.</p>
         </div>
       </div>
     </section>
 
     <footer class="foot">
-      <p><strong>Méthode.</strong> Pour chaque équipe : xG et buts de la saison (les matchs récents comptent davantage, la force des adversaires est prise en compte), mélangés avec la saison 2025-26 (poids équivalent à 16 matchs, qui s'efface à mesure que la saison avance), plus l'avantage du terrain mesuré dans chaque championnat. Les bilans domicile/extérieur de chaque équipe sont affichés mais pas utilisés : sur 3 ou 4 matchs, ils dégradaient les prévisions lors des tests. Probabilités par loi de Poisson corrigée (Dixon-Coles).</p>
+      <p><strong>Méthode.</strong> Pour chaque équipe : xG et buts de la saison (les matchs récents comptent davantage, la force des adversaires est prise en compte), mélangés avec la saison 2025-26 (poids équivalent à 16 matchs, qui s'efface à mesure que la saison avance), plus l'avantage du terrain mesuré dans chaque championnat. Les bilans domicile/extérieur de chaque équipe sont affichés mais pas utilisés : sur 3 ou 4 matchs, ils dégradaient les prévisions lors des tests. Probabilités par loi de Poisson corrigée (Dixon-Coles, ρ = −0,10 mesuré sur la saison).</p>
       <p><strong>Jouer comporte des risques</strong> : endettement, isolement, dépendance. Pour être aidé : 09 74 75 13 13 (Joueurs Info Service, appel non surtaxé). Interdit aux moins de 18 ans.</p>
       <p id="srcList"></p>
     </footer>
@@ -408,10 +424,19 @@ const DAYS = ["dim.","lun.","mar.","mer.","jeu.","ven.","sam."], MONTHS = ["janv
 const pDate = s => { const [d,t] = s.split("T"); const [y,m,dd] = d.split("-").map(Number); const [hh,mm] = t.split(":").map(Number); return new Date(y, m-1, dd, hh, mm); };
 const fmtDay = s => { const d = pDate(s); return `${DAYS[d.getDay()]} ${d.getDate()} ${MONTHS[d.getMonth()]}`; };
 const fmtTime = s => s.slice(11,16).replace(":", "h");
-const nowStr = () => { const d = new Date(); const p = n => String(n).padStart(2,"0"); return `${d.getFullYear()}-${p(d.getMonth()+1)}-${p(d.getDate())}T${p(d.getHours())}:${p(d.getMinutes())}`; };
+// Toutes les heures des données sont à l'heure de Paris : on calcule « maintenant » à Paris, quel que soit le fuseau du téléphone.
+const parisStr = ms => {
+  try {
+    const f = new Intl.DateTimeFormat("fr-FR", { timeZone:"Europe/Paris", year:"numeric", month:"2-digit", day:"2-digit", hour:"2-digit", minute:"2-digit", hourCycle:"h23" }).formatToParts(new Date(ms));
+    const g = t => f.find(x => x.type === t).value;
+    return `${g("year")}-${g("month")}-${g("day")}T${g("hour")}:${g("minute")}`;
+  } catch { const d = new Date(ms); const p = n => String(n).padStart(2,"0"); return `${d.getFullYear()}-${p(d.getMonth()+1)}-${p(d.getDate())}T${p(d.getHours())}:${p(d.getMinutes())}`; }
+};
+const nowStr = () => parisStr(Date.now());
+const hoursSince = s => (pDate(nowStr()) - pDate(s.length === 10 ? s + "T12:00" : s)) / 36e5;
 
 /* ================= Modèle ================= */
-const K_PRIOR = 16, DECAY = 0.88, RHO = -0.08, MAXG = 10, PROMO = {att:0.8, def:1.22}, K_SPLIT = 10;
+const K_PRIOR = 16, DECAY = 0.88, RHO = -0.10, MAXG = 10, K_MU = 10, PROMO = {att:0.8, def:1.22}, K_SPLIT = 10;
 const USE_SPLIT = false;   // bilans dom./ext. propres à l'équipe : affichés, pas utilisés (trop bruités sur 3-4 matchs, test du 24/10/2026)
 const prudent = (p, mp) => mp == null ? p : 0.6*p + 0.4*mp;
 
@@ -423,7 +448,7 @@ function computeLeague(L, opts = {}){
   let sh = 0, sa = 0; played.forEach(m => { sh += m.s[0]; sa += m.s[1]; });
   const ratioRaw = n ? (sh / Math.max(sa, 1)) : 1.22;
   const ratio = (ratioRaw * n + 1.22 * 60) / (n + 60);
-  const muAll = n >= 20 ? (sh + sa) / (2*n) : (L.priorMu * 20 + (n ? (sh+sa)/(2*n) : L.priorMu) * n) / (20 + n);
+  const muAll = ((sh + sa) + 2*L.priorMu*K_MU) / (2*n + 2*K_MU);   // moyenne de buts du championnat, lissée par l'équivalent de 10 matchs de la saison passée
   const hF = 2*ratio/(1+ratio), aF = 2/(1+ratio);
 
   const T = {};
@@ -556,22 +581,70 @@ function goalsPick(r){
 }
 
 /* ================= Valeur et mises ================= */
-function marketProbs(o){ const inv = o.map(x => 1/x), s = inv.reduce((a,b)=>a+b,0); return inv.map(x => x/s); }
-function settings(){ return Object.assign({ bank:100, week:30, method:"kelly", max:3 }, LS.get("pl_settings", {})); }
-function stakeFor(pModel, pMarket, odds){
-  const s = settings(), bank = currentBank();
-  const p = prudent(pModel, pMarket);
-  const edge = p*odds - 1;
-  if (edge <= 0 || bank <= 0) return { stake:0, edge };
-  let st = s.method === "flat" ? bank * 0.01 : bank * ((p*odds - 1)/(odds - 1)) * 0.25;
-  st = Math.min(st, bank * s.max/100);
-  return { stake: Math.max(0, Math.round(st*2)/2), edge };
+/* Marge du bookmaker retirée par la méthode « puissance » : la marge pèse davantage sur les outsiders,
+   la simple normalisation proportionnelle surestime donc leurs chances (biais favori-outsider). */
+function marketProbs(o){
+  const inv = o.map(x => 1/x), s0 = inv.reduce((a,b)=>a+b,0);
+  if (s0 <= 1) return inv.map(x => x/s0);
+  let lo = 1, hi = 4;
+  for (let i = 0; i < 60; i++){ const k = (lo+hi)/2, s = inv.reduce((a,x)=>a+Math.pow(x,k),0); if (s > 1) lo = k; else hi = k; }
+  const k = (lo+hi)/2; return inv.map(x => Math.pow(x, k));
+}
+function settings(){ return Object.assign({ bank:100, week:30, method:"kelly", max:3, expo:15 }, LS.get("pl_settings", {})); }
+const MAX_ODDS = 6, MIN_P = 0.2, VALUE_MIN = 0.04, STALE_H = 48;
+const isValue = x => x.edge >= VALUE_MIN && x.p >= MIN_P && x.o <= MAX_ODDS;
+function pendingStake(){ return bets().filter(x => x.status === "pending").reduce((s,x)=>s+x.stake,0); }
+const kellyFrac = (p, o) => (p*o - 1)/(o - 1);
+function stakeFor(pModel, pMarket, odds, opts = {}){
+  const s = settings(), bank = currentBank(), pend = pendingStake() + (opts.extra || 0);
+  const p = prudent(pModel, pMarket), edge = p*odds - 1, kf = kellyFrac(p, odds);
+  const res = { stake:0, edge, kf, why:"" };
+  if (edge < VALUE_MIN) { res.why = edge <= 0 ? "pas de valeur" : "valeur trop faible"; return res; }
+  if (odds > MAX_ODDS) { res.why = `cote > ${MAX_ODDS} : trop incertain`; return res; }
+  if (pModel < MIN_P) { res.why = "probabilité trop faible"; return res; }
+  if (opts.stale) { res.why = "cotes à revérifier"; return res; }
+  if (bank - pend <= 0) { res.why = "bankroll déjà engagée"; return res; }
+  let st = s.method === "flat" ? bank * 0.01 : bank * kf * 0.25;
+  st = Math.min(st, bank * s.max/100, bank * s.expo/100 - pend, bank - pend);
+  if (st < 0.5) { res.why = `exposition max. (${s.expo} %) atteinte`; return res; }
+  res.stake = Math.round(st*2)/2; return res;
+}
+/* Toutes les issues cotées d'un match : 1N2, plus/moins de 2,5 buts, les deux marquent */
+function matchOutcomes(m, r){
+  const out = [], od = m.odds; if (!od) return out;
+  const add = (keys, odds, probs, bk) => { if (!odds || odds.length !== keys.length || odds.some(x => !(x > 1))) return; const mp = marketProbs(odds); keys.forEach((k,i) => out.push({ k, o: odds[i], p: probs[i], mp: mp[i], bk, at: od.at })); };
+  if (od.o) add(["1","N","2"], od.o, [r.pH, r.pD, r.pA], od.bk);
+  if (od.ou) add(["O25","U25"], od.ou.o, [r.o25, 1-r.o25], od.ou.bk);
+  if (od.btts) add(["BY","BN"], od.btts.o, [r.btts, 1-r.btts], od.btts.bk);
+  return out;
+}
+/* Un seul pari par match (les issues d'un même match sont liées), mises cumulées sous le plafond d'exposition */
+function planMatches(list){
+  const rows = [];
+  list.forEach(({ lg, m, C }) => {
+    const r = predict(C, m.h, m.a), outs = matchOutcomes(m, r);
+    const stale = outs.length > 0 && hoursSince(outs[0].at) > STALE_H;
+    outs.forEach(x => { Object.assign(x, stakeFor(x.p, x.mp, x.o, { stale })); x.lg = lg; x.m = m; x.stale = stale; x.H = C.T[m.h].name; x.A = C.T[m.a].name; });
+    const best = outs.filter(x => x.stake > 0).sort((a,b) => b.kf - a.kf)[0];
+    outs.forEach(x => { if (x.stake > 0 && x !== best){ x.stake = 0; x.why = "un seul pari par match"; } x.best = x === best; rows.push(x); });
+  });
+  let extra = 0;
+  rows.filter(x => x.best).sort((a,b) => b.kf - a.kf).forEach(x => {
+    const st = stakeFor(x.p, x.mp, x.o, { stale: x.stale, extra });
+    x.stake = st.stake; if (!st.stake) { x.why = st.why; x.best = false; } extra += x.stake;
+  });
+  return rows;
 }
 
 /* ================= Paris ================= */
 const bets = () => LS.get("pl_bets", []);
 const saveBets = b => { LS.set("pl_bets", b); };
-function findMatch(b){ const L = DATA.leagues[b.lg]; return L && L.matches.find(m => m.h === b.h && m.a === b.a && m.d.slice(0,10) === b.d.slice(0,10)); }
+function findMatch(b){
+  const L = DATA.leagues[b.lg]; if (!L) return null;
+  // chaque affiche n'a lieu qu'une fois par saison : un match reporté est retrouvé à sa nouvelle date
+  return L.matches.find(m => m.h === b.h && m.a === b.a && m.d.slice(0,10) === b.d.slice(0,10))
+      || L.matches.find(m => m.h === b.h && m.a === b.a && m.s && m.d.slice(0,10) >= b.d.slice(0,10));
+}
 function autoSettle(){
   const b = bets(); let changed = 0;
   b.forEach(x => {
@@ -588,13 +661,14 @@ function betStats(){
   const b = bets(), set = b.filter(x => x.status==="won"||x.status==="lost");
   const staked = set.reduce((s,x)=>s+x.stake,0), profit = set.reduce((s,x)=>s+profitOf(x),0);
   const wins = set.filter(x=>x.status==="won").length;
-  const weekAgo = new Date(Date.now() - 7*864e5);
-  const week = b.filter(x => pDate(x.createdAt) >= weekAgo).reduce((s,x)=>s+x.stake,0);
+  const weekAgo = parisStr(Date.now() - 7*864e5);
+  const week = b.filter(x => x.createdAt >= weekAgo).reduce((s,x)=>s+x.stake,0);
+  const cl = b.filter(x => x.close > 1), clv = cl.length ? cl.reduce((s,x)=>s+(x.odds/x.close-1),0)/cl.length : null;
   const chrono = set.slice().sort((a,c)=> (a.settledAt||a.d) < (c.settledAt||c.d) ? -1 : 1);
   let streak = 0; for (let i = chrono.length-1; i >= 0 && chrono[i].status === "lost"; i--) streak++;
   let bank = settings().bank, peak = bank, dd = 0; chrono.forEach(x => { bank += profitOf(x); peak = Math.max(peak, bank); dd = Math.max(dd, (peak-bank)/peak); });
   const expW = set.reduce((s,x)=>s+(x.p||0),0);
-  return { n:b.length, settled:set.length, pending:b.filter(x=>x.status==="pending").length, staked, profit, wins, roi: staked ? profit/staked : 0, week, streak, dd, expW };
+  return { n:b.length, settled:set.length, pending:b.filter(x=>x.status==="pending").length, staked, profit, wins, roi: staked ? profit/staked : 0, week, streak, dd, expW, clv, nclv: cl.length };
 }
 
 /* ================= Fiabilité (test rétroactif) ================= */
@@ -616,7 +690,7 @@ function backtest(){
       const pr = [r.pH, r.pD, r.pA];
       const brier = pr.reduce((s,p,i)=>s+(p-(i===out?1:0))**2,0);
       const fav = pr.indexOf(Math.max(...pr));
-      recs.push({ lg, pr, out, brier, ok: fav === out, o25: r.o25, over: m.s[0]+m.s[1] > 2 });
+      recs.push({ lg, pr, out, brier, ok: fav === out, o25: r.o25, over: m.s[0]+m.s[1] > 2, btts: r.btts, bt: m.s[0] > 0 && m.s[1] > 0 });
     });
   }
   recs.forEach(r => { const q = per[r.lg] = per[r.lg] || { n:0, ok:0, brier:0 }; q.n++; q.ok += r.ok; q.brier += r.brier; });
@@ -666,8 +740,8 @@ function render(){
 
 /* ================= Vue : Matchs ================= */
 function upcoming(lg, days = 10){
-  const now = nowStr(), lim = new Date(Date.now() + days*864e5);
-  return DATA.leagues[lg].matches.filter(m => !m.s && pDate(m.d) <= lim && m.d >= now.slice(0,10));
+  const now = nowStr(), lim = parisStr(Date.now() + days*864e5);
+  return DATA.leagues[lg].matches.filter(m => !m.s && m.d <= lim && m.d.slice(0,10) >= now.slice(0,10));
 }
 function renderMatchs(){
   const lg = ui.lg, L = DATA.leagues[lg], C = CL[lg];
@@ -685,11 +759,10 @@ function renderMatchs(){
       const [mk, lab, p] = mainPick(r, H.name, A.name), [cc, cl] = confidence(p, Math.min(H.p, A.p));
       let val = "";
       if (m.odds){
-        const mp = marketProbs(m.odds.o), pr = [r.pH, r.pD, r.pA];
-        const edges = pr.map((q,i) => prudent(q, mp[i])*m.odds.o[i]-1);
-        const bi = edges.indexOf(Math.max(...edges));
-        if (edges[bi] >= 0.04 && pr[bi] >= 0.2) val = `<span class="tag good">Valeur ${["1","N","2"][bi]} @ ${fx(m.odds.o[bi])} (+${(edges[bi]*100).toFixed(0)} %)</span>`;
-        else val = `<span class="tag muted">Cotes : ${m.odds.o.map(x=>fx(x)).join(" · ")}</span>`;
+        const best = planMatches([{ lg, m, C }]).filter(x => x.best)[0];
+        if (best) val = `<span class="tag good">Valeur : ${esc(MARKETS[best.k].label(H.name, A.name))} @ ${fx(best.o)} (+${(best.edge*100).toFixed(0)} %)</span>`;
+        else if (m.odds.o) val = `<span class="tag muted">Cotes : ${m.odds.o.map(x=>fx(x)).join(" · ")}</span>`;
+        if (hoursSince(m.odds.at) > STALE_H) val += ` <span class="tag warn">cotes anciennes</span>`;
       }
       const started = m.d <= now;
       html += `<article class="mcard${val.includes("good")?" value":""}">
@@ -714,39 +787,34 @@ function renderMatchs(){
 
 /* ================= Vue : Valeur ================= */
 function valueRows(){
-  const rows = [], now = nowStr();
+  const list = [], now = nowStr();
   for (const [lg, L] of Object.entries(DATA.leagues)){
     if (ui.lg !== "all" && ui.lg !== lg) continue;
-    const C = CL[lg];
-    L.matches.filter(m => !m.s && m.odds && m.d > now).forEach(m => {
-      const r = predict(C, m.h, m.a), mp = marketProbs(m.odds.o), pr = [r.pH, r.pD, r.pA];
-      ["1","N","2"].forEach((k,i) => {
-        const o = m.odds.o[i], edge = prudent(pr[i], mp[i])*o - 1, st = stakeFor(pr[i], mp[i], o);
-        rows.push({ lg, m, k, i, o, p:pr[i], mp:mp[i], edge, stake:st.stake, H:C.T[m.h].name, A:C.T[m.a].name });
-      });
-    });
+    L.matches.filter(m => !m.s && m.odds && m.d > now).forEach(m => list.push({ lg, m, C: CL[lg] }));
   }
-  return rows.sort((a,b) => b.edge - a.edge);
+  return planMatches(list).sort((a,b) => (b.stake > 0) - (a.stake > 0) || b.kf - a.kf);
 }
 function renderValeur(){
   const only = $("vOnly").checked;
   let rows = valueRows();
   const total = rows.length;
-  if (only) rows = rows.filter(r => r.edge >= 0.04 && r.p >= 0.2);
+  if (only) rows = rows.filter(isValue);
+  const s = settings(), plan = rows.filter(r => r.stake > 0), tot = plan.reduce((a,r)=>a+r.stake,0);
+  $("vSummary").innerHTML = plan.length ? `<strong>${plan.length} pari${plan.length>1?"s":""} conseillé${plan.length>1?"s":""}</strong> · ${eur(tot)} au total, soit ${pct(tot/Math.max(currentBank(),1),1)} de votre bankroll (plafond ${s.expo} %, mises déjà en cours comprises).` : "Aucune mise conseillée pour l'instant.";
   if (!rows.length){
     $("vBody").innerHTML = `<tr><td class="l" colspan="8" style="padding:20px;text-align:center;color:var(--muted)">${total ? "Aucun pari ne dépasse le seuil de valeur pour l'instant. Décochez le filtre pour voir toutes les cotes." : "Aucune cote relevée pour les matchs à venir de ce championnat."}</td></tr>`;
   } else {
     $("vBody").innerHTML = rows.map(r => {
-      const warn = r.p - r.mp > 0.15 ? ` <span class="tag warn" title="Le modèle s'écarte fortement du marché : vérifiez les absences.">écart suspect</span>` : "";
+      const warn = (r.p - r.mp > 0.12 ? ` <span class="tag warn" title="Le modèle s'écarte fortement du marché : vérifiez les absences.">écart suspect</span>` : "") + (r.stale ? ` <span class="tag warn">cotes anciennes</span>` : "");
       return `<tr><td class="l"><strong>${esc(r.H)} – ${esc(r.A)}</strong><br><span class="hint">${esc(DATA.leagues[r.lg].name)} · ${fmtDay(r.m.d)} ${fmtTime(r.m.d)}</span></td>
-      <td class="l">${esc(MARKETS[r.k].label(r.H, r.A))}${warn}</td><td class="num">${fx(r.o)}</td><td class="num">${pct(r.p)}</td><td class="num">${pct(r.mp)}</td>
-      <td class="num ${r.edge>=0.04?"edge-pos":"edge-neg"}">${r.edge>0?"+":""}${(r.edge*100).toFixed(0)} %</td><td class="num">${r.stake>0?eur(r.stake):"—"}</td>
-      <td><button class="btn sm ghost" type="button" data-vb="${r.lg}|${esc(r.m.d)}|${esc(r.m.h)}|${esc(r.m.a)}|${r.k}|${r.o}">Suivre</button></td></tr>`;
+      <td class="l">${esc(MARKETS[r.k].label(r.H, r.A))}${warn}<br><span class="hint">${esc(r.bk || "")}</span></td><td class="num">${fx(r.o)}</td><td class="num">${pct(r.p)}</td><td class="num">${pct(r.mp)}</td>
+      <td class="num ${r.edge>=VALUE_MIN?"edge-pos":"edge-neg"}">${r.edge>0?"+":""}${(r.edge*100).toFixed(0)} %</td><td class="num">${r.stake>0?`<strong>${eur(r.stake)}</strong>`:`<span class="hint">${esc(r.why || "—")}</span>`}</td>
+      <td><button class="btn sm ${r.stake>0?"":"ghost"}" type="button" data-vb="${r.lg}|${esc(r.m.d)}|${esc(r.m.h)}|${esc(r.m.a)}|${r.k}|${r.o}">Suivre</button></td></tr>`;
     }).join("");
     $("vBody").querySelectorAll("[data-vb]").forEach(b => b.onclick = () => { const [lg,d,h,a,k,o] = b.dataset.vb.split("|"); openBetSheet({ lg, d, h, a, mk:k, odds:+o }); });
   }
   const at = [...new Set(Object.values(DATA.leagues).flatMap(L => L.matches.filter(m=>m.odds).map(m=>m.odds.at)))].sort().pop();
-  $("vNote").textContent = `Probabilité « marché » = cote convertie en probabilité, marge du bookmaker retirée. Cotes relevées le ${at ? at.split("-").reverse().join("/") : "—"} ; elles bougent jusqu'au coup d'envoi, vérifiez-les avant de miser. « Écart suspect » : quand le modèle s'éloigne beaucoup du marché, c'est souvent qu'il ignore une absence importante.`;
+  $("vNote").innerHTML = `Probabilité « marché » : la cote convertie en probabilité, marge du bookmaker retirée en tenant compte du biais favori-outsider. Cotes relevées le ${at ? at.split("-").reverse().join("/") : "—"} : elles bougent jusqu'au coup d'envoi, vérifiez-les avant de miser. Au-delà de ${STALE_H} h, aucune mise n'est conseillée. « Écart suspect » : le modèle s'éloigne beaucoup du marché, souvent parce qu'il ignore une absence. Les cotes au-delà de ${MAX_ODDS} sont écartées : l'erreur du modèle y dépasse la valeur espérée.<br><br><strong>Pourquoi pas de combinés ?</strong> La marge du bookmaker se multiplie à chaque sélection : un combiné de 4 matchs à 5 % de marge chacun coûte environ 19 %.`;
 }
 $("vOnly").onchange = renderValeur;
 
@@ -766,8 +834,10 @@ function renderAnalyse(){
   const key = lg + ui.aH + ui.aA;
   if (ui.aOddsKey !== key){
     ui.aOddsKey = key;
-    const o = fixt && fixt.odds ? fixt.odds.o : null;
-    ["ao1","aoN","ao2"].forEach((id,i) => $(id).value = o ? o[i] : "");
+    const od = fixt && fixt.odds ? fixt.odds : {};
+    ["ao1","aoN","ao2"].forEach((id,i) => $(id).value = od.o ? od.o[i] : "");
+    ["aoO","aoU"].forEach((id,i) => $(id).value = od.ou ? od.ou.o[i] : "");
+    ["aoY","aoNo"].forEach((id,i) => $(id).value = od.btts ? od.btts.o[i] : "");
     $("aOddsSrc").textContent = fixt && fixt.odds ? `Cotes ${fixt.odds.bk}, relevées le ${fixt.odds.at.split("-").reverse().join("/")}. Modifiez-les si votre bookmaker propose mieux.` : "Pas de cote relevée pour cette affiche : saisissez celles de votre bookmaker.";
     $("aAdjH").value = 0; $("aAdjA").value = 0; $("aNeutral").checked = false; $("aiOut").textContent = "";
   }
@@ -794,8 +864,9 @@ function renderAnalyse(){
   $("aMarkets").innerHTML = mks.map(k => { const p = MARKETS[k].p(r);
     return `<tr><td>${esc(MARKETS[k].label(H.name, A.name))}<div class="meter"><i style="width:${(p*100).toFixed(1)}%"></i></div></td><td class="r num">${pct(p,1)}</td><td class="r num">${p>0.01?fx(1/p):"—"}</td><td class="r"><button type="button" class="add" data-mk="${k}" title="Suivre ce pari" aria-label="Suivre ce pari">+</button></td></tr>`; }).join("");
   $("aMarkets").querySelectorAll("[data-mk]").forEach(b => b.onclick = () => {
-    const k = b.dataset.mk, i = ["1","N","2"].indexOf(k); const ov = i >= 0 ? parseFloat($(["ao1","aoN","ao2"][i]).value) : NaN;
-    openBetSheet({ lg, d: fixt ? fixt.d : nowStr(), h: H.id, a: A.id, mk: k, odds: ov > 1 ? ov : undefined, pOverride: MARKETS[k].p(r) });
+    const k = b.dataset.mk, idmap = { "1":"ao1", "N":"aoN", "2":"ao2", "O25":"aoO", "U25":"aoU", "BY":"aoY", "BN":"aoNo" };
+    const ov = idmap[k] ? parseFloat($(idmap[k]).value) : NaN;
+    openBetSheet({ lg, d: fixt ? fixt.d : nowStr(), h: H.id, a: A.id, mk: k, odds: ov > 1 ? ov : undefined, adj: { neutral, adjH, adjA } });
   });
 
   const top = r.sc[0], pmax = top[2];
@@ -823,18 +894,24 @@ function renderAnalyse(){
 }
 function renderEdges(){
   if (!ui.last) return;
-  const { r } = ui.last, pr = [r.pH, r.pD, r.pA];
-  const o = ["ao1","aoN","ao2"].map(id => parseFloat(($(id).value||"").replace(",", ".")));
-  const ok = o.every(x => x > 1), mp = ok ? marketProbs(o) : [null,null,null];
-  $("aEdges").innerHTML = o.map((x,i) => {
-    if (!(x > 1)) return `<div class="edge">&nbsp;</div>`;
-    const e = prudent(pr[i], mp[i])*x - 1, st = stakeFor(pr[i], mp[i], x);
-    return `<div class="edge ${e>=0.04?"edge-pos":"edge-neg"}">${e>0?"+":""}${(e*100).toFixed(0)} %${st.stake>0?`<br>mise ${eur(st.stake)}`:""}</div>`;
-  }).join("");
+  const { r } = ui.last;
+  const grp = (ids, probs, host) => {
+    const o = ids.map(id => parseFloat(($(id).value||"").replace(",", ".")));
+    const mp = o.every(x => x > 1) ? marketProbs(o) : o.map(() => null);
+    $(host).innerHTML += o.map((x,i) => {
+      if (!(x > 1)) return `<div class="edge">&nbsp;</div>`;
+      const st = stakeFor(probs[i], mp[i], x);
+      return `<div class="edge ${st.edge>=VALUE_MIN?"edge-pos":"edge-neg"}">${st.edge>0?"+":""}${(st.edge*100).toFixed(0)} %${st.stake>0?` · mise ${eur(st.stake)}`:""}</div>`;
+    }).join("");
+  };
+  $("aEdges").innerHTML = ""; $("aEdges2").innerHTML = "";
+  grp(["ao1","aoN","ao2"], [r.pH, r.pD, r.pA], "aEdges");
+  grp(["aoO","aoU"], [r.o25, 1-r.o25], "aEdges2");
+  grp(["aoY","aoNo"], [r.btts, 1-r.btts], "aEdges2");
 }
 ["aHome","aAway"].forEach(id => $(id).addEventListener("change", () => { ui.aH = $("aHome").value; ui.aA = $("aAway").value; saveUi(); renderAnalyse(); }));
 ["aNeutral","aAdjH","aAdjA"].forEach(id => $(id).addEventListener("input", renderAnalyse));
-["ao1","aoN","ao2"].forEach(id => $(id).addEventListener("input", renderEdges));
+["ao1","aoN","ao2","aoO","aoU","aoY","aoNo"].forEach(id => $(id).addEventListener("input", renderEdges));
 $("aSwap").onclick = () => { [ui.aH, ui.aA] = [ui.aA, ui.aH]; saveUi(); renderAnalyse(); };
 $("aReset").onclick = () => { $("aAdjH").value = 0; $("aAdjA").value = 0; $("aNeutral").checked = false; renderAnalyse(); };
 
@@ -843,9 +920,11 @@ function openBetSheet(pre){
   const L = DATA.leagues[pre.lg], C = CL[pre.lg];
   const H = C.T[pre.h], A = C.T[pre.a];
   const fixt = L.matches.find(m => m.h === pre.h && m.a === pre.a && !m.s);
-  const r = predict(C, pre.h, pre.a);
-  const i3 = ["1","N","2"].indexOf(pre.mk);
-  const defOdds = pre.odds || (fixt && fixt.odds && i3 >= 0 ? fixt.odds.o[i3] : "");
+  const r = predict(C, pre.h, pre.a, pre.adj || {});
+  const outs = fixt ? matchOutcomes(fixt, r) : [];
+  const outOf = k => outs.find(x => x.k === k);
+  const defOdds = pre.odds || (outOf(pre.mk) ? outOf(pre.mk).o : "");
+  const same = bets().filter(x => x.status === "pending" && x.lg === pre.lg && x.h === pre.h && x.a === pre.a);
   const s = betStats(), st = settings();
   $("sheetHost").innerHTML = `<div class="sheet-bg" id="sheetBg"><form class="sheet" id="betForm" novalidate>
     <h2 style="font-size:22px">Suivre un pari</h2>
@@ -861,16 +940,17 @@ function openBetSheet(pre){
   </form></div>`;
   const upd = () => {
     const k = $("bMk").value, o = parseFloat($("bOdds").value), p = MARKETS[k].p(r);
-    const ii = ["1","N","2"].indexOf(k), mpp = (fixt && fixt.odds && ii >= 0) ? marketProbs(fixt.odds.o)[ii] : null;
+    const mpp = outOf(k) ? outOf(k).mp : null;
     if (o > 1){
-      const sk = stakeFor(p, mpp, o), e = prudent(p, mpp)*o - 1;
-      $("bAdvice").innerHTML = `Valeur estimée (prudente) : <strong class="${e>=0.04?"edge-pos":""}">${e>0?"+":""}${(e*100).toFixed(0)} %</strong>. ${sk.stake>0?`Mise conseillée : <strong>${eur(sk.stake)}</strong> (bankroll ${eur(currentBank())}).`:"Pas de valeur : le modèle déconseille ce pari."}`;
+      const sk = stakeFor(p, mpp, o, { stale: outOf(k) && Math.abs(o - outOf(k).o) < 1e-9 && hoursSince(outOf(k).at) > STALE_H }), e = sk.edge;
+      $("bAdvice").innerHTML = `Valeur estimée (prudente) : <strong class="${e>=VALUE_MIN?"edge-pos":""}">${e>0?"+":""}${(e*100).toFixed(0)} %</strong>. ${sk.stake>0?`Mise conseillée : <strong>${eur(sk.stake)}</strong> (bankroll ${eur(currentBank())}, dont ${eur(pendingStake())} déjà engagés).`:`Pas de mise conseillée : ${esc(sk.why)}.`}`;
       if (!$("bStake").dataset.touched) $("bStake").value = sk.stake > 0 ? sk.stake : "";
     } else $("bAdvice").textContent = "Saisissez la cote pour obtenir une mise conseillée.";
     const stake = parseFloat($("bStake").value) || 0, w = [];
     if (st.week > 0 && s.week + stake > st.week) w.push(`Ce pari porterait vos mises des 7 derniers jours à ${eur(s.week + stake)}, au-delà de votre limite de ${eur(st.week)}.`);
     if (s.streak >= 5) w.push(`Vous restez sur ${s.streak} pertes d'affilée. Faire une pause évite de vouloir « se refaire ».`);
     if (stake > currentBank() * 0.1) w.push("Cette mise dépasse 10 % de votre bankroll.");
+    if (same.length) w.push(`Vous avez déjà ${same.length} pari${same.length>1?"s":""} en cours sur ce match : les issues d'un même match sont liées, ce qui augmente le risque.`);
     $("bWarn").innerHTML = w.map(x => `<div class="alert warn"><div>${esc(x)}</div></div>`).join("");
   };
   $("bMk").onchange = upd; $("bOdds").oninput = upd; $("bStake").oninput = () => { $("bStake").dataset.touched = 1; upd(); };
@@ -893,7 +973,7 @@ function toast(msg){ $("toastHost").innerHTML = `<div class="toast" role="status
 /* ================= Vue : Mes paris ================= */
 function renderParis(){
   const st = settings();
-  [["sBank","bank"],["sWeek","week"],["sMax","max"]].forEach(([id,k]) => { if (document.activeElement !== $(id)) $(id).value = st[k]; });
+  [["sBank","bank"],["sWeek","week"],["sMax","max"],["sExpo","expo"]].forEach(([id,k]) => { if (document.activeElement !== $(id)) $(id).value = st[k]; });
   $("sMethod").value = st.method;
   const s = betStats(), bank = currentBank();
   const al = [];
@@ -909,6 +989,7 @@ function renderParis(){
     ["Paris gagnés", s.settled ? `${s.wins}/${s.settled}` : "—", ""],
     ["En attente", String(s.pending), ""],
     ["Misé sur 7 jours", eur(s.week), ""],
+    ["CLV moyen", s.nclv ? (s.clv>=0?"+":"") + pct(s.clv,1) : "—", s.nclv ? (s.clv>=0?"pos":"neg") : ""],
   ].map(([k,v,c]) => `<div class="kpi"><div class="k">${k}</div><div class="v num ${c}">${v}</div></div>`).join("");
   const f = $("pFilter").value;
   let b = bets().slice().sort((a,c) => a.d < c.d ? 1 : -1);
@@ -922,10 +1003,15 @@ function renderParis(){
       return `<div class="bet ${x.status}">
         <div class="bt">${esc(x.hn)} – ${esc(x.an)}${x.score?` <span class="num">(${x.score[0]}-${x.score[1]})</span>`:""}</div>
         <div class="bp"><span class="tag ${x.status==="won"?"good":x.status==="lost"?"bad":"muted"}">${stLab[x.status]}</span><br>${x.status==="pending"?eur(x.stake):(pr>=0?"+":"")+eur(pr)}</div>
-        <div class="bm">${esc(lab)} · cote ${fx(x.odds)} · mise ${eur(x.stake)} · modèle ${pct(x.p||0)} · ${fmtDay(x.d)}</div>
+        <div class="bm">${esc(lab)} · cote ${fx(x.odds)} · mise ${eur(x.stake)} · modèle ${pct(x.p||0)} · ${fmtDay(x.d)}${x.close>1?` · clôture ${fx(x.close)} (${x.odds>=x.close?"+":""}${pct(x.odds/x.close-1,1)})`:""}</div>
+        <div class="ba"><label class="hint" style="display:flex;gap:6px;align-items:center">Cote à la clôture <input type="number" step="0.01" min="1.01" inputmode="decimal" data-close="${x.id}" value="${x.close||""}" style="width:90px;padding:4px 8px"></label></div>
         ${x.status==="pending" ? `<div class="ba"><button class="btn sm ghost" type="button" data-st="won|${x.id}">Gagné</button><button class="btn sm ghost" type="button" data-st="lost|${x.id}">Perdu</button><button class="btn sm ghost" type="button" data-st="void|${x.id}">Annulé</button><button class="btn sm ghost" type="button" data-st="del|${x.id}">Supprimer</button></div>` : `<div class="ba"><button class="btn sm ghost" type="button" data-st="pending|${x.id}">Rouvrir</button></div>`}
       </div>`;
     }).join("");
+    $("pList").querySelectorAll("[data-close]").forEach(inp => inp.onchange = () => {
+      const all = bets(), x = all.find(y => y.id === inp.dataset.close), v = parseFloat(inp.value);
+      if (x) { if (v > 1) x.close = v; else delete x.close; saveBets(all); renderParis(); }
+    });
     $("pList").querySelectorAll("[data-st]").forEach(btn => btn.onclick = () => {
       const [act, id] = btn.dataset.st.split("|"); let all = bets();
       if (act === "del"){ if (btn.dataset.confirm){ all = all.filter(x => x.id !== id); } else { btn.dataset.confirm = 1; btn.textContent = "Confirmer ?"; btn.classList.add("danger"); return; } }
@@ -938,7 +1024,7 @@ function renderParis(){
     $("pCalibTxt").textContent = `Sur ${s.settled} paris réglés, le modèle attendait ${fx(s.expW,1)} gains ; vous en avez ${s.wins} (${d>=0?"+":""}${fx(d,1)}). ${Math.abs(d) <= Math.sqrt(s.expW)*1.5 ? "C'est cohérent avec ses probabilités." : d < 0 ? "C'est nettement moins que prévu : le modèle surestime peut-être ses favoris." : "C'est nettement plus que prévu, sans doute en partie de la chance."}`;
   } else $("pCalibTxt").textContent = `Il faut au moins 10 paris réglés pour comparer vos gains aux probabilités annoncées (${s.settled} pour l'instant).`;
 }
-[["sBank","bank"],["sWeek","week"],["sMax","max"]].forEach(([id,k]) => $(id).addEventListener("change", () => { const s = LS.get("pl_settings", {}); const v = parseFloat($(id).value); if (v >= 0) { s[k] = v; LS.set("pl_settings", s); } renderParis(); }));
+[["sBank","bank"],["sWeek","week"],["sMax","max"],["sExpo","expo"]].forEach(([id,k]) => $(id).addEventListener("change", () => { const s = LS.get("pl_settings", {}); const v = parseFloat($(id).value); if (v >= 0) { s[k] = v; LS.set("pl_settings", s); } renderParis(); }));
 $("sMethod").onchange = () => { const s = LS.get("pl_settings", {}); s.method = $("sMethod").value; LS.set("pl_settings", s); renderParis(); };
 $("pFilter").onchange = renderParis;
 $("pAdd").onclick = () => { const lg = ui.lg === "all" ? "l1" : ui.lg; const nx = upcoming(lg)[0]; const C = CL[lg]; openBetSheet({ lg, d: nx ? nx.d : nowStr(), h: nx ? nx.h : C.order[0].id, a: nx ? nx.a : C.order[1].id, mk: "1" }); };
@@ -979,6 +1065,7 @@ function renderFiab(){
     ["Plus/moins 2,5 juste", pct(ouOk)],
     ["Score Brier (modèle)", fx(brier,3)],
     ["Brier (fréquences 1N2)", fx(base,3)],
+    ["Log-loss (modèle)", fx(recs.reduce((s,r)=>s-Math.log(r.pr[r.out]),0)/n,3)],
   ].map(([k,v]) => `<div class="kpi"><div class="k">${k}</div><div class="v num">${v}</div></div>`).join("");
   // calibration
   const bins = Array.from({length:10}, () => ({ n:0, p:0, hit:0 }));
@@ -995,6 +1082,15 @@ function renderFiab(){
   pts.forEach(p => svg += `<circle class="pts" cx="${sx(p[0]).toFixed(1)}" cy="${sy(p[1]).toFixed(1)}" r="${Math.min(7, 2.5+Math.sqrt(p[2])/3).toFixed(1)}"><title>Annoncé ${pct(p[0])} · observé ${pct(p[1])} (${p[2]} cas)</title></circle>`);
   svg += `<text x="${(W+pad)/2}" y="${Hh-4}" text-anchor="middle">probabilité annoncée (%)</text></svg>`;
   $("fCalib").innerHTML = svg;
+  const avg = (f) => recs.reduce((s,r)=>s+f(r),0)/n;
+  $("fMarkets").innerHTML = [
+    ["Victoire à domicile", avg(r=>r.pr[0]), avg(r=>r.out===0)],
+    ["Match nul", avg(r=>r.pr[1]), avg(r=>r.out===1)],
+    ["Victoire à l'extérieur", avg(r=>r.pr[2]), avg(r=>r.out===2)],
+    ["Plus de 2,5 buts", avg(r=>r.o25), avg(r=>r.over)],
+    ["Les deux marquent", avg(r=>r.btts), avg(r=>r.bt)],
+  ].map(([k,a,b]) => { const se = Math.sqrt(b*(1-b)/n), d = b - a, flag = Math.abs(d) > 2*se ? `<span class="tag warn">biais ${d>0?"sous-estimé":"surestimé"}</span>` : `<span class="tag good">dans la marge</span>`;
+    return `<tr><td>${k}</td><td class="r num">${pct(a)}</td><td class="r num">${pct(b)}</td><td class="r">${flag}</td></tr>`; }).join("");
   $("fLeagues").innerHTML = Object.entries(B.per).map(([lg,q]) => `<tr><td>${esc(DATA.leagues[lg].name)}</td><td class="r num">${q.n}</td><td class="r num">${pct(q.ok/q.n)}</td><td class="r num">${fx(q.brier/q.n,3)}</td></tr>`).join("");
 }
 
@@ -1013,12 +1109,35 @@ async function refresh(manual){
     if (!res.ok) throw new Error(res.status);
     const d = await res.json();
     if (!d || !d.leagues || d.version !== EMBEDDED.version) throw new Error("format");
-    if (d.generatedAt > DATA.generatedAt){ DATA = d; LS.set("pl_data", d); computeAll(); const n = autoSettle(); render(); renderFresh(); toast(n ? `Données à jour · ${n} pari(s) réglé(s)` : "Données mises à jour"); }
+    if (d.generatedAt > DATA.generatedAt){
+      const prev = DATA;
+      try { DATA = d; computeAll(); } catch (err) { DATA = prev; computeAll(); throw new Error("données invalides"); }
+      LS.set("pl_data", d); const n = autoSettle(); render(); renderFresh(); toast(n ? `Données à jour · ${n} pari(s) réglé(s)` : "Données mises à jour");
+    }
     else if (manual) toast("Vous avez déjà les données les plus récentes.");
   } catch (e) { if (manual) toast("Pas de connexion : l'application garde les dernières données."); }
   finally { $("refreshBtn").disabled = false; $("refreshBtn").textContent = "Mettre à jour"; }
 }
 $("refreshBtn").onclick = () => refresh(true);
+
+/* Nouvelle version de l'application disponible ? (une vérification par jour) */
+const APP_BUILD = /*BUILD*/0;
+async function checkApk(){
+  const m = /raw\.githubusercontent\.com\/([^/]+)\/([^/]+)\//.exec(REMOTE_URL || "");
+  if (!m || !APP_BUILD) return;
+  const last = LS.get("pl_apkcheck", 0); if (Date.now() - last < 864e5 && !LS.get("pl_apknew", null)) return;
+  try {
+    let info = LS.get("pl_apknew", null);
+    if (Date.now() - last >= 864e5){
+      const res = await fetch(`https://api.github.com/repos/${m[1]}/${m[2]}/releases/latest`, { cache:"no-store" });
+      if (!res.ok) return; const j = await res.json(); LS.set("pl_apkcheck", Date.now());
+      const b = parseInt(String(j.tag_name || "").split(".").pop(), 10);
+      info = b > APP_BUILD ? { b, url: `https://github.com/${m[1]}/${m[2]}/releases/latest/download/prono-lab.apk` } : null;
+      LS.set("pl_apknew", info);
+    }
+    if (info && info.b > APP_BUILD) { $("apkBanner").hidden = false; $("apkLink").href = info.url; }
+  } catch {}
+}
 
 /* ================= Commentaire de Claude (dans claude.ai uniquement) ================= */
 (async () => {
@@ -1047,4 +1166,5 @@ autoSettle();
 renderFresh();
 setView(ui.view);
 refresh(false);
+checkApk();
 </script>

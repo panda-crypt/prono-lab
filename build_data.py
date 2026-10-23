@@ -32,12 +32,23 @@ def build(generated_at, odds_at):
         missing = [n for n in names if n not in L["xg"] or n not in L["prior"]]
         if missing:
             sys.exit(f"{lg}: équipes sans xG ou prior: {missing}")
-        for (h, a), (bk, o) in L["odds"].items():
+        for (h, a), spec in L["odds"].items():
             hit = [m for m in matches if m["h"] == h and m["a"] == a and "s" not in m]
             if not hit:
                 print(f"  ! {lg}: cote ignorée (match joué ou absent) {h}-{a}")
                 continue
-            hit[0]["odds"] = {"bk": bk, "o": o, "at": odds_at}
+            # spec = (bookmaker, [1, N, 2])  ou  {"1x2": (bk, [1,N,2]), "ou": (bk, [plus 2,5, moins 2,5]), "btts": (bk, [oui, non])}
+            if isinstance(spec, tuple):
+                spec = {"1x2": spec}
+            od = {"at": odds_at}
+            if "1x2" in spec:
+                od["bk"], od["o"] = spec["1x2"][0], list(spec["1x2"][1]); assert len(od["o"]) == 3
+            for key in ("ou", "btts"):
+                if key in spec:
+                    bk, o = spec[key]; assert len(o) == 2
+                    od[key] = {"bk": bk, "o": list(o)}
+            assert all(x > 1 for x in od.get("o", []) + sum((od[k]["o"] for k in ("ou", "btts") if k in od), []))
+            hit[0]["odds"] = od
         pg, pgf = L["priorTotals"]
         teams = []
         for n in names:
