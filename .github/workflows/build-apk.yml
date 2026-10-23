@@ -61,7 +61,13 @@ jobs:
         working-directory: android
         env:
           VERSION_CODE: ${{ github.run_number }}
-        run: gradle assembleRelease --no-daemon --stacktrace
+        run: |
+          set -o pipefail
+          if ! gradle assembleRelease --no-daemon 2>&1 | tee build.log; then
+            # Faire remonter l'erreur dans les annotations (lisibles via l'API)
+            grep -E "What went wrong|error:|Error:|FAILURE|> " build.log | grep -v "^> Task" | head -40 | while IFS= read -r l; do echo "::error::${l:0:400}"; done
+            exit 1
+          fi
 
       - name: Renommer
         run: cp android/app/build/outputs/apk/release/app-release.apk prono-lab.apk
