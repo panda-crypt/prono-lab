@@ -334,6 +334,7 @@ table{border-collapse:collapse;width:100%}
           <div class="settings">
             <label class="field"><span>Bankroll de départ (€)</span><input type="number" id="sBank" min="0" step="10" inputmode="decimal"></label>
             <label class="field"><span>Limite de mises / 7 jours (€)</span><input type="number" id="sWeek" min="0" step="5" inputmode="decimal"></label>
+            <label class="field"><span>Mon bookmaker</span><select id="sBook"><option value="unibet">Unibet</option><option value="winamax">Winamax</option><option value="betclic">Betclic</option><option value="parions">Parions Sport</option><option value="pmu">PMU</option></select></label>
             <label class="field"><span>Méthode de mise</span><select id="sMethod"><option value="kelly">Kelly fractionné (¼)</option><option value="flat">Mise fixe (1 %)</option></select></label>
             <label class="field"><span>Mise maximale par pari (% bankroll)</span><input type="number" id="sMax" min="0.5" max="10" step="0.5" inputmode="decimal"></label>
             <label class="field"><span>Exposition maximale (% bankroll en jeu)</span><input type="number" id="sExpo" min="1" max="50" step="1" inputmode="decimal"></label>
@@ -678,7 +679,56 @@ function marketProbs(o){
   for (let i = 0; i < 60; i++){ const k = (lo+hi)/2, s = inv.reduce((a,x)=>a+Math.pow(x,k),0); if (s > 1) lo = k; else hi = k; }
   const k = (lo+hi)/2; return inv.map(x => Math.pow(x, k));
 }
-function settings(){ return Object.assign({ bank:100, week:30, method:"kelly", max:3, expo:15 }, LS.get("pl_settings", {})); }
+function settings(){ return Object.assign({ bank:100, week:30, method:"kelly", max:3, expo:15, book:"unibet" }, LS.get("pl_settings", {})); }
+/* Bookmaker de l'utilisateur : l'application prépare le pari, l'utilisateur le valide lui-même chez le bookmaker. */
+const BOOKS = {
+  unibet:  ["Unibet", "https://www.unibet.fr/sport/football"],
+  winamax: ["Winamax", "https://www.winamax.fr/paris-sportifs/sports/1"],
+  betclic: ["Betclic", "https://www.betclic.fr/football-s1"],
+  parions: ["Parions Sport", "https://www.enligne.parionssport.fdj.fr/paris-football"],
+  pmu:     ["PMU", "https://paris-sportifs.pmu.fr/pari/sport/25/football"],
+};
+const book = () => BOOKS[settings().book] || BOOKS.unibet;
+// cote en dessous de laquelle le pari n'a plus de valeur (même seuil que l'onglet Valeur)
+const minOdds = (p, mp) => { const q = prudent(p, mp); return q > 0 ? (1 + VALUE_MIN) / q : null; };
+function copyText(t){
+  let ok = false;
+  try { const ta = document.createElement("textarea"); ta.value = t; ta.setAttribute("readonly", ""); ta.style.position = "fixed"; ta.style.opacity = "0"; document.body.appendChild(ta); ta.select(); ok = document.execCommand("copy"); ta.remove(); } catch {}
+  try { if (navigator.clipboard) navigator.clipboard.writeText(t).catch(() => {}); ok = true; } catch {}
+  return ok;
+}
+function openBookSheet(pre){
+  const L = DATA.leagues[pre.lg], C = CL[pre.lg], H = C.T[pre.h], A = C.T[pre.a];
+  const fixt = L.matches.find(m => m.h === pre.h && m.a === pre.a && !m.s);
+  const r = predict(C, pre.h, pre.a), outs = fixt ? matchOutcomes(fixt, r) : [];
+  const out = outs.find(x => x.k === pre.mk), p = MARKETS[pre.mk].p(r), mp = out ? out.mp : null;
+  const mo = minOdds(p, mp), [bn, bu] = book();
+  let stake = pre.stake;
+  // mise calculée à la cote minimale : prudente, et indépendante de cotes relevées qui ont pu bouger
+  if (stake == null && mo) stake = stakeFor(p, mp, mo * 1.0001).stake || null;
+  const when = fixt ? `${fmtDay(fixt.d)} ${fmtTime(fixt.d)}` : (pre.d ? `${fmtDay(pre.d)} ${fmtTime(pre.d)}` : "");
+  const lab = MARKETS[pre.mk].label(H.name, A.name);
+  const lines = [`${H.name} – ${A.name}`, `${L.name}${when ? " · " + when : ""}`, `Pari : ${lab}`];
+  if (pre.odds) lines.push(`Cote prise : ${fx(pre.odds)}`);
+  else if (mo) lines.push(`Cote minimale : ${fx(mo)}`);
+  if (stake) lines.push(`Mise : ${eur(stake)}`);
+  const txt = lines.join("\n");
+  $("sheetHost").innerHTML = `<div class="sheet-bg" id="sheetBg"><div class="sheet">
+    <h2 style="font-size:22px">Préparer sur ${esc(bn)}</h2>
+    <pre style="margin:0;white-space:pre-wrap;background:var(--surface-2);border:1px solid var(--line);border-radius:8px;padding:12px;font-family:var(--font-data);font-size:13.5px">${esc(txt)}</pre>
+    ${!pre.odds && mo ? `<div class="alert warn"><div><strong>Cote minimale : ${fx(mo)}</strong>En dessous, le pari n'a plus de valeur selon le modèle : ne le jouez pas. Au-dessus, c'est d'autant mieux.</div></div>` : ""}
+    <p class="hint">Le récapitulatif est copié et ${esc(bn)} s'ouvre sur la page football : retrouvez le match, vérifiez la cote, puis validez vous-même votre pari.</p>
+    <div class="row" style="justify-content:flex-end">
+      <button type="button" class="btn ghost" id="bkClose">Fermer</button>
+      ${pre.recorded ? "" : `<button type="button" class="btn ghost" id="bkRecord">Enregistrer dans Mes paris</button>`}
+      <a class="btn" id="bkGo" href="${esc(bu)}" target="_blank" rel="noopener" style="text-decoration:none">Copier et ouvrir ${esc(bn)}</a>
+    </div></div></div>`;
+  const close = () => { $("sheetHost").innerHTML = ""; };
+  $("bkClose").onclick = close;
+  $("sheetBg").addEventListener("click", e => { if (e.target.id === "sheetBg") close(); });
+  $("bkGo").addEventListener("click", () => { copyText(txt); toast(`Récapitulatif copié · ouverture de ${bn}`); });
+  if ($("bkRecord")) $("bkRecord").onclick = () => openBetSheet({ lg: pre.lg, d: fixt ? fixt.d : pre.d, h: pre.h, a: pre.a, mk: pre.mk });
+}
 const MAX_ODDS = 6, MIN_P = 0.2, VALUE_MIN = 0.04, STALE_H = 48;
 const isValue = x => x.edge >= VALUE_MIN && x.p >= MIN_P && x.o <= MAX_ODDS;
 function pendingStake(){ return bets().filter(x => x.status === "pending").reduce((s,x)=>s+x.stake,0); }
@@ -864,9 +914,10 @@ function renderMatchs(){
       if (dl !== day){ if (day) html += `</div>`; html += `<p class="daylabel">${dl}</p><div class="mlist">`; day = dl; }
       const H = C.T[m.h], A = C.T[m.a], r = predict(C, m.h, m.a);
       const [mk, lab, p] = mainPick(r, H.name, A.name), [cc, cl] = confidence(p, Math.min(H.p, A.p));
-      let val = "";
+      let val = "", bookMk = mk;
       if (m.odds){
         const best = planMatches([{ lg, m, C }]).filter(x => x.best)[0];
+        if (best) bookMk = best.k;
         if (best) val = `<span class="tag good">Valeur : ${esc(MARKETS[best.k].label(H.name, A.name))} @ ${fx(best.o)} (+${(best.edge*100).toFixed(0)} %)</span>`;
         else if (m.odds.o) val = `<span class="tag muted">Cotes : ${m.odds.o.map(x=>fx(x)).join(" · ")}</span>`;
         if (hoursSince(m.odds.at) > STALE_H) val += ` <span class="tag warn">cotes anciennes</span>`;
@@ -878,13 +929,14 @@ function renderMatchs(){
         <div class="minibar"><i class="h" style="width:${r.pH*100}%"></i><i class="d" style="width:${r.pD*100}%"></i><i class="a" style="width:${r.pA*100}%"></i></div>
         <div class="mprobs num"><span>${pct(r.pH)}</span><span>${pct(r.pD)}</span><span>${pct(r.pA)}</span></div>
         <div class="mfoot"><span class="pickline">${esc(lab)} <span class="tag ${cc}">${cl}</span></span>${val}</div>
-        <div class="row"><button class="btn sm" type="button" data-an="${esc(m.h)}|${esc(m.a)}">Analyser</button><button class="btn ghost sm" type="button" data-bet="${lg}|${esc(m.d)}|${esc(m.h)}|${esc(m.a)}|${mk}">+ Suivre ce pari</button></div>
+        <div class="row"><button class="btn sm" type="button" data-an="${esc(m.h)}|${esc(m.a)}">Analyser</button><button class="btn ghost sm" type="button" data-bet="${lg}|${esc(m.d)}|${esc(m.h)}|${esc(m.a)}|${mk}">+ Suivre ce pari</button><button class="btn ghost sm" type="button" data-book="${lg}|${esc(m.d)}|${esc(m.h)}|${esc(m.a)}|${bookMk}">${esc(book()[0])} ↗</button></div>
       </article>`;
     });
     html += `</div>`;
     $("mList").innerHTML = html;
     $("mList").querySelectorAll("[data-an]").forEach(b => b.onclick = () => { const [h,a] = b.dataset.an.split("|"); ui.aH = h; ui.aA = a; ui.aOddsKey = null; setView("analyse"); });
     $("mList").querySelectorAll("[data-bet]").forEach(b => b.onclick = () => { const [l,d,h,a,mk] = b.dataset.bet.split("|"); openBetSheet({ lg:l, d, h, a, mk }); });
+    $("mList").querySelectorAll("[data-book]").forEach(b => b.onclick = () => { const [l,d,h,a,mk] = b.dataset.book.split("|"); openBookSheet({ lg:l, d, h, a, mk }); });
   }
   // classement
   $("stdTitle").textContent = L.type === "euro" ? `${L.name} · phase de ligue` : `Classement ${L.name}`;
@@ -916,9 +968,10 @@ function renderValeur(){
       return `<tr><td class="l"><strong>${esc(r.H)} – ${esc(r.A)}</strong><br><span class="hint">${esc(DATA.leagues[r.lg].name)} · ${fmtDay(r.m.d)} ${fmtTime(r.m.d)}</span></td>
       <td class="l">${esc(MARKETS[r.k].label(r.H, r.A))}${warn}<br><span class="hint">${esc(r.bk || "")}</span></td><td class="num">${fx(r.o)}</td><td class="num">${pct(r.p)}</td><td class="num">${pct(r.mp)}</td>
       <td class="num ${r.edge>=VALUE_MIN?"edge-pos":"edge-neg"}">${r.edge>0?"+":""}${(r.edge*100).toFixed(0)} %</td><td class="num">${r.stake>0?`<strong>${eur(r.stake)}</strong>`:`<span class="hint">${esc(r.why || "—")}</span>`}</td>
-      <td><button class="btn sm ${r.stake>0?"":"ghost"}" type="button" data-vb="${r.lg}|${esc(r.m.d)}|${esc(r.m.h)}|${esc(r.m.a)}|${r.k}|${r.o}">Suivre</button></td></tr>`;
+      <td><button class="btn sm ${r.stake>0?"":"ghost"}" type="button" data-vb="${r.lg}|${esc(r.m.d)}|${esc(r.m.h)}|${esc(r.m.a)}|${r.k}|${r.o}">Suivre</button> <button class="btn sm ghost" type="button" data-vbk="${r.lg}|${esc(r.m.d)}|${esc(r.m.h)}|${esc(r.m.a)}|${r.k}|${r.stake}">${esc(book()[0])} ↗</button></td></tr>`;
     }).join("");
     $("vBody").querySelectorAll("[data-vb]").forEach(b => b.onclick = () => { const [lg,d,h,a,k,o] = b.dataset.vb.split("|"); openBetSheet({ lg, d, h, a, mk:k, odds:+o }); });
+    $("vBody").querySelectorAll("[data-vbk]").forEach(b => b.onclick = () => { const [lg,d,h,a,k,st] = b.dataset.vbk.split("|"); openBookSheet({ lg, d, h, a, mk:k, stake: +st || undefined }); });
   }
   const at = [...new Set(Object.values(DATA.leagues).flatMap(L => L.matches.filter(m=>m.odds).map(m=>m.odds.at)))].sort().pop();
   $("vNote").innerHTML = `Probabilité « marché » : la cote convertie en probabilité, marge du bookmaker retirée en tenant compte du biais favori-outsider. Cotes relevées le ${at ? at.split("-").reverse().join("/") : "—"} : elles bougent jusqu'au coup d'envoi, vérifiez-les avant de miser. Au-delà de ${STALE_H} h, aucune mise n'est conseillée. « Écart suspect » : le modèle s'éloigne beaucoup du marché, souvent parce qu'il ignore une absence. Les cotes au-delà de ${MAX_ODDS} sont écartées : l'erreur du modèle y dépasse la valeur espérée.<br><br><strong>Pourquoi pas de combinés ?</strong> La marge du bookmaker se multiplie à chaque sélection : un combiné de 4 matchs à 5 % de marge chacun coûte environ 19 %.`;
@@ -1046,10 +1099,11 @@ function openBetSheet(pre){
     <p class="hint">${esc(H.name)} – ${esc(A.name)} · ${esc(L.name)}${fixt?` · ${fmtDay(fixt.d)} ${fmtTime(fixt.d)}`:""}</p>
     <label class="field"><span>Pari</span><select id="bMk">${Object.keys(MARKETS).map(k=>`<option value="${k}"${k===pre.mk?" selected":""}>${esc(MARKETS[k].label(H.name, A.name))} · modèle ${pct(MARKETS[k].p(r))}</option>`).join("")}</select></label>
     <div class="settings">
-      <label class="field"><span>Cote obtenue</span><input type="number" id="bOdds" step="0.01" min="1.01" inputmode="decimal" value="${defOdds}" required></label>
+      <label class="field"><span>Cote obtenue chez ${esc(book()[0])}</span><input type="number" id="bOdds" step="0.01" min="1.01" inputmode="decimal" value="${defOdds}" required></label>
       <label class="field"><span>Mise (€)</span><input type="number" id="bStake" step="0.5" min="0.5" inputmode="decimal" required></label>
     </div>
     <p class="hint" id="bAdvice"></p>
+    <p class="hint" id="bMin"></p>
     <div id="bWarn"></div>
     <div class="row" style="justify-content:flex-end"><button type="button" class="btn ghost" id="bCancel">Annuler</button><button type="submit" class="btn" id="bSave">Enregistrer</button></div>
   </form></div>`;
@@ -1061,6 +1115,7 @@ function openBetSheet(pre){
       $("bAdvice").innerHTML = `Valeur estimée (prudente) : <strong class="${e>=VALUE_MIN?"edge-pos":""}">${e>0?"+":""}${(e*100).toFixed(0)} %</strong>. ${sk.stake>0?`Mise conseillée : <strong>${eur(sk.stake)}</strong> (bankroll ${eur(currentBank())}, dont ${eur(pendingStake())} déjà engagés).`:`Pas de mise conseillée : ${esc(sk.why)}.`}`;
       if (!$("bStake").dataset.touched) $("bStake").value = sk.stake > 0 ? sk.stake : "";
     } else $("bAdvice").textContent = "Saisissez la cote pour obtenir une mise conseillée.";
+    const mo = minOdds(p, mpp); $("bMin").innerHTML = mo ? `Cote minimale pour que ce pari ait de la valeur : <strong>${fx(mo)}</strong>. Saisissez la cote réellement affichée chez ${esc(book()[0])}.` : "";
     const stake = parseFloat($("bStake").value) || 0, w = [];
     if (st.week > 0 && s.week + stake > st.week) w.push(`Ce pari porterait vos mises des 7 derniers jours à ${eur(s.week + stake)}, au-delà de votre limite de ${eur(st.week)}.`);
     if (s.streak >= 5) w.push(`Vous restez sur ${s.streak} pertes d'affilée. Faire une pause évite de vouloir « se refaire ».`);
@@ -1079,7 +1134,7 @@ function openBetSheet(pre){
     if (!(o > 1)) { $("bOdds").focus(); toast("Indiquez une cote supérieure à 1."); return; }
     if (!(stake > 0)) { $("bStake").focus(); toast("Indiquez une mise."); return; }
     const b = bets();
-    b.push({ id: Date.now().toString(36), lg: pre.lg, d: fixt ? fixt.d : (pre.d || nowStr()), h: pre.h, a: pre.a, hn: H.name, an: A.name, mk: k, odds: o, stake, p: MARKETS[k].p(r), status: "pending", createdAt: nowStr() });
+    b.push({ id: Date.now().toString(36), lg: pre.lg, d: fixt ? fixt.d : (pre.d || nowStr()), h: pre.h, a: pre.a, hn: H.name, an: A.name, mk: k, odds: o, stake, p: MARKETS[k].p(r), bk: book()[0], status: "pending", createdAt: nowStr() });
     saveBets(b); close(); toast("Pari enregistré dans Mes paris"); autoSettle(); renderBadge();
   };
 }
@@ -1089,6 +1144,7 @@ function toast(msg){ $("toastHost").innerHTML = `<div class="toast" role="status
 function renderParis(){
   const st = settings();
   [["sBank","bank"],["sWeek","week"],["sMax","max"],["sExpo","expo"]].forEach(([id,k]) => { if (document.activeElement !== $(id)) $(id).value = st[k]; });
+  $("sBook").value = st.book;
   $("sMethod").value = st.method;
   const s = betStats(), bank = currentBank();
   const al = [];
@@ -1120,9 +1176,13 @@ function renderParis(){
         <div class="bp"><span class="tag ${x.status==="won"?"good":x.status==="lost"?"bad":"muted"}">${stLab[x.status]}</span><br>${x.status==="pending"?eur(x.stake):(pr>=0?"+":"")+eur(pr)}</div>
         <div class="bm">${esc(lab)} · cote ${fx(x.odds)} · mise ${eur(x.stake)} · modèle ${pct(x.p||0)} · ${fmtDay(x.d)}${x.close>1?` · clôture ${fx(x.close)} (${x.odds>=x.close?"+":""}${pct(x.odds/x.close-1,1)})`:""}</div>
         <div class="ba"><label class="hint" style="display:flex;gap:6px;align-items:center">Cote à la clôture <input type="number" step="0.01" min="1.01" inputmode="decimal" data-close="${x.id}" value="${x.close||""}" style="width:90px;padding:4px 8px"></label></div>
-        ${x.status==="pending" ? `<div class="ba"><button class="btn sm ghost" type="button" data-st="won|${x.id}">Gagné</button><button class="btn sm ghost" type="button" data-st="lost|${x.id}">Perdu</button><button class="btn sm ghost" type="button" data-st="void|${x.id}">Annulé</button><button class="btn sm ghost" type="button" data-st="del|${x.id}">Supprimer</button></div>` : `<div class="ba"><button class="btn sm ghost" type="button" data-st="pending|${x.id}">Rouvrir</button></div>`}
+        ${x.status==="pending" ? `<div class="ba"><button class="btn sm" type="button" data-bk="${x.id}">${esc(book()[0])} ↗</button><button class="btn sm ghost" type="button" data-st="won|${x.id}">Gagné</button><button class="btn sm ghost" type="button" data-st="lost|${x.id}">Perdu</button><button class="btn sm ghost" type="button" data-st="void|${x.id}">Annulé</button><button class="btn sm ghost" type="button" data-st="del|${x.id}">Supprimer</button></div>` : `<div class="ba"><button class="btn sm ghost" type="button" data-st="pending|${x.id}">Rouvrir</button></div>`}
       </div>`;
     }).join("");
+    $("pList").querySelectorAll("[data-bk]").forEach(btn => btn.onclick = () => {
+      const x = bets().find(y => y.id === btn.dataset.bk); if (!x || !DATA.leagues[x.lg] || !CL[x.lg].T[x.h]) return;
+      openBookSheet({ lg: x.lg, d: x.d, h: x.h, a: x.a, mk: x.mk, odds: x.odds, stake: x.stake, recorded: true });
+    });
     $("pList").querySelectorAll("[data-close]").forEach(inp => inp.onchange = () => {
       const all = bets(), x = all.find(y => y.id === inp.dataset.close), v = parseFloat(inp.value);
       if (x) { if (v > 1) x.close = v; else delete x.close; saveBets(all); renderParis(); }
@@ -1140,6 +1200,7 @@ function renderParis(){
   } else $("pCalibTxt").textContent = `Il faut au moins 10 paris réglés pour comparer vos gains aux probabilités annoncées (${s.settled} pour l'instant).`;
 }
 [["sBank","bank"],["sWeek","week"],["sMax","max"],["sExpo","expo"]].forEach(([id,k]) => $(id).addEventListener("change", () => { const s = LS.get("pl_settings", {}); const v = parseFloat($(id).value); if (v >= 0) { s[k] = v; LS.set("pl_settings", s); } renderParis(); }));
+$("sBook").onchange = () => { const s = LS.get("pl_settings", {}); s.book = $("sBook").value; LS.set("pl_settings", s); toast(`Bookmaker : ${book()[0]}`); renderParis(); };
 $("sMethod").onchange = () => { const s = LS.get("pl_settings", {}); s.method = $("sMethod").value; LS.set("pl_settings", s); renderParis(); };
 $("pFilter").onchange = renderParis;
 $("pAdd").onclick = () => { const lg = ui.lg === "all" ? "l1" : ui.lg; const nx = upcoming(lg)[0]; const C = CL[lg]; openBetSheet({ lg, d: nx ? nx.d : nowStr(), h: nx ? nx.h : C.order[0].id, a: nx ? nx.a : C.order[1].id, mk: "1" }); };
