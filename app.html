@@ -739,7 +739,7 @@ function openBookSheet(pre){
   });
   if ($("bkRecord")) $("bkRecord").onclick = () => openBetSheet({ lg: pre.lg, d: fixt ? fixt.d : pre.d, h: pre.h, a: pre.a, mk: pre.mk });
 }
-const MAX_ODDS = 6, MIN_P = 0.2, VALUE_MIN = 0.04, STALE_H = 48;
+const MAX_ODDS = 6, MIN_P = 0.2, VALUE_MIN = 0.04, STALE_H = 72;   // mises à jour lundi, mercredi, vendredi : 72 h couvre le dimanche soir
 const isValue = x => x.edge >= VALUE_MIN && x.p >= MIN_P && x.o <= MAX_ODDS;
 function pendingStake(){ return bets().filter(x => x.status === "pending").reduce((s,x)=>s+x.stake,0); }
 const kellyFrac = (p, o) => (p*o - 1)/(o - 1);

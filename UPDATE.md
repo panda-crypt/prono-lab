@@ -1,6 +1,6 @@
 # Mise à jour des données de Prono Lab
 
-Procédure suivie par la tâche planifiée (lundi et vendredi). L'application Android télécharge `data.json`
+Procédure suivie par la tâche planifiée (lundi, mercredi et vendredi). L'application Android télécharge `data.json`
 depuis la branche `main` de ce dépôt : publier un nouveau `data.json` suffit, aucune recompilation de l'APK n'est nécessaire.
 
 **Règle d'or : ne jamais inventer un résultat, une statistique ou une cote.** Si une source ne répond pas,
