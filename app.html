@@ -76,7 +76,8 @@ main .wrap{padding-block:16px 28px}
 .mcard.value{border-color:var(--good)}
 .mtop{display:flex;justify-content:space-between;font-size:12px;color:var(--muted);gap:8px}
 .mteams{display:grid;grid-template-columns:1fr auto 1fr;gap:8px;align-items:center}
-.mteams .t{font-family:var(--font-display);font-weight:700;font-size:20px;line-height:1.05;text-transform:uppercase;overflow-wrap:anywhere}
+.mteams .t{font-family:var(--font-display);font-weight:700;font-size:20px;line-height:1.05;text-transform:uppercase;overflow-wrap:break-word;min-width:0}
+.mteams .t.long{font-size:16px}
 .mteams .t.a{text-align:right}
 .mteams .xg{font-family:var(--font-data);font-size:12.5px;color:var(--muted);text-align:center;white-space:nowrap}
 .minibar{display:flex;height:8px;border-radius:4px;overflow:hidden}
@@ -121,7 +122,7 @@ select,input[type=number],input[type=text]{background:var(--surface-2);border:1p
 .check input{accent-color:var(--pitch);width:16px;height:16px}
 
 .fixture{display:grid;grid-template-columns:1fr auto 1fr;align-items:center;gap:10px}
-.fixture .name{font-family:var(--font-display);font-weight:800;font-size:clamp(22px,4.5vw,34px);line-height:1;text-transform:uppercase;overflow-wrap:anywhere}
+.fixture .name{font-family:var(--font-display);font-weight:800;font-size:clamp(20px,4.5vw,34px);line-height:1;text-transform:uppercase;overflow-wrap:break-word}
 .fixture .away{text-align:right}
 .fixture .meta{font-size:12px;color:var(--muted);margin-top:4px}
 .fixture .score{font-family:var(--font-display);font-weight:800;font-size:clamp(30px,6vw,46px);line-height:1;text-align:center}
@@ -385,6 +386,7 @@ table{border-collapse:collapse;width:100%}
 
     <footer class="foot">
       <p><strong>Méthode.</strong> Pour chaque équipe : xG et buts de la saison (les matchs récents comptent davantage, la force des adversaires est prise en compte), mélangés avec la saison 2025-26 (poids équivalent à 16 matchs, qui s'efface à mesure que la saison avance), plus l'avantage du terrain mesuré dans chaque championnat. Les bilans domicile/extérieur de chaque équipe sont affichés mais pas utilisés : sur 3 ou 4 matchs, ils dégradaient les prévisions lors des tests. Probabilités par loi de Poisson corrigée (Dixon-Coles, ρ = −0,10 mesuré sur la saison).</p>
+      <p><strong>Coupes d'Europe.</strong> Tous les clubs sont placés sur une même échelle de force : coefficient UEFA de leur pays, niveau mesuré dans leur championnat pour les clubs des cinq grands championnats (sinon niveau de la coupe disputée), et résultats européens de la saison. Le modèle est recalé sur chaque nouveau match européen.</p>
       <p><strong>Jouer comporte des risques</strong> : endettement, isolement, dépendance. Pour être aidé : 09 74 75 13 13 (Joueurs Info Service, appel non surtaxé). Interdit aux moins de 18 ans.</p>
       <p id="srcList"></p>
     </footer>
@@ -519,11 +521,18 @@ function pois(k, l){ let r = Math.exp(-l); for (let i=1;i<=k;i++) r *= l/i; retu
 function predict(C, hid, aid, o = {}){
   const H = C.T[hid], A = C.T[aid];
   const neutral = !!o.neutral, adjH = o.adjH || 0, adjA = o.adjA || 0;
-  const hf = neutral ? 1 : C.hF, af = neutral ? 1 : C.aF;
-  const sp = USE_SPLIT && !neutral;
-  let lh = C.muAll * hf * H.att * A.def * (sp ? H.hAtt * A.aDef : 1);
-  let la = C.muAll * af * A.att * H.def * (sp ? A.aAtt * H.hDef : 1);
+  let lh, la;
+  if (C.euro){ [lh, la] = euroLambdas(C.E, hid, aid, neutral); }
+  else {
+    const hf = neutral ? 1 : C.hF, af = neutral ? 1 : C.aF;
+    const sp = USE_SPLIT && !neutral;
+    lh = C.muAll * hf * H.att * A.def * (sp ? H.hAtt * A.aDef : 1);
+    la = C.muAll * af * A.att * H.def * (sp ? A.aAtt * H.hDef : 1);
+  }
   lh *= (1 + adjH/100) / (1 + adjA/200); la *= (1 + adjA/100) / (1 + adjH/200);
+  return scoreMatrix(lh, la);
+}
+function scoreMatrix(lh, la){
   lh = Math.max(0.15, Math.min(5, lh)); la = Math.max(0.15, Math.min(5, la));
   const M = []; let tot = 0;
   for (let i=0;i<=MAXG;i++){ M[i]=[]; for (let j=0;j<=MAXG;j++){
@@ -578,6 +587,85 @@ function goalsPick(r){
   if (1-r.o25 >= 0.57) return ["U25","Moins de 2,5 buts", 1-r.o25];
   if (r.o15 >= 0.75) return ["O15","Plus de 1,5 but", r.o15];
   return ["O25", r.o25 >= 0.5 ? "Plus de 2,5 buts" : "Moins de 2,5 buts", Math.max(r.o25, 1-r.o25)];
+}
+
+
+/* ================= Coupes d'Europe =================
+   Une seule échelle de force pour tous les clubs européens :
+   force = a × log(coefficient UEFA du pays) + b × niveau domestique (clubs des 5 championnats suivis)
+           ou effet de la coupe (autres clubs) + écart propre au club appris sur les matchs européens.
+   Buts : log λ = m ± avantage du terrain ± (écart de force)/2. Paramètres ajustés par maximum de vraisemblance
+   (Poisson) avec des a priori faibles, sur les matchs européens de la saison. */
+const EURO_PRIOR = { m:[Math.log(1.45),0.2], h:[0.12,0.08], a:[0.45,0.3], b:[0.8,0.3], kU:[0,0.4], kC:[0,0.4] }, EURO_TAU = 0.3;
+function euroFit(before){
+  const comps = Object.keys(DATA.leagues).filter(k => DATA.leagues[k].type === "euro");
+  const coef = DATA.uefaCountry || {}, logs = Object.values(coef).map(Math.log), ml = logs.reduce((a,b)=>a+b,0) / Math.max(1, logs.length);
+  const domC = {};
+  const domOf = d => {
+    if (!d || !DATA.leagues[d.lg]) return null;
+    if (!before) return CL[d.lg] && CL[d.lg].T[d.id] ? Math.log(CL[d.lg].T[d.id].att / CL[d.lg].T[d.id].def) : null;
+    domC[d.lg] = domC[d.lg] || computeLeague(DATA.leagues[d.lg], { before, useXg:false });
+    const t = domC[d.lg].T[d.id]; return t ? Math.log(t.att / t.def) : null;
+  };
+  const T = {};
+  comps.forEach(k => DATA.leagues[k].teams.forEach(t => {
+    T[t.id] = { id:t.id, comp:k, country:t.country, z: Math.log(coef[t.country] || 10) - ml, dom: domOf(t.dom), u:0, mu:0, vu:0, gu:0 };
+  }));
+  const M = [];
+  comps.forEach(k => DATA.leagues[k].matches.forEach(m => { if (m.s && T[m.h] && T[m.a] && (!before || m.d < before)) M.push(m); }));
+  const P = { m:EURO_PRIOR.m[0], h:EURO_PRIOR.h[0], a:EURO_PRIOR.a[0], b:EURO_PRIOR.b[0], kU:0, kC:0 };
+  const keys = Object.keys(P), mA = {}, vA = {}; keys.forEach(k => { mA[k] = 0; vA[k] = 0; });
+  const team = Object.values(T);
+  const sOf = t => P.a*t.z + (t.dom != null ? P.b*t.dom : (t.comp === "ucl" ? P.kU : t.comp === "uecl" ? P.kC : 0)) + t.u;
+  const lr = 0.03, b1 = 0.9, b2 = 0.999;
+  for (let it = 1; it <= 700; it++){
+    const g = {}; keys.forEach(k => g[k] = (P[k] - EURO_PRIOR[k][0]) / EURO_PRIOR[k][1]**2);
+    team.forEach(t => { t.gu = t.u / EURO_TAU**2; t.sv = sOf(t); });
+    M.forEach(m => {
+      const H = T[m.h], A = T[m.a], d = (H.sv - A.sv)/2;
+      const eh = Math.exp(P.m + P.h + d) - m.s[0], ea = Math.exp(P.m - P.h - d) - m.s[1];
+      g.m += eh + ea; g.h += eh - ea;
+      const gs = 0.5*(eh - ea);
+      [[H, gs], [A, -gs]].forEach(([t, gg]) => {
+        g.a += gg*t.z; t.gu += gg;
+        if (t.dom != null) g.b += gg*t.dom; else if (t.comp === "ucl") g.kU += gg; else if (t.comp === "uecl") g.kC += gg;
+      });
+    });
+    const c1 = 1 - b1**it, c2 = 1 - b2**it;
+    keys.forEach(k => { mA[k] = b1*mA[k] + (1-b1)*g[k]; vA[k] = b2*vA[k] + (1-b2)*g[k]**2; P[k] -= lr*(mA[k]/c1)/(Math.sqrt(vA[k]/c2) + 1e-8); });
+    team.forEach(t => { t.mu = b1*t.mu + (1-b1)*t.gu; t.vu = b2*t.vu + (1-b2)*t.gu**2; t.u -= lr*(t.mu/c1)/(Math.sqrt(t.vu/c2) + 1e-8); });
+  }
+  team.forEach(t => t.s = sOf(t));
+  return { P, T, n: M.length };
+}
+function euroLambdas(E, hid, aid, neutral){
+  const d = (E.T[hid].s - E.T[aid].s)/2, h = neutral ? 0 : E.P.h;
+  return [Math.exp(E.P.m + h + d), Math.exp(E.P.m - h - d)];
+}
+function computeEuroComp(L, E){
+  const played = L.matches.filter(m => m.s);
+  const T = {};
+  L.teams.forEach(t => {
+    const e = E.T[t.id];
+    T[t.id] = { id:t.id, name:t.name, raw:{ xg:{ p:0, f:0, a:0 }, prior:null }, country:t.country, dom:t.dom, games:[],
+                s: e.s, att: Math.exp(e.s/2), def: Math.exp(-e.s/2), domRating: e.dom, hAtt:1, hDef:1, aAtt:1, aDef:1 };
+  });
+  played.forEach(m => {
+    T[m.h].games.push({ d:m.d, opp:m.a, home:true, gf:m.s[0], ga:m.s[1] });
+    T[m.a].games.push({ d:m.d, opp:m.h, home:false, gf:m.s[1], ga:m.s[0] });
+  });
+  Object.values(T).forEach(t => {
+    t.games.sort((a,b) => a.d < b.d ? -1 : 1);
+    const g = t.games; t.p = g.length;
+    t.w = g.filter(x=>x.gf>x.ga).length; t.dr = g.filter(x=>x.gf===x.ga).length; t.l = t.p - t.w - t.dr;
+    t.f = g.reduce((s,x)=>s+x.gf,0); t.a = g.reduce((s,x)=>s+x.ga,0); t.pts = 3*t.w + t.dr;
+    const sp = arr => ({ p:arr.length, w:arr.filter(x=>x.gf>x.ga).length, d:arr.filter(x=>x.gf===x.ga).length, l:arr.filter(x=>x.gf<x.ga).length, f:arr.reduce((s,x)=>s+x.gf,0), a:arr.reduce((s,x)=>s+x.ga,0) });
+    t.home = sp(g.filter(x=>x.home)); t.away = sp(g.filter(x=>!x.home));
+    t.form = g.slice(-5).map(x => x.gf>x.ga ? "W" : x.gf===x.ga ? "D" : "L");
+  });
+  const order = Object.values(T).sort((a,b) => b.pts-a.pts || (b.f-b.a)-(a.f-a.a) || b.f-a.f || a.name.localeCompare(b.name));
+  order.forEach((t,i) => t.rank = i+1);
+  return { T, order, euro:true, E, muAll: Math.exp(E.P.m), n: played.length };
 }
 
 /* ================= Valeur et mises ================= */
@@ -675,7 +763,20 @@ function betStats(){
 let BT = null;
 function backtest(){
   const recs = []; const per = {};
+  const rec = (lg, r, m) => {
+    const out = m.s[0] > m.s[1] ? 0 : m.s[0] === m.s[1] ? 1 : 2, pr = [r.pH, r.pD, r.pA];
+    recs.push({ lg, pr, out, brier: pr.reduce((s,p,i)=>s+(p-(i===out?1:0))**2,0), ok: pr.indexOf(Math.max(...pr)) === out, o25: r.o25, over: m.s[0]+m.s[1] > 2, btts: r.btts, bt: m.s[0] > 0 && m.s[1] > 0 });
+  };
+  // Coupes d'Europe : ajustement refait avant chaque journée, avec uniquement les matchs antérieurs
+  const eu = Object.entries(DATA.leagues).filter(([,L]) => L.type === "euro").flatMap(([lg,L]) => L.matches.filter(m => m.s).map(m => ({ lg, m })));
+  [...new Set(eu.map(x => x.m.d.slice(0,10)))].sort().forEach(day => {
+    const before = day + "T00:00";
+    if (eu.filter(x => x.m.d < before).length < 30) return;
+    const E = euroFit(before);
+    eu.filter(x => x.m.d.slice(0,10) === day).forEach(({ lg, m }) => { const [lh, la] = euroLambdas(E, m.h, m.a, false); rec(lg, scoreMatrix(lh, la), m); });
+  });
   for (const [lg, L] of Object.entries(DATA.leagues)){
+    if (L.type === "euro") continue;
     const pl = L.matches.filter(m => m.s);
     const dates = [...new Set(pl.map(m => m.d.slice(0,10)))].sort();
     const cache = {};
@@ -710,7 +811,13 @@ const ui = Object.assign({ view:"matchs", lg:"l1" }, LS.get("pl_ui", {}));
 if (!DATA.leagues[ui.lg] && ui.lg !== "all") ui.lg = "l1";
 const saveUi = () => LS.set("pl_ui", { view:ui.view, lg:ui.lg, aH:ui.aH, aA:ui.aA });
 let CL = {};
-function computeAll(){ CL = {}; for (const lg of Object.keys(DATA.leagues)) CL[lg] = computeLeague(DATA.leagues[lg]); BT = null; }
+function computeAll(){
+  CL = {};
+  for (const [lg, L] of Object.entries(DATA.leagues)) if (L.type !== "euro") CL[lg] = computeLeague(L);
+  const euroKeys = Object.keys(DATA.leagues).filter(k => DATA.leagues[k].type === "euro");
+  if (euroKeys.length){ const E = euroFit(); euroKeys.forEach(k => CL[k] = computeEuroComp(DATA.leagues[k], E)); }
+  BT = null;
+}
 
 function renderChips(){
   const showAll = ui.view === "valeur" || ui.view === "fiab" || ui.view === "paris";
@@ -746,9 +853,9 @@ function upcoming(lg, days = 10){
 function renderMatchs(){
   const lg = ui.lg, L = DATA.leagues[lg], C = CL[lg];
   $("mTitle").textContent = `${L.name} · prochains matchs`;
-  const list = upcoming(lg);
-  $("mHint").textContent = list.length ? `${list.length} rencontres sur 10 jours` : "";
-  if (!list.length){ $("mList").innerHTML = `<div class="empty">Aucun match programmé dans les 10 prochains jours. Le calendrier se met à jour avec les données.</div>`; }
+  const days = L.type === "euro" ? 16 : 10, list = upcoming(lg, days);
+  $("mHint").textContent = list.length ? `${list.length} rencontres sur ${days} jours` : "";
+  if (!list.length){ $("mList").innerHTML = `<div class="empty">Aucun match programmé dans les ${days} prochains jours. Le calendrier se met à jour avec les données.</div>`; }
   else {
     let html = "", day = "";
     const now = nowStr();
@@ -767,7 +874,7 @@ function renderMatchs(){
       const started = m.d <= now;
       html += `<article class="mcard${val.includes("good")?" value":""}">
         <div class="mtop"><span>${fmtTime(m.d)}${started?" · en cours ou joué":""}</span><span>${H.rank}e contre ${A.rank}e</span></div>
-        <div class="mteams"><div class="t">${esc(H.name)}</div><div class="xg">${fx(r.lh,1)} – ${fx(r.la,1)}</div><div class="t a">${esc(A.name)}</div></div>
+        <div class="mteams"><div class="t${H.name.length>10?" long":""}">${esc(H.name)}</div><div class="xg">${fx(r.lh,1)} – ${fx(r.la,1)}</div><div class="t a${A.name.length>10?" long":""}">${esc(A.name)}</div></div>
         <div class="minibar"><i class="h" style="width:${r.pH*100}%"></i><i class="d" style="width:${r.pD*100}%"></i><i class="a" style="width:${r.pA*100}%"></i></div>
         <div class="mprobs num"><span>${pct(r.pH)}</span><span>${pct(r.pD)}</span><span>${pct(r.pA)}</span></div>
         <div class="mfoot"><span class="pickline">${esc(lab)} <span class="tag ${cc}">${cl}</span></span>${val}</div>
@@ -780,7 +887,7 @@ function renderMatchs(){
     $("mList").querySelectorAll("[data-bet]").forEach(b => b.onclick = () => { const [l,d,h,a,mk] = b.dataset.bet.split("|"); openBetSheet({ lg:l, d, h, a, mk }); });
   }
   // classement
-  $("stdTitle").textContent = `Classement ${L.name}`;
+  $("stdTitle").textContent = L.type === "euro" ? `${L.name} · phase de ligue` : `Classement ${L.name}`;
   const sp = s => `<td class="num">${s.w}-${s.d}-${s.l}</td><td class="num">${s.f}-${s.a}</td><td class="num">${3*s.w+s.d}</td>`;
   $("stBody").innerHTML = C.order.map(t => `<tr><td class="num">${t.rank}</td><td class="t">${esc(t.name)}</td><td class="num">${t.p}</td><td class="num">${t.w}</td><td class="num">${t.dr}</td><td class="num">${t.l}</td><td class="num">${t.f}-${t.a}</td><td class="num"><strong>${t.pts}</strong></td>${sp(t.home)}${sp(t.away)}<td class="num">${t.raw.xg.p?fx(t.raw.xg.f/t.raw.xg.p):"—"}</td><td class="num">${t.raw.xg.p?fx(t.raw.xg.a/t.raw.xg.p):"—"}</td><td class="t"><span class="form">${t.form.map(f=>`<b class="${f}">${f==="W"?"V":f==="D"?"N":"D"}</b>`).join("")}</span></td></tr>`).join("");
 }
@@ -849,8 +956,8 @@ function renderAnalyse(){
   ui.last = { lg, r, H, A, fixt, neutral, adjH, adjA };
 
   $("aHName").textContent = H.name; $("aAName").textContent = A.name;
-  $("aHMeta").textContent = `${H.rank}e · ${H.pts} pts · à dom. ${H.home.w}V ${H.home.d}N ${H.home.l}D`;
-  $("aAMeta").textContent = `${A.rank}e · ${A.pts} pts · à l'ext. ${A.away.w}V ${A.away.d}N ${A.away.l}D`;
+  $("aHMeta").textContent = C.euro ? `${H.rank}e · ${H.pts} pts · ${H.w}V ${H.dr}N ${H.l}D en Europe` : `${H.rank}e · ${H.pts} pts · à dom. ${H.home.w}V ${H.home.d}N ${H.home.l}D`;
+  $("aAMeta").textContent = C.euro ? `${A.rank}e · ${A.pts} pts · ${A.w}V ${A.dr}N ${A.l}D en Europe` : `${A.rank}e · ${A.pts} pts · à l'ext. ${A.away.w}V ${A.away.d}N ${A.away.l}D`;
   $("aXg").textContent = `${fx(r.lh,1)} – ${fx(r.la,1)}`;
   [...$("aBar").children].forEach((el,i) => { const p = [r.pH,r.pD,r.pA][i]; el.style.flex = `0 0 ${p*100}%`; el.textContent = p > 0.09 ? pct(p) : ""; });
 
@@ -877,7 +984,15 @@ function renderAnalyse(){
   $("aMatrix").innerHTML = mx;
 
   const per = (x,p) => p ? fx(x/p) : "—";
-  const rows = [
+  const rows = C.euro ? [
+    ["Classement (phase de ligue)", H.rank+"e", A.rank+"e", H.rank<A.rank?0:1],
+    ["Points / match", per(H.pts,H.p), per(A.pts,A.p), H.pts/H.p>A.pts/A.p?0:1],
+    ["Buts / match en Europe", per(H.f,H.p), per(A.f,A.p), H.f/H.p>A.f/A.p?0:1],
+    ["Encaissés / match en Europe", per(H.a,H.p), per(A.a,A.p), H.a/H.p<A.a/A.p?0:1],
+    ["Pays (coef. UEFA)", `${H.country} ${fx(DATA.uefaCountry[H.country],1)}`, `${A.country} ${fx(DATA.uefaCountry[A.country],1)}`, DATA.uefaCountry[H.country]>DATA.uefaCountry[A.country]?0:1],
+    ["Niveau dans son championnat", H.domRating != null ? (H.domRating>=0?"+":"")+fx(H.domRating) : "—", A.domRating != null ? (A.domRating>=0?"+":"")+fx(A.domRating) : "—", -1],
+    ["Force européenne (0 = moyenne)", (H.s>=0?"+":"")+fx(H.s), (A.s>=0?"+":"")+fx(A.s), H.s>A.s?0:1],
+  ] : [
     ["Classement", H.rank+"e", A.rank+"e", H.rank<A.rank?0:1],
     ["Points / match", per(H.pts,H.p), per(A.pts,A.p), H.pts/H.p>A.pts/A.p?0:1],
     ["xG pour / match", per(H.raw.xg.f,H.raw.xg.p), per(A.raw.xg.f,A.raw.xg.p), H.raw.xg.f/H.raw.xg.p>A.raw.xg.f/A.raw.xg.p?0:1],
@@ -1149,8 +1264,8 @@ async function checkApk(){
     const s = ui.last; if (!s) return;
     const { r, H, A, lg } = s, L = DATA.leagues[lg];
     const prompt = `Tu es un analyste football. Rédige en français une analyse d'avant-match de 120 à 170 mots, en prose, pour ${H.name} (domicile) contre ${A.name} en ${L.name} 2026-27. N'utilise que ces chiffres et ne cite aucun fait absent :
-${H.name} : ${H.rank}e, ${H.pts} pts en ${H.p} matchs, ${H.f} buts pour, ${H.a} contre ; à domicile ${H.home.w}V ${H.home.d}N ${H.home.l}D ; xG/match ${fx(H.raw.xg.f/H.raw.xg.p)} pour, ${fx(H.raw.xg.a/H.raw.xg.p)} contre ; forme ${H.form.join("")}.
-${A.name} : ${A.rank}e, ${A.pts} pts en ${A.p} matchs, ${A.f} buts pour, ${A.a} contre ; à l'extérieur ${A.away.w}V ${A.away.d}N ${A.away.l}D ; xG/match ${fx(A.raw.xg.f/A.raw.xg.p)} pour, ${fx(A.raw.xg.a/A.raw.xg.p)} contre ; forme ${A.form.join("")}.
+${H.name} : ${H.rank}e, ${H.pts} pts en ${H.p} matchs, ${H.f} buts pour, ${H.a} contre ; à domicile ${H.home.w}V ${H.home.d}N ${H.home.l}D ; ${H.raw.xg.p ? `xG/match ${fx(H.raw.xg.f/H.raw.xg.p)} pour, ${fx(H.raw.xg.a/H.raw.xg.p)} contre ; ` : ""}forme ${H.form.join("")}.
+${A.name} : ${A.rank}e, ${A.pts} pts en ${A.p} matchs, ${A.f} buts pour, ${A.a} contre ; à l'extérieur ${A.away.w}V ${A.away.d}N ${A.away.l}D ; ${A.raw.xg.p ? `xG/match ${fx(A.raw.xg.f/A.raw.xg.p)} pour, ${fx(A.raw.xg.a/A.raw.xg.p)} contre ; ` : ""}forme ${A.form.join("")}.
 Modèle : buts attendus ${r.lh.toFixed(2)}-${r.la.toFixed(2)} ; 1 ${pct(r.pH)}, N ${pct(r.pD)}, 2 ${pct(r.pA)} ; plus de 2,5 buts ${pct(r.o25)} ; les deux marquent ${pct(r.btts)}.
 Explique ce qui fait pencher le modèle, la principale incertitude, et termine par un pronostic prudent et un rappel de vérifier les compositions.`;
     $("aiBtn").disabled = true; $("aiOut").textContent = "Claude réfléchit…";

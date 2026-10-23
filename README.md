@@ -1,6 +1,6 @@
 # Prono Lab
 
-Application Android de pronostics football pour la Ligue 1, la Premier League, la Liga, la Serie A et la Bundesliga.
+Application Android de pronostics football pour la Ligue 1, la Premier League, la Liga, la Serie A, la Bundesliga, la Ligue des champions, la Ligue Europa et la Ligue Conférence.
 
 **Installer :** sur votre téléphone, ouvrez la page [Releases](../../releases/latest) et touchez `prono-lab.apk`.
 Android vous demandera d'autoriser l'installation depuis cette source : acceptez pour ce téléchargement.

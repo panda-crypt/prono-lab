@@ -1,0 +1,73 @@
+#tz=uk  (heures du Royaume-Uni, source statz.ai)
+8 Sep 2026|17:45|Club Brugge|Aston Villa|2-3
+8 Sep 2026|17:45|AEK Athens|LASK Linz|1-0
+8 Sep 2026|20:00|Real Madrid|Inter|2-1
+8 Sep 2026|20:00|Porto|Manchester City|0-2
+8 Sep 2026|20:00|Borussia Dortmund|Villarreal|3-2
+8 Sep 2026|20:00|LOSC Lille|Real Betis|2-3
+9 Sep 2026|17:45|FC Barcelona|Feyenoord|5-1
+9 Sep 2026|17:45|VfB Stuttgart|Viking|3-1
+9 Sep 2026|20:00|Liverpool|Atlético Madrid|2-1
+9 Sep 2026|20:00|Napoli|Arsenal|0-1
+9 Sep 2026|20:00|Paris Saint Germain|Slovan Bratislava|6-1
+9 Sep 2026|20:00|Sporting CP|Galatasaray|3-1
+10 Sep 2026|17:45|Fenerbahçe|Roma|1-1
+10 Sep 2026|17:45|PSV|Shakhtar Donetsk|1-1
+10 Sep 2026|20:00|Manchester United|Sabah|4-0
+10 Sep 2026|20:00|Slavia Praha|Lens|2-3
+10 Sep 2026|20:00|Como|RB Leipzig|4-1
+10 Sep 2026|20:00|FC Bayern München|Bodø / Glimt|5-0
+13 Oct 2026|17:45|Sabah|Slavia Praha|2-0
+13 Oct 2026|17:45|Lens|Sporting CP|0-2
+13 Oct 2026|20:00|Galatasaray|FC Barcelona|1-4
+13 Oct 2026|20:00|Atlético Madrid|Manchester United|2-0
+13 Oct 2026|20:00|Arsenal|LOSC Lille|3-0
+13 Oct 2026|20:00|Viking|FC Bayern München|3-3
+13 Oct 2026|20:00|Inter|Club Brugge|3-4
+13 Oct 2026|20:00|Villarreal|Napoli|3-1
+13 Oct 2026|20:00|RB Leipzig|PSV|1-0
+14 Oct 2026|17:45|LASK Linz|Liverpool|3-6
+14 Oct 2026|17:45|Feyenoord|Como|3-2
+14 Oct 2026|20:00|Manchester City|Paris Saint Germain|2-4
+14 Oct 2026|20:00|Bodø / Glimt|Borussia Dortmund|1-0
+14 Oct 2026|20:00|Slovan Bratislava|VfB Stuttgart|0-3
+14 Oct 2026|20:00|Shakhtar Donetsk|AEK Athens|3-1
+14 Oct 2026|20:00|Roma|Real Madrid|3-4
+14 Oct 2026|20:00|Real Betis|Porto|3-2
+14 Oct 2026|20:00|Aston Villa|Fenerbahçe|6-0
+20 Oct 2026|17:45|Sabah|Borussia Dortmund|1-2
+20 Oct 2026|17:45|Fenerbahçe|Slavia Praha|2-2
+20 Oct 2026|20:00|Paris Saint Germain|FC Barcelona|4-2
+20 Oct 2026|20:00|Manchester City|AEK Athens|5-1
+20 Oct 2026|20:00|Liverpool|Villarreal|4-3
+20 Oct 2026|20:00|VfB Stuttgart|Atlético Madrid|1-1
+20 Oct 2026|20:00|Napoli|Bodø / Glimt|4-3
+20 Oct 2026|20:00|Porto|PSV|0-1
+20 Oct 2026|20:00|Roma|Slovan Bratislava|4-0
+21 Oct 2026|17:45|Como|Manchester United|4-1
+21 Oct 2026|17:45|LOSC Lille|Galatasaray|2-4
+21 Oct 2026|20:00|FC Bayern München|Arsenal|2-2
+21 Oct 2026|20:00|Inter|Shakhtar Donetsk|1-0
+21 Oct 2026|20:00|Club Brugge|Lens|3-0
+21 Oct 2026|20:00|Real Madrid|RB Leipzig|4-1
+21 Oct 2026|20:00|Real Betis|Feyenoord|1-0
+21 Oct 2026|20:00|Aston Villa|Viking|3-1
+21 Oct 2026|20:00|Sporting CP|LASK Linz|2-3
+3 Nov 2026|17:45|Galatasaray|VfB Stuttgart|
+3 Nov 2026|17:45|Shakhtar Donetsk|Sporting CP|
+3 Nov 2026|20:00|FC Barcelona|Aston Villa|
+3 Nov 2026|20:00|Atlético Madrid|FC Bayern München|
+3 Nov 2026|20:00|Manchester United|Roma|
+3 Nov 2026|20:00|Villarreal|Paris Saint Germain|
+3 Nov 2026|20:00|Feyenoord|Inter|
+3 Nov 2026|20:00|Bodø / Glimt|LOSC Lille|
+3 Nov 2026|20:00|LASK Linz|Slovan Bratislava|
+4 Nov 2026|17:45|Fenerbahçe|Liverpool|
+4 Nov 2026|17:45|AEK Athens|Real Madrid|
+4 Nov 2026|20:00|RB Leipzig|Manchester City|
+4 Nov 2026|20:00|Slavia Praha|Arsenal|
+4 Nov 2026|20:00|Borussia Dortmund|Real Betis|
+4 Nov 2026|20:00|Porto|Napoli|
+4 Nov 2026|20:00|Viking|Sabah|
+4 Nov 2026|20:00|PSV|Club Brugge|
+4 Nov 2026|20:00|Lens|Como|

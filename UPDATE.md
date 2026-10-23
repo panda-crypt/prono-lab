@@ -31,13 +31,22 @@ Les noms d'équipes doivent être **exactement** ceux de statz.ai (ceux déjà p
    (l'ancienne forme `("Bookmaker", [c1, cN, c2])` reste acceptée). Préférer la meilleure cote disponible.
    Cotes américaines : `+150` → 2,50 ; `-200` → 1,50 (formule : `+X` → 1 + X/100, `-X` → 1 + 100/X).
    Supprimer les cotes des matchs déjà joués (le script les ignore de toute façon).
-4. **Construire et vérifier.**
+4. **Coupes d'Europe** (`raw/ucl.txt`, `raw/uel.txt`, `raw/uecl.txt`, `raw/euro.py`).
+   - Ligue des champions : `https://statz.ai/competitions/champions-league/fixtures` (heures du Royaume-Uni, fichier marqué `#tz=uk`).
+   - Ligue Europa et Ligue Conférence : articles uefa.com « all the league phase fixtures and results » (liens dans `raw/euro.py`,
+     `SOURCES`), heures de Paris (fichiers marqués `#tz=paris`, 21:00 quand l'heure n'est pas précisée).
+   - Ajouter les scores joués et les matchs des 16 prochains jours. À partir des barrages, ajouter les nouveaux matchs
+     dans le même fichier (les clubs doivent figurer dans `CLUBS`, avec leur pays et, pour les 5 grands championnats, leur id statz).
+   - Cotes des matchs européens : dictionnaire `ODDS` de `raw/euro.py`, par compétition :
+     `ODDS = {"ucl": {("Domicile","Extérieur"): {"1x2": ("Bookmaker", [c1, cN, c2])}}}`.
+   - Coefficients des pays (`COUNTRY_COEF`) : à rafraîchir une fois par mois depuis Wikipédia « UEFA coefficient ».
+5. **Construire et vérifier.**
    ```
    python3 build_data.py "AAAA-MM-JJTHH:MM" "AAAA-MM-JJ"   # date/heure de Paris de la mise à jour, puis date de relevé des cotes
    ```
    Le script s'arrête si une équipe n'a pas de xG ou de saison précédente. Vérifier ensuite sur une source officielle
    (classement du championnat) que les points des 3 premiers et du dernier correspondent aux résultats saisis.
-5. **Publier.** `git add raw data.json && git commit -m "Données du JJ/MM : …" && git push origin main`.
+6. **Publier.** `git add raw data.json && git commit -m "Données du JJ/MM : …" && git push origin main`.
    Ne pas modifier `app.html` ni `android/` (cela relancerait la compilation de l'APK).
 
 ## Résumé à écrire en fin de tâche
