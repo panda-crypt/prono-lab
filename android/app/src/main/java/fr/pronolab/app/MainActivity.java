@@ -1,7 +1,15 @@
 package fr.pronolab.app;
 
 import android.annotation.SuppressLint;
+import android.content.ClipData;
+import android.content.ClipboardManager;
+import android.content.Context;
 import android.content.Intent;
+import android.content.pm.PackageManager;
+import android.content.pm.ResolveInfo;
+import android.webkit.JavascriptInterface;
+import java.util.List;
+import java.util.Locale;
 import android.net.Uri;
 import android.os.Bundle;
 import android.webkit.WebResourceRequest;
@@ -44,6 +52,9 @@ public class MainActivity extends AppCompatActivity {
         s.setCacheMode(WebSettings.LOAD_DEFAULT);
         s.setTextZoom(100);
 
+        // Pont réservé à la page embarquée : ouvrir l'application du bookmaker, copier un texte.
+        web.addJavascriptInterface(new Bridge(), "ProNoLab");
+
         web.setWebViewClient(new WebViewClient() {
             @Override
             public WebResourceResponse shouldInterceptRequest(WebView view, @NonNull WebResourceRequest request) {
@@ -65,6 +76,47 @@ public class MainActivity extends AppCompatActivity {
             web.restoreState(savedInstanceState);
         } else {
             web.loadUrl("https://" + HOST + "/assets/index.html");
+        }
+    }
+
+    /** Fonctions appelées depuis la page (window.ProNoLab). */
+    private class Bridge {
+        /** Ouvre l'application installée dont le nom ou l'identifiant contient {@code keyword} ; sinon ouvre {@code fallbackUrl}. Renvoie "app" ou "web". */
+        @JavascriptInterface
+        public String openApp(String keyword, String fallbackUrl) {
+            String k = keyword == null ? "" : keyword.toLowerCase(Locale.ROOT);
+            PackageManager pm = getPackageManager();
+            Intent main = new Intent(Intent.ACTION_MAIN).addCategory(Intent.CATEGORY_LAUNCHER);
+            List<ResolveInfo> apps = pm.queryIntentActivities(main, 0);
+            for (ResolveInfo ri : apps) {
+                String pkg = ri.activityInfo.packageName.toLowerCase(Locale.ROOT);
+                String label = String.valueOf(ri.loadLabel(pm)).toLowerCase(Locale.ROOT);
+                if (!k.isEmpty() && (pkg.contains(k) || label.contains(k))) {
+                    Intent launch = pm.getLaunchIntentForPackage(ri.activityInfo.packageName);
+                    if (launch != null) {
+                        launch.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                        runOnUiThread(() -> startActivity(launch));
+                        return "app";
+                    }
+                }
+            }
+            if (fallbackUrl != null && fallbackUrl.startsWith("https://")) {
+                runOnUiThread(() -> {
+                    try { startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse(fallbackUrl))); } catch (Exception ignored) { }
+                });
+            }
+            return "web";
+        }
+
+        @JavascriptInterface
+        public boolean copy(String text) {
+            try {
+                ClipboardManager cm = (ClipboardManager) getSystemService(Context.CLIPBOARD_SERVICE);
+                cm.setPrimaryClip(ClipData.newPlainText("Prono Lab", text));
+                return true;
+            } catch (Exception e) {
+                return false;
+            }
         }
     }
 

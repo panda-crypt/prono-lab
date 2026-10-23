@@ -682,17 +682,19 @@ function marketProbs(o){
 function settings(){ return Object.assign({ bank:100, week:30, method:"kelly", max:3, expo:15, book:"unibet" }, LS.get("pl_settings", {})); }
 /* Bookmaker de l'utilisateur : l'application prépare le pari, l'utilisateur le valide lui-même chez le bookmaker. */
 const BOOKS = {
-  unibet:  ["Unibet", "https://www.unibet.fr/sport/football"],
-  winamax: ["Winamax", "https://www.winamax.fr/paris-sportifs/sports/1"],
-  betclic: ["Betclic", "https://www.betclic.fr/football-s1"],
-  parions: ["Parions Sport", "https://www.enligne.parionssport.fdj.fr/paris-football"],
-  pmu:     ["PMU", "https://paris-sportifs.pmu.fr/pari/sport/25/football"],
+  // [nom, page football du site, mot-clé pour retrouver l'application installée]
+  unibet:  ["Unibet", "https://www.unibet.fr/sport/football", "unibet"],
+  winamax: ["Winamax", "https://www.winamax.fr/paris-sportifs/sports/1", "winamax"],
+  betclic: ["Betclic", "https://www.betclic.fr/football-s1", "betclic"],
+  parions: ["Parions Sport", "https://www.enligne.parionssport.fdj.fr/paris-football", "parions"],
+  pmu:     ["PMU", "https://paris-sportifs.pmu.fr/pari/sport/25/football", "pmu"],
 };
 const book = () => BOOKS[settings().book] || BOOKS.unibet;
 // cote en dessous de laquelle le pari n'a plus de valeur (même seuil que l'onglet Valeur)
 const minOdds = (p, mp) => { const q = prudent(p, mp); return q > 0 ? (1 + VALUE_MIN) / q : null; };
 function copyText(t){
   let ok = false;
+  try { if (window.ProNoLab && window.ProNoLab.copy(t)) return true; } catch {}
   try { const ta = document.createElement("textarea"); ta.value = t; ta.setAttribute("readonly", ""); ta.style.position = "fixed"; ta.style.opacity = "0"; document.body.appendChild(ta); ta.select(); ok = document.execCommand("copy"); ta.remove(); } catch {}
   try { if (navigator.clipboard) navigator.clipboard.writeText(t).catch(() => {}); ok = true; } catch {}
   return ok;
@@ -717,7 +719,7 @@ function openBookSheet(pre){
     <h2 style="font-size:22px">Préparer sur ${esc(bn)}</h2>
     <pre style="margin:0;white-space:pre-wrap;background:var(--surface-2);border:1px solid var(--line);border-radius:8px;padding:12px;font-family:var(--font-data);font-size:13.5px">${esc(txt)}</pre>
     ${!pre.odds && mo ? `<div class="alert warn"><div><strong>Cote minimale : ${fx(mo)}</strong>En dessous, le pari n'a plus de valeur selon le modèle : ne le jouez pas. Au-dessus, c'est d'autant mieux.</div></div>` : ""}
-    <p class="hint">Le récapitulatif est copié et ${esc(bn)} s'ouvre sur la page football : retrouvez le match, vérifiez la cote, puis validez vous-même votre pari.</p>
+    <p class="hint">Le récapitulatif est copié et l'application ${esc(bn)} s'ouvre (ou son site, si elle n'est pas installée) : retrouvez le match, vérifiez la cote, puis validez vous-même votre pari.</p>
     <div class="row" style="justify-content:flex-end">
       <button type="button" class="btn ghost" id="bkClose">Fermer</button>
       ${pre.recorded ? "" : `<button type="button" class="btn ghost" id="bkRecord">Enregistrer dans Mes paris</button>`}
@@ -726,7 +728,15 @@ function openBookSheet(pre){
   const close = () => { $("sheetHost").innerHTML = ""; };
   $("bkClose").onclick = close;
   $("sheetBg").addEventListener("click", e => { if (e.target.id === "sheetBg") close(); });
-  $("bkGo").addEventListener("click", () => { copyText(txt); toast(`Récapitulatif copié · ouverture de ${bn}`); });
+  $("bkGo").addEventListener("click", e => {
+    copyText(txt);
+    // Dans l'application Android : ouvrir directement l'application du bookmaker si elle est installée
+    if (window.ProNoLab && window.ProNoLab.openApp){
+      e.preventDefault();
+      let how = "web"; try { how = window.ProNoLab.openApp(book()[2], bu); } catch {}
+      toast(how === "app" ? `Récapitulatif copié · ouverture de l'application ${bn}` : `Récapitulatif copié · application ${bn} introuvable, ouverture du site`);
+    } else toast(`Récapitulatif copié · ouverture de ${bn}`);
+  });
   if ($("bkRecord")) $("bkRecord").onclick = () => openBetSheet({ lg: pre.lg, d: fixt ? fixt.d : pre.d, h: pre.h, a: pre.a, mk: pre.mk });
 }
 const MAX_ODDS = 6, MIN_P = 0.2, VALUE_MIN = 0.04, STALE_H = 48;
