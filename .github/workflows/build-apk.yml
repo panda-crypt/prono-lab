@@ -45,10 +45,9 @@ jobs:
             echo "$KEYSTORE_B64" | base64 -d > android/release.jks
             echo "KS_PASS=$KS_PASS" >> "$GITHUB_ENV"
           else
-            echo "::warning::Secrets KEYSTORE_B64/KS_PASS absents : clé temporaire (il faudra désinstaller avant chaque mise à jour de l'APK)."
-            keytool -genkeypair -keystore android/release.jks -alias pronolab -keyalg RSA -keysize 2048 -validity 10000 \
-              -storepass pronolab -keypass pronolab -dname "CN=Prono Lab, C=FR"
-            echo "KS_PASS=pronolab" >> "$GITHUB_ENV"
+            # Clé du dépôt (application personnelle) : même signature à chaque version, les mises à jour s'installent par-dessus.
+            cp android/signing/pronolab.jks android/release.jks
+            echo "KS_PASS=SAwNSWkFqYolJVNHcdlhlL7w" >> "$GITHUB_ENV"
           fi
 
       - name: Compiler
