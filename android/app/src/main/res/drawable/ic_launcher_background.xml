@@ -1,4 +1,28 @@
 <?xml version="1.0" encoding="utf-8"?>
-<shape xmlns:android="http://schemas.android.com/apk/res/android" android:shape="rectangle">
-    <solid android:color="#1D6B45" />
-</shape>
+<!-- Fond : pelouse vert profond, éclairage radial, rayures de tonte -->
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:aapt="http://schemas.android.com/aapt"
+    android:width="108dp" android:height="108dp"
+    android:viewportWidth="108" android:viewportHeight="108">
+    <path android:pathData="M0,0 L108,0 L108,108 L0,108 Z">
+        <aapt:attr name="android:fillColor">
+            <gradient android:type="radial" android:centerX="43.2" android:centerY="32.4" android:gradientRadius="91.8">
+                <item android:offset="0" android:color="#FF2FB673" />
+                <item android:offset="0.55" android:color="#FF17804D" />
+                <item android:offset="1" android:color="#FF0A3B23" />
+            </gradient>
+        </aapt:attr>
+    </path>
+    <group android:rotation="-20" android:pivotX="54" android:pivotY="54">
+        <path android:fillColor="#FFFFFF" android:fillAlpha="0.045" android:pathData="M-30,-20 L-21,-20 L-21,130 L-30,130 Z" />
+        <path android:fillColor="#FFFFFF" android:fillAlpha="0.045" android:pathData="M-12,-20 L-3,-20 L-3,130 L-12,130 Z" />
+        <path android:fillColor="#FFFFFF" android:fillAlpha="0.045" android:pathData="M6,-20 L15,-20 L15,130 L6,130 Z" />
+        <path android:fillColor="#FFFFFF" android:fillAlpha="0.045" android:pathData="M24,-20 L33,-20 L33,130 L24,130 Z" />
+        <path android:fillColor="#FFFFFF" android:fillAlpha="0.045" android:pathData="M42,-20 L51,-20 L51,130 L42,130 Z" />
+        <path android:fillColor="#FFFFFF" android:fillAlpha="0.045" android:pathData="M60,-20 L69,-20 L69,130 L60,130 Z" />
+        <path android:fillColor="#FFFFFF" android:fillAlpha="0.045" android:pathData="M78,-20 L87,-20 L87,130 L78,130 Z" />
+        <path android:fillColor="#FFFFFF" android:fillAlpha="0.045" android:pathData="M96,-20 L105,-20 L105,130 L96,130 Z" />
+        <path android:fillColor="#FFFFFF" android:fillAlpha="0.045" android:pathData="M114,-20 L123,-20 L123,130 L114,130 Z" />
+        <path android:fillColor="#FFFFFF" android:fillAlpha="0.045" android:pathData="M132,-20 L141,-20 L141,130 L132,130 Z" />
+    </group>
+</vector>

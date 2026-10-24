@@ -48,7 +48,9 @@ h2{font-family:var(--font-display);font-weight:800;font-size:26px;text-transform
 .band .wrap{padding-block:12px 0}
 .brandrow{display:flex;align-items:center;justify-content:space-between;gap:12px}
 .brand{font-family:var(--font-display);font-weight:800;font-size:28px;line-height:1;text-transform:uppercase;letter-spacing:.01em;margin:0}
-.brand span{opacity:.6;font-weight:600}
+.brand{display:flex;align-items:center;gap:10px}
+.brand .bt span{opacity:.6;font-weight:600}
+.brand .logo{width:34px;height:34px;flex:none;border-radius:9px;box-shadow:0 0 0 1px rgba(255,255,255,.18),0 2px 6px rgba(0,0,0,.25)}
 .fresh{font-size:12px;opacity:.85;text-align:right;line-height:1.3}
 .fresh button{background:transparent;border:1px solid currentColor;border-radius:999px;color:inherit;padding:2px 10px;font-size:12px;cursor:pointer;margin-top:3px}
 .chips{display:flex;gap:6px;overflow-x:auto;scrollbar-width:none;padding-block:10px 12px}
@@ -211,7 +213,7 @@ table{border-collapse:collapse;width:100%}
 <header class="band">
   <div class="wrap">
     <div class="brandrow">
-      <p class="brand">Prono<span>/</span>Lab</p>
+      <p class="brand"><svg class="logo" viewBox="14 14 80 80" aria-hidden="true"><defs><radialGradient id="lgBg" cx="40%" cy="30%" r="85%"><stop offset="0" stop-color="#2FB673"/><stop offset="0.55" stop-color="#17804D"/><stop offset="1" stop-color="#0A3B23"/></radialGradient><linearGradient id="lgGold" x1="0" y1="1" x2="0" y2="0"><stop offset="0" stop-color="#F29A2E"/><stop offset="1" stop-color="#FFD978"/></linearGradient></defs><rect x="14" y="14" width="80" height="80" rx="20" fill="url(#lgBg)"/><g transform="translate(54 54) scale(0.84) translate(-54 -54)"><circle cx="54" cy="54" r="27" fill="#062616" fill-opacity="0.45"/> <path d="M54,40 L63.5,46.9 L59.9,58.1 L48.1,58.1 L44.5,46.9 Z M54,40 L54,28.5 M63.5,46.9 L74.5,43.3 M59.9,58.1 L66.7,67.4 M48.1,58.1 L41.3,67.4 M44.5,46.9 L33.5,43.3" fill="none" stroke="#FFFFFF" stroke-opacity="0.13" stroke-width="1.6" stroke-linejoin="round"/> <circle cx="54" cy="54" r="27" fill="none" stroke="#FFFFFF" stroke-width="4.5"/> <path d="M38,69 L38,61 Q38,59 40,59 L44.5,59 Q46.5,59 46.5,61 L46.5,69 Z" fill="url(#lgGold)"/> <path d="M49.75,69 L49.75,52.5 Q49.75,50.5 51.75,50.5 L56.25,50.5 Q58.25,50.5 58.25,52.5 L58.25,69 Z" fill="url(#lgGold)"/> <path d="M61.5,69 L61.5,45 Q61.5,43 63.5,43 L68,43 Q70,43 70,45 L70,69 Z" fill="url(#lgGold)"/> <path d="M35,57 C43,56 49,48 56,45 C61,43 66,38 72.5,31.5" fill="none" stroke="#FFFFFF" stroke-width="3.4" stroke-linecap="round"/> <path d="M68,30.2 L76.2,27.8 L73.8,36 Z" fill="#FFFFFF"/> <circle cx="78.5" cy="23" r="5" fill="#FFE29A" fill-opacity="0.25"/> <path d="M78.5,17.5 L79.8,21.7 L84,23 L79.8,24.3 L78.5,28.5 L77.2,24.3 L73,23 L77.2,21.7 Z" fill="#FFE8A8"/></g></svg><span class="bt">Prono<span>/</span>Lab</span></p>
       <div class="fresh"><span id="freshTxt">Données…</span><br><button type="button" id="refreshBtn">Mettre à jour</button></div>
     </div>
     <div class="chips" id="leagueChips" role="group" aria-label="Championnat"></div>
