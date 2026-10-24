@@ -614,6 +614,10 @@ function mainPick(r, hn, an){
    2) moyenne avec la probabilité des cotes quand le bookmaker cote ce marché ;
    3) vert si le résultat atteint 80 %, avec le taux de réussite réel de ce type de pari cette saison. */
 const SAFE_P = 0.80;
+// Une victoire passe avant tout autre pari dès 70 % : mesuré cette saison, ces victoires ont réussi 38 fois sur 45 (84 %), autant que les autres paris verts, avec une meilleure cote.
+const WIN_P = 0.70;
+const pickOf = cands => cands.filter(c => (c.k === "1" || c.k === "2") && c.p >= WIN_P).sort((a,b) => b.p - a.p)[0] || cands.sort((a,b) => b.p - a.p)[0];
+const isSafe = c => c.p >= ((c.k === "1" || c.k === "2") ? WIN_P : SAFE_P);
 const TOP_KEYS = ["1","2","1N","N2","12","O15","O25","U25","U35","BY","BN"];
 if (!MARKETS.U35) MARKETS.U35 = { label:()=>"Moins de 3,5 buts", p:r=>1-r.o35, win:(x,y)=>x+y<4 };
 let CAL = null;
@@ -636,9 +640,9 @@ function calib(){
     TOP_KEYS.forEach(k => f[g][k] *= top);
     // taux réel des paris qui seraient passés en vert
     recs.forEach(x => {
-      const b = TOP_KEYS.map(k => [k, MARKETS[k].p(x.q) * f[g][k]]).sort((a,c) => c[1]-a[1])[0];
-      if (b[1] < SAFE_P) return;
-      const t = st[g][b[0]] = st[g][b[0]] || { n:0, hit:0 }; t.n++; t.hit += MARKETS[b[0]].win(x.sc[0], x.sc[1]) ? 1 : 0;
+      const b = pickOf(TOP_KEYS.map(k => ({ k, p: MARKETS[k].p(x.q) * f[g][k] })));
+      if (!isSafe(b)) return;
+      const t = st[g][b.k] = st[g][b.k] || { n:0, hit:0 }; t.n++; t.hit += MARKETS[b.k].win(x.sc[0], x.sc[1]) ? 1 : 0;
     });
   });
   CAL = { at: DATA.generatedAt, f, st, grp };
@@ -658,8 +662,8 @@ function topPick(m, r, lg){
   const cands = TOP_KEYS.map(k => {
     const pm = MARKETS[k].p(r), pc = pm * c.f[g][k], pk = marketP(m, k);
     return { k, pm, pc, pk, p: pk == null ? pc : (pc + pk) / 2 };
-  }).sort((a,b) => b.p - a.p);
-  const t = cands[0]; t.safe = t.p >= SAFE_P; t.season = c.st[g][t.k] || null;
+  });
+  const t = pickOf(cands); t.safe = isSafe(t); t.season = c.st[g][t.k] || null;
   return t;
 }
 function goalsPick(r){
@@ -1227,14 +1231,14 @@ function renderMatchs(){
       const started = m.d <= now, sf = safes.get(m), tp = tops.get(m);
       if (!best) bookMk = tp.k;   // bouton bookmaker et suivi : le pari le plus probable
       html += `<article class="mcard${sf?" safe":""}${best?" value":""}">
-        ${sf ? `<div class="ribbon"><span>✓ Pari le plus probable : ${esc(MARKETS[sf.k].label(H.name, A.name))}</span><span class="num">${pct(sf.p)}</span></div>` : ""}
+        ${sf ? `<div class="ribbon"><span>✓ Pari mis en avant : ${esc(MARKETS[sf.k].label(H.name, A.name))}</span><span class="num">${pct(sf.p)}</span></div>` : ""}
         ${best ? `<div class="ribbon gold"><span>★ Pari à valeur : ${esc(MARKETS[best.k].label(H.name, A.name))}</span><span class="num">cote ≥ ${fx(best.sharp ? (1+sharpMinFor(m.d))/best.p : minOdds(best.p, best.mp))} · mise ${eur(best.stake)}</span></div>` : ""}
         <div class="mtop"><span>${fmtTime(m.d)}${started?" · en cours ou joué":""}</span><span>${H.rank}e contre ${A.rank}e</span></div>
         <div class="mteams"><div class="t${H.name.length>9?" long":""}">${esc(H.name)}</div><div class="xg">${fx(r.lh,1)} – ${fx(r.la,1)}</div><div class="t a${A.name.length>9?" long":""}">${esc(A.name)}</div></div>
         <div class="minibar"><i class="h" style="width:${r.pH*100}%"></i><i class="d" style="width:${r.pD*100}%"></i><i class="a" style="width:${r.pA*100}%"></i></div>
         <div class="mprobs num"><span>${pct(r.pH)}</span><span>${pct(r.pD)}</span><span>${pct(r.pA)}</span></div>
-        <div class="mfoot"><span class="pickline"><span class="hint" style="font-weight:400">Pari le plus probable :</span> ${esc(MARKETS[tp.k].label(H.name, A.name))} <span class="num">${pct(tp.p)}</span>${sf ? "" : ` <span class="tag ${tp.p >= 0.7 ? "warn" : "bad"}">${tp.p >= 0.7 ? "probable" : "incertain"}</span>`}</span>${best ? "" : val}</div>
-        ${sf ? `<p class="hint" style="margin:0;color:var(--fg)"><strong>Pourquoi en vert ?</strong> De tous les paris de ce match (résultat, double chance, buts, les deux marquent), c'est celui qui a le plus de chances : environ <strong>${Math.round(sf.p*10)} fois sur 10</strong>. Modèle ${pct(sf.pc)}${sf.pk != null ? `, cotes ${pct(sf.pk)}` : " (pas de cote pour ce pari : avis du modèle seul, corrigé de ses erreurs passées)"}.${sf.season && sf.season.n >= 10 ? ` Cette saison, ce pari mis en avant a réussi <strong>${sf.season.hit} fois sur ${sf.season.n}</strong> (${pct(sf.season.hit/sf.season.n)}).` : ""} ${best && best.k === sf.k ? "C'est aussi un pari à valeur." : "Cote faible : ne misez que s'il est aussi en doré."}</p>` : ""}
+        <div class="mfoot"><span class="pickline"><span class="hint" style="font-weight:400">Pari mis en avant :</span> ${esc(MARKETS[tp.k].label(H.name, A.name))} <span class="num">${pct(tp.p)}</span>${sf ? "" : ` <span class="tag ${tp.p >= 0.7 ? "warn" : "bad"}">${tp.p >= 0.7 ? "probable" : "incertain"}</span>`}</span>${best ? "" : val}</div>
+        ${sf ? `<p class="hint" style="margin:0;color:var(--fg)"><strong>Pourquoi en vert ?</strong> ${sf.k === "1" || sf.k === "2" ? "Victoire assez probable pour passer avant les paris plus sûrs mais moins payés : environ" : "De tous les paris de ce match (résultat, double chance, buts, les deux marquent), c'est celui qui a le plus de chances : environ"} <strong>${Math.round(sf.p*10)} fois sur 10</strong>. Modèle ${pct(sf.pc)}${sf.pk != null ? `, cotes ${pct(sf.pk)}` : " (pas de cote pour ce pari : avis du modèle seul, corrigé de ses erreurs passées)"}.${sf.season && sf.season.n >= 10 ? ` Cette saison, ce pari mis en avant a réussi <strong>${sf.season.hit} fois sur ${sf.season.n}</strong> (${pct(sf.season.hit/sf.season.n)}).` : ""} ${best && best.k === sf.k ? "C'est aussi un pari à valeur." : "Cote faible : ne misez que s'il est aussi en doré."}</p>` : ""}
         ${best ? `<p class="hint" style="margin:0;color:var(--fg)"><strong>Pourquoi ce pari ?</strong> Il a ${pct(best.p)} de chances de passer${best.sharp ? " selon les cotes de référence" : ""} et la cote ${fx(best.o)}${best.bk ? " (" + esc(best.bk) + ")" : ""} paie plus que ce risque : <strong class="edge-pos">+${(best.edge*100).toFixed(0)} % de valeur</strong>. ${best.p < 0.5 ? "Il perdra souvent, mais sur la durée il rapporte." : ""}</p>` : ""}
         <div class="row"><button class="btn sm" type="button" data-an="${esc(m.h)}|${esc(m.a)}">Analyser</button><button class="btn ghost sm" type="button" data-bet="${lg}|${esc(m.d)}|${esc(m.h)}|${esc(m.a)}|${bookMk}">+ Suivre ce pari</button><button class="btn ${best ? "" : "ghost "}sm" type="button" data-book="${lg}|${esc(m.d)}|${esc(m.h)}|${esc(m.a)}|${bookMk}">${esc(book(best && best.bkKey)[0])} ↗</button></div>
       </article>`;
