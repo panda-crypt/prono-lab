@@ -75,11 +75,15 @@ main .wrap{padding-block:16px 28px}
 .daylabel{font-family:var(--font-display);font-weight:700;font-size:15px;letter-spacing:.06em;text-transform:uppercase;color:var(--muted);margin:10px 0 6px}
 .mlist{display:grid;grid-template-columns:repeat(auto-fill,minmax(min(100%,330px),1fr));gap:10px}
 .mcard{background:var(--surface);border:1px solid var(--line);border-radius:var(--r);padding:12px 14px;display:flex;flex-direction:column;gap:8px;min-width:0}
-.mcard.value{border:2px solid var(--good);background:color-mix(in srgb,var(--good) 7%,var(--surface));box-shadow:0 0 0 3px color-mix(in srgb,var(--good) 16%,transparent)}
+.mcard.safe{border:2px solid var(--good);background:color-mix(in srgb,var(--good) 8%,var(--surface));box-shadow:0 0 0 3px color-mix(in srgb,var(--good) 18%,transparent)}
+.mcard.value{border:2px solid var(--warn);background:color-mix(in srgb,var(--warn) 6%,var(--surface));box-shadow:0 0 0 3px color-mix(in srgb,var(--warn) 14%,transparent)}
+.mcard.safe.value{border-color:var(--good)}
 .ribbon{margin:-12px -14px 2px;padding:7px 14px;background:var(--good);color:var(--pitch-ink);font-weight:600;font-size:13px;border-radius:8px 8px 0 0;display:flex;justify-content:space-between;gap:8px;flex-wrap:wrap}
+.ribbon.gold{background:var(--warn)}
+.ribbon + .ribbon{margin-top:0;border-radius:0}
 .ribbon .num{font-weight:600}
-.vtable tr.reco td{background:color-mix(in srgb,var(--good) 10%,transparent)}
-.vtable tr.reco td:first-child{box-shadow:inset 4px 0 0 var(--good)}
+.vtable tr.reco td{background:color-mix(in srgb,var(--warn) 10%,transparent)}
+.vtable tr.reco td:first-child{box-shadow:inset 4px 0 0 var(--warn)}
 .mtop{display:flex;justify-content:space-between;font-size:12px;color:var(--muted);gap:8px}
 .mteams{display:grid;grid-template-columns:minmax(0,1fr) auto minmax(0,1fr);gap:6px;align-items:center}
 .mteams .t{font-family:var(--font-display);font-weight:700;font-size:clamp(15px,4.4vw,20px);line-height:1.05;text-transform:uppercase;overflow-wrap:normal;word-break:normal;hyphens:manual;min-width:0}
@@ -231,7 +235,7 @@ table{border-collapse:collapse;width:100%}
     <!-- MATCHS -->
     <section class="view" id="v-matchs">
       <div class="viewhead"><h2 id="mTitle">Prochains matchs</h2><span class="hint" id="mHint"></span></div>
-      <label class="check" style="margin:-4px 0 10px"><input type="checkbox" id="mOnly"> Afficher seulement les paris conseillés (cadre vert)</label>
+      <label class="field" style="margin:-4px 0 10px;max-width:340px"><span>Afficher</span><select id="mFilter"><option value="all">Tous les matchs</option><option value="safe">Seulement les très probables (vert)</option><option value="value">Seulement les paris à valeur (doré)</option></select></label>
       <div id="mList"></div>
       <div class="panel" style="margin-top:16px">
         <p class="label" id="stdTitle">Classement</p>
@@ -378,7 +382,7 @@ table{border-collapse:collapse;width:100%}
         <p class="hint">Test sur la saison en cours : pour chaque match joué, le modèle est recalculé uniquement avec les matchs disputés avant, puis comparé au résultat réel. Les xG match par match n'étant pas disponibles pour le passé, ce test utilise les buts et la saison 2025-26.</p>
         <div class="panel">
           <p class="label">Journal des paris conseillés (sans miser)</p>
-          <p class="hint" style="margin-bottom:10px">Chaque pari en cadre vert est noté automatiquement à chaque actualisation des cotes, puis réglé avec le résultat. C'est la mesure réelle de la méthode, que vous ayez parié ou non. Calcul à mise fixe d'une unité.</p>
+          <p class="hint" style="margin-bottom:10px">Chaque pari à valeur (cadre doré) est noté automatiquement à chaque actualisation des cotes, puis réglé avec le résultat. C'est la mesure réelle de la méthode, que vous ayez parié ou non. Calcul à mise fixe d'une unité.</p>
           <div class="kpis" id="jKpis"></div>
           <p class="hint" id="jTxt" style="margin-top:10px"></p>
         </div>
@@ -604,6 +608,38 @@ function mainPick(r, hn, an){
   if (r.pD < 0.24) return ["12", "Pas de nul", r.pH + r.pA];
   const b = Math.max(r.pH, r.pD, r.pA);
   return b === r.pD ? ["N","Match nul",b] : b === r.pH ? ["1",`Victoire ${hn}`,b] : ["2",`Victoire ${an}`,b];
+}
+/* Issue très probable : le modèle ET les cotes doivent la donner gagnante très souvent.
+   Probabilité retenue = la plus prudente des deux. Sans cotes, pas de cadre vert (une seule source ne suffit pas). */
+const SAFE_P = 0.80, SAFE_MODEL = 0.77;   // mesuré cette saison : annoncé 86 %, réussi 83 % (le modèle est un peu trop sûr de lui)
+const SAFE_KEYS = ["1","2","1N","N2"];
+function safeOf(m, r){
+  const od = m.odds; if (!od) return null;
+  let mk = null;
+  if (od.sharp && od.fair) mk = od.fair;
+  else if (od.o && od.o.length === 3 && od.o.every(x => x > 1)) mk = marketProbs(od.o);
+  if (!mk) return null;
+  const pm = { "1": r.pH, "2": r.pA, "1N": r.pH + r.pD, "N2": r.pD + r.pA };
+  const pk = { "1": mk[0], "2": mk[2], "1N": mk[0] + mk[1], "N2": mk[1] + mk[2] };
+  // une victoire sèche passe avant la double chance quand elle atteint le seuil (meilleure cote, même certitude)
+  for (const k of SAFE_KEYS){
+    const p = (pm[k] + pk[k]) / 2;   // moyenne des deux avis, chacun devant lui-même être très haut
+    if (p >= SAFE_P && Math.min(pm[k], pk[k]) >= SAFE_MODEL) return { k, p, pm: pm[k], pk: pk[k], ref: od.sharp ? "cotes de référence" : "cotes du marché" };
+  }
+  return null;
+}
+// Taux de réussite mesuré cette saison sur les issues que le modèle donnait au-dessus du seuil (prédites avant chaque journée)
+let SAFE_ST = null;
+function safeStats(){
+  if (SAFE_ST && SAFE_ST.at === DATA.generatedAt) return SAFE_ST;
+  const B = BT || backtest(); let n = 0, hit = 0, sp = 0;
+  B.recs.forEach(x => {
+    const [h, d, a] = x.pr, c = [[h, x.out === 0], [a, x.out === 2], [h + d, x.out !== 2], [d + a, x.out !== 0]];
+    const win = c.filter(([q]) => q >= SAFE_P).sort((u, v) => u[0] - v[0])[0];   // l'issue retenue : la plus précise au-dessus du seuil
+    if (win){ n++; hit += win[1] ? 1 : 0; sp += win[0]; }
+  });
+  SAFE_ST = { at: DATA.generatedAt, n, hit, exp: n ? sp / n : 0 };
+  return SAFE_ST;
 }
 function goalsPick(r){
   if (r.o25 >= 0.57) return ["O25","Plus de 2,5 buts", r.o25];
@@ -1094,7 +1130,7 @@ function backtest(){
 /* ================= État & navigation ================= */
 const ui = Object.assign({ view:"matchs", lg:"l1" }, LS.get("pl_ui", {}));
 if (!DATA.leagues[ui.lg] && ui.lg !== "all") ui.lg = "l1";
-const saveUi = () => LS.set("pl_ui", { view:ui.view, lg:ui.lg, aH:ui.aH, aA:ui.aA, mOnly:ui.mOnly });
+const saveUi = () => LS.set("pl_ui", { view:ui.view, lg:ui.lg, aH:ui.aH, aA:ui.aA, mF:ui.mF });
 let CL = {};
 function computeAll(){
   CL = {};
@@ -1142,11 +1178,14 @@ function renderMatchs(){
   // pari conseillé = issue retenue par le moteur de valeur (valeur, cote, probabilité, cotes fraîches, limites de mise)
   const recoOf = m => m.odds ? planMatches([{ lg, m, C }]).filter(x => x.best)[0] || null : null;
   const recos = new Map(all.map(m => [m, recoOf(m)]));
-  const nReco = [...recos.values()].filter(Boolean).length;
-  $("mOnly").checked = !!ui.mOnly;
-  const list = ui.mOnly ? all.filter(m => recos.get(m)) : all;
-  $("mHint").textContent = all.length ? `${all.length} rencontres sur ${days} jours · ${nReco ? `${nReco} pari${nReco>1?"s":""} conseillé${nReco>1?"s":""}` : "aucun pari conseillé pour l'instant"}` : "";
-  if (!list.length){ $("mList").innerHTML = `<div class="empty">${ui.mOnly && all.length ? `Aucun pari conseillé dans ce championnat pour l'instant. ${liveKey() ? "Actualisez les cotes dans l'onglet Valeur, ou décochez le filtre." : "Activez les cotes en direct dans Mes paris pour en obtenir."}` : `Aucun match programmé dans les ${days} prochains jours. Le calendrier se met à jour avec les données.`}</div>`; }
+  const safes = new Map(all.map(m => [m, m.d > nowStr() ? safeOf(m, predict(C, m.h, m.a)) : null]));
+  const nReco = [...recos.values()].filter(Boolean).length, nSafe = [...safes.values()].filter(Boolean).length;
+  const SS = safeStats();
+  if (!["all","safe","value"].includes(ui.mF)) ui.mF = "all";
+  $("mFilter").value = ui.mF;
+  const list = ui.mF === "safe" ? all.filter(m => safes.get(m)) : ui.mF === "value" ? all.filter(m => recos.get(m)) : all;
+  $("mHint").textContent = all.length ? `${all.length} rencontres sur ${days} jours · ${nSafe} très probable${nSafe>1?"s":""} (vert) · ${nReco} pari${nReco>1?"s":""} à valeur (doré)` : "";
+  if (!list.length){ $("mList").innerHTML = `<div class="empty">${ui.mF !== "all" && all.length ? (ui.mF === "safe" ? "Aucune issue très probable dans ce championnat pour l'instant : il faut que le modèle et les cotes la donnent toutes deux à ${Math.round(SAFE_P*100)} % ou plus." : `Aucun pari à valeur dans ce championnat pour l'instant. ${liveKey() ? "Actualisez les cotes dans l'onglet Valeur." : "Activez les cotes en direct dans Mes paris pour en obtenir."}`) : `Aucun match programmé dans les ${days} prochains jours. Le calendrier se met à jour avec les données.`}</div>`; }
   else {
     let html = "", day = "";
     const now = nowStr();
@@ -1164,16 +1203,20 @@ function renderMatchs(){
         else if (m.odds.o) val = `<span class="tag muted">Cotes : ${m.odds.o.map(x=>x>1?fx(x):"–").join(" · ")}</span>`;
         if (hoursSince(m.odds.at) > STALE_H) val += ` <span class="tag warn">cotes anciennes</span>`;
       }
-      const started = m.d <= now;
-      html += `<article class="mcard${best?" value":""}">
-        ${best ? `<div class="ribbon"><span>✓ Pari à valeur : ${esc(MARKETS[best.k].label(H.name, A.name))}</span><span class="num">cote ≥ ${fx(best.sharp ? (1+sharpMinFor(m.d))/best.p : minOdds(best.p, best.mp))} · mise ${eur(best.stake)}</span></div>` : ""}
+      const started = m.d <= now, sf = safes.get(m);
+      if (!best && sf) bookMk = sf.k;   // bouton bookmaker et suivi : l'issue en vert
+      const sfOdds = sf && m.odds.o ? (sf.k === "1" ? m.odds.o[0] : sf.k === "2" ? m.odds.o[2] : null) : null;
+      html += `<article class="mcard${sf?" safe":""}${best?" value":""}">
+        ${sf ? `<div class="ribbon"><span>✓ Très probable : ${esc(MARKETS[sf.k].label(H.name, A.name))}</span><span class="num">${pct(sf.p)}</span></div>` : ""}
+        ${best ? `<div class="ribbon gold"><span>★ Pari à valeur : ${esc(MARKETS[best.k].label(H.name, A.name))}</span><span class="num">cote ≥ ${fx(best.sharp ? (1+sharpMinFor(m.d))/best.p : minOdds(best.p, best.mp))} · mise ${eur(best.stake)}</span></div>` : ""}
         <div class="mtop"><span>${fmtTime(m.d)}${started?" · en cours ou joué":""}</span><span>${H.rank}e contre ${A.rank}e</span></div>
         <div class="mteams"><div class="t${H.name.length>9?" long":""}">${esc(H.name)}</div><div class="xg">${fx(r.lh,1)} – ${fx(r.la,1)}</div><div class="t a${A.name.length>9?" long":""}">${esc(A.name)}</div></div>
         <div class="minibar"><i class="h" style="width:${r.pH*100}%"></i><i class="d" style="width:${r.pD*100}%"></i><i class="a" style="width:${r.pA*100}%"></i></div>
         <div class="mprobs num"><span>${pct(r.pH)}</span><span>${pct(r.pD)}</span><span>${pct(r.pA)}</span></div>
         <div class="mfoot"><span class="pickline"><span class="hint" style="font-weight:400">Le plus probable (modèle) :</span> ${esc(lab)} <span class="num">${pct(p)}</span> <span class="tag ${cc}">${cl}</span></span>${best ? "" : val}</div>
+        ${sf ? `<p class="hint" style="margin:0;color:var(--fg)"><strong>Pourquoi en vert ?</strong> Le modèle (${pct(sf.pm)}) et les ${sf.ref} (${pct(sf.pk)}) s'accordent : ${esc(MARKETS[sf.k].label(H.name, A.name))} passe environ <strong>${Math.round(sf.p*10)} fois sur 10</strong>.${SS.n >= 20 ? ` Cette saison, les issues annoncées à ${Math.round(SAFE_P*100)} % ou plus ont réussi <strong>${SS.hit} fois sur ${SS.n}</strong> (${pct(SS.hit/SS.n)}).` : ""} ${best && best.k === sf.k ? "C'est aussi un pari à valeur." : `${sfOdds ? `Cote ${fx(sfOdds)} : u` : "U"}n échec efface plusieurs réussites, ne misez que s'il est aussi en doré.`}</p>` : ""}
         ${best ? `<p class="hint" style="margin:0;color:var(--fg)"><strong>Pourquoi ce pari ?</strong> Il a ${pct(best.p)} de chances de passer${best.sharp ? " selon les cotes de référence" : ""} et la cote ${fx(best.o)}${best.bk ? " (" + esc(best.bk) + ")" : ""} paie plus que ce risque : <strong class="edge-pos">+${(best.edge*100).toFixed(0)} % de valeur</strong>. ${best.p < 0.5 ? "Il perdra souvent, mais sur la durée il rapporte." : ""}</p>` : ""}
-        <div class="row"><button class="btn sm" type="button" data-an="${esc(m.h)}|${esc(m.a)}">Analyser</button><button class="btn ghost sm" type="button" data-bet="${lg}|${esc(m.d)}|${esc(m.h)}|${esc(m.a)}|${best ? best.k : mk}">+ Suivre ce pari</button><button class="btn ${best ? "" : "ghost "}sm" type="button" data-book="${lg}|${esc(m.d)}|${esc(m.h)}|${esc(m.a)}|${bookMk}">${esc(book(best && best.bkKey)[0])} ↗</button></div>
+        <div class="row"><button class="btn sm" type="button" data-an="${esc(m.h)}|${esc(m.a)}">Analyser</button><button class="btn ghost sm" type="button" data-bet="${lg}|${esc(m.d)}|${esc(m.h)}|${esc(m.a)}|${bookMk}">+ Suivre ce pari</button><button class="btn ${best ? "" : "ghost "}sm" type="button" data-book="${lg}|${esc(m.d)}|${esc(m.h)}|${esc(m.a)}|${bookMk}">${esc(book(best && best.bkKey)[0])} ↗</button></div>
       </article>`;
     });
     html += `</div>`;
@@ -1182,7 +1225,7 @@ function renderMatchs(){
     $("mList").querySelectorAll("[data-bet]").forEach(b => b.onclick = () => { const [l,d,h,a,mk] = b.dataset.bet.split("|"); openBetSheet({ lg:l, d, h, a, mk }); });
     $("mList").querySelectorAll("[data-book]").forEach(b => b.onclick = () => { const [l,d,h,a,mk] = b.dataset.book.split("|"); openBookSheet({ lg:l, d, h, a, mk }); });
   }
-  $("mOnly").onchange = () => { ui.mOnly = $("mOnly").checked; saveUi(); renderMatchs(); };
+  $("mFilter").onchange = () => { ui.mF = $("mFilter").value; saveUi(); renderMatchs(); };
   // classement
   $("stdTitle").textContent = L.type === "euro" ? `${L.name} · phase de ligue` : `Classement ${L.name}`;
   const sp = s => `<td class="num">${s.w}-${s.d}-${s.l}</td><td class="num">${s.f}-${s.a}</td><td class="num">${3*s.w+s.d}</td>`;
