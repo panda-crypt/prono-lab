@@ -831,12 +831,21 @@ const STOP = new Set(["fc","afc","cf","ac","as","sc","ssc","rc","rcd","cd","ud",
 // lettres qui ne se décomposent pas (ø, æ, ł, ß…) : translittérées avant de retirer les accents
 const TRANSLIT = { "ø":"o", "Ø":"o", "æ":"ae", "Æ":"ae", "œ":"oe", "Œ":"oe", "ł":"l", "Ł":"l", "ß":"ss", "đ":"d", "Đ":"d", "ı":"i", "þ":"th", "ð":"d" };
 const toks = s => String(s).replace(/[øØæÆœŒłŁßđĐıþð]/g, c => TRANSLIT[c]).normalize("NFD").replace(/[̀-ͯ]/g,"").toLowerCase().replace(/[^a-z0-9]+/g," ").split(" ").filter(w => w && !STOP.has(w));
+// Noms usuels différents d'une source à l'autre (forme normalisée -> nom utilisé dans nos données)
+const TEAM_ALIAS = { "red star belgrade":"crvena zvezda", "crvena zvezda belgrade":"crvena zvezda", "heart of midlothian":"hearts", "agf":"aarhus", "agf aarhus":"aarhus",
+  "nec nijmegen":"n e c nijmegen", "nec":"n e c nijmegen", "union st gilloise":"union sg", "royale union saint gilloise":"union sg", "union saint gilloise":"union sg",
+  "sint truiden":"sint truidense", "stvv":"sint truidense", "olympiakos":"olympiacos", "olympiakos piraeus":"olympiacos", "psv eindhoven":"psv",
+  "internazionale":"inter", "inter milan":"inter", "fc internazionale milano":"inter", "bodo glimt":"bodo glimt", "sporting lisbon":"sporting cp", "sporting":"sporting cp",
+  "dinamo zagreb":"gnk dinamo", "red bull salzburg":"salzburg", "rb salzburg":"salzburg", "fc copenhagen":"copenhagen", "kobenhavn":"copenhagen",
+  "atletico de madrid":"atletico madrid", "athletic bilbao":"athletic club", "deportivo alaves":"deportivo alaves", "alaves":"deportivo alaves" };
+const tokEq = (x, y) => x === y || (x.length >= 5 && y.length >= 5 && x.slice(0,5) === y.slice(0,5));
 function teamCands(L, name){
-  const a = toks(name); if (!a.length) return [];
+  const raw = toks(name).join(" "), al = TEAM_ALIAS[raw] || TEAM_ALIAS[toks(name).filter(w => w !== "fc").join(" ")];
+  const a = toks(al || name); if (!a.length) return [];
   const out = [];
   L.teams.forEach(t => {
     let best = 0;
-    [t.id, t.name].forEach(n => { const b = toks(n); if (!b.length) return; const inter = a.filter(w => b.includes(w)).length;
+    [t.id, t.name].forEach(n => { const b = toks(n); if (!b.length) return; const inter = a.filter(w => b.some(v => tokEq(w, v))).length;
       if (inter / Math.min(a.length, b.length) >= 0.99) best = Math.max(best, inter / new Set([...a, ...b]).size); });
     if (best > 0) out.push([t.id, best]);
   });
@@ -869,7 +878,10 @@ async function refreshLive(manual){
       const fixtures = L.matches.filter(m => !m.s);
       evs.forEach(ev => {
         const hc = teamCands(L, ev.home_team), ac = teamCands(L, ev.away_team), t = parisOfIso(ev.commence_time);
-        const m = fixtures.find(f => hc.includes(f.h) && ac.includes(f.a) && Math.abs(pDate(f.d) - pDate(t)) <= 36*36e5);
+        // 1) les deux équipes reconnues, à ±36 h ; 2) sinon, une seule reconnue et un match de cette équipe à ±3 h (une équipe ne joue qu'un match à la fois)
+        const near = h => fixtures.filter(f => Math.abs(pDate(f.d) - pDate(t)) <= h*36e5);
+        const m = near(36).find(f => hc.includes(f.h) && ac.includes(f.a))
+               || (c => c.length === 1 ? c[0] : null)(near(3).filter(f => hc.includes(f.h) || ac.includes(f.a)));
         if (!m){ unmatched++; missed.push(`${ev.home_team} – ${ev.away_team} (${(ev.commence_time || "").slice(0,10).split("-").reverse().join("/")})`); return; }
         const books = [];
         (ev.bookmakers || []).forEach(b => {
