@@ -8,7 +8,7 @@ Android vous demandera d'autoriser l'installation depuis cette source : acceptez
 ## Ce que fait l'application
 
 - **Matchs** : les rencontres des 10 prochains jours avec probabilités 1-N-2, buts attendus et pronostic principal ; classement avec bilans domicile/extérieur, forme et xG.
-- **Valeur** : les paris dont la cote dépasse la probabilité estimée (calcul prudent : 60 % modèle, 40 % marché), avec la mise conseillée.
+- **Valeur** : avec une clé The Odds API (gratuite), les cotes sont récupérées en direct depuis le téléphone ; la vraie probabilité est tirée des cotes de Pinnacle (marge retirée) et l'application signale quand votre bookmaker paie plus. Sans clé : modèle (60 %) + marché (40 %).
 - **Analyse** : n'importe quelle affiche, tous les marchés (double chance, plus/moins de buts, les deux marquent, scores exacts), ajustements manuels.
 - **Mes paris** : suivi des paris, réglement automatique quand le résultat arrive, bankroll, rendement, limites hebdomadaires et alertes.
 - **Fiabilité** : test du modèle sur les matchs déjà joués de la saison (favori juste, score Brier, calibration).

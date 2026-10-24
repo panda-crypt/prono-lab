@@ -242,13 +242,14 @@ table{border-collapse:collapse;width:100%}
     <section class="view" id="v-valeur" hidden>
       <div class="viewhead"><h2>Paris à valeur</h2></div>
       <div class="stack">
-        <p class="hint">Un pari a de la valeur quand sa probabilité multipliée par la cote dépasse 1. Par prudence, la valeur est calculée avec une probabilité qui mélange le modèle (60 %) et le marché (40 %) : les bookmakers sont bien informés, et un modèle seul surestime souvent ses chances. Seuls les matchs dont les cotes ont été relevées apparaissent ici.</p>
+        <p class="hint"><strong>Avec les cotes en direct</strong>, la vraie probabilité de chaque issue est tirée des cotes de Pinnacle, le bookmaker de référence des professionnels, marge retirée. Un pari a de la valeur quand votre bookmaker paie plus que cette vraie probabilité (écart d'au moins 2 %). « Proba. » est l'avis du modèle, donné pour comparaison. <strong>Sans cotes en direct</strong>, la valeur repose sur le modèle (60 %) et le marché (40 %), avec un seuil de 4 %.</p>
         <div class="row">
           <label class="check"><input type="checkbox" id="vOnly" checked> Seulement les paris à valeur (≥ 4 %, cote ≤ 6)</label>
         </div>
+        <div class="panel row" style="justify-content:space-between;padding:12px 14px"><span class="hint" id="liveStatus" style="flex:1;min-width:200px"></span><button class="btn sm" type="button" id="liveBtn">Actualiser les cotes</button></div>
         <p id="vSummary" style="margin:0"></p>
         <div class="panel scroll" style="padding:0 8px"><table class="vtable"><thead><tr>
-          <th class="l">Match</th><th class="l">Pari</th><th>Cote</th><th>Modèle</th><th>Marché</th><th>Valeur prudente</th><th>Mise conseillée</th><th></th></tr></thead>
+          <th class="l">Match</th><th class="l">Pari</th><th>Cote</th><th>Proba.</th><th>Réf.</th><th>Valeur</th><th>Mise conseillée</th><th></th></tr></thead>
           <tbody id="vBody"></tbody></table></div>
         <p class="hint" id="vNote"></p>
       </div>
@@ -340,6 +341,11 @@ table{border-collapse:collapse;width:100%}
             <label class="field"><span>Méthode de mise</span><select id="sMethod"><option value="kelly">Kelly fractionné (¼)</option><option value="flat">Mise fixe (1 %)</option></select></label>
             <label class="field"><span>Mise maximale par pari (% bankroll)</span><input type="number" id="sMax" min="0.5" max="10" step="0.5" inputmode="decimal"></label>
             <label class="field"><span>Exposition maximale (% bankroll en jeu)</span><input type="number" id="sExpo" min="1" max="50" step="1" inputmode="decimal"></label>
+          </div>
+          <div class="field" style="margin-top:12px"><span>Clé The Odds API (cotes en direct)</span>
+            <div class="row"><input type="password" id="sKey" autocomplete="off" spellcheck="false" placeholder="Collez votre clé ici" style="flex:1;min-width:180px"><button class="btn sm" type="button" id="sKeySave">Enregistrer</button></div>
+            <span class="hint" id="sKeyInfo"></span>
+            <label class="check" style="margin-top:6px"><input type="checkbox" id="sBest"> Chercher la meilleure cote chez tous les bookmakers (sinon : uniquement mon bookmaker)</label>
           </div>
           <p class="hint" style="margin-top:10px">Kelly fractionné : la mise grandit avec l'écart de valeur, divisée par 4 par prudence, plafonnée par pari et pour l'ensemble des paris en cours. Elle utilise une probabilité prudente (60 % modèle, 40 % marché). Pour une bankroll de 100 €, le plafond d'exposition de 15 % limite à 15 € la somme des paris en attente.</p>
         </div>
@@ -706,10 +712,10 @@ function openBookSheet(pre){
   const fixt = L.matches.find(m => m.h === pre.h && m.a === pre.a && !m.s);
   const r = predict(C, pre.h, pre.a), outs = fixt ? matchOutcomes(fixt, r) : [];
   const out = outs.find(x => x.k === pre.mk), p = MARKETS[pre.mk].p(r), mp = out ? out.mp : null;
-  const mo = minOdds(p, mp), [bn, bu] = book();
+  const mo = out && out.sharp ? (1 + SHARP_MIN) / out.p : minOdds(p, mp), [bn, bu] = book();
   let stake = pre.stake;
   // mise calculée à la cote minimale : prudente, et indépendante de cotes relevées qui ont pu bouger
-  if (stake == null && mo) stake = stakeFor(p, mp, mo * 1.0001).stake || null;
+  if (stake == null && mo) stake = (out && out.sharp ? stakeFor(out.p, out.p, mo * 1.0001, { min: SHARP_MIN }) : stakeFor(p, mp, mo * 1.0001)).stake || null;
   const when = fixt ? `${fmtDay(fixt.d)} ${fmtTime(fixt.d)}` : (pre.d ? `${fmtDay(pre.d)} ${fmtTime(pre.d)}` : "");
   const lab = MARKETS[pre.mk].label(H.name, A.name);
   const lines = [`${H.name} – ${A.name}`, `${L.name}${when ? " · " + when : ""}`, `Pari : ${lab}`];
@@ -742,14 +748,15 @@ function openBookSheet(pre){
   if ($("bkRecord")) $("bkRecord").onclick = () => openBetSheet({ lg: pre.lg, d: fixt ? fixt.d : pre.d, h: pre.h, a: pre.a, mk: pre.mk });
 }
 const MAX_ODDS = 6, MIN_P = 0.2, VALUE_MIN = 0.04, STALE_H = 72;   // mises à jour lundi, mercredi, vendredi : 72 h couvre le dimanche soir
-const isValue = x => x.edge >= VALUE_MIN && x.p >= MIN_P && x.o <= MAX_ODDS;
+const SHARP_MIN = 0.02;   // avec une probabilité tirée des cotes de référence (Pinnacle), un écart de 2 % suffit
+const isValue = x => x.edge >= (x.sharp ? SHARP_MIN : VALUE_MIN) && x.p >= MIN_P && x.o <= MAX_ODDS;
 function pendingStake(){ return bets().filter(x => x.status === "pending").reduce((s,x)=>s+x.stake,0); }
 const kellyFrac = (p, o) => (p*o - 1)/(o - 1);
 function stakeFor(pModel, pMarket, odds, opts = {}){
   const s = settings(), bank = currentBank(), pend = pendingStake() + (opts.extra || 0);
   const p = prudent(pModel, pMarket), edge = p*odds - 1, kf = kellyFrac(p, odds);
-  const res = { stake:0, edge, kf, why:"" };
-  if (edge < VALUE_MIN) { res.why = edge <= 0 ? "pas de valeur" : "valeur trop faible"; return res; }
+  const res = { stake:0, edge, kf, why:"" }, minE = opts.min != null ? opts.min : VALUE_MIN;
+  if (edge < minE) { res.why = edge <= 0 ? "pas de valeur" : "valeur trop faible"; return res; }
   if (odds > MAX_ODDS) { res.why = `cote > ${MAX_ODDS} : trop incertain`; return res; }
   if (pModel < MIN_P) { res.why = "probabilité trop faible"; return res; }
   if (opts.stale) { res.why = "cotes à revérifier"; return res; }
@@ -762,6 +769,12 @@ function stakeFor(pModel, pMarket, odds, opts = {}){
 /* Toutes les issues cotées d'un match : 1N2, plus/moins de 2,5 buts, les deux marquent */
 function matchOutcomes(m, r){
   const out = [], od = m.odds; if (!od) return out;
+  if (od.sharp){
+    // Cotes en direct : vraie probabilité = cote de référence sans marge ; on parie chez le bookmaker qui paie plus
+    const pm = [r.pH, r.pD, r.pA];
+    ["1","N","2"].forEach((k,i) => { if (od.o[i] > 1 && od.fair[i] > 0) out.push({ k, o: od.o[i], p: od.fair[i], mp: od.fair[i], pModel: pm[i], bk: od.bkPer ? od.bkPer[i] : od.bk, at: od.at, sharp: true }); });
+    return out;
+  }
   const add = (keys, odds, probs, bk) => { if (!odds || odds.length !== keys.length || odds.some(x => !(x > 1))) return; const mp = marketProbs(odds); keys.forEach((k,i) => out.push({ k, o: odds[i], p: probs[i], mp: mp[i], bk, at: od.at })); };
   if (od.o) add(["1","N","2"], od.o, [r.pH, r.pD, r.pA], od.bk);
   if (od.ou) add(["O25","U25"], od.ou.o, [r.o25, 1-r.o25], od.ou.bk);
@@ -774,16 +787,134 @@ function planMatches(list){
   list.forEach(({ lg, m, C }) => {
     const r = predict(C, m.h, m.a), outs = matchOutcomes(m, r);
     const stale = outs.length > 0 && hoursSince(outs[0].at) > STALE_H;
-    outs.forEach(x => { Object.assign(x, stakeFor(x.p, x.mp, x.o, { stale })); x.lg = lg; x.m = m; x.stale = stale; x.H = C.T[m.h].name; x.A = C.T[m.a].name; });
+    // Sans cotes de référence, le modèle seul n'est pas assez fiable dans deux cas : un fort écart avec le marché
+    // (souvent une absence qu'il ignore) et les coupes d'Europe avec un club hors des 5 grands championnats.
+    const euroBlind = C.euro && (C.T[m.h].dom == null || C.T[m.a].dom == null);
+    outs.forEach(x => {
+      Object.assign(x, stakeFor(x.p, x.mp, x.o, { stale, min: x.sharp ? SHARP_MIN : undefined }));
+      if (!x.sharp && x.stake > 0 && x.p - x.mp > 0.08){ x.stake = 0; x.why = "écart suspect avec le marché"; }
+      if (!x.sharp && x.stake > 0 && liveKey()){ x.stake = 0; x.why = "pas encore de cote de référence pour ce match"; }
+      if (!x.sharp && x.stake > 0 && euroBlind){ x.stake = 0; x.why = "club hors 5 grands championnats : attendre les cotes en direct"; }
+      x.lg = lg; x.m = m; x.stale = stale; x.H = C.T[m.h].name; x.A = C.T[m.a].name;
+    });
     const best = outs.filter(x => x.stake > 0).sort((a,b) => b.kf - a.kf)[0];
     outs.forEach(x => { if (x.stake > 0 && x !== best){ x.stake = 0; x.why = "un seul pari par match"; } x.best = x === best; rows.push(x); });
   });
   let extra = 0;
   rows.filter(x => x.best).sort((a,b) => b.kf - a.kf).forEach(x => {
-    const st = stakeFor(x.p, x.mp, x.o, { stale: x.stale, extra });
+    const st = stakeFor(x.p, x.mp, x.o, { stale: x.stale, extra, min: x.sharp ? SHARP_MIN : undefined });
     x.stake = st.stake; if (!st.stake) { x.why = st.why; x.best = false; } extra += x.stake;
   });
   return rows;
+}
+
+
+/* ================= Cotes en direct (The Odds API) =================
+   La clé reste sur le téléphone (stockage local). Les requêtes partent directement du téléphone. */
+const ODDS_API = "https://api.the-odds-api.com/v4";
+const SPORT_KEYS = { l1:"soccer_france_ligue_one", pl:"soccer_epl", liga:"soccer_spain_la_liga", sa:"soccer_italy_serie_a", bl:"soccer_germany_bundesliga",
+                     ucl:"soccer_uefa_champs_league", uel:"soccer_uefa_europa_league", uecl:"soccer_uefa_europa_conference_league" };
+const SHARP_BOOK = "pinnacle", EXCHANGES = /betfair|matchbook|smarkets|betdaq/i, LIVE_MIN_H = 3;
+const liveKey = () => (LS.get("pl_oddskey", "") || "").trim();
+const liveState = () => LS.get("pl_live", { at:null, remaining:null, used:null, data:{}, msg:"" });
+window.__nfCb = {};
+window.__nf = (id, status, body, remaining, used) => { const cb = window.__nfCb[id]; delete window.__nfCb[id]; if (cb) cb({ status, body, remaining, used }); };
+function nativeFetch(url){
+  if (window.ProNoLab && window.ProNoLab.fetchAsync){
+    return new Promise(res => { const id = Math.random().toString(36).slice(2); window.__nfCb[id] = res; window.ProNoLab.fetchAsync(id, url); });
+  }
+  return fetch(url).then(async r => ({ status: r.status, body: await r.text(), remaining: r.headers.get("x-requests-remaining"), used: r.headers.get("x-requests-used") }))
+                   .catch(() => ({ status: 0, body: "", remaining: null }));
+}
+const STOP = new Set(["fc","afc","cf","ac","as","sc","ssc","rc","rcd","cd","ud","sd","club","de","the","calcio","fsv","tsg","vfb","vfl","sv","bc","fk","sk","nk","gnk","pfk","kks","cp","and","1","04","05","07","1899","1901","sl"]);
+const toks = s => String(s).normalize("NFD").replace(/[̀-ͯ]/g,"").toLowerCase().replace(/[^a-z0-9]+/g," ").split(" ").filter(w => w && !STOP.has(w));
+function teamCands(L, name){
+  const a = toks(name); if (!a.length) return [];
+  const out = [];
+  L.teams.forEach(t => {
+    let best = 0;
+    [t.id, t.name].forEach(n => { const b = toks(n); if (!b.length) return; const inter = a.filter(w => b.includes(w)).length;
+      if (inter / Math.min(a.length, b.length) >= 0.99) best = Math.max(best, inter / new Set([...a, ...b]).size); });
+    if (best > 0) out.push([t.id, best]);
+  });
+  return out.sort((x,y) => y[1]-x[1]).map(x => x[0]);
+}
+const isoUtc = ms => new Date(ms).toISOString().replace(/\.\d{3}Z$/, "Z");
+const parisOfIso = iso => parisStr(Date.parse(iso));
+function powerFair(o){ return marketProbs(o); }
+async function refreshLive(manual){
+  const key = liveKey();
+  if (!key){ if (manual) toast("Saisissez d'abord votre clé The Odds API dans Mes paris."); return; }
+  const st = liveState();
+  if (!manual && st.at && hoursSince(st.at) < LIVE_MIN_H) return;
+  const btn = $("liveBtn"); if (btn){ btn.disabled = true; btn.textContent = "Actualisation…"; }
+  const kw = book()[2], now = Date.now(), data = {};
+  let remaining = st.remaining, used = st.used, matched = 0, unmatched = 0, err = "";
+  try {
+    const leagues = Object.keys(SPORT_KEYS).filter(lg => DATA.leagues[lg] && upcoming(lg, DATA.leagues[lg].type === "euro" ? 16 : 10).length);
+    for (const lg of leagues){
+      const L = DATA.leagues[lg], days = L.type === "euro" ? 16 : 10;
+      const url = `${ODDS_API}/sports/${SPORT_KEYS[lg]}/odds/?apiKey=${encodeURIComponent(key)}&regions=eu&markets=h2h&oddsFormat=decimal&dateFormat=iso&commenceTimeFrom=${isoUtc(now)}&commenceTimeTo=${isoUtc(now + days*864e5)}`;
+      const r = await nativeFetch(url);
+      if (r.remaining != null && r.remaining !== "") remaining = +r.remaining;
+      if (r.used != null && r.used !== "") used = +r.used;
+      if (r.status === 401){ err = "Clé refusée : vérifiez qu'elle est correcte."; break; }
+      if (r.status === 429){ err = "Crédits épuisés pour ce mois-ci (ou trop de requêtes)."; break; }
+      if (r.status === 404 || r.status === 422) continue;           // compétition hors saison chez le fournisseur
+      if (r.status !== 200){ err = r.status ? `Erreur du service de cotes (${r.status}).` : "Pas de connexion au service de cotes."; break; }
+      let evs = []; try { evs = JSON.parse(r.body); } catch { continue; }
+      const fixtures = L.matches.filter(m => !m.s);
+      evs.forEach(ev => {
+        const hc = teamCands(L, ev.home_team), ac = teamCands(L, ev.away_team), t = parisOfIso(ev.commence_time);
+        const m = fixtures.find(f => hc.includes(f.h) && ac.includes(f.a) && Math.abs(pDate(f.d) - pDate(t)) <= 36*36e5);
+        if (!m){ unmatched++; return; }
+        const books = [];
+        (ev.bookmakers || []).forEach(b => {
+          const mk = (b.markets || []).find(x => x.key === "h2h"); if (!mk) return;
+          const price = n => { const o = mk.outcomes.find(x => x.name === n); return o ? +o.price : 0; };
+          const o = [price(ev.home_team), price("Draw"), price(ev.away_team)];
+          if (o.every(x => x > 1)) books.push({ key: b.key, title: b.title, o });
+        });
+        if (!books.length) return;
+        const sharp = books.find(b => b.key === SHARP_BOOK);
+        let fair, src;
+        if (sharp){ fair = powerFair(sharp.o); src = "Pinnacle"; }
+        else {
+          const soft = books.filter(b => !EXCHANGES.test(b.key));
+          if (soft.length < 4) return;                                // trop peu d'avis pour une référence fiable
+          const ps = soft.map(b => powerFair(b.o)); fair = [0,1,2].map(i => ps.reduce((a,p)=>a+p[i],0)/ps.length); src = `moyenne de ${soft.length} bookmakers`;
+        }
+        const cand = books.filter(b => b.key !== SHARP_BOOK && !EXCHANGES.test(b.key));
+        const mine = cand.filter(b => (b.key + " " + b.title).toLowerCase().includes(kw)).sort((x,y) => /fr/.test(y.key) - /fr/.test(x.key))[0];
+        const best = [0,1,2].map(i => cand.reduce((acc,b) => b.o[i] > acc.o ? { o: b.o[i], bk: b.title } : acc, { o:0, bk:"" }));
+        data[`${lg}|${m.h}|${m.a}`] = { fair, src, n: books.length, mine: mine ? { bk: mine.title, o: mine.o } : null, best: { o: best.map(x=>x.o), bk: best.map(x=>x.bk) } };
+        matched++;
+      });
+    }
+  } catch (e) { err = "La récupération des cotes a échoué."; }
+  const ns = { at: err && !matched ? st.at : nowStr(), remaining, used, data: matched ? data : st.data, msg: err || (unmatched ? `${unmatched} match(s) du fournisseur non reconnu(s).` : "") };
+  LS.set("pl_live", ns);
+  if (btn){ btn.disabled = false; btn.textContent = "Actualiser les cotes"; }
+  applyLive(); render();
+  toast(err ? err : `Cotes en direct : ${matched} matchs · ${remaining != null ? remaining + " crédits restants" : ""}`);
+}
+function applyLive(){
+  const st = liveState(); if (!st.at || !st.data) return;
+  if (hoursSince(st.at) > 48) return;
+  Object.entries(st.data).forEach(([k, v]) => {
+    const [lg, h, a] = k.split("|"), L = DATA.leagues[lg]; if (!L) return;
+    const m = L.matches.find(x => !x.s && x.h === h && x.a === a); if (!m) return;
+    const useMine = v.mine && settings().bestPrice !== true;
+    m.odds = { sharp: true, at: st.at, fair: v.fair, fairSrc: v.src, n: v.n,
+               bk: useMine ? v.mine.bk : null, o: useMine ? v.mine.o : v.best.o, bkPer: useMine ? null : v.best.bk };
+  });
+}
+function liveStatus(){
+  const st = liveState(), k = liveKey();
+  if (!k) return "Cotes en direct désactivées : ajoutez votre clé The Odds API dans Mes paris.";
+  if (!st.at) return "Cotes en direct prêtes : touchez « Actualiser les cotes ».";
+  const h = hoursSince(st.at), ago = h < 1 ? `${Math.max(1, Math.round(h*60))} min` : `${Math.round(h)} h`;
+  return `Cotes en direct actualisées il y a ${ago}${st.remaining != null ? ` · ${st.remaining} crédits restants ce mois-ci` : ""}${st.msg ? " · " + st.msg : ""}`;
 }
 
 /* ================= Paris ================= */
@@ -930,7 +1061,7 @@ function renderMatchs(){
       if (m.odds){
         const best = planMatches([{ lg, m, C }]).filter(x => x.best)[0];
         if (best) bookMk = best.k;
-        if (best) val = `<span class="tag good">Valeur : ${esc(MARKETS[best.k].label(H.name, A.name))} @ ${fx(best.o)} (+${(best.edge*100).toFixed(0)} %)</span>`;
+        if (best) val = `<span class="tag good">Valeur : ${esc(MARKETS[best.k].label(H.name, A.name))} @ ${fx(best.o)}${best.sharp && best.bk ? " " + esc(best.bk) : ""} (+${(best.edge*100).toFixed(0)} %)</span>`;
         else if (m.odds.o) val = `<span class="tag muted">Cotes : ${m.odds.o.map(x=>fx(x)).join(" · ")}</span>`;
         if (hoursSince(m.odds.at) > STALE_H) val += ` <span class="tag warn">cotes anciennes</span>`;
       }
@@ -966,6 +1097,7 @@ function valueRows(){
   return planMatches(list).sort((a,b) => (b.stake > 0) - (a.stake > 0) || b.kf - a.kf);
 }
 function renderValeur(){
+  $("liveStatus").textContent = liveStatus();
   const only = $("vOnly").checked;
   let rows = valueRows();
   const total = rows.length;
@@ -976,10 +1108,10 @@ function renderValeur(){
     $("vBody").innerHTML = `<tr><td class="l" colspan="8" style="padding:20px;text-align:center;color:var(--muted)">${total ? "Aucun pari ne dépasse le seuil de valeur pour l'instant. Décochez le filtre pour voir toutes les cotes." : "Aucune cote relevée pour les matchs à venir de ce championnat."}</td></tr>`;
   } else {
     $("vBody").innerHTML = rows.map(r => {
-      const warn = (r.p - r.mp > 0.12 ? ` <span class="tag warn" title="Le modèle s'écarte fortement du marché : vérifiez les absences.">écart suspect</span>` : "") + (r.stale ? ` <span class="tag warn">cotes anciennes</span>` : "");
+      const warn = (r.sharp && r.pModel != null && r.pModel < r.p - 0.10 ? ` <span class="tag warn" title="Les cotes de référence et le modèle divergent fortement.">modèle en désaccord</span>` : "") + (!r.sharp && r.p - r.mp > 0.08 ? ` <span class="tag warn" title="Le modèle s'écarte fortement du marché : vérifiez les absences.">écart suspect</span>` : "") + (r.stale ? ` <span class="tag warn">cotes anciennes</span>` : "");
       return `<tr><td class="l"><strong>${esc(r.H)} – ${esc(r.A)}</strong><br><span class="hint">${esc(DATA.leagues[r.lg].name)} · ${fmtDay(r.m.d)} ${fmtTime(r.m.d)}</span></td>
-      <td class="l">${esc(MARKETS[r.k].label(r.H, r.A))}${warn}<br><span class="hint">${esc(r.bk || "")}</span></td><td class="num">${fx(r.o)}</td><td class="num">${pct(r.p)}</td><td class="num">${pct(r.mp)}</td>
-      <td class="num ${r.edge>=VALUE_MIN?"edge-pos":"edge-neg"}">${r.edge>0?"+":""}${(r.edge*100).toFixed(0)} %</td><td class="num">${r.stake>0?`<strong>${eur(r.stake)}</strong>`:`<span class="hint">${esc(r.why || "—")}</span>`}</td>
+      <td class="l">${esc(MARKETS[r.k].label(r.H, r.A))}${warn}<br><span class="hint">${esc(r.bk || "")}</span></td><td class="num">${fx(r.o)}</td><td class="num">${pct(r.sharp ? r.pModel : r.p)}</td><td class="num">${pct(r.mp)}</td>
+      <td class="num ${r.edge>=(r.sharp?SHARP_MIN:VALUE_MIN)?"edge-pos":"edge-neg"}">${r.edge>0?"+":""}${(r.edge*100).toFixed(0)} %</td><td class="num">${r.stake>0?`<strong>${eur(r.stake)}</strong>`:`<span class="hint">${esc(r.why || "—")}</span>`}</td>
       <td><button class="btn sm ${r.stake>0?"":"ghost"}" type="button" data-vb="${r.lg}|${esc(r.m.d)}|${esc(r.m.h)}|${esc(r.m.a)}|${r.k}|${r.o}">Suivre</button> <button class="btn sm ghost" type="button" data-vbk="${r.lg}|${esc(r.m.d)}|${esc(r.m.h)}|${esc(r.m.a)}|${r.k}|${r.stake}">${esc(book()[0])} ↗</button></td></tr>`;
     }).join("");
     $("vBody").querySelectorAll("[data-vb]").forEach(b => b.onclick = () => { const [lg,d,h,a,k,o] = b.dataset.vb.split("|"); openBetSheet({ lg, d, h, a, mk:k, odds:+o }); });
@@ -989,6 +1121,7 @@ function renderValeur(){
   $("vNote").innerHTML = `Probabilité « marché » : la cote convertie en probabilité, marge du bookmaker retirée en tenant compte du biais favori-outsider. Cotes relevées le ${at ? at.split("-").reverse().join("/") : "—"} : elles bougent jusqu'au coup d'envoi, vérifiez-les avant de miser. Au-delà de ${STALE_H} h, aucune mise n'est conseillée. « Écart suspect » : le modèle s'éloigne beaucoup du marché, souvent parce qu'il ignore une absence. Les cotes au-delà de ${MAX_ODDS} sont écartées : l'erreur du modèle y dépasse la valeur espérée.<br><br><strong>Pourquoi pas de combinés ?</strong> La marge du bookmaker se multiplie à chaque sélection : un combiné de 4 matchs à 5 % de marge chacun coûte environ 19 %.`;
 }
 $("vOnly").onchange = renderValeur;
+$("liveBtn").onclick = () => refreshLive(true);
 
 /* ================= Vue : Analyse ================= */
 function renderAnalyse(){
@@ -1157,6 +1290,8 @@ function renderParis(){
   const st = settings();
   [["sBank","bank"],["sWeek","week"],["sMax","max"],["sExpo","expo"]].forEach(([id,k]) => { if (document.activeElement !== $(id)) $(id).value = st[k]; });
   $("sBook").value = st.book;
+  $("sBest").checked = st.bestPrice === true;
+  $("sKeyInfo").textContent = liveKey() ? "Clé enregistrée sur ce téléphone. " + liveStatus() : "La clé reste sur ce téléphone, elle n'est envoyée qu'au service de cotes.";
   $("sMethod").value = st.method;
   const s = betStats(), bank = currentBank();
   const al = [];
@@ -1212,6 +1347,13 @@ function renderParis(){
   } else $("pCalibTxt").textContent = `Il faut au moins 10 paris réglés pour comparer vos gains aux probabilités annoncées (${s.settled} pour l'instant).`;
 }
 [["sBank","bank"],["sWeek","week"],["sMax","max"],["sExpo","expo"]].forEach(([id,k]) => $(id).addEventListener("change", () => { const s = LS.get("pl_settings", {}); const v = parseFloat($(id).value); if (v >= 0) { s[k] = v; LS.set("pl_settings", s); } renderParis(); }));
+$("sKeySave").onclick = () => {
+  const v = $("sKey").value.trim();
+  if (!v){ LS.set("pl_oddskey", ""); LS.set("pl_live", { at:null, data:{} }); toast("Clé supprimée"); renderParis(); return; }
+  if (!/^[A-Za-z0-9]{16,64}$/.test(v)){ toast("Cette clé ne ressemble pas à une clé The Odds API."); return; }
+  LS.set("pl_oddskey", v); $("sKey").value = ""; toast("Clé enregistrée · récupération des cotes…"); refreshLive(true);
+};
+$("sBest").onchange = () => { const s = LS.get("pl_settings", {}); s.bestPrice = $("sBest").checked; LS.set("pl_settings", s); computeAll(); applyLive(); renderParis(); };
 $("sBook").onchange = () => { const s = LS.get("pl_settings", {}); s.book = $("sBook").value; LS.set("pl_settings", s); toast(`Bookmaker : ${book()[0]}`); renderParis(); };
 $("sMethod").onchange = () => { const s = LS.get("pl_settings", {}); s.method = $("sMethod").value; LS.set("pl_settings", s); renderParis(); };
 $("pFilter").onchange = renderParis;
@@ -1300,7 +1442,7 @@ async function refresh(manual){
     if (d.generatedAt > DATA.generatedAt){
       const prev = DATA;
       try { DATA = d; computeAll(); } catch (err) { DATA = prev; computeAll(); throw new Error("données invalides"); }
-      LS.set("pl_data", d); const n = autoSettle(); render(); renderFresh(); toast(n ? `Données à jour · ${n} pari(s) réglé(s)` : "Données mises à jour");
+      LS.set("pl_data", d); applyLive(); const n = autoSettle(); render(); renderFresh(); toast(n ? `Données à jour · ${n} pari(s) réglé(s)` : "Données mises à jour");
     }
     else if (manual) toast("Vous avez déjà les données les plus récentes.");
   } catch (e) { if (manual) toast("Pas de connexion : l'application garde les dernières données."); }
@@ -1350,9 +1492,10 @@ Explique ce qui fait pencher le modèle, la principale incertitude, et termine p
 
 /* ================= Démarrage ================= */
 computeAll();
+applyLive();
 autoSettle();
 renderFresh();
 setView(ui.view);
-refresh(false);
+refresh(false).then(() => refreshLive(false));
 checkApk();
 </script>
