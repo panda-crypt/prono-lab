@@ -137,4 +137,23 @@ SOURCES = [
   ["UEFA — Ligue Conférence : calendrier et résultats", "https://www.uefa.com/uefaconferenceleague/news/02a8-2174cb200f25-b94693ddff4e-1000--2026-27-conference-league-all-the-league-phase-fixtures/"],
   ["Wikipédia — coefficients UEFA des pays", "https://en.wikipedia.org/wiki/UEFA_coefficient"],
 ]
-ODDS = {}
+ODDS = {"ucl": {  # OddsPortal, relevé du 23/10
+     ("Galatasaray","VfB Stuttgart"): {"1x2": ("OddsPortal",[2.25,4.10,2.85])},
+     ("Shakhtar Donetsk","Sporting CP"): {"1x2": ("OddsPortal",[3.80,3.80,1.95])},
+     ("Manchester United","Roma"): {"1x2": ("OddsPortal",[2.10,3.90,3.20])},
+     ("FC Barcelona","Aston Villa"): {"1x2": ("OddsPortal",[1.26,7.00,10.00])},
+     ("Atlético Madrid","FC Bayern München"): {"1x2": ("OddsPortal",[3.40,4.10,2.05])},
+     ("Bodø / Glimt","LOSC Lille"): {"1x2": ("OddsPortal",[1.95,4.10,3.80])},
+     ("Feyenoord","Inter"): {"1x2": ("OddsPortal",[4.40,4.40,1.70])},
+     ("LASK Linz","Slovan Bratislava"): {"1x2": ("OddsPortal",[1.48,4.90,6.50])},
+     ("Villarreal","Paris Saint Germain"): {"1x2": ("OddsPortal",[5.00,4.60,1.63])},
+     ("AEK Athens","Real Madrid"): {"1x2": ("OddsPortal",[8.00,6.00,1.36])},
+     ("Fenerbahçe","Liverpool"): {"1x2": ("OddsPortal",[4.75,4.40,1.68])},
+     ("Slavia Praha","Arsenal"): {"1x2": ("OddsPortal",[8.50,6.00,1.33])},
+     ("Borussia Dortmund","Real Betis"): {"1x2": ("OddsPortal",[1.80,4.10,4.30])},
+     ("PSV","Club Brugge"): {"1x2": ("OddsPortal",[2.20,4.20,2.90])},
+     ("Lens","Como"): {"1x2": ("OddsPortal",[3.00,3.90,2.25])},
+     ("Porto","Napoli"): {"1x2": ("OddsPortal",[2.20,3.60,3.30])},
+     ("RB Leipzig","Manchester City"): {"1x2": ("OddsPortal",[5.50,4.80,1.58])},
+     ("Viking","Sabah"): {"1x2": ("OddsPortal",[1.58,4.50,5.50])},
+}}
