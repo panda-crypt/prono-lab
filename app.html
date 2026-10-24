@@ -235,7 +235,7 @@ table{border-collapse:collapse;width:100%}
     <!-- MATCHS -->
     <section class="view" id="v-matchs">
       <div class="viewhead"><h2 id="mTitle">Prochains matchs</h2><span class="hint" id="mHint"></span></div>
-      <label class="field" style="margin:-4px 0 10px;max-width:340px"><span>Afficher</span><select id="mFilter"><option value="all">Tous les matchs</option><option value="safe">Seulement les très probables (vert)</option><option value="value">Seulement les paris à valeur (doré)</option></select></label>
+      <label class="field" style="margin:-4px 0 10px;max-width:340px"><span>Afficher</span><select id="mFilter"><option value="all">Tous les matchs</option><option value="safe">Seulement les paris très probables (vert)</option><option value="value">Seulement les paris à valeur (doré)</option></select></label>
       <div id="mList"></div>
       <div class="panel" style="margin-top:16px">
         <p class="label" id="stdTitle">Classement</p>
@@ -609,37 +609,58 @@ function mainPick(r, hn, an){
   const b = Math.max(r.pH, r.pD, r.pA);
   return b === r.pD ? ["N","Match nul",b] : b === r.pH ? ["1",`Victoire ${hn}`,b] : ["2",`Victoire ${an}`,b];
 }
-/* Issue très probable : le modèle ET les cotes doivent la donner gagnante très souvent.
-   Probabilité retenue = la plus prudente des deux. Sans cotes, pas de cadre vert (une seule source ne suffit pas). */
-const SAFE_P = 0.80, SAFE_MODEL = 0.77;   // mesuré cette saison : annoncé 86 %, réussi 83 % (le modèle est un peu trop sûr de lui)
-const SAFE_KEYS = ["1","2","1N","N2"];
-function safeOf(m, r){
+/* Pari le plus probable du match, tous marchés confondus (résultat, double chance, buts, les deux marquent).
+   1) probabilité du modèle, corrigée de son excès de confiance mesuré cette saison pour ce type de pari ;
+   2) moyenne avec la probabilité des cotes quand le bookmaker cote ce marché ;
+   3) vert si le résultat atteint 80 %, avec le taux de réussite réel de ce type de pari cette saison. */
+const SAFE_P = 0.80;
+const TOP_KEYS = ["1","2","1N","N2","12","O15","O25","U25","U35","BY","BN"];
+if (!MARKETS.U35) MARKETS.U35 = { label:()=>"Moins de 3,5 buts", p:r=>1-r.o35, win:(x,y)=>x+y<4 };
+let CAL = null;
+function calib(){
+  if (CAL && CAL.at === DATA.generatedAt) return CAL;
+  const B = BT || backtest(), f = { dom:{}, euro:{} }, st = { dom:{}, euro:{} };
+  const grp = lg => DATA.leagues[lg].type === "euro" ? "euro" : "dom";
+  ["dom","euro"].forEach(g => {
+    const recs = B.recs.filter(x => grp(x.lg) === g);
+    TOP_KEYS.forEach(k => {
+      // facteur = réussites / réussites annoncées sur les pronostics à 70 % ou plus, ramené vers 1 (poids de 10) et jamais au-dessus de 1
+      let hit = 0, exp = 0;
+      recs.forEach(x => { const p = MARKETS[k].p(x.q); if (p >= 0.7){ exp += p; hit += MARKETS[k].win(x.sc[0], x.sc[1]) ? 1 : 0; } });
+      f[g][k] = Math.min(1, (hit + 10) / (exp + 10));
+    });
+    // l'excès de confiance restant au sommet (pari mis en avant) est retiré lui aussi
+    let n = 0, hit = 0, exp = 0;
+    recs.forEach(x => { const b = TOP_KEYS.map(k => [k, MARKETS[k].p(x.q) * f[g][k]]).sort((a,c) => c[1]-a[1])[0]; if (b[1] >= 0.75){ n++; exp += b[1]; hit += MARKETS[b[0]].win(x.sc[0], x.sc[1]) ? 1 : 0; } });
+    const top = n ? Math.min(1, (hit + 10) / (exp + 10)) : 1;
+    TOP_KEYS.forEach(k => f[g][k] *= top);
+    // taux réel des paris qui seraient passés en vert
+    recs.forEach(x => {
+      const b = TOP_KEYS.map(k => [k, MARKETS[k].p(x.q) * f[g][k]]).sort((a,c) => c[1]-a[1])[0];
+      if (b[1] < SAFE_P) return;
+      const t = st[g][b[0]] = st[g][b[0]] || { n:0, hit:0 }; t.n++; t.hit += MARKETS[b[0]].win(x.sc[0], x.sc[1]) ? 1 : 0;
+    });
+  });
+  CAL = { at: DATA.generatedAt, f, st, grp };
+  return CAL;
+}
+function marketP(m, k){
   const od = m.odds; if (!od) return null;
-  let mk = null;
-  if (od.sharp && od.fair) mk = od.fair;
-  else if (od.o && od.o.length === 3 && od.o.every(x => x > 1)) mk = marketProbs(od.o);
-  if (!mk) return null;
-  const pm = { "1": r.pH, "2": r.pA, "1N": r.pH + r.pD, "N2": r.pD + r.pA };
-  const pk = { "1": mk[0], "2": mk[2], "1N": mk[0] + mk[1], "N2": mk[1] + mk[2] };
-  // une victoire sèche passe avant la double chance quand elle atteint le seuil (meilleure cote, même certitude)
-  for (const k of SAFE_KEYS){
-    const p = (pm[k] + pk[k]) / 2;   // moyenne des deux avis, chacun devant lui-même être très haut
-    if (p >= SAFE_P && Math.min(pm[k], pk[k]) >= SAFE_MODEL) return { k, p, pm: pm[k], pk: pk[k], ref: od.sharp ? "cotes de référence" : "cotes du marché" };
-  }
+  let x = null;
+  if (od.sharp && od.fair) x = od.fair; else if (od.o && od.o.length === 3 && od.o.every(v => v > 1)) x = marketProbs(od.o);
+  if (x){ const t = { "1": x[0], "2": x[2], "1N": x[0]+x[1], "N2": x[1]+x[2], "12": x[0]+x[2] }; if (k in t) return t[k]; }
+  if ((k === "O25" || k === "U25") && od.ou && od.ou.o && od.ou.o.every(v => v > 1)){ const q = marketProbs(od.ou.o); return k === "O25" ? q[0] : q[1]; }
+  if ((k === "BY" || k === "BN") && od.btts && od.btts.o && od.btts.o.every(v => v > 1)){ const q = marketProbs(od.btts.o); return k === "BY" ? q[0] : q[1]; }
   return null;
 }
-// Taux de réussite mesuré cette saison sur les issues que le modèle donnait au-dessus du seuil (prédites avant chaque journée)
-let SAFE_ST = null;
-function safeStats(){
-  if (SAFE_ST && SAFE_ST.at === DATA.generatedAt) return SAFE_ST;
-  const B = BT || backtest(); let n = 0, hit = 0, sp = 0;
-  B.recs.forEach(x => {
-    const [h, d, a] = x.pr, c = [[h, x.out === 0], [a, x.out === 2], [h + d, x.out !== 2], [d + a, x.out !== 0]];
-    const win = c.filter(([q]) => q >= SAFE_P).sort((u, v) => u[0] - v[0])[0];   // l'issue retenue : la plus précise au-dessus du seuil
-    if (win){ n++; hit += win[1] ? 1 : 0; sp += win[0]; }
-  });
-  SAFE_ST = { at: DATA.generatedAt, n, hit, exp: n ? sp / n : 0 };
-  return SAFE_ST;
+function topPick(m, r, lg){
+  const c = calib(), g = c.grp(lg);
+  const cands = TOP_KEYS.map(k => {
+    const pm = MARKETS[k].p(r), pc = pm * c.f[g][k], pk = marketP(m, k);
+    return { k, pm, pc, pk, p: pk == null ? pc : (pc + pk) / 2 };
+  }).sort((a,b) => b.p - a.p);
+  const t = cands[0]; t.safe = t.p >= SAFE_P; t.season = c.st[g][t.k] || null;
+  return t;
 }
 function goalsPick(r){
   if (r.o25 >= 0.57) return ["O25","Plus de 2,5 buts", r.o25];
@@ -1086,7 +1107,7 @@ function backtest(){
   const recs = []; const per = {};
   const rec = (lg, r, m) => {
     const out = m.s[0] > m.s[1] ? 0 : m.s[0] === m.s[1] ? 1 : 2, pr = [r.pH, r.pD, r.pA];
-    recs.push({ lg, pr, out, brier: pr.reduce((s,p,i)=>s+(p-(i===out?1:0))**2,0), ok: pr.indexOf(Math.max(...pr)) === out, o25: r.o25, over: m.s[0]+m.s[1] > 2, btts: r.btts, bt: m.s[0] > 0 && m.s[1] > 0 });
+    recs.push({ lg, pr, out, brier: pr.reduce((s,p,i)=>s+(p-(i===out?1:0))**2,0), ok: pr.indexOf(Math.max(...pr)) === out, o25: r.o25, over: m.s[0]+m.s[1] > 2, btts: r.btts, bt: m.s[0] > 0 && m.s[1] > 0, q: r, sc: m.s });
   };
   // Coupes d'Europe : ajustement refait avant chaque journée, avec uniquement les matchs antérieurs
   const eu = Object.entries(DATA.leagues).filter(([,L]) => L.type === "euro").flatMap(([lg,L]) => L.matches.filter(m => m.s).map(m => ({ lg, m })));
@@ -1112,7 +1133,7 @@ function backtest(){
       const pr = [r.pH, r.pD, r.pA];
       const brier = pr.reduce((s,p,i)=>s+(p-(i===out?1:0))**2,0);
       const fav = pr.indexOf(Math.max(...pr));
-      recs.push({ lg, pr, out, brier, ok: fav === out, o25: r.o25, over: m.s[0]+m.s[1] > 2, btts: r.btts, bt: m.s[0] > 0 && m.s[1] > 0 });
+      recs.push({ lg, pr, out, brier, ok: fav === out, o25: r.o25, over: m.s[0]+m.s[1] > 2, btts: r.btts, bt: m.s[0] > 0 && m.s[1] > 0, q: r, sc: m.s });
     });
   }
   recs.forEach(r => { const q = per[r.lg] = per[r.lg] || { n:0, ok:0, brier:0 }; q.n++; q.ok += r.ok; q.brier += r.brier; });
@@ -1178,14 +1199,14 @@ function renderMatchs(){
   // pari conseillé = issue retenue par le moteur de valeur (valeur, cote, probabilité, cotes fraîches, limites de mise)
   const recoOf = m => m.odds ? planMatches([{ lg, m, C }]).filter(x => x.best)[0] || null : null;
   const recos = new Map(all.map(m => [m, recoOf(m)]));
-  const safes = new Map(all.map(m => [m, m.d > nowStr() ? safeOf(m, predict(C, m.h, m.a)) : null]));
+  const tops = new Map(all.map(m => [m, topPick(m, predict(C, m.h, m.a), lg)]));
+  const safes = new Map(all.map(m => [m, m.d > nowStr() && tops.get(m).safe ? tops.get(m) : null]));
   const nReco = [...recos.values()].filter(Boolean).length, nSafe = [...safes.values()].filter(Boolean).length;
-  const SS = safeStats();
   if (!["all","safe","value"].includes(ui.mF)) ui.mF = "all";
   $("mFilter").value = ui.mF;
   const list = ui.mF === "safe" ? all.filter(m => safes.get(m)) : ui.mF === "value" ? all.filter(m => recos.get(m)) : all;
   $("mHint").textContent = all.length ? `${all.length} rencontres sur ${days} jours · ${nSafe} très probable${nSafe>1?"s":""} (vert) · ${nReco} pari${nReco>1?"s":""} à valeur (doré)` : "";
-  if (!list.length){ $("mList").innerHTML = `<div class="empty">${ui.mF !== "all" && all.length ? (ui.mF === "safe" ? "Aucune issue très probable dans ce championnat pour l'instant : il faut que le modèle et les cotes la donnent toutes deux à ${Math.round(SAFE_P*100)} % ou plus." : `Aucun pari à valeur dans ce championnat pour l'instant. ${liveKey() ? "Actualisez les cotes dans l'onglet Valeur." : "Activez les cotes en direct dans Mes paris pour en obtenir."}`) : `Aucun match programmé dans les ${days} prochains jours. Le calendrier se met à jour avec les données.`}</div>`; }
+  if (!list.length){ $("mList").innerHTML = `<div class="empty">${ui.mF !== "all" && all.length ? (ui.mF === "safe" ? "Aucune issue très probable dans ce championnat pour l'instant : il faut que le modèle et les cotes donnent le meilleur pari d'un match à ${Math.round(SAFE_P*100)} % ou plus." : `Aucun pari à valeur dans ce championnat pour l'instant. ${liveKey() ? "Actualisez les cotes dans l'onglet Valeur." : "Activez les cotes en direct dans Mes paris pour en obtenir."}`) : `Aucun match programmé dans les ${days} prochains jours. Le calendrier se met à jour avec les données.`}</div>`; }
   else {
     let html = "", day = "";
     const now = nowStr();
@@ -1203,18 +1224,17 @@ function renderMatchs(){
         else if (m.odds.o) val = `<span class="tag muted">Cotes : ${m.odds.o.map(x=>x>1?fx(x):"–").join(" · ")}</span>`;
         if (hoursSince(m.odds.at) > STALE_H) val += ` <span class="tag warn">cotes anciennes</span>`;
       }
-      const started = m.d <= now, sf = safes.get(m);
-      if (!best && sf) bookMk = sf.k;   // bouton bookmaker et suivi : l'issue en vert
-      const sfOdds = sf && m.odds.o ? (sf.k === "1" ? m.odds.o[0] : sf.k === "2" ? m.odds.o[2] : null) : null;
+      const started = m.d <= now, sf = safes.get(m), tp = tops.get(m);
+      if (!best) bookMk = tp.k;   // bouton bookmaker et suivi : le pari le plus probable
       html += `<article class="mcard${sf?" safe":""}${best?" value":""}">
-        ${sf ? `<div class="ribbon"><span>✓ Très probable : ${esc(MARKETS[sf.k].label(H.name, A.name))}</span><span class="num">${pct(sf.p)}</span></div>` : ""}
+        ${sf ? `<div class="ribbon"><span>✓ Pari le plus probable : ${esc(MARKETS[sf.k].label(H.name, A.name))}</span><span class="num">${pct(sf.p)}</span></div>` : ""}
         ${best ? `<div class="ribbon gold"><span>★ Pari à valeur : ${esc(MARKETS[best.k].label(H.name, A.name))}</span><span class="num">cote ≥ ${fx(best.sharp ? (1+sharpMinFor(m.d))/best.p : minOdds(best.p, best.mp))} · mise ${eur(best.stake)}</span></div>` : ""}
         <div class="mtop"><span>${fmtTime(m.d)}${started?" · en cours ou joué":""}</span><span>${H.rank}e contre ${A.rank}e</span></div>
         <div class="mteams"><div class="t${H.name.length>9?" long":""}">${esc(H.name)}</div><div class="xg">${fx(r.lh,1)} – ${fx(r.la,1)}</div><div class="t a${A.name.length>9?" long":""}">${esc(A.name)}</div></div>
         <div class="minibar"><i class="h" style="width:${r.pH*100}%"></i><i class="d" style="width:${r.pD*100}%"></i><i class="a" style="width:${r.pA*100}%"></i></div>
         <div class="mprobs num"><span>${pct(r.pH)}</span><span>${pct(r.pD)}</span><span>${pct(r.pA)}</span></div>
-        <div class="mfoot"><span class="pickline"><span class="hint" style="font-weight:400">Le plus probable (modèle) :</span> ${esc(lab)} <span class="num">${pct(p)}</span> <span class="tag ${cc}">${cl}</span></span>${best ? "" : val}</div>
-        ${sf ? `<p class="hint" style="margin:0;color:var(--fg)"><strong>Pourquoi en vert ?</strong> Le modèle (${pct(sf.pm)}) et les ${sf.ref} (${pct(sf.pk)}) s'accordent : ${esc(MARKETS[sf.k].label(H.name, A.name))} passe environ <strong>${Math.round(sf.p*10)} fois sur 10</strong>.${SS.n >= 20 ? ` Cette saison, les issues annoncées à ${Math.round(SAFE_P*100)} % ou plus ont réussi <strong>${SS.hit} fois sur ${SS.n}</strong> (${pct(SS.hit/SS.n)}).` : ""} ${best && best.k === sf.k ? "C'est aussi un pari à valeur." : `${sfOdds ? `Cote ${fx(sfOdds)} : u` : "U"}n échec efface plusieurs réussites, ne misez que s'il est aussi en doré.`}</p>` : ""}
+        <div class="mfoot"><span class="pickline"><span class="hint" style="font-weight:400">Pari le plus probable :</span> ${esc(MARKETS[tp.k].label(H.name, A.name))} <span class="num">${pct(tp.p)}</span>${sf ? "" : ` <span class="tag ${tp.p >= 0.7 ? "warn" : "bad"}">${tp.p >= 0.7 ? "probable" : "incertain"}</span>`}</span>${best ? "" : val}</div>
+        ${sf ? `<p class="hint" style="margin:0;color:var(--fg)"><strong>Pourquoi en vert ?</strong> De tous les paris de ce match (résultat, double chance, buts, les deux marquent), c'est celui qui a le plus de chances : environ <strong>${Math.round(sf.p*10)} fois sur 10</strong>. Modèle ${pct(sf.pc)}${sf.pk != null ? `, cotes ${pct(sf.pk)}` : " (pas de cote pour ce pari : avis du modèle seul, corrigé de ses erreurs passées)"}.${sf.season && sf.season.n >= 10 ? ` Cette saison, ce pari mis en avant a réussi <strong>${sf.season.hit} fois sur ${sf.season.n}</strong> (${pct(sf.season.hit/sf.season.n)}).` : ""} ${best && best.k === sf.k ? "C'est aussi un pari à valeur." : "Cote faible : ne misez que s'il est aussi en doré."}</p>` : ""}
         ${best ? `<p class="hint" style="margin:0;color:var(--fg)"><strong>Pourquoi ce pari ?</strong> Il a ${pct(best.p)} de chances de passer${best.sharp ? " selon les cotes de référence" : ""} et la cote ${fx(best.o)}${best.bk ? " (" + esc(best.bk) + ")" : ""} paie plus que ce risque : <strong class="edge-pos">+${(best.edge*100).toFixed(0)} % de valeur</strong>. ${best.p < 0.5 ? "Il perdra souvent, mais sur la durée il rapporte." : ""}</p>` : ""}
         <div class="row"><button class="btn sm" type="button" data-an="${esc(m.h)}|${esc(m.a)}">Analyser</button><button class="btn ghost sm" type="button" data-bet="${lg}|${esc(m.d)}|${esc(m.h)}|${esc(m.a)}|${bookMk}">+ Suivre ce pari</button><button class="btn ${best ? "" : "ghost "}sm" type="button" data-book="${lg}|${esc(m.d)}|${esc(m.h)}|${esc(m.a)}|${bookMk}">${esc(book(best && best.bkKey)[0])} ↗</button></div>
       </article>`;
