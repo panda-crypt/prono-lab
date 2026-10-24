@@ -584,9 +584,9 @@ const MARKETS = {
 
 function confidence(p, n){
   const s = n < 6 ? 0.05 : 0;
-  if (p - s >= 0.6) return ["good","confiance forte"];
-  if (p - s >= 0.48) return ["warn","confiance moyenne"];
-  return ["bad","confiance faible"];
+  if (p - s >= 0.6) return ["good","issue probable"];
+  if (p - s >= 0.48) return ["warn","match ouvert"];
+  return ["bad","match très ouvert"];
 }
 function mainPick(r, hn, an){
   if (r.pH >= 0.5) return ["1", `Victoire ${hn}`, r.pH];
@@ -1094,12 +1094,13 @@ function renderMatchs(){
       }
       const started = m.d <= now;
       html += `<article class="mcard${best?" value":""}">
-        ${best ? `<div class="ribbon"><span>✓ Pari conseillé : ${esc(MARKETS[best.k].label(H.name, A.name))}</span><span class="num">cote ≥ ${fx(best.sharp ? (1+SHARP_MIN)/best.p : minOdds(best.p, best.mp))} · mise ${eur(best.stake)}</span></div>` : ""}
+        ${best ? `<div class="ribbon"><span>✓ Pari à valeur : ${esc(MARKETS[best.k].label(H.name, A.name))}</span><span class="num">cote ≥ ${fx(best.sharp ? (1+SHARP_MIN)/best.p : minOdds(best.p, best.mp))} · mise ${eur(best.stake)}</span></div>` : ""}
         <div class="mtop"><span>${fmtTime(m.d)}${started?" · en cours ou joué":""}</span><span>${H.rank}e contre ${A.rank}e</span></div>
         <div class="mteams"><div class="t${H.name.length>9?" long":""}">${esc(H.name)}</div><div class="xg">${fx(r.lh,1)} – ${fx(r.la,1)}</div><div class="t a${A.name.length>9?" long":""}">${esc(A.name)}</div></div>
         <div class="minibar"><i class="h" style="width:${r.pH*100}%"></i><i class="d" style="width:${r.pD*100}%"></i><i class="a" style="width:${r.pA*100}%"></i></div>
         <div class="mprobs num"><span>${pct(r.pH)}</span><span>${pct(r.pD)}</span><span>${pct(r.pA)}</span></div>
-        <div class="mfoot"><span class="pickline">${esc(lab)} <span class="tag ${cc}">${cl}</span></span>${val}</div>
+        <div class="mfoot"><span class="pickline"><span class="hint" style="font-weight:400">Le plus probable (modèle) :</span> ${esc(lab)} <span class="num">${pct(p)}</span> <span class="tag ${cc}">${cl}</span></span>${best ? "" : val}</div>
+        ${best ? `<p class="hint" style="margin:0;color:var(--fg)"><strong>Pourquoi ce pari ?</strong> Il a ${pct(best.p)} de chances de passer${best.sharp ? " selon les cotes de référence" : ""} et la cote ${fx(best.o)}${best.bk ? " (" + esc(best.bk) + ")" : ""} paie plus que ce risque : <strong class="edge-pos">+${(best.edge*100).toFixed(0)} % de valeur</strong>. ${best.p < 0.5 ? "Il perdra souvent, mais sur la durée il rapporte." : ""}</p>` : ""}
         <div class="row"><button class="btn sm" type="button" data-an="${esc(m.h)}|${esc(m.a)}">Analyser</button><button class="btn ghost sm" type="button" data-bet="${lg}|${esc(m.d)}|${esc(m.h)}|${esc(m.a)}|${best ? best.k : mk}">+ Suivre ce pari</button><button class="btn ${best ? "" : "ghost "}sm" type="button" data-book="${lg}|${esc(m.d)}|${esc(m.h)}|${esc(m.a)}|${bookMk}">${esc(book()[0])} ↗</button></div>
       </article>`;
     });
@@ -1193,7 +1194,7 @@ function renderAnalyse(){
 
   const n = Math.min(H.p, A.p);
   const mp = mainPick(r, H.name, A.name), gp = goalsPick(r), bt = r.btts >= 0.5 ? ["BY","Oui",r.btts] : ["BN","Non",1-r.btts];
-  const card = (k, v, p, main, raw) => { const [c,l] = raw ? ["bad","score exact, très risqué"] : confidence(p, n);
+  const card = (k, v, p, main, raw) => { const [c,l] = raw ? ["bad","score exact, très incertain"] : confidence(p, n);
     return `<div class="pick${main?" main":""}"><div class="k">${k}</div><div class="v">${esc(v)}</div><div class="s"><span class="num">${pct(p)}</span><span class="tag ${c}">${l}</span></div></div>`; };
   $("aPicks").innerHTML = card("Pronostic principal", mp[1], mp[2], true) + card("Nombre de buts", gp[1], gp[2]) + card("Les deux marquent", bt[1], bt[2]) + card("Score le plus probable", `${r.sc[0][0]} – ${r.sc[0][1]}`, r.sc[0][2], false, true);
 
