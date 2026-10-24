@@ -246,7 +246,8 @@ table{border-collapse:collapse;width:100%}
         <div class="row">
           <label class="check"><input type="checkbox" id="vOnly" checked> Seulement les paris à valeur (≥ 4 %, cote ≤ 6)</label>
         </div>
-        <div class="panel row" style="justify-content:space-between;padding:12px 14px"><span class="hint" id="liveStatus" style="flex:1;min-width:200px"></span><button class="btn sm" type="button" id="liveBtn">Actualiser les cotes</button></div>
+        <div class="panel row" style="justify-content:space-between;padding:12px 14px"><span class="hint" id="liveStatus" style="flex:1;min-width:200px"></span><button class="btn sm" type="button" id="liveBtn">Actualiser les cotes</button>
+          <details id="liveMissed" class="hint" style="flex-basis:100%" hidden></details></div>
         <p id="vSummary" style="margin:0"></p>
         <div class="panel scroll" style="padding:0 8px"><table class="vtable"><thead><tr>
           <th class="l">Match</th><th class="l">Pari</th><th>Cote</th><th>Proba.</th><th>Réf.</th><th>Valeur</th><th>Mise conseillée</th><th></th></tr></thead>
@@ -827,7 +828,9 @@ function nativeFetch(url){
                    .catch(() => ({ status: 0, body: "", remaining: null }));
 }
 const STOP = new Set(["fc","afc","cf","ac","as","sc","ssc","rc","rcd","cd","ud","sd","club","de","the","calcio","fsv","tsg","vfb","vfl","sv","bc","fk","sk","nk","gnk","pfk","kks","cp","and","1","04","05","07","1899","1901","sl"]);
-const toks = s => String(s).normalize("NFD").replace(/[̀-ͯ]/g,"").toLowerCase().replace(/[^a-z0-9]+/g," ").split(" ").filter(w => w && !STOP.has(w));
+// lettres qui ne se décomposent pas (ø, æ, ł, ß…) : translittérées avant de retirer les accents
+const TRANSLIT = { "ø":"o", "Ø":"o", "æ":"ae", "Æ":"ae", "œ":"oe", "Œ":"oe", "ł":"l", "Ł":"l", "ß":"ss", "đ":"d", "Đ":"d", "ı":"i", "þ":"th", "ð":"d" };
+const toks = s => String(s).replace(/[øØæÆœŒłŁßđĐıþð]/g, c => TRANSLIT[c]).normalize("NFD").replace(/[̀-ͯ]/g,"").toLowerCase().replace(/[^a-z0-9]+/g," ").split(" ").filter(w => w && !STOP.has(w));
 function teamCands(L, name){
   const a = toks(name); if (!a.length) return [];
   const out = [];
@@ -849,7 +852,7 @@ async function refreshLive(manual){
   if (!manual && st.at && hoursSince(st.at) < LIVE_MIN_H) return;
   const btn = $("liveBtn"); if (btn){ btn.disabled = true; btn.textContent = "Actualisation…"; }
   const kw = book()[2], now = Date.now(), data = {};
-  let remaining = st.remaining, used = st.used, matched = 0, unmatched = 0, err = "";
+  let remaining = st.remaining, used = st.used, matched = 0, unmatched = 0, err = ""; const missed = [];
   try {
     const leagues = Object.keys(SPORT_KEYS).filter(lg => DATA.leagues[lg] && upcoming(lg, DATA.leagues[lg].type === "euro" ? 16 : 10).length);
     for (const lg of leagues){
@@ -867,7 +870,7 @@ async function refreshLive(manual){
       evs.forEach(ev => {
         const hc = teamCands(L, ev.home_team), ac = teamCands(L, ev.away_team), t = parisOfIso(ev.commence_time);
         const m = fixtures.find(f => hc.includes(f.h) && ac.includes(f.a) && Math.abs(pDate(f.d) - pDate(t)) <= 36*36e5);
-        if (!m){ unmatched++; return; }
+        if (!m){ unmatched++; missed.push(`${ev.home_team} – ${ev.away_team} (${(ev.commence_time || "").slice(0,10).split("-").reverse().join("/")})`); return; }
         const books = [];
         (ev.bookmakers || []).forEach(b => {
           const mk = (b.markets || []).find(x => x.key === "h2h"); if (!mk) return;
@@ -892,7 +895,8 @@ async function refreshLive(manual){
       });
     }
   } catch (e) { err = "La récupération des cotes a échoué."; }
-  const ns = { at: err && !matched ? st.at : nowStr(), remaining, used, data: matched ? data : st.data, msg: err || (unmatched ? `${unmatched} match(s) du fournisseur non reconnu(s).` : "") };
+  const ns = { at: err && !matched ? st.at : nowStr(), remaining, used, data: matched ? data : st.data, matched, missed,
+               msg: err || (unmatched ? `${unmatched} match(s) du fournisseur non reconnu(s).` : "") };
   LS.set("pl_live", ns);
   if (btn){ btn.disabled = false; btn.textContent = "Actualiser les cotes"; }
   applyLive(); render();
@@ -914,7 +918,7 @@ function liveStatus(){
   if (!k) return "Cotes en direct désactivées : ajoutez votre clé The Odds API dans Mes paris.";
   if (!st.at) return "Cotes en direct prêtes : touchez « Actualiser les cotes ».";
   const h = hoursSince(st.at), ago = h < 1 ? `${Math.max(1, Math.round(h*60))} min` : `${Math.round(h)} h`;
-  return `Cotes en direct actualisées il y a ${ago}${st.remaining != null ? ` · ${st.remaining} crédits restants ce mois-ci` : ""}${st.msg ? " · " + st.msg : ""}`;
+  return `Cotes en direct actualisées il y a ${ago}${st.matched ? ` · ${st.matched} matchs` : ""}${st.remaining != null ? ` · ${st.remaining} crédits restants ce mois-ci` : ""}${st.msg ? " · " + st.msg : ""}`;
 }
 
 /* ================= Paris ================= */
@@ -1098,6 +1102,9 @@ function valueRows(){
 }
 function renderValeur(){
   $("liveStatus").textContent = liveStatus();
+  const miss = liveState().missed || [];
+  $("liveMissed").hidden = !miss.length;
+  $("liveMissed").innerHTML = miss.length ? `<summary>Voir les matchs non reconnus</summary><ul style="margin:6px 0 0;padding-left:18px">${miss.map(x => `<li>${esc(x)}</li>`).join("")}</ul>` : "";
   const only = $("vOnly").checked;
   let rows = valueRows();
   const total = rows.length;
