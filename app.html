@@ -1700,27 +1700,38 @@ function buildTickets(){
   pool.forEach(x => {
     const pr = k => { const a = x.alts.find(c => c.k === k); return a ? (a.pk != null ? Math.min(a.p, a.pk) : a.p) : 0; };
     const fav = pr("1") >= pr("2") ? "1" : "2";
-    x.alts.filter(a => !a.guess && a.o >= 1.2 && ["1","2","1N","N2"].includes(a.k)).forEach(a => {
+    x.alts.filter(a => a.o >= 1.2).forEach(a => {
       const p = pr(a.k);
-      const ok = (a.k === "1" || a.k === "2") ? a.k === fav && p >= 0.45 && p >= pr("N") : p >= 0.6 && (a.k === "1N" ? fav === "1" : fav === "2");
-      if (ok) jp.push(Object.assign({}, a, { key: x.key, p, eff: Math.log(1 / p) / Math.log(a.o) }));
+      let ok;
+      if (a.k === "1" || a.k === "2") ok = !a.guess && a.k === fav && p >= 0.45;                       // victoire du favori
+      else if (a.k === "1N" || a.k === "N2") ok = !a.guess && p >= 0.6 && (a.k === "1N" ? fav === "1" : fav === "2");   // double chance du favori
+      else if (["O15","O25","U25","U35","BY","BN"].includes(a.k)) ok = p >= 0.6;                      // buts, les deux marquent
+      else ok = false;                                                                                  // ni nul, ni « pas de nul »
+      if (!ok) return;
+      // sans cote relevée pour ce marché : cote estimée avec 7 % de marge (les marchés de buts sont plus margés que le 1N2)
+      const o = a.guess ? Math.max(1.02, +(0.93 / p).toFixed(2)) : a.o;
+      jp.push(Object.assign({}, a, { o, key: x.key, p, eff: Math.log(1 / p) / Math.log(o) }));
     });
   });
   jp.sort((a,b) => a.eff - b.eff);
-  [[50, "Jackpot ×50"], [150, "Jackpot ×150"], [500, "Jackpot ×500"]].forEach(([target, name]) => {
+  [false, true].forEach(mixed => [[50, "Jackpot ×50"], [150, "Jackpot ×150"], [500, "Jackpot ×500"]].forEach(([target, name0]) => {
+    const name = name0 + (mixed ? " mixte" : "");
     const legs = [], used = new Set(); let O = 1;
+    const isWin = l => l.k === "1" || l.k === "2", nW = () => legs.filter(isWin).length;
     for (const a of jp){
       if (O >= target || legs.length >= 16) break;
       if (used.has(a.key)) continue;
+      // mélange des types de paris : pas plus de victoires que d'autres paris (double chance, buts, les deux marquent), plus une
+      if (mixed && isWin(a) && nW() > legs.length - nW()) continue;
       if (O * a.o >= target){
         // dernière sélection : la plus probable de celles qui suffisent pour atteindre la cote visée
-        const last = jp.filter(b => !used.has(b.key) && O * b.o >= target).sort((u,v) => v.p - u.p)[0] || a;
+        const last = jp.filter(b => !used.has(b.key) && O * b.o >= target && !(mixed && isWin(b) && nW() > legs.length - nW())).sort((u,v) => v.p - u.p)[0] || a;
         used.add(last.key); legs.push(last); O *= last.o; break;
       }
       used.add(a.key); legs.push(a); O *= a.o;
     }
-    if (O >= target * 0.8) add(mkTicket("combo", name, legs.sort((a,b) => a.m.d < b.m.d ? -1 : 1), { jackpot: true }));
-  });
+    if (O >= target * 0.8) add(mkTicket("combo", name, legs.sort((a,b) => a.m.d < b.m.d ? -1 : 1), { jackpot: true, mixed }));
+  }));
   out.forEach(t => Object.assign(t, ticketStake(t)));
   return out.sort((a,b) => a.P - b.P);   // du moins sûr au plus sûr
 }
@@ -1797,7 +1808,7 @@ function renderTickets(){
           <div><span>Mise conseillée</span><b>${eur(t.stake)}</b></div>
           <div><span>Gain possible</span><b>${gain}</b></div>
         </div>
-        <p class="hint" style="margin:0">${t.ev >= 0 ? `<strong class="edge-pos">Espérance positive : ${pct(t.ev)}</strong> par euro misé.` : `Espérance : <strong>${pct(t.ev)}</strong> par euro misé (la marge des bookmakers${t.legs.length > 1 ? " se multiplie à chaque sélection" : ""}).`} ${esc(t.why)}.${t.est ? " Cotes marquées ≈ : estimées, vérifiez-les chez votre bookmaker." : ""}</p>
+        <p class="hint" style="margin:0">${t.ev >= 0 ? `<strong class="edge-pos">Espérance positive : ${pct(t.ev)}</strong> par euro misé.` : `Espérance : <strong>${pct(t.ev)}</strong> par euro misé (la marge des bookmakers${t.legs.length > 1 ? " se multiplie à chaque sélection" : ""}).`} ${esc(t.why)}.${t.est ? " Cotes marquées ≈ : estimées, vérifiez-les chez votre bookmaker." : ""}${t.jackpot ? (t.mixed ? " Version mixte : victoires, doubles chances, buts et « les deux marquent » ; plus de matchs pour la même cote, donc moins de chances que la version simple." : " Version optimale : la combinaison qui a le plus de chances d'atteindre cette cote, surtout des victoires de favoris.") : ""}</p>
         <div class="row"><button class="btn sm" type="button" data-tk="${i}">Copier et ouvrir ${esc(book()[0])}</button></div>
       </article>`;
     }).join("");
