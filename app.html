@@ -1609,7 +1609,7 @@ function oddsFor(m, k, p){
   }
   if ((k === "O25" || k === "U25") && od && od.ou && ok(od.ou.o)) return { o: od.ou.o[k === "O25" ? 0 : 1], bk: od.ou.bk };
   if ((k === "BY" || k === "BN") && od && od.btts && ok(od.btts.o)) return { o: od.btts.o[k === "BY" ? 0 : 1], bk: od.btts.bk };
-  return { o: Math.max(1.02, 0.95 / p), est: true };     // pas de cote relevée : estimation avec une marge de 5 %
+  return { o: Math.max(1.02, 0.95 / p), est: true, guess: true };     // pas de cote relevée : estimation avec une marge de 5 %
 }
 function ticketPool(){
   const now = nowStr(); let pool = [];
@@ -1619,9 +1619,9 @@ function ticketPool(){
       const C = CL[lg]; if (!C) continue;
       upcoming(lg, days).filter(m => m.d > now).forEach(m => {
         const r = predict(C, m.h, m.a), t = topPick(m, r, lg), H = C.T[m.h].name, A = C.T[m.a].name;
-        const sel = c => { const od = oddsFor(m, c.k, c.p); return { lg, m, H, A, k: c.k, p: c.p, o: +od.o.toFixed(2), est: !!od.est, bk: od.bk || "" }; };
+        const sel = c => { const od = oddsFor(m, c.k, c.p); return { lg, m, H, A, k: c.k, p: c.p, pk: c.pk, o: +od.o.toFixed(2), est: !!od.est, guess: !!od.guess, bk: od.bk || "" }; };
         const win = t.all.filter(c => c.k === "1" || c.k === "2").sort((a,b) => b.p - a.p)[0];
-        pool.push({ key: `${lg}|${m.h}|${m.a}`, top: sel(t), safe: t.safe, win: sel(win) });
+        pool.push({ key: `${lg}|${m.h}|${m.a}`, top: sel(t), safe: t.safe, win: sel(win), alts: t.all.map(sel) });
       });
     }
     if (pool.filter(x => x.safe).length >= 5) break;
@@ -1656,6 +1656,7 @@ function ticketStake(t){
   const s = settings(), bank = currentBank();
   if (bank <= 0) return { stake: 0, why: "bankroll épuisée" };
   if (t.valueStake) return { stake: t.valueStake, why: "Pari à valeur : Kelly ¼, comme dans l'onglet Valeur" };
+  if (t.jackpot) return { stake: Math.min(bank * s.max / 100, Math.max(0.5, Math.round(bank * 0.005 * 2) / 2)), why: "Grosse cote : mise symbolique (0,5 % de la bankroll), à considérer comme perdue d'avance" };
   if (t.ev > 0.02 && !t.est && t.kind !== "system"){
     const k = (t.P * t.O - 1) / (t.O - 1) * 0.25, st = Math.min(bank * k, bank * s.max / 100);
     if (st >= 0.5) return { stake: Math.round(st * 2) / 2, why: "Espérance positive : Kelly ¼" };
@@ -1684,6 +1685,29 @@ function buildTickets(){
   if (vc.length >= 3) add(mkTicket("combo", "Combiné rentable ×3", vc.slice(0, 3)));
   if (wins.length >= 3) add(mkTicket("combo", "Combiné de 3 victoires", wins.slice(0, 3)));
   if (wins.length >= 5) add(mkTicket("combo", "Grosse cote : 5 victoires", wins.slice(0, 5)));
+  // Jackpots : pour chaque cote visée, la combinaison qui a le plus de chances de l'atteindre.
+  // On ajoute les sélections qui « coûtent » le moins de probabilité par unité de cote : rapport log(1/p) / log(cote) le plus bas.
+  const jp = [];
+  // Probabilité prudente : jamais au-dessus de celle des cotes (sur un long combiné, un excès d'optimisme se multiplie).
+  pool.forEach(x => x.alts.filter(a => !a.guess && a.o >= 1.25 && a.o <= 4).forEach(a => {
+    const p = a.pk != null ? Math.min(a.p, a.pk) : a.p;
+    if (p >= 0.3) jp.push(Object.assign({}, a, { key: x.key, p, eff: Math.log(1 / p) / Math.log(a.o) }));
+  }));
+  jp.sort((a,b) => a.eff - b.eff);
+  [[50, "Jackpot ×50"], [150, "Jackpot ×150"], [500, "Jackpot ×500"]].forEach(([target, name]) => {
+    const legs = [], used = new Set(); let O = 1;
+    for (const a of jp){
+      if (O >= target || legs.length >= 16) break;
+      if (used.has(a.key)) continue;
+      if (O * a.o >= target){
+        // dernière sélection : la plus probable de celles qui suffisent pour atteindre la cote visée
+        const last = jp.filter(b => !used.has(b.key) && O * b.o >= target).sort((u,v) => v.p - u.p)[0] || a;
+        used.add(last.key); legs.push(last); O *= last.o; break;
+      }
+      used.add(a.key); legs.push(a); O *= a.o;
+    }
+    if (O >= target * 0.8) add(mkTicket("combo", name, legs.sort((a,b) => a.m.d < b.m.d ? -1 : 1), { jackpot: true }));
+  });
   out.forEach(t => Object.assign(t, ticketStake(t)));
   return out.sort((a,b) => a.P - b.P);   // du moins sûr au plus sûr
 }
@@ -1755,7 +1779,7 @@ function renderTickets(){
         <ul class="legs">${t.legs.map(l => `<li class="leg"><div><strong>${esc(MARKETS[l.k].label(l.H, l.A))}</strong><br><span class="hint">${esc(l.H)} – ${esc(l.A)} · ${esc(DATA.leagues[l.lg].name)} · ${fmtDay(l.m.d)} ${fmtTime(l.m.d)}</span></div>
           <div class="r num">${l.est ? "≈ " : ""}${fx(l.o)}<br><span class="hint">${pct(l.p)}</span></div></li>`).join("")}</ul>
         <div class="tk-kpis">
-          <div><span>Chance de gain</span><b>${pct(t.P)}</b>${t.kind === "system" ? `<span>${pct(t.Pany)} d'au moins 2 sur 3</span>` : ""}</div>
+          <div><span>Chance de gain</span><b>${t.P < 0.05 ? `1 sur ${Math.round(1 / t.P)}` : pct(t.P)}</b>${t.kind === "system" ? `<span>${pct(t.Pany)} d'au moins 2 sur 3</span>` : ""}</div>
           <div><span>${t.kind === "system" ? "Rapporte (× la mise)" : "Cote totale"}</span><b>${t.kind === "system" ? `${fx(t.lo,1)} à ${fx(t.hi,1)}` : fx(t.O)}</b></div>
           <div><span>Mise conseillée</span><b>${eur(t.stake)}</b></div>
           <div><span>Gain possible</span><b>${gain}</b></div>
