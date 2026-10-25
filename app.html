@@ -64,8 +64,8 @@ main .wrap{padding-block:16px 28px}
 
 /* Barre d'onglets */
 .nav{position:fixed;left:0;right:0;bottom:0;z-index:6;background:var(--surface);border-top:1px solid var(--line);padding-bottom:env(safe-area-inset-bottom,0px);padding-left:env(safe-area-inset-left,0px);padding-right:env(safe-area-inset-right,0px)}
-.nav ul{list-style:none;margin:0 auto;padding:0;display:grid;grid-template-columns:repeat(6,1fr);max-width:640px;height:var(--nav-h)}
-.nav button{width:100%;height:100%;border:0;background:transparent;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:2px;font-size:11.5px;color:var(--muted);cursor:pointer}
+.nav ul{list-style:none;margin:0 auto;padding:0;display:grid;grid-template-columns:repeat(7,1fr);max-width:640px;height:var(--nav-h)}
+.nav button{width:100%;height:100%;border:0;background:transparent;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:2px;font-size:10.5px;color:var(--muted);cursor:pointer}
 .nav button svg{width:22px;height:22px;stroke:currentColor;fill:none;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round}
 .nav button[aria-current="page"]{color:var(--pitch);font-weight:600}
 .nav .badge{position:absolute;margin-left:22px;margin-top:-22px;background:var(--bad);color:#fff;border-radius:999px;font-size:10px;padding:0 5px;line-height:16px}
@@ -397,6 +397,17 @@ table{border-collapse:collapse;width:100%}
       <div class="panel" style="margin-top:16px"><p class="label">Comment lire ces tickets</p><p class="hint" id="tNote"></p></div>
     </section>
 
+    <!-- METABET -->
+    <section class="view" id="v-metabet" hidden>
+      <div class="viewhead"><h2>Metabet</h2><span class="hint">Laboratoire de prédictions métaphysiques</span></div>
+      <div class="alert warn" style="margin-bottom:12px"><div><strong>Laboratoire expérimental</strong>Aucune de ces méthodes n'a démontré de pouvoir prédictif. Leurs signaux ne sont jamais mélangés aux probabilités, aux paris verts ni aux tickets, et aucune mise n'est conseillée sur leur base. Le laboratoire mesure, match après match, si elles font mieux que le hasard, le modèle et le marché.</div></div>
+      <div class="panel" style="margin-bottom:12px"><p class="label">Bilan des tickets Metabet (sans miser)</p><div id="mbStats"></div></div>
+      <div class="stack" id="mbList"></div>
+      <details class="panel" style="margin-top:16px"><summary class="label" style="cursor:pointer;margin:0">Noter mes intuitions et synchronicités</summary><div class="stack" id="mbIntu" style="margin-top:10px"></div></details>
+      <div class="panel" style="margin-top:16px"><p class="label">Résultats du laboratoire</p><div id="mbLab"></div></div>
+      <div class="panel" style="margin-top:16px"><p class="label">Règles préenregistrées (version 1, fixées le 25/10/2026)</p><div class="hint" id="mbRules"></div></div>
+    </section>
+
     <!-- FIABILITÉ -->
     <section class="view" id="v-fiab" hidden>
       <div class="viewhead"><h2>Fiabilité du modèle</h2></div>
@@ -456,6 +467,7 @@ table{border-collapse:collapse;width:100%}
     <li><button type="button" data-v="paris"><svg viewBox="0 0 24 24"><path d="M6 3h9l3 3v15H6z"/><path d="M9 10h6M9 14h6M9 18h3"/></svg>Mes paris<span class="badge" id="navBadge" hidden></span></button></li>
     <li><button type="button" data-v="fiab"><svg viewBox="0 0 24 24"><path d="M12 3l8 3v6c0 4.5-3.4 8.2-8 9-4.6-.8-8-4.5-8-9V6z"/><path d="M8.5 12l2.5 2.5 4.5-5"/></svg>Fiabilité</button></li>
     <li><button type="button" data-v="tickets"><svg viewBox="0 0 24 24"><path d="M3 7h18v3a2 2 0 0 0 0 4v3H3v-3a2 2 0 0 0 0-4z"/><path d="M15 7v2M15 11v2M15 15v2"/></svg>Tickets</button></li>
+    <li><button type="button" data-v="metabet"><svg viewBox="0 0 24 24"><path d="M12 3l1.8 4.2L18 9l-4.2 1.8L12 15l-1.8-4.2L6 9l4.2-1.8z"/><path d="M18.5 15.5l.8 1.7 1.7.8-1.7.8-.8 1.7-.8-1.7-1.7-.8 1.7-.8z"/><path d="M5 17.5a3 3 0 1 0 3-3"/></svg>Metabet</button></li>
   </ul>
 </nav>
 
@@ -1134,7 +1146,7 @@ function findMatch(b){
       || L.matches.find(m => m.h === b.h && m.a === b.a && m.s && m.d.slice(0,10) >= b.d.slice(0,10));
 }
 function autoSettle(){
-  settleJournal(); settleTickets();
+  settleJournal(); settleTickets(); settleTickets("pl_mjournal");
   const b = bets(); let changed = 0;
   b.forEach(x => {
     if (x.status !== "pending" || !MARKETS[x.mk]) return;
@@ -1167,7 +1179,7 @@ function backtest(){
   const recs = []; const per = {};
   const rec = (lg, r, m) => {
     const out = m.s[0] > m.s[1] ? 0 : m.s[0] === m.s[1] ? 1 : 2, pr = [r.pH, r.pD, r.pA];
-    recs.push({ lg, pr, out, brier: pr.reduce((s,p,i)=>s+(p-(i===out?1:0))**2,0), ok: pr.indexOf(Math.max(...pr)) === out, o25: r.o25, over: m.s[0]+m.s[1] > 2, btts: r.btts, bt: m.s[0] > 0 && m.s[1] > 0, q: r, sc: m.s });
+    recs.push({ lg, pr, out, brier: pr.reduce((s,p,i)=>s+(p-(i===out?1:0))**2,0), ok: pr.indexOf(Math.max(...pr)) === out, o25: r.o25, over: m.s[0]+m.s[1] > 2, btts: r.btts, bt: m.s[0] > 0 && m.s[1] > 0, q: r, sc: m.s, m });
   };
   // Coupes d'Europe : ajustement refait avant chaque journée, avec uniquement les matchs antérieurs
   const eu = Object.entries(DATA.leagues).filter(([,L]) => L.type === "euro").flatMap(([lg,L]) => L.matches.filter(m => m.s).map(m => ({ lg, m })));
@@ -1193,7 +1205,7 @@ function backtest(){
       const pr = [r.pH, r.pD, r.pA];
       const brier = pr.reduce((s,p,i)=>s+(p-(i===out?1:0))**2,0);
       const fav = pr.indexOf(Math.max(...pr));
-      recs.push({ lg, pr, out, brier, ok: fav === out, o25: r.o25, over: m.s[0]+m.s[1] > 2, btts: r.btts, bt: m.s[0] > 0 && m.s[1] > 0, q: r, sc: m.s });
+      recs.push({ lg, pr, out, brier, ok: fav === out, o25: r.o25, over: m.s[0]+m.s[1] > 2, btts: r.btts, bt: m.s[0] > 0 && m.s[1] > 0, q: r, sc: m.s, m });
     });
   }
   recs.forEach(r => { const q = per[r.lg] = per[r.lg] || { n:0, ok:0, brier:0 }; q.n++; q.ok += r.ok; q.brier += r.brier; });
@@ -1222,7 +1234,7 @@ function computeAll(){
 }
 
 function renderChips(){
-  $("leagueChips").style.display = ui.view === "tickets" ? "none" : "";   // les tickets puisent dans toutes les compétitions
+  $("leagueChips").style.display = ui.view === "tickets" || ui.view === "metabet" ? "none" : "";   // les tickets puisent dans toutes les compétitions
   const showAll = ui.view === "valeur" || ui.view === "fiab" || ui.view === "paris";
   const items = (showAll ? [["all","Tous"]] : []).concat(Object.entries(DATA.leagues).map(([k,L]) => [k, L.name]));
   if (!showAll && ui.lg === "all") ui.lg = "l1";
@@ -1246,6 +1258,7 @@ function render(){
   else if (ui.view === "paris") renderParis();
   else if (ui.view === "fiab") renderFiab();
   else if (ui.view === "tickets") renderTickets();
+  else if (ui.view === "metabet") renderMeta();
   renderBadge();
 }
 
@@ -1774,20 +1787,20 @@ function buildTickets(){
 }
 /* Bilan : chaque ticket proposé est noté (une fois), puis réglé avec les résultats, à la mise conseillée.
    C'est la mesure honnête de l'onglet, que vous ayez joué les tickets ou non. */
-const tjournal = () => LS.get("pl_tjournal", []);
+const tjournal = (key = "pl_tjournal") => LS.get(key, []);
 const ticketId = t => t.kind + "|" + t.legs.map(l => `${l.lg}:${l.m.h}:${l.m.a}:${l.k}`).sort().join(",");
-function recordTickets(T){
-  const j = tjournal(), ids = new Set(j.map(e => e.id)), now = nowStr(); let ch = false;
+function recordTickets(T, key = "pl_tjournal"){
+  const j = tjournal(key), ids = new Set(j.map(e => e.id)), now = nowStr(); let ch = false;
   T.forEach(t => {
     const id = ticketId(t); if (ids.has(id) || t.legs.some(l => l.m.d <= now) || !(t.stake > 0)) return;
     j.push({ id, at: now, name: t.name, kind: t.kind, stake: t.stake, P: t.P, ev: t.ev, O: t.O,
              legs: t.legs.map(l => ({ lg: l.lg, h: l.m.h, a: l.m.a, d: l.m.d, k: l.k, o: l.o, hn: l.H, an: l.A })) });
     ids.add(id); ch = true;
   });
-  if (ch) LS.set("pl_tjournal", j.slice(-400));
+  if (ch) LS.set(key, j.slice(-400));
 }
-function settleTickets(){
-  const j = tjournal(); let ch = false;
+function settleTickets(key = "pl_tjournal"){
+  const j = tjournal(key); let ch = false;
   j.forEach(e => {
     if (e.res) return;
     const st = e.legs.map(l => { const m = findMatch(l); return m && m.s ? (MARKETS[l.k].win(m.s[0], m.s[1]) ? 1 : 0) : null; });
@@ -1800,18 +1813,18 @@ function settleTickets(){
     else return;
     e.settledAt = nowStr(); ch = true;
   });
-  if (ch) LS.set("pl_tjournal", j);
+  if (ch) LS.set(key, j);
 }
-function renderTicketStats(){
-  const j = tjournal(), done = j.filter(e => e.res), pend = j.length - done.length;
+function renderTicketStats(key = "pl_tjournal", host = "tStats"){
+  const j = tjournal(key), done = j.filter(e => e.res), pend = j.length - done.length;
   if (!done.length){
-    $("tStats").innerHTML = `<p class="hint" style="margin:0">${j.length ? `${j.length} ticket${j.length>1?"s":""} noté${j.length>1?"s":""}, en attente des résultats.` : "Aucun ticket noté pour l'instant."} Chaque ticket affiché ci-dessous est noté automatiquement avec sa mise conseillée, puis réglé quand les résultats arrivent dans les données : vous verrez ici ce que vous auriez gagné ou perdu en les jouant tous.</p>`;
+    $(host).innerHTML = `<p class="hint" style="margin:0">${j.length ? `${j.length} ticket${j.length>1?"s":""} noté${j.length>1?"s":""}, en attente des résultats.` : "Aucun ticket noté pour l'instant."} Chaque ticket affiché ci-dessous est noté automatiquement avec sa mise conseillée, puis réglé quand les résultats arrivent dans les données : vous verrez ici ce que vous auriez gagné ou perdu en les jouant tous.</p>`;
     return;
   }
   const sum = list => { const st = list.reduce((s,e) => s + e.stake, 0), ret = list.reduce((s,e) => s + (e.ret || 0), 0); return { n: list.length, won: list.filter(e => e.res === "won").length, st, pr: ret - st, roi: st ? (ret - st) / st : 0 }; };
   const all = sum(done), names = [...new Set(done.map(e => e.name))];
   const row = (n, x) => `<tr><td class="l">${esc(n)}</td><td class="num">${x.won}/${x.n}</td><td class="num">${eur(x.st)}</td><td class="num ${x.pr>=0?"edge-pos":"edge-neg"}">${x.pr>=0?"+":""}${eur(x.pr)}</td><td class="num">${x.roi>=0?"+":""}${pct(x.roi)}</td></tr>`;
-  $("tStats").innerHTML = `<div class="tk-kpis" style="margin-bottom:10px">
+  $(host).innerHTML = `<div class="tk-kpis" style="margin-bottom:10px">
       <div><span>Tickets réglés</span><b>${all.won} gagnés / ${all.n}</b></div>
       <div><span>Bénéfice</span><b class="${all.pr>=0?"edge-pos":"edge-neg"}">${all.pr>=0?"+":""}${eur(all.pr)}</b></div>
       <div><span>Total misé</span><b>${eur(all.st)}</b></div>
@@ -1910,6 +1923,214 @@ function renderTickets(){
     });
   }
   $("tNote").innerHTML = `Les tickets sont classés du <strong>plus risqué</strong> (grosse cote, rarement gagnant) au <strong>plus sûr</strong> (petite cote, gagne souvent). La chance de gain d'un combiné est le produit des chances de chaque sélection : trois paris à 80 % ne font qu'environ 51 % ensemble. Le <strong>système 2 sur 3</strong> joue les trois doubles possibles : il rapporte si au moins deux sélections passent. La mise conseillée suit la Kelly ¼ quand le ticket a une espérance positive ; sinon c'est une petite mise de loisir, à ne jamais augmenter pour « se refaire ». Une seule sélection par match, matchs des 3 prochains jours (7 s'il en manque). Les matchs où le bookmaker garde plus de 15 % de marge (taux de retour sous 85 %) sont écartés. Les cotes de double chance sont déduites des cotes 1N2 puis réduites de 3 %, comme le font en général les bookmakers. Les combinés sont des paris distincts sur Unibet : vérifiez chaque cote avant de valider.`;
+}
+
+/* ================= Vue : Metabet (laboratoire métaphysique) =================
+   Règles fixées à l'avance (version 1, 25/10/2026) et identiques pour chaque match : elles ne seront pas modifiées
+   après avoir vu des résultats. Les signaux ne sont JAMAIS utilisés dans les probabilités, les paris verts ni les tickets. */
+const MB_VERSION = "v1 · 25/10/2026";
+// heure de Paris -> instant UTC (heure d'été du dernier dimanche de mars au dernier dimanche d'octobre, à 01:00 UTC)
+function parisToUtcMs(s){
+  const [d, t] = s.split("T"), [y, mo, dd] = d.split("-").map(Number), [hh, mi] = t.split(":").map(Number);
+  const lastSun = m => { const x = new Date(Date.UTC(y, m + 1, 0)); return Date.UTC(y, m, x.getUTCDate() - x.getUTCDay(), 1); };
+  const guess = Date.UTC(y, mo - 1, dd, hh, mi) - 3600e3;
+  const summer = guess >= lastSun(2) && guess < lastSun(9);
+  return Date.UTC(y, mo - 1, dd, hh, mi) - (summer ? 7200e3 : 3600e3);
+}
+const SIGNS = [["Bélier","Feu"],["Taureau","Terre"],["Gémeaux","Air"],["Cancer","Eau"],["Lion","Feu"],["Vierge","Terre"],["Balance","Air"],["Scorpion","Eau"],["Sagittaire","Feu"],["Capricorne","Terre"],["Verseau","Air"],["Poissons","Eau"]];
+const norm360 = x => ((x % 360) + 360) % 360, rad = x => x * Math.PI / 180;
+function sky(s){
+  // positions approchées (précision ~1°) : Lune et Soleil en longitude écliptique
+  const dd = (parisToUtcMs(s) / 864e5 + 2440587.5) - 2451545.0;
+  const L = 218.316 + 13.176396 * dd, M = 134.963 + 13.064993 * dd;
+  const moon = norm360(L + 6.289 * Math.sin(rad(M)));
+  const g = 357.528 + 0.9856003 * dd, sun = norm360(280.460 + 0.9856474 * dd + 1.915 * Math.sin(rad(g)) + 0.020 * Math.sin(rad(2 * g)));
+  const elong = norm360(moon - sun);
+  return { moon, sun, moonSign: Math.floor(moon / 30), sunSign: Math.floor(sun / 30), waxing: elong < 180, illum: (1 - Math.cos(rad(elong))) / 2 };
+}
+// 1. Astrologie : élément du signe de la Lune au coup d'envoi
+//    Feu → domicile (élan) · Air → extérieur (mouvement) · Terre → nul (stabilité) · Eau → domicile si Lune croissante, extérieur si décroissante
+function astroPick(m){
+  const k = sky(m.d), [sn, el] = SIGNS[k.moonSign];
+  const out = el === "Feu" ? "1" : el === "Air" ? "2" : el === "Terre" ? "N" : (k.waxing ? "1" : "2");
+  return { k: out, txt: `Lune en ${sn} (${el}), ${k.waxing ? "croissante" : "décroissante"} ${Math.round(k.illum * 100)} % · Soleil en ${SIGNS[k.sunSign][0]}` };
+}
+// 2. Numérologie : nombre du jour (somme des chiffres de la date réduite à 1-9) ; nombre de chaque équipe (lettres de son nom, table de Pythagore)
+//    L'équipe dont le nombre est le plus proche de celui du jour gagne ; égalité de distance → nul.
+const reduce9 = n => { while (n > 9) n = String(n).split("").reduce((a, b) => a + +b, 0); return n || 9; };
+const nameNum = nm => reduce9(String(nm).normalize("NFD").replace(/[^A-Za-z]/g, "").toUpperCase().split("").reduce((s, c) => s + ((c.charCodeAt(0) - 65) % 9) + 1, 0));
+function numeroPick(m, H, A){
+  const day = reduce9(m.d.slice(0, 10).replace(/-/g, "").split("").reduce((a, b) => a + +b, 0)), nh = nameNum(H), na = nameNum(A);
+  const dh = Math.abs(nh - day), da = Math.abs(na - day);
+  return { k: dh < da ? "1" : da < dh ? "2" : "N", txt: `Jour ${day} · ${H} ${nh} · ${A} ${na}` };
+}
+// 3. Cartomancie : un arcane majeur tiré de façon figée pour chaque match (le même à chaque ouverture, impossible à retirer)
+const ARCANA = ["Le Mat","Le Bateleur","La Papesse","L'Impératrice","L'Empereur","Le Pape","L'Amoureux","Le Chariot","La Justice","L'Hermite","La Roue de Fortune","La Force","Le Pendu","L'Arcane sans nom","Tempérance","Le Diable","La Maison Dieu","L'Étoile","La Lune","Le Soleil","Le Jugement","Le Monde"];
+const ARC_HOME = [1,3,4,7,11,17,19,21], ARC_AWAY = [0,12,13,15,16,18];   // élan, puissance → domicile ; rupture, renversement → extérieur ; le reste → nul (équilibre, attente)
+const ROMAN = n => n === 0 ? "0" : ["","I","II","III","IV","V","VI","VII","VIII","IX","X","XI","XII","XIII","XIV","XV","XVI","XVII","XVIII","XIX","XX","XXI"][n];
+function fnv(str){ let h = 2166136261; for (const c of str){ h ^= c.charCodeAt(0); h = Math.imul(h, 16777619) >>> 0; } return h; }
+function cartoPick(m, lg){
+  const i = fnv(`${MB_VERSION}|${lg}|${m.h}|${m.a}|${m.d.slice(0, 10)}`) % 22;
+  return { k: ARC_HOME.includes(i) ? "1" : ARC_AWAY.includes(i) ? "2" : "N", txt: `${ROMAN(i)} · ${ARCANA[i]}`, card: i };
+}
+// Test sur 7 saisons (2019-2026, 10 510 matchs, mêmes règles ; « hasard » = hasard qui prédit dans les mêmes proportions que la méthode)
+const MB_HIST = { astro: "34,6 % (hasard équivalent 34,8 %)", numero: "37,1 % (hasard équivalent 35,6 % ; l'écart vient surtout des noms d'équipes, pas de la date, et ne résiste pas à la correction des tests multiples)", carto: "33,1 % (hasard équivalent 33,4 %)", model: "50,5 %" };
+const OUT_LAB = (k, H, A) => k === "1" ? `Victoire ${H}` : k === "2" ? `Victoire ${A}` : "Match nul";
+const outOf = sc => sc[0] > sc[1] ? "1" : sc[0] === sc[1] ? "N" : "2";
+// 4. et 5. Intuition et synchronicités : saisies par l'utilisateur AVANT le coup d'envoi, verrouillées ensuite
+const intuitions = () => LS.get("pl_intuit", {});
+function binomP(hits, n, p0){ // probabilité d'obtenir au moins « hits » réussites par hasard (approximation normale, correction de continuité)
+  if (!n) return 1; const mu = n * p0, sd = Math.sqrt(n * p0 * (1 - p0)), z = (hits - 0.5 - mu) / sd;
+  const t = 1 / (1 + 0.2316419 * Math.abs(z)), d = 0.3989423 * Math.exp(-z * z / 2);
+  const q = d * t * (0.3193815 + t * (-0.3565638 + t * (1.781478 + t * (-1.821256 + t * 1.330274))));
+  return z > 0 ? q : 1 - q;
+}
+function metaLab(){
+  const B = BT || backtest(), rows = {}, freq = { "1": 0, "N": 0, "2": 0 };
+  ["astro","numero","carto","model","home"].forEach(k => rows[k] = [0, 0, { "1": 0, "N": 0, "2": 0 }]);
+  B.recs.forEach(x => {
+    if (!x.m) return; const out = outOf(x.sc), L = DATA.leagues[x.lg], T = id => (L.teams.find(t => t.id === id) || { name: id }).name;
+    const H = T(x.m.h), A = T(x.m.a);
+    const add = (k, p) => { rows[k][0]++; rows[k][1] += p === out ? 1 : 0; rows[k][2][p]++; };
+    freq[out]++;
+    add("astro", astroPick(x.m).k); add("numero", numeroPick(x.m, H, A).k); add("carto", cartoPick(x.m, x.lg).k);
+    add("model", ["1","N","2"][x.pr.indexOf(Math.max(...x.pr))]); add("home", "1");
+  });
+  // intuitions réglées
+  const tot = freq["1"] + freq["N"] + freq["2"] || 1; Object.keys(freq).forEach(k => freq[k] /= tot);
+  const I = intuitions(); const ir = { intu: [0,0,{ "1": 0, "N": 0, "2": 0 }], sync: [0,0,{ "1": 0, "N": 0, "2": 0 }] };
+  Object.entries(I).forEach(([key, e]) => {
+    const [lg, h, a] = key.split("|"), L = DATA.leagues[lg]; if (!L) return;
+    const m = L.matches.find(x => x.h === h && x.a === a && x.s && x.d.slice(0, 10) === e.d.slice(0, 10)); if (!m) return;
+    const r = ir[e.type === "sync" ? "sync" : "intu"]; r[0]++; r[1] += e.k === outOf(m.s) ? 1 : 0; r[2][e.k]++;
+  });
+  return { rows, ir, freq };
+}
+/* Tickets Metabet : sélections choisies par les méthodes métaphysiques (règles fixées à l'avance, ordre des coups d'envoi).
+   La cote vient des vraies cotes (ou est estimée, ≈) et la « chance réelle » du modèle statistique : c'est ce que vous jouez vraiment. */
+function metaPool(){
+  const now = nowStr(); let out = [];
+  for (const days of [3, 7]){
+    out = [];
+    for (const [lg, L] of Object.entries(DATA.leagues)) if (CL[lg]) upcoming(lg, days).filter(m => m.d > now && !ctxAlert(m)).forEach(m => {
+      const C = CL[lg], H = C.T[m.h].name, A = C.T[m.a].name, r = predict(C, m.h, m.a);
+      const as = astroPick(m), nu = numeroPick(m, H, A), ca = cartoPick(m, lg);
+      const pr = { "1": r.pH, "N": r.pD, "2": r.pA }, mk = marketP(m, "1") != null ? { "1": marketP(m, "1"), "N": 1 - marketP(m, "1") - marketP(m, "2"), "2": marketP(m, "2") } : null;
+      const pOf = k => mk ? (pr[k] + mk[k]) / 2 : pr[k];
+      const votes = [as.k, nu.k, ca.k], agree = ["1","N","2"].map(k => [k, votes.filter(v => v === k).length]).sort((x, y) => y[1] - x[1])[0];
+      const mf = ["1","N","2"].sort((x, y) => pr[y] - pr[x])[0];
+      const leg = (k, why) => { const p = pOf(k), od = oddsFor(m, k, p); return { lg, m, H, A, k, p, o: +od.o.toFixed(2), est: !!od.est, bk: od.bk || "", why }; };
+      out.push({ lg, m, H, A, as, nu, ca, agree, mf, leg, nuExact: (() => { const d = nu.txt.match(/Jour (\d)/)[1]; return nu.k !== "N" && nu.txt.split(" · ").slice(1).some(t => t.endsWith(" " + d)); })() });
+    });
+    if (out.length >= 12) break;
+  }
+  return out.sort((x, y) => x.m.d < y.m.d ? -1 : 1);
+}
+function buildMetaTickets(){
+  const pool = metaPool(), T = [], take = (list, n) => list.slice(0, n);
+  const mk = (name, legs, extra = {}) => { if (legs.length) T.push(Object.assign(mkTicket(legs.length > 1 ? "combo" : "simple", name, legs), extra)); };
+  const A = x => x.leg(x.as.k, `🔭 ${x.as.txt}`), N = x => x.leg(x.nu.k, `🔢 ${x.nu.txt}`), K = x => x.leg(x.ca.k, `🃏 ${x.ca.txt}`);
+  // 1. Simple astral : le premier match où la Lune est en signe de Feu (élan du domicile)
+  mk("Simple astral (Lune de Feu)", take(pool.filter(x => SIGNS[sky(x.m.d).moonSign][1] === "Feu").map(A), 1));
+  // 2. Simple numérologique : le premier match où une équipe vibre exactement au nombre du jour
+  mk("Simple numérologique (nombre du jour)", take(pool.filter(x => x.nuExact).map(N), 1));
+  // 3. Simple du tarot : le premier match qui tire le Soleil, le Monde, l'Étoile ou la Force
+  mk("Simple du tarot (arcane lumineux)", take(pool.filter(x => [19, 21, 17, 11].includes(x.ca.card)).map(K), 1));
+  // 4. Combiné des oracles ×3 : les 3 premiers matchs où les trois méthodes disent la même chose (sinon deux sur trois)
+  const all3 = pool.filter(x => x.agree[1] === 3), two = pool.filter(x => x.agree[1] === 2);
+  mk("Combiné de l'accord des oracles ×3", take([...all3, ...two], 3).map(x => x.leg(x.agree[0], `✨ ${x.agree[1]} oracles sur 3`)));
+  // 5. Combiné astral ×4 : les 4 premiers matchs selon la Lune
+  mk("Combiné astral ×4", take(pool.map(A), 4));
+  // 6. Combiné numérologique ×4
+  mk("Combiné numérologique ×4", take(pool.filter(x => x.nu.k !== "N").map(N), 4));
+  // 7. Grand tirage ×6 : six arcanes, six matchs
+  mk("Grand tirage du tarot ×6", take(pool.map(K), 6));
+  // 8. Harmonie : oracles (2 sur 3) ET modèle statistique d'accord — le ticket métaphysique qui a le plus de chances réelles
+  mk("Harmonie : oracles et modèle d'accord ×3", take(pool.filter(x => x.agree[1] >= 2 && x.agree[0] === x.mf), 3).map(x => x.leg(x.agree[0], `✨ ${x.agree[1]} oracles sur 3 + modèle`)));
+  // 9. Jackpot cosmique : accord des oracles jusqu'à une cote de 50
+  { const legs = []; let O = 1; for (const x of [...all3, ...two]){ if (O >= 50 || legs.length >= 14) break; const l = x.leg(x.agree[0], `✨ ${x.agree[1]} oracles sur 3`); legs.push(l); O *= l.o; } if (O >= 40) mk("Jackpot cosmique ×50", legs, { jackpot: true }); }
+  const s = settings(), bank = currentBank();
+  T.forEach(t => { t.stake = Math.min(bank * s.max / 100, Math.max(0.5, Math.round(bank * 0.005 * 2) / 2)); t.why = "Mise symbolique (0,5 % de la bankroll) : aucune méthode métaphysique n'a montré d'avantage"; });
+  return T.sort((a, b) => a.P - b.P);
+}
+function renderMeta(){
+  settleTickets("pl_mjournal");
+  const now = nowStr(), T = buildMetaTickets();
+  recordTickets(T, "pl_mjournal"); renderTicketStats("pl_mjournal", "mbStats");
+  $("mbList").innerHTML = T.length ? T.map((t, i) => {
+    const [rc, rl, col] = RISK(t.P);
+    return `<article class="panel ticket">
+      <div class="thead"><span class="tag ${rc}">${rl}</span><strong>${esc(t.name)}</strong><span class="hint">${t.legs.length > 1 ? `Combiné · ${t.legs.length} sélections` : "Simple"}</span></div>
+      <div class="riskbar" title="Chance réelle de gain"><i style="width:${Math.max(2, t.P*100)}%;background:${col}"></i></div>
+      <ul class="legs">${t.legs.map(l => `<li class="leg"><div><strong>${esc(OUT_LAB(l.k, l.H, l.A))}</strong><br><span class="hint">${esc(l.H)} – ${esc(l.A)} · ${fmtDay(l.m.d)} ${fmtTime(l.m.d)}</span><br><span class="hint">${esc(l.why)}</span></div>
+        <div class="r num">${l.est ? "≈ " : ""}${fx(l.o)}<br><span class="hint">${pct(l.p)}</span></div></li>`).join("")}</ul>
+      <div class="tk-kpis">
+        <div><span>Chance réelle (modèle)</span><b>${t.P < 0.05 ? `1 sur ${Math.round(1 / t.P)}` : pct(t.P)}</b></div>
+        <div><span>Cote totale</span><b>${fx(t.O)}</b></div>
+        <div><span>Mise symbolique</span><b>${eur(t.stake)}</b></div>
+        <div><span>Gain possible</span><b>${eur(t.stake * t.O)}</b></div>
+      </div>
+      <p class="hint" style="margin:0">Espérance selon le modèle et les cotes : <strong>${t.ev >= 0 ? "+" : ""}${pct(t.ev)}</strong> par euro misé. ${esc(t.why)}.${t.est ? " Cotes marquées ≈ : estimées, vérifiez-les." : ""}</p>
+      <div class="row"><button class="btn sm" type="button" data-mstep="${i}">Reporter pas à pas</button><button class="btn sm ghost" type="button" data-mtk="${i}">Copier et ouvrir ${esc(book()[0])}</button></div>
+    </article>`; }).join("") : `<div class="empty">Pas assez de matchs dans les prochains jours pour composer les tickets.</div>`;
+  $("mbList").querySelectorAll("[data-mstep]").forEach(b => b.onclick = () => openStepSheet(T[+b.dataset.mstep]));
+  $("mbList").querySelectorAll("[data-mtk]").forEach(b => b.onclick = () => {
+    const t = T[+b.dataset.mtk]; copyText(["Metabet · " + t.name, ...t.legs.map(l => `• ${l.H} – ${l.A} (${fmtDay(l.m.d)} ${fmtTime(l.m.d)}) : ${OUT_LAB(l.k, l.H, l.A)} @ ${fx(l.o)}`), `Cote totale : ${fx(t.O)} · Mise : ${eur(t.stake)}`].join("\n"));
+    const [bn, bu, kw] = book();
+    if (window.ProNoLab && window.ProNoLab.openApp){ let how = "web"; try { how = window.ProNoLab.openApp(kw, bu); } catch {} toast(how === "app" ? `Ticket copié · ouverture de ${bn}` : `Ticket copié · ${bn} introuvable, ouverture du site`); }
+    else { toast("Ticket copié"); window.open(bu, "_blank", "noopener"); }
+  });
+  // intuitions : saisie par match, verrouillée au coup d'envoi
+  const I = intuitions(), list = metaPool();
+  $("mbIntu").innerHTML = list.map(({ lg, m, H, A }) => { const key = `${lg}|${m.h}|${m.a}`, e = I[key];
+    return `<div class="row" style="align-items:center;border-bottom:1px dashed var(--line);padding-bottom:8px"><span style="flex:1"><strong>${esc(H)} – ${esc(A)}</strong> <span class="hint">${fmtDay(m.d)} ${fmtTime(m.d)}</span><br><span class="hint">${e ? `${e.type === "sync" ? "✨ Synchronicité" : "✍ Intuition"} : ${esc(OUT_LAB(e.k, H, A))} (${e.c} %)${e.note ? " · " + esc(e.note) : ""}` : "aucune intuition notée"}</span></span>
+      <button class="btn sm ghost" type="button" data-intu="${esc(key)}|${esc(m.d)}">${e ? "Modifier" : "Noter"}</button></div>`; }).join("") || `<div class="empty">Aucun match à venir.</div>`;
+  $("mbIntu").querySelectorAll("[data-intu]").forEach(b => b.onclick = () => { const p = b.dataset.intu.split("|"); openIntuSheet(p.slice(0, 3).join("|"), p[3]); });
+  // laboratoire
+  const { rows, ir, freq } = metaLab(), nTests = 3;
+  const line = (name, [n, h, mix], base, note) => {
+    const p0 = n ? ["1","N","2"].reduce((s, k) => s + mix[k] / n * freq[k], 0) : 1/3;
+    const pv = binomP(h, n, p0), sig = n >= 30 && pv < 0.05 / nTests;
+    return `<li class="leg"><div><strong>${name}</strong><br><span class="hint">${note}${base ? "" : ` · hasard équivalent ${pct(p0)}`}</span></div><div class="r num">${n ? pct(h / n) : "—"}<br><span class="hint">${h}/${n}${base ? "" : ` · ${n < 30 ? "trop tôt" : sig ? "signal à confirmer" : "hasard"}`}</span></div></li>`;
+  };
+  $("mbLab").innerHTML = `<p class="hint" style="margin:0 0 8px">Tous les matchs joués cette saison, avec les règles ci-dessous appliquées comme avant chaque match. Chaque méthode est comparée au hasard qui prédit dans les mêmes proportions qu'elle (les victoires à domicile sont plus fréquentes que les nuls), avec une correction pour les ${nTests} méthodes testées.</p>
+    <ul class="legs bt-list">
+      ${line("🔭 Astrologie (Lune)", rows.astro, false, "élément du signe lunaire")}
+      ${line("🔢 Numérologie", rows.numero, false, "nombre du jour et des équipes")}
+      ${line("🃏 Cartomancie", rows.carto, false, "arcane majeur figé")}
+      ${line("📊 Modèle statistique", rows.model, true, "référence : favori du modèle")}
+      ${line("🏟 Toujours le domicile", rows.home, true, "référence naïve")}
+      ${ir.intu[0] ? line("✍ Mes intuitions", ir.intu, false, "saisies avant le match") : ""}
+      ${ir.sync[0] ? line("✨ Mes synchronicités", ir.sync, false, "motifs notés avant le match") : ""}
+    </ul>
+    <p class="hint" style="margin:8px 0 0"><strong>Test sur 7 saisons passées</strong> (10 510 matchs, mêmes règles) : astrologie ${MB_HIST.astro} ; numérologie ${MB_HIST.numero} ; cartomancie ${MB_HIST.carto}. Le modèle statistique : ${MB_HIST.model}. Verdict à ce jour : aucune méthode métaphysique ne fait mieux que le hasard.</p>`;
+  $("mbRules").innerHTML = `<p style="margin:0 0 6px"><strong>Astrologie</strong> : position approchée de la Lune au coup d'envoi. Signe de Feu → victoire à domicile ; d'Air → victoire à l'extérieur ; de Terre → nul ; d'Eau → domicile si la Lune est croissante, extérieur si elle décroît.</p>
+    <p style="margin:0 0 6px"><strong>Numérologie</strong> : nombre du jour = somme des chiffres de la date réduite de 1 à 9 ; nombre d'une équipe = valeurs de Pythagore des lettres de son nom, réduites. L'équipe la plus proche du nombre du jour gagne ; à égalité, nul.</p>
+    <p style="margin:0 0 6px"><strong>Cartomancie</strong> : un arcane majeur du tarot de Marseille, tiré une fois pour toutes à partir du match et de sa date. Le Bateleur, l'Impératrice, l'Empereur, le Chariot, la Force, l'Étoile, le Soleil, le Monde → domicile ; le Mat, le Pendu, l'Arcane sans nom, le Diable, la Maison Dieu, la Lune → extérieur ; les autres → nul.</p>
+    <p style="margin:0 0 6px"><strong>Tickets</strong> : sélections choisies dans l'ordre des coups d'envoi selon chaque méthode ; la cote vient des vraies cotes (≈ si estimée) et la chance réelle du modèle statistique. Mise symbolique, jamais de Kelly.</p>
+    <p style="margin:0">Ces règles ne seront pas modifiées après avoir vu des résultats ; une nouvelle idée devra être testée comme une nouvelle version, sur des matchs futurs.</p>`;
+}
+function openIntuSheet(key, d){
+  const [lg, h, a] = key.split("|"), C = CL[lg], H = C.T[h].name, A = C.T[a].name, I = intuitions(), e = I[key] || { k: "1", c: 60, type: "intu", note: "" };
+  $("sheetHost").innerHTML = `<div class="sheet-bg" id="sheetBg"><div class="sheet">
+    <h2 style="font-size:22px">Mon intuition</h2>
+    <p class="hint" style="margin:0">${esc(H)} – ${esc(A)} · ${fmtDay(d)} ${fmtTime(d)}. Elle sera verrouillée au coup d'envoi et comptée dans le laboratoire.</p>
+    <label class="field"><span>Type</span><select id="inType"><option value="intu">Intuition</option><option value="sync">Synchronicité remarquée</option></select></label>
+    <label class="field"><span>Résultat pressenti</span><select id="inK"><option value="1">Victoire ${esc(H)}</option><option value="N">Match nul</option><option value="2">Victoire ${esc(A)}</option></select></label>
+    <label class="field"><span>Confiance : <strong id="inCv">${e.c} %</strong></span><input type="range" id="inC" min="34" max="99" value="${e.c}"></label>
+    <label class="field"><span>Ce qui vous l'inspire (facultatif)</span><input type="text" id="inNote" maxlength="140" value="${esc(e.note || "")}" placeholder="ex. un rêve, un chiffre revenu plusieurs fois…"></label>
+    <div class="row" style="justify-content:flex-end">${I[key] ? `<button type="button" class="btn ghost" id="inDel">Supprimer</button>` : ""}<button type="button" class="btn ghost" id="inClose">Annuler</button><button type="button" class="btn" id="inSave">Enregistrer</button></div>
+  </div></div>`;
+  $("inType").value = e.type; $("inK").value = e.k;
+  $("inC").oninput = () => { $("inCv").textContent = $("inC").value + " %"; };
+  const close = () => { $("sheetHost").innerHTML = ""; };
+  $("inClose").onclick = close; $("sheetBg").addEventListener("click", ev => { if (ev.target.id === "sheetBg") close(); });
+  if ($("inDel")) $("inDel").onclick = () => { const all = intuitions(); delete all[key]; LS.set("pl_intuit", all); close(); renderMeta(); };
+  $("inSave").onclick = () => {
+    if (d <= nowStr()){ toast("Match commencé : l'intuition ne peut plus être enregistrée."); close(); renderMeta(); return; }
+    const all = intuitions(); all[key] = { k: $("inK").value, c: +$("inC").value, type: $("inType").value, note: $("inNote").value.trim(), at: nowStr(), d };
+    LS.set("pl_intuit", all); close(); toast("Intuition enregistrée"); renderMeta();
+  };
 }
 
 function renderFiab(){
