@@ -613,7 +613,20 @@ const MARKETS = {
   "O35": { label:()=>"Plus de 3,5 buts", p:r=>r.o35, win:(x,y)=>x+y>3 },
   "BY":  { label:()=>"Les deux marquent", p:r=>r.btts, win:(x,y)=>x>0&&y>0 },
   "BN":  { label:()=>"Les deux ne marquent pas", p:r=>1-r.btts, win:(x,y)=>!(x>0&&y>0) },
+  // Handicap européen (1N2 handicap, temps réglementaire) : l'équipe part avec des buts d'avance ou de retard, trois issues possibles.
+  // Probabilité tirée de la grille des scores exacts (écart d = buts domicile − buts extérieur).
+  "HM1_1": { label:(h)=>`Handicap ${h} (-1) : gagne par 2 buts ou plus`, p:r=>hcp(r, d => d >= 2), win:(x,y)=>x-y >= 2 },
+  "HM1_N": { label:(h)=>`Handicap nul (${h} -1) : ${h} gagne par 1 but exactement`, p:r=>hcp(r, d => d === 1), win:(x,y)=>x-y === 1 },
+  "HP1_N": { label:(h,a)=>`Handicap nul (${a} -1) : ${a} gagne par 1 but exactement`, p:r=>hcp(r, d => d === -1), win:(x,y)=>x-y === -1 },
+  "HP1_2": { label:(h,a)=>`Handicap ${a} (-1) : gagne par 2 buts ou plus`, p:r=>hcp(r, d => d <= -2), win:(x,y)=>x-y <= -2 },
+  "HM2_2": { label:(h,a)=>`Handicap ${a} (+2) : ne perd pas par 2 buts ou plus`, p:r=>hcp(r, d => d <= 1), win:(x,y)=>x-y <= 1 },
+  "HP2_1": { label:(h)=>`Handicap ${h} (+2) : ne perd pas par 2 buts ou plus`, p:r=>hcp(r, d => d >= -1), win:(x,y)=>x-y >= -1 },
 };
+function hcp(r, f){ let p = 0; for (const [i, j, q] of r.sc) if (f(i - j)) p += q; return p; }
+// Handicaps retenus pour les paris mis en avant : le favori à -1 (gagne nettement), l'outsider à +2 (ne s'effondre pas).
+// Les handicaps +1 / -1 inverses reviennent exactement à la double chance : inutile de les doubler.
+const HCP_FAV = { "HM1_1": "h", "HP1_2": "a", "HM2_2": "h", "HP2_1": "a" };
+const allowedK = (k, r) => !(k in HCP_FAV) || HCP_FAV[k] === (r.pH >= r.pA ? "h" : "a");
 
 function confidence(p, n){
   const s = n < 6 ? 0.05 : 0;
@@ -639,7 +652,7 @@ const SAFE_P = 0.80;
 const WIN_P = 0.70;
 const pickOf = cands => cands.filter(c => (c.k === "1" || c.k === "2") && c.p >= WIN_P).sort((a,b) => b.p - a.p)[0] || cands.sort((a,b) => b.p - a.p)[0];
 const isSafe = c => c.p >= ((c.k === "1" || c.k === "2") ? WIN_P : SAFE_P);
-const TOP_KEYS = ["1","2","1N","N2","12","O15","O25","U25","U35","BY","BN"];
+const TOP_KEYS = ["1","2","1N","N2","12","O15","O25","U25","U35","BY","BN","HM1_1","HP1_2","HM2_2","HP2_1"];
 if (!MARKETS.U35) MARKETS.U35 = { label:()=>"Moins de 3,5 buts", p:r=>1-r.o35, win:(x,y)=>x+y<4 };
 let CAL = null;
 function calib(){
@@ -654,14 +667,19 @@ function calib(){
       recs.forEach(x => { const p = MARKETS[k].p(x.q); if (p >= 0.7){ exp += p; hit += MARKETS[k].win(x.sc[0], x.sc[1]) ? 1 : 0; } });
       f[g][k] = Math.min(1, (hit + 10) / (exp + 10));
     });
-    // l'excès de confiance restant au sommet (pari mis en avant) est retiré lui aussi
-    let n = 0, hit = 0, exp = 0;
-    recs.forEach(x => { const b = TOP_KEYS.map(k => [k, MARKETS[k].p(x.q) * f[g][k]]).sort((a,c) => c[1]-a[1])[0]; if (b[1] >= 0.75){ n++; exp += b[1]; hit += MARKETS[b[0]].win(x.sc[0], x.sc[1]) ? 1 : 0; } });
-    const top = n ? Math.min(1, (hit + 10) / (exp + 10)) : 1;
-    TOP_KEYS.forEach(k => f[g][k] *= top);
+    // l'excès de confiance restant quand ce type de pari est mis en avant (75 % ou plus) est retiré, type par type
+    for (let it = 0; it < 2; it++){
+      const agg = {};
+      recs.forEach(x => {
+        const b = pickOf(TOP_KEYS.filter(k => allowedK(k, x.q)).map(k => ({ k, p: MARKETS[k].p(x.q) * f[g][k] })));
+        if (b.p < 0.75) return;
+        const t = agg[b.k] = agg[b.k] || { hit:0, exp:0 }; t.exp += b.p; t.hit += MARKETS[b.k].win(x.sc[0], x.sc[1]) ? 1 : 0;
+      });
+      Object.entries(agg).forEach(([k, t]) => { f[g][k] *= Math.min(1, (t.hit + 10) / (t.exp + 10)); });
+    }
     // taux réel des paris qui seraient passés en vert
     recs.forEach(x => {
-      const b = pickOf(TOP_KEYS.map(k => ({ k, p: MARKETS[k].p(x.q) * f[g][k] })));
+      const b = pickOf(TOP_KEYS.filter(k => allowedK(k, x.q)).map(k => ({ k, p: MARKETS[k].p(x.q) * f[g][k] })));
       if (!isSafe(b)) return;
       const t = st[g][b.k] = st[g][b.k] || { n:0, hit:0 }; t.n++; t.hit += MARKETS[b.k].win(x.sc[0], x.sc[1]) ? 1 : 0;
     });
@@ -680,7 +698,7 @@ function marketP(m, k){
 }
 function topPick(m, r, lg){
   const c = calib(), g = c.grp(lg);
-  const cands = TOP_KEYS.map(k => {
+  const cands = TOP_KEYS.filter(k => allowedK(k, r)).map(k => {
     const pm = MARKETS[k].p(r), pc = pm * c.f[g][k], pk = marketP(m, k);
     return { k, pm, pc, pk, p: pk == null ? pc : (pc + pk) / 2 };
   });
@@ -1360,7 +1378,7 @@ function renderAnalyse(){
     return `<div class="pick${main?" main":""}"><div class="k">${k}</div><div class="v">${esc(v)}</div><div class="s"><span class="num">${pct(p)}</span><span class="tag ${c}">${l}</span></div></div>`; };
   $("aPicks").innerHTML = card("Pronostic principal", mp[1], mp[2], true) + card("Nombre de buts", gp[1], gp[2]) + card("Les deux marquent", bt[1], bt[2]) + card("Score le plus probable", `${r.sc[0][0]} – ${r.sc[0][1]}`, r.sc[0][2], false, true);
 
-  const mks = ["1","N","2","1N","N2","12","O15","O25","U25","O35","BY","BN"];
+  const mks = ["1","N","2","1N","N2","12","O15","O25","U25","O35","BY","BN","HM1_1","HM1_N","HP1_N","HP1_2","HM2_2","HP2_1"];
   $("aMarkets").innerHTML = mks.map(k => { const p = MARKETS[k].p(r);
     return `<tr><td>${esc(MARKETS[k].label(H.name, A.name))}<div class="meter"><i style="width:${(p*100).toFixed(1)}%"></i></div></td><td class="r num">${pct(p,1)}</td><td class="r num">${p>0.01?fx(1/p):"—"}</td><td class="r"><button type="button" class="add" data-mk="${k}" title="Suivre ce pari" aria-label="Suivre ce pari">+</button></td></tr>`; }).join("");
   $("aMarkets").querySelectorAll("[data-mk]").forEach(b => b.onclick = () => {
@@ -1705,7 +1723,8 @@ function buildTickets(){
       let ok;
       if (a.k === "1" || a.k === "2") ok = !a.guess && a.k === fav && p >= 0.45;                       // victoire du favori
       else if (a.k === "1N" || a.k === "N2") ok = !a.guess && p >= 0.6 && (a.k === "1N" ? fav === "1" : fav === "2");   // double chance du favori
-      else if (["O15","O25","U25","U35","BY","BN"].includes(a.k)) ok = p >= 0.6;                      // buts, les deux marquent
+      else if (["O15","O25","U25","U35","BY","BN","HM2_2","HP2_1"].includes(a.k)) ok = p >= 0.6;      // buts, les deux marquent, outsider +2
+      else if (a.k === "HM1_1" || a.k === "HP1_2") ok = p >= 0.45;                                       // favori -1 : gagne par 2 buts ou plus
       else ok = false;                                                                                  // ni nul, ni « pas de nul »
       if (!ok) return;
       // sans cote relevée pour ce marché : cote estimée avec 7 % de marge (les marchés de buts sont plus margés que le 1N2)
