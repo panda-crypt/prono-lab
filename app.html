@@ -1182,6 +1182,10 @@ function applyLive(){
 /* Scores récupérés en direct avec la clé de cotes : les paris et tickets sont réglés le soir même,
    sans attendre la mise à jour des données (lundi, mercredi, vendredi). 2 crédits par compétition interrogée. */
 const SCORES_MIN_H = 2;
+// scores seulement (pas de cotes en direct, pour économiser les crédits) pour les autres championnats
+const SCORE_KEYS = Object.assign({}, SPORT_KEYS, { champ:"soccer_efl_champ", eng3:"soccer_england_league1", eng4:"soccer_england_league2", sco:"soccer_spl",
+  bl2:"soccer_germany_bundesliga2", sb:"soccer_italy_serie_b", liga2:"soccer_spain_segunda_division", l2:"soccer_france_ligue_two",
+  ere:"soccer_netherlands_eredivisie", bel:"soccer_belgium_first_div", por:"soccer_portugal_primeira_liga", tur:"soccer_turkey_super_league", gre:"soccer_greece_super_league" });
 const scoreOverlay = () => LS.get("pl_scores", {});
 function applyScores(){
   const ov = scoreOverlay();
@@ -1199,13 +1203,13 @@ async function refreshScores(manual){
   if (!manual && st.remaining != null && st.remaining < LIVE_RESERVE) return 0;
   const now = Date.now(), limit = parisStr(now - 2.25 * 36e5), from = parisStr(now - 3 * 864e5);
   // seulement les compétitions qui ont un match terminé (coup d'envoi il y a plus de 2 h 15) sans score
-  const leagues = Object.keys(SPORT_KEYS).filter(lg => DATA.leagues[lg] && DATA.leagues[lg].matches.some(m => !m.s && m.d <= limit && m.d >= from));
+  const leagues = Object.keys(SCORE_KEYS).filter(lg => DATA.leagues[lg] && DATA.leagues[lg].matches.some(m => !m.s && m.d <= limit && m.d >= from));
   if (!leagues.length){ if (manual) toast("Aucun match terminé en attente de score."); return 0; }
   const btn = $("scoreBtn"); if (btn){ btn.disabled = true; btn.textContent = "…"; }
   const ov = scoreOverlay(); let found = 0, remaining = st.remaining, err = "";
   for (const lg of leagues){
     const L = DATA.leagues[lg];
-    const r = await nativeFetch(`${ODDS_API}/sports/${SPORT_KEYS[lg]}/scores/?apiKey=${encodeURIComponent(key)}&daysFrom=3&dateFormat=iso`);
+    const r = await nativeFetch(`${ODDS_API}/sports/${SCORE_KEYS[lg]}/scores/?apiKey=${encodeURIComponent(key)}&daysFrom=3&dateFormat=iso`);
     if (r.remaining != null && r.remaining !== "") remaining = +r.remaining;
     if (r.status === 401){ err = "Clé refusée."; break; }
     if (r.status === 429){ err = "Crédits épuisés pour ce mois-ci."; break; }

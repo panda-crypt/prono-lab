@@ -16,6 +16,11 @@ garder les données précédentes de ce championnat et le signaler dans le messa
 
 Les noms d'équipes doivent être **exactement** ceux de statz.ai (ceux déjà présents dans les fichiers).
 
+**Autres championnats** (Championship, League One/Two, Écosse, 2. Bundesliga, Serie B, LaLiga 2, Ligue 2, Eredivisie, Belgique,
+Portugal, Turquie, Grèce) : le dossier `fd/` est mis à jour automatiquement deux fois par jour par la tâche GitHub
+« Autres championnats » (football-data.co.uk), qui reconstruit aussi `data.json`. Ne pas modifier `fd/` à la main ;
+`build_data.py` l'intègre de lui-même. Faire `git pull --rebase` juste avant de publier.
+
 ## Étapes
 
 1. **Résultats et calendrier.** Pour chaque championnat, lire `https://statz.ai/competitions/<slug>/fixtures`

@@ -3,7 +3,7 @@
 Raw line format: "D Mon YYYY|HH:MM|Home|Away|score"  (time = UK local, Paris = UK + 1h; empty score = not played;
 score "2-1" or "2-1 (1-0)" with the half-time score in brackets when the source gives it)
 """
-import json, sys, datetime as dt, importlib.util, pathlib
+import json, sys, csv, datetime as dt, importlib.util, pathlib
 
 ROOT = pathlib.Path(__file__).parent
 def _load(name):
@@ -66,6 +66,65 @@ def attach_context(lg, matches):
         assert c.get("lvl") in ("alerte", "info") and c.get("why") and str(c.get("src", "")).startswith("http"), f"contexte incomplet {lg} {h}-{a}"
         hit[0]["ctx"] = {"lvl": c["lvl"], "why": c["why"], "src": c["src"], "at": context.CHECKED_AT}
 
+# ---------- Autres championnats européens : football-data.co.uk (fd/), mis à jour chaque jour par une tâche GitHub ----------
+FD = {  # code: (clé, nom affiché, pays)
+    "E1": ("champ", "Championship", "Angleterre"), "E2": ("eng3", "League One", "Angleterre"), "E3": ("eng4", "League Two", "Angleterre"),
+    "SC0": ("sco", "Premiership écossaise", "Écosse"), "SC1": ("sco2", "Championship écossais", "Écosse"),
+    "D2": ("bl2", "2. Bundesliga", "Allemagne"), "I2": ("sb", "Serie B", "Italie"), "SP2": ("liga2", "LaLiga 2", "Espagne"),
+    "F2": ("l2", "Ligue 2", "France"), "N1": ("ere", "Eredivisie", "Pays-Bas"), "B1": ("bel", "Pro League", "Belgique"),
+    "P1": ("por", "Liga Portugal", "Portugal"), "T1": ("tur", "Süper Lig", "Turquie"), "G1": ("gre", "Super League", "Grèce"),
+}
+FD_SEASON, FD_PREV = "2627", "2526"
+def _rows(path):
+    if not path.exists(): return []
+    with open(path, encoding="utf-8-sig", newline="") as f:
+        return [r for r in csv.DictReader(f) if r.get("HomeTeam") and r.get("AwayTeam")]
+def _fd_when(r):
+    # heure du Royaume-Uni → Paris (+1 h toute l'année : les deux pays changent d'heure le même jour)
+    t = (r.get("Time") or "15:00").strip() or "15:00"
+    return (dt.datetime.strptime(r["Date"].strip(), "%d/%m/%Y") + dt.timedelta(hours=int(t[:2]) + 1, minutes=int(t[3:5]))).strftime("%Y-%m-%dT%H:%M")
+def _num(x):
+    try: return float(x)
+    except (TypeError, ValueError): return None
+def load_fd(data, odds_at):
+    root = ROOT / "fd"
+    if not root.exists(): return
+    fixtures = _rows(root / "fixtures.csv")
+    for code, (key, name, country) in FD.items():
+        cur, prev = _rows(root / f"{code}_{FD_SEASON}.csv"), _rows(root / f"{code}_{FD_PREV}.csv")
+        if not cur: continue
+        matches, seen = [], set()
+        for r in cur:
+            if r.get("FTHG", "") == "" or r.get("FTAG", "") == "": continue
+            m = {"d": _fd_when(r), "h": r["HomeTeam"].strip(), "a": r["AwayTeam"].strip(), "s": [int(float(r["FTHG"])), int(float(r["FTAG"]))]}
+            if r.get("HTHG", "") != "" and r.get("HTAG", "") != "": m["ht"] = [int(float(r["HTHG"])), int(float(r["HTAG"]))]
+            matches.append(m); seen.add((m["h"], m["a"]))
+        for r in fixtures:
+            if r.get("Div", "").strip() != code: continue
+            h, a = r["HomeTeam"].strip(), r["AwayTeam"].strip()
+            if (h, a) in seen: continue           # déjà joué et dans les résultats
+            m = {"d": _fd_when(r), "h": h, "a": a}
+            o = [_num(r.get(c)) for c in ("AvgH", "AvgD", "AvgA")]
+            if all(x and x > 1 for x in o):
+                m["odds"] = {"at": odds_at, "bk": "moyenne des bookmakers", "o": o}
+                ou = [_num(r.get("Avg>2.5")), _num(r.get("Avg<2.5"))]
+                if all(x and x > 1 for x in ou): m["odds"]["ou"] = {"bk": "moyenne des bookmakers", "o": ou}
+            matches.append(m); seen.add((h, a))
+        matches.sort(key=lambda m: m["d"])
+        names = sorted({m["h"] for m in matches} | {m["a"] for m in matches})
+        tot = {}
+        for r in prev:
+            if r.get("FTHG", "") == "": continue
+            for t, f, a in ((r["HomeTeam"].strip(), r["FTHG"], r["FTAG"]), (r["AwayTeam"].strip(), r["FTAG"], r["FTHG"])):
+                x = tot.setdefault(t, [0, 0, 0]); x[0] += 1; x[1] += int(float(f)); x[2] += int(float(a))
+        pg, pgf = sum(v[0] for v in tot.values()), sum(v[1] for v in tot.values())
+        data["leagues"][key] = {"name": name, "country": country, "xgAsOf": None, "source": "fd",
+            "priorMu": round(pgf / pg, 4) if pg else 1.3,
+            "teams": [{"id": n, "name": n, "xg": {"p": 0, "f": 0, "a": 0},
+                       "prior": ({"p": tot[n][0], "f": tot[n][1], "a": tot[n][2]} if n in tot else None)} for n in names],
+            "matches": matches}
+    data["sources"] = data["sources"] + [["football-data.co.uk (autres championnats)", "https://www.football-data.co.uk/data.php"]]
+
 def build(generated_at, odds_at):
     data = {"generatedAt": generated_at, "version": 2, "sources": meta.SOURCES, "leagues": {}, "contextAt": context.CHECKED_AT}
     for lg, L in meta.LEAGUES.items():
@@ -104,11 +163,20 @@ def build(generated_at, odds_at):
         data["leagues"][lg] = {"name": euro.NAMES[lg], "type": "euro", "coefAsOf": euro.COEF_AS_OF,
             "teams": [{"id": n, "name": d, "country": c, "dom": ({"lg": dm[0], "id": dm[1]} if dm else None)} for n, (d, c, dm) in clubs.items()],
             "matches": matches}
+    load_fd(data, generated_at[:10])
     return data
 
 if __name__ == "__main__":
-    gen = sys.argv[1] if len(sys.argv) > 1 else dt.datetime.now().strftime("%Y-%m-%dT%H:%M")
-    odds_at = sys.argv[2] if len(sys.argv) > 2 else gen[:10]
+    if len(sys.argv) > 1 and sys.argv[1] == "--auto":
+        # reconstruction automatique (tâche GitHub) : heure de Paris maintenant, date des cotes des 5 championnats inchangée
+        from zoneinfo import ZoneInfo
+        gen = dt.datetime.now(ZoneInfo("Europe/Paris")).strftime("%Y-%m-%dT%H:%M")
+        prev = json.loads((ROOT / "data.json").read_text(encoding="utf-8"))
+        ats = [m["odds"]["at"] for k, L in prev["leagues"].items() if L.get("source") != "fd" for m in L["matches"] if "odds" in m]
+        odds_at = max(ats) if ats else gen[:10]
+    else:
+        gen = sys.argv[1] if len(sys.argv) > 1 else dt.datetime.now().strftime("%Y-%m-%dT%H:%M")
+        odds_at = sys.argv[2] if len(sys.argv) > 2 else gen[:10]
     data = build(gen, odds_at)
     (ROOT / "data.json").write_text(json.dumps(data, ensure_ascii=False, separators=(",", ":")), encoding="utf-8")
     for lg, L in data["leagues"].items():
