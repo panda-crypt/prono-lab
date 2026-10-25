@@ -1,0 +1,33 @@
+name: Cotes historiques (test de la méthode)
+
+# Télécharge les résultats et cotes historiques de football-data.co.uk (5 grands championnats)
+# dans la branche « history ». Ne touche ni à l'application ni à l'APK.
+on:
+  workflow_dispatch:
+  push:
+    branches: [main]
+    paths: [".github/workflows/fetch-history.yml"]
+
+permissions:
+  contents: write
+
+jobs:
+  fetch:
+    runs-on: ubuntu-24.04
+    steps:
+      - name: Télécharger
+        run: |
+          mkdir -p history
+          for s in 1920 2021 2122 2223 2324 2425 2526 2627; do
+            for l in E0 SP1 I1 D1 F1; do
+              curl -sSfL --retry 3 -o "history/${l}_${s}.csv" "https://www.football-data.co.uk/mmz4281/${s}/${l}.csv" || echo "manquant ${l} ${s}"
+            done
+          done
+          ls -la history
+      - name: Publier dans la branche history
+        run: |
+          cd history
+          git init -q -b history
+          git config user.name "github-actions"; git config user.email "github-actions@users.noreply.github.com"
+          git add . && git commit -qm "Cotes historiques football-data.co.uk ($(date -u +%F))"
+          git push -f "https://x-access-token:${{ github.token }}@github.com/${{ github.repository }}.git" history
