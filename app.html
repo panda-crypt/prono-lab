@@ -388,6 +388,12 @@ table{border-collapse:collapse;width:100%}
           </div>
           <p class="hint" style="margin-top:10px">Kelly fractionné : la mise grandit avec l'écart de valeur, divisée par 4 par prudence, plafonnée par pari et pour l'ensemble des paris en cours. Elle utilise une probabilité prudente (60 % modèle, 40 % marché). Pour une bankroll de 100 €, le plafond d'exposition de 15 % limite à 15 € la somme des paris en attente.</p>
         </div>
+        <div class="panel" id="backupPanel">
+          <p class="label">Sauvegarde de mes données</p>
+          <p class="hint" style="margin:0 0 10px">Paris, Archive des tickets, bilans, intuitions et réglages sont gardés sur ce téléphone seulement. Faites une sauvegarde de temps en temps : elle permet de tout retrouver après une désinstallation ou sur un nouveau téléphone. Votre clé de cotes n'y figure pas (à ressaisir).</p>
+          <div class="row"><button class="btn sm" type="button" id="bkExport">Enregistrer une sauvegarde</button><button class="btn sm ghost" type="button" id="bkShare">Envoyer (Drive, e-mail…)</button><label class="btn sm ghost" style="cursor:pointer">Restaurer<input type="file" id="bkImport" hidden></label></div>
+          <p class="hint" id="bkInfo" style="margin:8px 0 0"></p>
+        </div>
         <div>
           <div class="row" style="justify-content:space-between;margin-bottom:8px"><p class="label" style="margin:0">Historique</p>
             <select id="pFilter" style="width:auto"><option value="all">Tous</option><option value="pending">En attente</option><option value="settled">Réglés</option></select></div>
@@ -1722,7 +1728,53 @@ function openBetSheet(pre){
 function toast(msg){ $("toastHost").innerHTML = `<div class="toast" role="status">${esc(msg)}</div>`; clearTimeout(toast.t); toast.t = setTimeout(() => $("toastHost").innerHTML = "", 2600); }
 
 /* ================= Vue : Mes paris ================= */
+/* ===== Sauvegarde : export / import de toutes les données personnelles (sauf la clé de cotes et le cache des données) ===== */
+const BACKUP_KEYS = ["pl_bets","pl_settings","pl_journal","pl_tjournal","pl_mjournal","pl_arch_t","pl_arch_m","pl_intuit","pl_step","pl_scores","pl_goldseen","pl_ui"];
+function backupJson(){
+  const data = {}; BACKUP_KEYS.forEach(k => { const v = LS.get(k, null); if (v != null) data[k] = v; });
+  return JSON.stringify({ app: "Prono Lab", format: 1, at: nowStr(), data });
+}
+const backupName = () => `prono-lab-sauvegarde-${nowStr().slice(0, 10)}.json`;
+function exportBackup(viaShare){
+  const json = backupJson(), name = backupName();
+  if (window.ProNoLab && window.ProNoLab.saveFile){
+    if (viaShare){ window.ProNoLab.share(name, json); toast("Choisissez où envoyer la sauvegarde (Drive, e-mail…)"); }
+    else { const r = window.ProNoLab.saveFile(name, json); toast(r === "ok" ? `Sauvegarde enregistrée dans Téléchargements : ${name}` : "Choisissez où envoyer la sauvegarde"); }
+  } else if (viaShare && navigator.share){ navigator.share({ title: name, text: json }).catch(() => {}); }
+  else { const a = document.createElement("a"); a.href = URL.createObjectURL(new Blob([json], { type: "application/json" })); a.download = name; document.body.appendChild(a); a.click(); a.remove(); toast(`Sauvegarde téléchargée : ${name}`); }
+  LS.set("pl_lastbackup", nowStr()); renderBackupInfo();
+}
+function renderBackupInfo(){
+  const last = LS.get("pl_lastbackup", null), n = bets().length, days = last ? Math.floor(hoursSince(last) / 24) : null;
+  $("bkInfo").innerHTML = last ? `Dernière sauvegarde : ${fmtDay(last)} à ${fmtTime(last)}${days >= 7 ? ` · <strong style="color:var(--warn)">il y a ${days} jours, pensez à en refaire une</strong>` : ""}.` : (n ? `<strong style="color:var(--warn)">Aucune sauvegarde pour l'instant.</strong>` : "Aucune sauvegarde pour l'instant.");
+}
+function importBackup(file){
+  const rd = new FileReader();
+  rd.onload = () => {
+    let b; try { b = JSON.parse(rd.result); } catch { toast("Ce fichier n'est pas une sauvegarde lisible."); return; }
+    if (!b || b.app !== "Prono Lab" || !b.data){ toast("Ce fichier n'est pas une sauvegarde Prono Lab."); return; }
+    const d = b.data, nb = (d.pl_bets || []).length, na = new Set([...(d.pl_arch_t || []), ...(d.pl_arch_m || [])].map(x => x.day)).size;
+    $("sheetHost").innerHTML = `<div class="sheet-bg" id="sheetBg"><div class="sheet">
+      <h2 style="font-size:22px">Restaurer la sauvegarde ?</h2>
+      <p style="margin:0">Sauvegarde du ${fmtDay(b.at)} à ${fmtTime(b.at)} : <strong>${nb} pari${nb > 1 ? "s" : ""}</strong>, <strong>${na} jour${na > 1 ? "s" : ""} d'archive</strong>, réglages et bilans.</p>
+      <div class="alert warn" style="margin:0"><div><strong>Vos données actuelles seront remplacées</strong>Faites d'abord une sauvegarde des données actuelles si vous voulez pouvoir y revenir.</div></div>
+      <div class="row" style="justify-content:flex-end"><button type="button" class="btn ghost" id="rsNo">Annuler</button><button type="button" class="btn" id="rsYes">Remplacer mes données</button></div>
+    </div></div>`;
+    const close = () => { $("sheetHost").innerHTML = ""; };
+    $("rsNo").onclick = close; $("sheetBg").addEventListener("click", e => { if (e.target.id === "sheetBg") close(); });
+    $("rsYes").onclick = () => {
+      BACKUP_KEYS.forEach(k => { if (k in d) LS.set(k, d[k]); else { try { localStorage.removeItem(k); } catch {} } });
+      Object.assign(ui, LS.get("pl_ui", {}));
+      close(); computeAll(); autoSettle(); render(); toast(`Sauvegarde restaurée : ${nb} paris, ${na} jours d'archive`);
+    };
+  };
+  rd.readAsText(file);
+}
+$("bkExport").onclick = () => exportBackup(false);
+$("bkShare").onclick = () => exportBackup(true);
+$("bkImport").onchange = e => { const f = e.target.files && e.target.files[0]; if (f) importBackup(f); e.target.value = ""; };
 function renderParis(){
+  renderBackupInfo();
   const st = settings();
   [["sBank","bank"],["sWeek","week"],["sMax","max"],["sExpo","expo"]].forEach(([id,k]) => { if (document.activeElement !== $(id)) $(id).value = st[k]; });
   $("sBook").value = st.book;

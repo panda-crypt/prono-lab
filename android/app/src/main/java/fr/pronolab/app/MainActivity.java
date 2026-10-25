@@ -2,6 +2,12 @@ package fr.pronolab.app;
 
 import android.annotation.SuppressLint;
 import android.content.ClipData;
+import android.content.ContentValues;
+import android.os.Build;
+import android.provider.MediaStore;
+import android.webkit.ValueCallback;
+import android.webkit.WebChromeClient;
+import java.io.OutputStream;
 import android.content.ClipboardManager;
 import android.content.Context;
 import android.content.Intent;
@@ -36,6 +42,8 @@ public class MainActivity extends AppCompatActivity {
 
     private static final String HOST = "appassets.androidplatform.net";
     private WebView web;
+    private ValueCallback<Uri[]> fileCb;
+    private static final int PICK_FILE = 42;
 
     @SuppressLint("SetJavaScriptEnabled")
     @Override
@@ -74,6 +82,19 @@ public class MainActivity extends AppCompatActivity {
                 try {
                     startActivity(new Intent(Intent.ACTION_VIEW, u));
                 } catch (Exception ignored) { }
+                return true;
+            }
+        });
+
+        // Choix d'un fichier (restauration d'une sauvegarde)
+        web.setWebChromeClient(new WebChromeClient() {
+            @Override
+            public boolean onShowFileChooser(WebView view, ValueCallback<Uri[]> cb, FileChooserParams params) {
+                if (fileCb != null) fileCb.onReceiveValue(null);
+                fileCb = cb;
+                Intent i = new Intent(Intent.ACTION_GET_CONTENT).addCategory(Intent.CATEGORY_OPENABLE).setType("*/*");
+                try { startActivityForResult(Intent.createChooser(i, "Choisir la sauvegarde"), PICK_FILE); }
+                catch (Exception e) { fileCb = null; return false; }
                 return true;
             }
         });
@@ -143,6 +164,38 @@ public class MainActivity extends AppCompatActivity {
             }).start();
         }
 
+        /** Enregistre un fichier texte dans Téléchargements (Android 10+). Renvoie "ok", sinon ouvre le partage et renvoie "share". */
+        @JavascriptInterface
+        public String saveFile(String name, String content) {
+            if (Build.VERSION.SDK_INT >= 29) {
+                try {
+                    ContentValues v = new ContentValues();
+                    v.put(MediaStore.MediaColumns.DISPLAY_NAME, name);
+                    v.put(MediaStore.MediaColumns.MIME_TYPE, "application/json");
+                    Uri u = getContentResolver().insert(MediaStore.Downloads.EXTERNAL_CONTENT_URI, v);
+                    if (u != null) {
+                        try (OutputStream os = getContentResolver().openOutputStream(u)) {
+                            os.write(content.getBytes(StandardCharsets.UTF_8));
+                        }
+                        return "ok";
+                    }
+                } catch (Exception ignored) { }
+            }
+            share(name, content);
+            return "share";
+        }
+
+        /** Ouvre le partage Android (Drive, e-mail, messagerie…) avec le contenu de la sauvegarde. */
+        @JavascriptInterface
+        public void share(String name, String content) {
+            runOnUiThread(() -> {
+                Intent i = new Intent(Intent.ACTION_SEND).setType("text/plain");
+                i.putExtra(Intent.EXTRA_SUBJECT, name);
+                i.putExtra(Intent.EXTRA_TEXT, content);
+                try { startActivity(Intent.createChooser(i, "Sauvegarder Prono Lab")); } catch (Exception ignored) { }
+            });
+        }
+
         @JavascriptInterface
         public boolean copy(String text) {
             try {
@@ -152,6 +205,18 @@ public class MainActivity extends AppCompatActivity {
             } catch (Exception e) {
                 return false;
             }
+        }
+    }
+
+    @SuppressWarnings("deprecation")
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (requestCode == PICK_FILE && fileCb != null) {
+            Uri[] res = null;
+            if (resultCode == RESULT_OK && data != null && data.getData() != null) res = new Uri[]{ data.getData() };
+            fileCb.onReceiveValue(res);
+            fileCb = null;
         }
     }
 
