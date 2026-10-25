@@ -2228,13 +2228,16 @@ function renderArchiveTab(){
   const byDay = {};
   tabs.forEach(tab => LS.get("pl_arch_" + tab, []).forEach(d => { (byDay[d.day] = byDay[d.day] || []).push(...d.tickets.map(t => Object.assign({ src: tab, setAt: d.at }, t))); }));
   const days = Object.keys(byDay).sort().reverse();
+  // garder ouverts les tickets que l'utilisateur a dépliés (l'affichage se rafraîchit à l'arrivée des scores)
+  const opened = new Set([...document.querySelectorAll("#arList details.arch-t[open]")].map(e => e.dataset.id));
   $("arList").innerHTML = days.length ? days.map(day => {
     const T = byDay[day], rs = T.map(ticketRes), won = rs.filter(r => r.res === "won").length, lost = rs.filter(r => r.res === "lost").length, open = T.length - won - lost - rs.filter(r => r.res === "void").length;
     return `<p class="daylabel" style="margin:14px 0 6px">${fmtDay(day + "T12:00")} · ${T.length} tickets · ✅ ${won} · ❌ ${lost}${open ? ` · ⏳ ${open}` : ""}</p>` + T.map((t, i) => {
       const r = rs[i], sts = t.legs.map(legSt), nOk = sts.filter(x => x === "won" || x === "void").length;
       const O = t.kind === "system" ? (t.hi || t.O || 0) : t.legs.reduce((a, l) => a * l.o, 1);
       const badge = r.res === "won" ? `<span class="tag good">✅ Gagné +${eur(r.ret - t.stake)}</span>` : r.res === "lost" ? `<span class="tag bad">❌ Perdu</span>` : r.res === "void" ? `<span class="tag muted">↩️ Remboursé</span>` : `<span class="tag muted">⏳ En cours</span>`;
-      return `<details class="arch-t ${r.res || ""}"><summary>
+      const id = `${day}|${t.src}|${t.name}`;
+      return `<details class="arch-t ${r.res || ""}" data-id="${esc(id)}"${opened.has(id) ? " open" : ""}><summary>
           <strong>${esc(t.name)}</strong>${badge}
           <span class="hint">${src[t.src]} · ${t.legs.length} match${t.legs.length > 1 ? "s" : ""} · cote ${fx(O)} · mise ${eur(t.stake)}</span><span class="dots">${t.legs.map(legIcon).join("")}</span>
         </summary><div class="body"><ul class="legs bt-list">${t.legs.map(l => `<li class="leg"><div>${legIcon(l)} <strong>${esc(MARKETS[l.k] ? MARKETS[l.k].label(l.H, l.A) : l.k)}</strong><br><span class="hint">${esc(l.H)} – ${esc(l.A)} · ${fmtDay(l.d)} ${fmtTime(l.d)}${legScore(l)}</span></div><div class="r num">${fx(l.o)}</div></li>`).join("")}</ul>
