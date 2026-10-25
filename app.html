@@ -1819,6 +1819,58 @@ function renderTicketStats(){
     <div class="scroll"><table class="vtable"><thead><tr><th class="l">Ticket</th><th>Gagnés</th><th>Misé</th><th>Bénéfice</th><th>Rendement</th></tr></thead><tbody>${names.map(n => row(n, sum(done.filter(e => e.name === n)))).join("")}</tbody></table></div>
     <p class="hint" style="margin:8px 0 0">${pend ? `${pend} ticket${pend>1?"s":""} en attente. ` : ""}Comptez au moins une cinquantaine de tickets réglés avant de juger : sur quelques jours, la chance pèse plus que la méthode.</p>`;
 }
+/* Report pas à pas : chaque sélection avec le nom du pari tel qu'il apparaît chez le bookmaker, une case à cocher
+   et la cote réellement affichée (facultative) pour recalculer la cote totale. La progression est gardée sur le téléphone. */
+function bookLabel(k, h, a){
+  const L = {
+    "1": ["Résultat du match", h], "N": ["Résultat du match", "Match nul"], "2": ["Résultat du match", a],
+    "1N": ["Double chance", `${h} ou Nul`], "N2": ["Double chance", `Nul ou ${a}`], "12": ["Double chance", `${h} ou ${a}`],
+    "O15": ["Nombre total de buts", "Plus de 1,5"], "O25": ["Nombre total de buts", "Plus de 2,5"], "U25": ["Nombre total de buts", "Moins de 2,5"],
+    "O35": ["Nombre total de buts", "Plus de 3,5"], "U35": ["Nombre total de buts", "Moins de 3,5"],
+    "BY": ["Les 2 équipes marquent", "Oui"], "BN": ["Les 2 équipes marquent", "Non"],
+    "HM1_1": ["Handicap (1N2, 90 min)", `${h} (-1)`], "HP1_2": ["Handicap (1N2, 90 min)", `${a} (-1)`],
+    "HM2_2": ["Handicap (1N2, 90 min)", `${a} (+2)`], "HP2_1": ["Handicap (1N2, 90 min)", `${h} (+2)`],
+    "HM1_N": ["Handicap (1N2, 90 min)", `Nul (${h} -1)`], "HP1_N": ["Handicap (1N2, 90 min)", `Nul (${a} -1)`],
+  };
+  return L[k] || ["Pari", MARKETS[k] ? MARKETS[k].label(h, a) : k];
+}
+function openStepSheet(t){
+  const id = "step|" + ticketId(t), st = LS.get("pl_step", {}), cur = st[id] || { done: {}, odds: {} };
+  const legs = t.legs.slice().sort((x,y) => x.m.d < y.m.d ? -1 : x.m.d > y.m.d ? 1 : 0);
+  const save = () => { const all = LS.get("pl_step", {}); all[id] = cur; const keys = Object.keys(all); if (keys.length > 30) delete all[keys[0]]; LS.set("pl_step", all); };
+  const [bn, bu, kw] = book();
+  const draw = () => {
+    const n = legs.filter((l, i) => cur.done[i]).length;
+    const O = legs.reduce((s, l, i) => s * (cur.odds[i] > 1 ? cur.odds[i] : l.o), 1);
+    const P = legs.reduce((s, l) => s * l.p, 1);
+    $("sheetHost").innerHTML = `<div class="sheet-bg" id="sheetBg"><div class="sheet">
+      <h2 style="font-size:22px">${esc(t.name)} · pas à pas</h2>
+      <p class="hint" style="margin:0">Ouvrez ${esc(bn)} (astuce : écran partagé d'Android pour voir les deux). Pour chaque ligne : cherchez le match, choisissez le pari indiqué, puis cochez. Saisissez la cote affichée si elle diffère.</p>
+      <div class="riskbar"><i style="width:${n/legs.length*100}%;background:var(--good)"></i></div>
+      <p style="margin:0"><strong>${n} / ${legs.length}</strong> sélections ajoutées · cote totale <strong class="num">${fx(O)}</strong>${t.kind === "system" ? " (système 2/3 : choisissez « Système 2/3 » dans le ticket)" : ""}</p>
+      <ul class="legs bt-list">${legs.map((l, i) => { const [mk, sel] = bookLabel(l.k, l.H, l.A); const ok = !!cur.done[i];
+        return `<li class="leg" style="${ok ? "opacity:.55" : ""}"><label style="display:flex;gap:10px;align-items:flex-start;flex:1;min-width:0;cursor:pointer">
+          <input type="checkbox" data-sd="${i}" ${ok ? "checked" : ""} style="width:22px;height:22px;margin-top:2px;flex:none">
+          <span><span class="hint">${esc(DATA.leagues[l.lg].name)} · ${fmtDay(l.m.d)} ${fmtTime(l.m.d)}</span><br><strong>${esc(l.H)} – ${esc(l.A)}</strong><br>${esc(mk)} → <strong>${esc(sel)}</strong></span></label>
+          <div class="r"><span class="hint">cote ${l.est ? "≈ " : ""}${fx(l.o)}</span><br><input type="text" inputmode="decimal" data-so="${i}" value="${cur.odds[i] || ""}" placeholder="affichée" style="width:84px;padding:4px 6px"></div></li>`; }).join("")}</ul>
+      <p class="hint" style="margin:0">Chance de gain du ticket : ${t.P < 0.05 ? `1 sur ${Math.round(1 / t.P)}` : pct(t.P)} · mise conseillée ${eur(t.stake)} · gain possible ${eur(t.stake * O)}. Si une cote est nettement plus basse que prévu, le ticket rapporte moins : vous pouvez remplacer ou retirer cette sélection.</p>
+      <div class="row" style="justify-content:flex-end">
+        <button type="button" class="btn ghost" id="stReset">Tout décocher</button>
+        <button type="button" class="btn ghost" id="stClose">Fermer</button>
+        <button type="button" class="btn" id="stGo">Ouvrir ${esc(bn)}</button>
+      </div></div></div>`;
+    $("sheetBg").addEventListener("click", e => { if (e.target.id === "sheetBg") $("sheetHost").innerHTML = ""; });
+    $("stClose").onclick = () => { $("sheetHost").innerHTML = ""; };
+    $("stReset").onclick = () => { cur.done = {}; save(); draw(); };
+    $("stGo").onclick = () => {
+      if (window.ProNoLab && window.ProNoLab.openApp){ let how = "web"; try { how = window.ProNoLab.openApp(kw, bu); } catch {} toast(how === "app" ? `Ouverture de ${bn}` : `${bn} introuvable, ouverture du site`); }
+      else window.open(bu, "_blank", "noopener");
+    };
+    $("sheetHost").querySelectorAll("[data-sd]").forEach(c => c.onchange = () => { cur.done[c.dataset.sd] = c.checked; save(); draw(); });
+    $("sheetHost").querySelectorAll("[data-so]").forEach(inp => inp.onchange = () => { const v = parseFloat(String(inp.value).replace(",", ".")); if (v > 1) cur.odds[inp.dataset.so] = v; else delete cur.odds[inp.dataset.so]; save(); draw(); });
+  };
+  draw();
+}
 function ticketText(t){
   const kind = t.kind === "system" ? "Système 2/3" : t.kind === "combo" ? `Combiné ${t.legs.length} sélections` : "Simple";
   return [`${t.name} (${kind})`, ...t.legs.map(l => `• ${l.H} – ${l.A} (${fmtDay(l.m.d)} ${fmtTime(l.m.d)}) : ${MARKETS[l.k].label(l.H, l.A)} @ ${fx(l.o)}${l.est ? " (cote à vérifier)" : ""}`),
@@ -1846,9 +1898,10 @@ function renderTickets(){
           <div><span>Gain possible</span><b>${gain}</b></div>
         </div>
         <p class="hint" style="margin:0">${t.ev >= 0 ? `<strong class="edge-pos">Espérance positive : ${pct(t.ev)}</strong> par euro misé.` : `Espérance : <strong>${pct(t.ev)}</strong> par euro misé (la marge des bookmakers${t.legs.length > 1 ? " se multiplie à chaque sélection" : ""}).`} ${esc(t.why)}.${t.est ? " Cotes marquées ≈ : estimées, vérifiez-les chez votre bookmaker." : ""}${t.jackpot ? (t.mixed ? " Version mixte : victoires, doubles chances, buts et « les deux marquent » ; plus de matchs pour la même cote, donc moins de chances que la version simple." : " Version optimale : la combinaison qui a le plus de chances d'atteindre cette cote, surtout des victoires de favoris.") : ""}</p>
-        <div class="row"><button class="btn sm" type="button" data-tk="${i}">Copier et ouvrir ${esc(book()[0])}</button></div>
+        <div class="row"><button class="btn sm" type="button" data-tkstep="${i}">Reporter pas à pas</button><button class="btn sm ghost" type="button" data-tk="${i}">Copier et ouvrir ${esc(book()[0])}</button></div>
       </article>`;
     }).join("");
+    $("tList").querySelectorAll("[data-tkstep]").forEach(b => b.onclick = () => openStepSheet(T[+b.dataset.tkstep]));
     $("tList").querySelectorAll("[data-tk]").forEach(b => b.onclick = () => {
       const t = T[+b.dataset.tk]; copyText(ticketText(t));
       const [bn, bu, kw] = book();
