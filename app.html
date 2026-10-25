@@ -1602,22 +1602,28 @@ function oddsFor(m, k, p){
     if (k === "1") return { o: a, bk: bk(0) };
     if (k === "N") return { o: n, bk: bk(1) };
     if (k === "2") return { o: b, bk: bk(2) };
-    // double chance : déduite des cotes 1N2 (les bookmakers l'affichent à peu près à ce niveau)
-    if (k === "1N") return { o: 1/(1/a + 1/n), est: true };
-    if (k === "N2") return { o: 1/(1/n + 1/b), est: true };
-    if (k === "12") return { o: 1/(1/a + 1/b), est: true };
+    // double chance : déduite des cotes 1N2 (cote1 × coteN / (cote1 + coteN)), puis décote de 3 % :
+    // les bookmakers l'affichent en général un peu en dessous de ce calcul
+    const DC = 0.97, dc = (x, y) => Math.max(1.01, DC / (1/x + 1/y));
+    if (k === "1N") return { o: dc(a, n), est: true };
+    if (k === "N2") return { o: dc(n, b), est: true };
+    if (k === "12") return { o: dc(a, b), est: true };
   }
   if ((k === "O25" || k === "U25") && od && od.ou && ok(od.ou.o)) return { o: od.ou.o[k === "O25" ? 0 : 1], bk: od.ou.bk };
   if ((k === "BY" || k === "BN") && od && od.btts && ok(od.btts.o)) return { o: od.btts.o[k === "BY" ? 0 : 1], bk: od.btts.bk };
   return { o: Math.max(1.02, 0.95 / p), est: true, guess: true };     // pas de cote relevée : estimation avec une marge de 5 %
 }
+// Taux de retour joueur des cotes 1N2 : 1 / (1/c1 + 1/cN + 1/c2). Sous 85 %, la marge est trop lourde : match écarté des tickets.
+const TRJ_MIN = 0.85;
+const trjOf = o => o && o.length === 3 && o.every(x => x > 1) ? 1 / (1/o[0] + 1/o[1] + 1/o[2]) : null;
+const lowTrj = m => { const t = m.odds ? trjOf(m.odds.o) : null; return t != null && t < TRJ_MIN; };
 function ticketPool(){
   const now = nowStr(); let pool = [];
   for (const days of [3, 7]){
     pool = [];
     for (const lg of Object.keys(DATA.leagues)){
       const C = CL[lg]; if (!C) continue;
-      upcoming(lg, days).filter(m => m.d > now).forEach(m => {
+      upcoming(lg, days).filter(m => m.d > now && !lowTrj(m)).forEach(m => {
         const r = predict(C, m.h, m.a), t = topPick(m, r, lg), H = C.T[m.h].name, A = C.T[m.a].name;
         const sel = c => { const od = oddsFor(m, c.k, c.p); return { lg, m, H, A, k: c.k, p: c.p, pk: c.pk, o: +od.o.toFixed(2), est: !!od.est, guess: !!od.guess, bk: od.bk || "" }; };
         const win = t.all.filter(c => c.k === "1" || c.k === "2").sort((a,b) => b.p - a.p)[0];
@@ -1802,7 +1808,7 @@ function renderTickets(){
       else { toast(`Ticket copié`); window.open(bu, "_blank", "noopener"); }
     });
   }
-  $("tNote").innerHTML = `Les tickets sont classés du <strong>plus risqué</strong> (grosse cote, rarement gagnant) au <strong>plus sûr</strong> (petite cote, gagne souvent). La chance de gain d'un combiné est le produit des chances de chaque sélection : trois paris à 80 % ne font qu'environ 51 % ensemble. Le <strong>système 2 sur 3</strong> joue les trois doubles possibles : il rapporte si au moins deux sélections passent. La mise conseillée suit la Kelly ¼ quand le ticket a une espérance positive ; sinon c'est une petite mise de loisir, à ne jamais augmenter pour « se refaire ». Une seule sélection par match, matchs des 3 prochains jours (7 s'il en manque). Les combinés sont des paris distincts sur Unibet : vérifiez chaque cote avant de valider.`;
+  $("tNote").innerHTML = `Les tickets sont classés du <strong>plus risqué</strong> (grosse cote, rarement gagnant) au <strong>plus sûr</strong> (petite cote, gagne souvent). La chance de gain d'un combiné est le produit des chances de chaque sélection : trois paris à 80 % ne font qu'environ 51 % ensemble. Le <strong>système 2 sur 3</strong> joue les trois doubles possibles : il rapporte si au moins deux sélections passent. La mise conseillée suit la Kelly ¼ quand le ticket a une espérance positive ; sinon c'est une petite mise de loisir, à ne jamais augmenter pour « se refaire ». Une seule sélection par match, matchs des 3 prochains jours (7 s'il en manque). Les matchs où le bookmaker garde plus de 15 % de marge (taux de retour sous 85 %) sont écartés. Les cotes de double chance sont déduites des cotes 1N2 puis réduites de 3 %, comme le font en général les bookmakers. Les combinés sont des paris distincts sur Unibet : vérifiez chaque cote avant de valider.`;
 }
 
 function renderFiab(){
