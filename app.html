@@ -1018,7 +1018,7 @@ function stakeFor(pModel, pMarket, odds, opts = {}){
   if (raw < 0.5) { res.why = "valeur trop mince pour votre bankroll (mise < 0,50 €)"; return res; }
   const st = Math.min(raw, bank * s.max/100, bank * s.expo/100 - pend, bank - pend);
   if (st < 0.5) { res.why = `exposition max. (${s.expo} %) atteinte`; return res; }
-  res.stake = Math.round(st*2)/2; return res;
+  res.stake = Math.floor(st*2)/2; return res;   // arrondi au demi-euro inférieur : jamais au-dessus des plafonds
 }
 /* Toutes les issues cotées d'un match : 1N2, plus/moins de 2,5 buts, les deux marquent */
 function matchOutcomes(m, r){
@@ -1961,7 +1961,7 @@ function ticketStake(t){
   if (t.jackpot) return { stake: Math.min(bank * s.max / 100, Math.max(0.5, Math.round(bank * 0.005 * 2) / 2)), why: "Grosse cote : mise symbolique (0,5 % de la bankroll), à considérer comme perdue d'avance" };
   if (t.ev > 0.02 && !t.est && t.kind !== "system"){
     const k = (t.P * t.O - 1) / (t.O - 1) * 0.25, st = Math.min(bank * k, bank * s.max / 100);
-    if (st >= 0.5) return { stake: Math.round(st * 2) / 2, why: "Espérance positive : Kelly ¼" };
+    if (st >= 0.5) return { stake: Math.floor(st * 2) / 2, why: "Espérance positive : Kelly ¼" };
   }
   // espérance négative ou incertaine : petite mise de loisir, d'autant plus petite que le ticket est risqué
   const st = Math.min(bank * s.max / 100, Math.max(0.5, Math.round(bank * 0.02 * t.P * 2) / 2));
