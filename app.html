@@ -64,8 +64,8 @@ main .wrap{padding-block:16px 28px}
 
 /* Barre d'onglets */
 .nav{position:fixed;left:0;right:0;bottom:0;z-index:6;background:var(--surface);border-top:1px solid var(--line);padding-bottom:env(safe-area-inset-bottom,0px);padding-left:env(safe-area-inset-left,0px);padding-right:env(safe-area-inset-right,0px)}
-.nav ul{list-style:none;margin:0 auto;padding:0;display:grid;grid-template-columns:repeat(7,1fr);max-width:640px;height:var(--nav-h)}
-.nav button{width:100%;height:100%;border:0;background:transparent;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:2px;font-size:10.5px;color:var(--muted);cursor:pointer}
+.nav ul{list-style:none;margin:0 auto;padding:0;display:grid;grid-template-columns:repeat(8,1fr);max-width:640px;height:var(--nav-h)}
+.nav button{width:100%;height:100%;border:0;background:transparent;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:2px;font-size:9.5px;color:var(--muted);cursor:pointer}
 .nav button svg{width:22px;height:22px;stroke:currentColor;fill:none;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round}
 .nav button[aria-current="page"]{color:var(--pitch);font-weight:600}
 .nav .badge{position:absolute;margin-left:22px;margin-top:-22px;background:var(--bad);color:#fff;border-radius:999px;font-size:10px;padding:0 5px;line-height:16px}
@@ -75,6 +75,13 @@ main .wrap{padding-block:16px 28px}
 .daylabel{font-family:var(--font-display);font-weight:700;font-size:15px;letter-spacing:.06em;text-transform:uppercase;color:var(--muted);margin:10px 0 6px}
 .mlist{display:grid;grid-template-columns:repeat(auto-fill,minmax(min(100%,330px),1fr));gap:10px}
 .ticket{display:flex;flex-direction:column;gap:10px}
+.arch-t{border:1px solid var(--line);border-radius:10px;background:var(--surface);margin-bottom:8px}
+.arch-t > summary{list-style:none;cursor:pointer;padding:10px 12px;display:grid;grid-template-columns:1fr auto;gap:2px 10px;align-items:center}
+.arch-t > summary::-webkit-details-marker{display:none}
+.arch-t[open] > summary{border-bottom:1px dashed var(--line)}
+.arch-t .body{padding:6px 12px 10px}
+.arch-t.won{border-color:var(--good)} .arch-t.lost{border-color:color-mix(in srgb,var(--bad) 55%,var(--line))}
+.dots{font-size:12px;letter-spacing:1px}
 .ticket .thead{display:flex;align-items:center;gap:8px;flex-wrap:wrap}
 .ticket .thead strong{font-family:var(--font-display);font-size:18px;text-transform:uppercase;letter-spacing:.02em}
 .ticket .legs,.bt-list{list-style:none;margin:0;padding:0;display:grid;gap:8px}
@@ -391,19 +398,24 @@ table{border-collapse:collapse;width:100%}
 
     <!-- TICKETS -->
     <section class="view" id="v-tickets" hidden>
-      <div class="viewhead"><h2>Tickets du moment</h2><span class="hint" id="tHint"></span></div>
-      <div class="panel" style="margin-bottom:12px"><p class="label">Bilan des tickets proposés (sans miser)</p><div id="tStats"></div>
-        <details style="margin-top:10px"><summary class="label" style="cursor:pointer;margin:0">Historique des tickets proposés</summary><div id="tHist" style="margin-top:10px"></div></details></div>
+      <div class="viewhead"><h2>Tickets du jour</h2><span class="hint" id="tHint"></span></div>
       <div class="stack" id="tList"></div>
       <div class="panel" style="margin-top:16px"><p class="label">Comment lire ces tickets</p><p class="hint" id="tNote"></p></div>
+    </section>
+
+    <!-- ARCHIVE -->
+    <section class="view" id="v-archive" hidden>
+      <div class="viewhead"><h2>Archive</h2><span class="hint">Tous les tickets proposés, jour par jour</span></div>
+      <label class="field" style="margin:-4px 0 10px;max-width:340px"><span>Afficher</span><select id="arFilter"><option value="all">Tous les tickets</option><option value="t">Onglet Tickets</option><option value="m">Onglet Metabet</option></select></label>
+      <div class="stack" id="arList"></div>
+      <div class="panel" style="margin-top:16px"><p class="label">Bilan de tous les tickets archivés (sans miser)</p><div id="arStats"></div></div>
+      <p class="hint" style="margin-top:12px">Chaque jour, à la première ouverture de l'application, les tickets proposés sont enregistrés ici une fois pour toutes. Ils ne changent plus : chaque match reçoit ✅ s'il est passé, ❌ s'il a échoué, ↩️ s'il est remboursé, ⏳ tant qu'il n'est pas joué. Touchez un ticket pour voir ses matchs. Les résultats arrivent avec le bouton « Scores » (onglet Valeur) ou la mise à jour des données.</p>
     </section>
 
     <!-- METABET -->
     <section class="view" id="v-metabet" hidden>
       <div class="viewhead"><h2>Metabet</h2><span class="hint">Laboratoire de prédictions métaphysiques</span></div>
       <div class="alert warn" style="margin-bottom:12px"><div><strong>Laboratoire expérimental</strong>Aucune de ces méthodes n'a démontré de pouvoir prédictif. Leurs signaux ne sont jamais mélangés aux probabilités, aux paris verts ni aux tickets, et aucune mise n'est conseillée sur leur base. Le laboratoire mesure, match après match, si elles font mieux que le hasard, le modèle et le marché.</div></div>
-      <div class="panel" style="margin-bottom:12px"><p class="label">Bilan des tickets Metabet (sans miser)</p><div id="mbStats"></div>
-        <details style="margin-top:10px"><summary class="label" style="cursor:pointer;margin:0">Historique des tickets Metabet</summary><div id="mbHist" style="margin-top:10px"></div></details></div>
       <div class="stack" id="mbList"></div>
       <details class="panel" style="margin-top:16px"><summary class="label" style="cursor:pointer;margin:0">Noter mes intuitions et synchronicités</summary><div class="stack" id="mbIntu" style="margin-top:10px"></div></details>
       <div class="panel" style="margin-top:16px"><p class="label">Résultats du laboratoire</p><div id="mbLab"></div></div>
@@ -470,6 +482,7 @@ table{border-collapse:collapse;width:100%}
     <li><button type="button" data-v="fiab"><svg viewBox="0 0 24 24"><path d="M12 3l8 3v6c0 4.5-3.4 8.2-8 9-4.6-.8-8-4.5-8-9V6z"/><path d="M8.5 12l2.5 2.5 4.5-5"/></svg>Fiabilité</button></li>
     <li><button type="button" data-v="tickets"><svg viewBox="0 0 24 24"><path d="M3 7h18v3a2 2 0 0 0 0 4v3H3v-3a2 2 0 0 0 0-4z"/><path d="M15 7v2M15 11v2M15 15v2"/></svg>Tickets</button></li>
     <li><button type="button" data-v="metabet"><svg viewBox="0 0 24 24"><path d="M12 3l1.8 4.2L18 9l-4.2 1.8L12 15l-1.8-4.2L6 9l4.2-1.8z"/><path d="M18.5 15.5l.8 1.7 1.7.8-1.7.8-.8 1.7-.8-1.7-1.7-.8 1.7-.8z"/><path d="M5 17.5a3 3 0 1 0 3-3"/></svg>Metabet</button></li>
+    <li><button type="button" data-v="archive"><svg viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="5" rx="1"/><path d="M5 9v10h14V9"/><path d="M10 13h4"/></svg>Archive</button></li>
   </ul>
 </nav>
 
@@ -1351,7 +1364,7 @@ function backtest(){
 /* ================= État & navigation ================= */
 const ui = Object.assign({ view:"matchs", lg:"l1" }, LS.get("pl_ui", {}));
 if (!DATA.leagues[ui.lg] && ui.lg !== "all") ui.lg = "l1";
-const saveUi = () => LS.set("pl_ui", { view:ui.view, lg:ui.lg, aH:ui.aH, aA:ui.aA, mF:ui.mF });
+const saveUi = () => LS.set("pl_ui", { view:ui.view, lg:ui.lg, aH:ui.aH, aA:ui.aA, mF:ui.mF, arF:ui.arF });
 let CL = {};
 function computeAll(){
   applyScores();
@@ -1363,7 +1376,7 @@ function computeAll(){
 }
 
 function renderChips(){
-  $("leagueChips").style.display = ui.view === "tickets" || ui.view === "metabet" ? "none" : "";   // les tickets puisent dans toutes les compétitions
+  $("leagueChips").style.display = ui.view === "tickets" || ui.view === "metabet" || ui.view === "archive" ? "none" : "";   // les tickets puisent dans toutes les compétitions
   const showAll = ui.view === "valeur" || ui.view === "fiab" || ui.view === "paris";
   const items = (showAll ? [["all","Tous"]] : []).concat(Object.entries(DATA.leagues).map(([k,L]) => [k, L.name]));
   if (!showAll && ui.lg === "all") ui.lg = "l1";
@@ -1388,6 +1401,7 @@ function render(){
   else if (ui.view === "fiab") renderFiab();
   else if (ui.view === "tickets") renderTickets();
   else if (ui.view === "metabet") renderMeta();
+  else if (ui.view === "archive") renderArchiveTab();
   renderBadge();
 }
 
@@ -1806,9 +1820,11 @@ function oddsFor(m, k, p){
 const TRJ_MIN = 0.85;
 const trjOf = o => o && o.length === 3 && o.every(x => x > 1) ? 1 / (1/o[0] + 1/o[1] + 1/o[2]) : null;
 const lowTrj = m => { const t = m.odds ? trjOf(m.odds.o) : null; return t != null && t < TRJ_MIN; };
+// nombre de jours (fractionnaire) jusqu'à la fin du jour J+k, heure de Paris : les tickets du jour portent sur aujourd'hui et demain
+const daysToEnd = k => { const n = nowStr(), d = pDate(n.slice(0, 10) + "T23:59"); d.setDate(d.getDate() + k); return Math.max(0.01, (d - pDate(n)) / 864e5); };
 function ticketPool(wide){
   const now = nowStr(); let pool = [];
-  for (const days of wide ? [7] : [3, 7]){
+  for (const days of wide ? [daysToEnd(2)] : [daysToEnd(1), daysToEnd(2)]){
     pool = [];
     for (const lg of Object.keys(DATA.leagues)){
       const C = CL[lg]; if (!C) continue;
@@ -1886,7 +1902,7 @@ function buildTickets(){
   addIf("system", "Système 2 sur 3 (victoires)", pick(wins.filter(w => w.o >= 1.75), 3));
   // Jackpots : pour chaque cote visée, la combinaison qui a le plus de chances de l'atteindre.
   // On ajoute les sélections qui « coûtent » le moins de probabilité par unité de cote : rapport log(1/p) / log(cote) le plus bas.
-  const jp = [], jpPool = ticketPool(true).pool;   // jackpots : matchs des 7 prochains jours (beaucoup de sélections, un match dans 2 tickets au plus)
+  const jp = [], jpPool = ticketPool(true).pool;   // jackpots : aujourd'hui et les deux jours suivants au plus (beaucoup de sélections, un match dans 2 tickets au plus)
   // Probabilité prudente : jamais au-dessus de celle des cotes (sur un long combiné, un excès d'optimisme se multiplie).
   // Des sélections qui ont un sens : la victoire du favori (issue la plus probable, 45 % ou plus) ou une double chance à 60 % ou plus.
   // Ni nul, ni « pas de nul », ni outsider glissé pour gonfler la cote.
@@ -2046,6 +2062,98 @@ function openStepSheet(t){
   draw();
 }
 /* Historique : chaque ticket tel qu'il a été affiché (heure, sélections, cotes), avec le résultat de chaque sélection. */
+/* ===== Archive des tickets du jour =====
+   À la première ouverture de la journée, les tickets proposés sont enregistrés une fois pour toutes (« tickets du jour »).
+   Ils ne changent plus : seuls s'ajoutent, dans la journée, des tickets d'un nouveau type (ex. un pari à valeur apparu avec les cotes du soir).
+   Chaque jour est conservé dans l'archive (plus d'un an), avec ✅ / ❌ sur chaque match quand les résultats arrivent. */
+const serT = t => ({ name: t.name, kind: t.kind, P: t.P, Pany: t.Pany, O: t.O, lo: t.lo, hi: t.hi, ev: t.ev, est: !!t.est, stake: t.stake, why: t.why || "", jackpot: !!t.jackpot, mixed: !!t.mixed, at: nowStr(),
+  legs: t.legs.map(l => ({ lg: l.lg, h: l.m.h, a: l.m.a, d: l.m.d, k: l.k, o: l.o, p: l.p, est: !!l.est, H: l.H || l.hn, A: l.A || l.an, why: l.why || "" })) });
+const hydT = t => Object.assign({}, t, { legs: t.legs.map(l => Object.assign({}, l, { m: { h: l.h, a: l.a, d: l.d } })) });
+function dailySet(tab, build){
+  const K = "pl_arch_" + tab, today = nowStr().slice(0, 10);
+  let arch = LS.get(K, null);
+  if (!arch){   // reprise des tickets déjà notés par l'ancien journal : la première version de chaque ticket, jour par jour
+    arch = [];
+    const old = tjournal(tab === "t" ? "pl_tjournal" : "pl_mjournal").slice().sort((x, y) => x.at < y.at ? -1 : 1);
+    old.forEach(e => { const day = e.at.slice(0, 10); let set = arch.find(x => x.day === day); if (!set){ set = { day, at: e.at, tickets: [] }; arch.push(set); }
+      if (!set.tickets.some(x => x.name === e.name)) set.tickets.push({ name: e.name, kind: e.kind, P: e.P, O: e.O, ev: e.ev, stake: e.stake, at: e.at, est: false,
+        legs: e.legs.map(l => ({ lg: l.lg, h: l.h, a: l.a, d: l.d, k: l.k, o: l.o, H: l.hn, A: l.an, why: "" })) }); });
+  }
+  let cur = arch.find(x => x.day === today);
+  const fresh = build();
+  if (!cur){ if (fresh.length){ cur = { day: today, at: nowStr(), tickets: fresh.map(serT) }; arch.push(cur); } }
+  else fresh.forEach(t => { if (!cur.tickets.some(x => x.name === t.name)) cur.tickets.push(serT(t)); });
+  arch.sort((x, y) => x.day < y.day ? -1 : 1);
+  arch = arch.slice(-400); LS.set(K, arch);
+  return { arch, cur, T: cur ? cur.tickets.map(hydT) : [] };
+}
+const legSt = l => settleMk(l.k, findMatch({ lg: l.lg, h: l.h || l.m.h, a: l.a || l.m.a, d: l.d || l.m.d }));
+const legIcon = l => { const st = legSt(l); return st === "won" ? "✅" : st === "lost" ? "❌" : st === "void" ? "↩️" : (l.d || l.m.d) <= nowStr() ? "⏱️" : "⏳"; };
+const legScore = l => { const m = findMatch({ lg: l.lg, h: l.h || l.m.h, a: l.a || l.m.a, d: l.d || l.m.d }); return m && m.s ? ` · <strong>${m.s[0]}-${m.s[1]}</strong>${m.ht ? ` (mi-temps ${m.ht[0]}-${m.ht[1]})` : ""}` : ""; };
+function ticketRes(t){
+  const st = t.legs.map(legSt), ok = i => st[i] === "won" || st[i] === "void", odd = i => st[i] === "void" ? 1 : t.legs[i].o;
+  if (t.kind === "system"){
+    if (st.some(x => x == null)) return { res: null };
+    const ret = [[0,1],[0,2],[1,2]].reduce((s2, [x, y]) => s2 + (ok(x) && ok(y) ? odd(x) * odd(y) * t.stake / 3 : 0), 0);
+    return { res: ret > t.stake ? "won" : "lost", ret };
+  }
+  if (st.some(x => x === "lost")) return { res: "lost", ret: 0 };
+  if (st.every(x => x === "won" || x === "void")){ const ret = t.stake * t.legs.reduce((s2, l, i) => s2 * odd(i), 1); return { res: ret > t.stake ? "won" : "void", ret }; }
+  return { res: null };
+}
+const resBadge = t => { const r = ticketRes(t); return r.res === "won" ? `<span class="tag good">✅ Gagné · +${eur(r.ret - t.stake)}</span>` : r.res === "lost" ? `<span class="tag bad">❌ Perdu</span>` : r.res === "void" ? `<span class="tag muted">↩️ Remboursé</span>` : `<span class="tag muted">En cours</span>`; };
+function renderArchStats(arch, host){
+  const all = arch.flatMap(d => d.tickets.map(t => Object.assign(ticketRes(t), { name: t.name, stake: t.stake }))), done = all.filter(e => e.res);
+  if (!done.length){ $(host).innerHTML = `<p class="hint" style="margin:0">${all.length} ticket${all.length > 1 ? "s" : ""} enregistré${all.length > 1 ? "s" : ""}, en attente des résultats. Le bilan compte tous les tickets du jour proposés par l'application, avec la mise indiquée : ce que vous auriez gagné ou perdu en les jouant tous.</p>`; return; }
+  const sum = list => { const st = list.reduce((a, e) => a + e.stake, 0), ret = list.reduce((a, e) => a + (e.ret || 0), 0); return { n: list.length, won: list.filter(e => e.res === "won").length, st, pr: ret - st, roi: st ? (ret - st) / st : 0 }; };
+  const A = sum(done), names = [...new Set(done.map(e => e.name))];
+  $(host).innerHTML = `<div class="tk-kpis" style="margin-bottom:10px">
+      <div><span>Tickets terminés</span><b>${A.won} gagnés / ${A.n}</b></div>
+      <div><span>Bénéfice</span><b class="${A.pr >= 0 ? "edge-pos" : "edge-neg"}">${A.pr >= 0 ? "+" : ""}${eur(A.pr)}</b></div>
+      <div><span>Total misé</span><b>${eur(A.st)}</b></div>
+      <div><span>Rendement</span><b>${A.roi >= 0 ? "+" : ""}${pct(A.roi)}</b></div></div>
+    <ul class="legs bt-list">${names.map(n => { const x = sum(done.filter(e => e.name === n));
+      return `<li class="leg"><div><strong>${esc(n)}</strong><br><span class="hint">${x.won} gagné${x.won > 1 ? "s" : ""} sur ${x.n} · misé ${eur(x.st)}</span></div><div class="r num"><span class="${x.pr >= 0 ? "edge-pos" : "edge-neg"}">${x.pr >= 0 ? "+" : ""}${eur(x.pr)}</span><br><span class="hint">${x.roi >= 0 ? "+" : ""}${pct(x.roi)}</span></div></li>`; }).join("")}</ul>
+    <p class="hint" style="margin:8px 0 0">${all.length - done.length ? `${all.length - done.length} ticket(s) en cours. ` : ""}Comptez au moins une cinquantaine de tickets terminés avant de juger : sur quelques jours, la chance pèse plus que la méthode.</p>`;
+}
+function renderArchive(arch, host){
+  const today = nowStr().slice(0, 10), days = arch.filter(d => d.day !== today).slice().reverse();
+  if (!days.length){ $(host).innerHTML = `<p class="hint" style="margin:0">L'archive commence aujourd'hui : demain, vous retrouverez ici les tickets du jour avec leurs résultats, et ainsi chaque jour.</p>`; return; }
+  $(host).innerHTML = days.map(d => {
+    const rs = d.tickets.map(ticketRes), won = rs.filter(r => r.res === "won").length, fin = rs.filter(r => r.res).length;
+    return `<details style="border:1px solid var(--line);border-radius:10px;padding:8px 12px;margin-bottom:8px"><summary style="cursor:pointer"><strong>${fmtDay(d.day + "T12:00")}</strong> <span class="hint">· ${d.tickets.length} tickets · ${won} gagné${won > 1 ? "s" : ""}${fin < d.tickets.length ? ` · ${d.tickets.length - fin} en cours` : ""}</span></summary>
+      ${d.tickets.map(t => `<div style="margin-top:10px;padding-top:8px;border-top:1px dashed var(--line)"><div class="row" style="justify-content:space-between;align-items:center"><strong>${esc(t.name)}</strong>${resBadge(t)}</div>
+        <p class="hint" style="margin:2px 0 6px">cote ${fx(t.kind === "system" ? (t.hi || t.O || 0) : t.legs.reduce((a, l) => a * l.o, 1))} · mise ${eur(t.stake)}</p>
+        <ul class="legs bt-list">${t.legs.map(l => `<li class="leg"><div>${legIcon(l)} <strong>${esc(MARKETS[l.k] ? MARKETS[l.k].label(l.H, l.A) : l.k)}</strong><br><span class="hint">${esc(l.H)} – ${esc(l.A)} · ${fmtDay(l.d)} ${fmtTime(l.d)}${legScore(l)}</span></div><div class="r num">${fx(l.o)}</div></li>`).join("")}</ul></div>`).join("")}
+    </details>`;
+  }).join("");
+}
+// enregistre les tickets du jour des deux onglets, même s'ils n'ont pas été ouverts
+function ensureDaily(){ try { dailySet("t", buildTickets); dailySet("m", buildMetaTickets); } catch (e) { console.warn(e); } }
+function renderArchiveTab(){
+  ensureDaily();
+  const f = ["all","t","m"].includes(ui.arF) ? ui.arF : "all"; $("arFilter").value = f;
+  const tabs = f === "all" ? ["t","m"] : [f], src = { t: "Tickets", m: "Metabet" };
+  const byDay = {};
+  tabs.forEach(tab => LS.get("pl_arch_" + tab, []).forEach(d => { (byDay[d.day] = byDay[d.day] || []).push(...d.tickets.map(t => Object.assign({ src: tab, setAt: d.at }, t))); }));
+  const days = Object.keys(byDay).sort().reverse();
+  $("arList").innerHTML = days.length ? days.map(day => {
+    const T = byDay[day], rs = T.map(ticketRes), won = rs.filter(r => r.res === "won").length, lost = rs.filter(r => r.res === "lost").length, open = T.length - won - lost - rs.filter(r => r.res === "void").length;
+    return `<p class="daylabel" style="margin:14px 0 6px">${fmtDay(day + "T12:00")} · ${T.length} tickets · ✅ ${won} · ❌ ${lost}${open ? ` · ⏳ ${open}` : ""}</p>` + T.map((t, i) => {
+      const r = rs[i], sts = t.legs.map(legSt), nOk = sts.filter(x => x === "won" || x === "void").length;
+      const O = t.kind === "system" ? (t.hi || t.O || 0) : t.legs.reduce((a, l) => a * l.o, 1);
+      const badge = r.res === "won" ? `<span class="tag good">✅ Gagné +${eur(r.ret - t.stake)}</span>` : r.res === "lost" ? `<span class="tag bad">❌ Perdu</span>` : r.res === "void" ? `<span class="tag muted">↩️ Remboursé</span>` : `<span class="tag muted">⏳ En cours</span>`;
+      return `<details class="arch-t ${r.res || ""}"><summary>
+          <strong>${esc(t.name)}</strong>${badge}
+          <span class="hint">${src[t.src]} · ${t.legs.length} match${t.legs.length > 1 ? "s" : ""} · cote ${fx(O)} · mise ${eur(t.stake)}</span><span class="dots">${t.legs.map(legIcon).join("")}</span>
+        </summary><div class="body"><ul class="legs bt-list">${t.legs.map(l => `<li class="leg"><div>${legIcon(l)} <strong>${esc(MARKETS[l.k] ? MARKETS[l.k].label(l.H, l.A) : l.k)}</strong><br><span class="hint">${esc(l.H)} – ${esc(l.A)} · ${fmtDay(l.d)} ${fmtTime(l.d)}${legScore(l)}</span></div><div class="r num">${fx(l.o)}</div></li>`).join("")}</ul>
+        <p class="hint" style="margin:6px 0 0">${nOk} sur ${t.legs.length} sélection${t.legs.length > 1 ? "s" : ""} passée${nOk > 1 ? "s" : ""} · proposé le ${fmtDay(t.at || t.setAt)} à ${fmtTime(t.at || t.setAt)}</p></div></details>`;
+    }).join("");
+  }).join("") : `<div class="empty">L'archive est vide pour l'instant. Les tickets du jour y seront enregistrés dès la prochaine ouverture.</div>`;
+  const arch = tabs.flatMap(tab => LS.get("pl_arch_" + tab, []));
+  renderArchStats(arch, "arStats");
+}
+$("arFilter").onchange = () => { ui.arF = $("arFilter").value; saveUi(); renderArchiveTab(); };
 function renderHistory(key, host){
   const j = tjournal(key).slice().reverse().slice(0, 60);
   if (!j.length){ $(host).innerHTML = `<p class="hint" style="margin:0">Aucun ticket enregistré pour l'instant. Chaque ticket affiché est noté ici avec l'heure à laquelle il a été proposé.</p>`; return; }
@@ -2068,20 +2176,18 @@ function ticketText(t){
           t.kind === "system" ? `Mise totale : ${eur(t.stake)} (3 doubles de ${eur(t.stake/3)})` : `Cote totale : ${fx(t.O)} · Mise : ${eur(t.stake)}`].join("\n");
 }
 function renderTickets(){
-  settleTickets();
-  const T = buildTickets();
-  recordTickets(T); renderTicketStats(); renderHistory("pl_tjournal", "tHist");
-  $("tHint").textContent = T.length ? `${T.length} tickets, du plus risqué au plus sûr · bankroll ${eur(currentBank())}` : "";
+  const DS = dailySet("t", buildTickets), T = DS.T.slice().sort((a, b) => a.P - b.P);
+  $("tHint").textContent = DS.cur ? `Tickets du ${fmtDay(DS.cur.day + "T12:00")}, proposés à ${fmtTime(DS.cur.at)} · ils ne changent plus de la journée et sont enregistrés dans l'Archive` : "";
   if (!T.length){ $("tList").innerHTML = `<div class="empty">Pas assez de matchs dans les prochains jours pour composer des tickets. Revenez après la prochaine mise à jour des données.</div>`; }
   else {
     $("tList").innerHTML = T.map((t, i) => {
       const [rc, rl, col] = RISK(t.P), kind = t.kind === "system" ? "Système 2/3" : t.kind === "combo" ? `Combiné · ${t.legs.length} sélections` : "Simple";
       const gain = t.kind === "system" ? `${eur(t.stake * t.lo)} à ${eur(t.stake * t.hi)}` : eur(t.stake * t.O);
       return `<article class="panel ticket">
-        <div class="thead"><span class="tag ${rc}">${rl}</span>${t.ev > 0 && !t.est ? `<span class="tag" style="color:var(--warn)">★ rentable</span>` : ""}<strong>${esc(t.name)}</strong><span class="hint">${kind}</span></div>
+        <div class="thead"><span class="tag ${rc}">${rl}</span>${t.ev > 0 && !t.est ? `<span class="tag" style="color:var(--warn)">★ rentable</span>` : ""}<strong>${esc(t.name)}</strong><span class="hint">${kind}</span>${resBadge(t)}</div>
         <div class="riskbar" title="Chance de gain"><i style="width:${Math.max(2, t.P*100)}%;background:${col}"></i></div>
-        <ul class="legs">${t.legs.map(l => `<li class="leg"><div><strong>${esc(MARKETS[l.k].label(l.H, l.A))}</strong><br><span class="hint">${esc(l.H)} – ${esc(l.A)} · ${esc(DATA.leagues[l.lg].name)} · ${fmtDay(l.m.d)} ${fmtTime(l.m.d)}</span></div>
-          <div class="r num">${l.est ? "≈ " : ""}${fx(l.o)}<br><span class="hint">${pct(l.p)}</span></div></li>`).join("")}</ul>
+        <ul class="legs">${t.legs.map(l => `<li class="leg"><div>${legIcon(l)} <strong>${esc(MARKETS[l.k].label(l.H, l.A))}</strong><br><span class="hint">${esc(l.H)} – ${esc(l.A)} · ${esc(DATA.leagues[l.lg].name)} · ${fmtDay(l.m.d)} ${fmtTime(l.m.d)}${legScore(l)}</span></div>
+          <div class="r num">${l.est ? "≈ " : ""}${fx(l.o)}<br><span class="hint">${l.p != null ? pct(l.p) : ""}</span></div></li>`).join("")}</ul>
         <div class="tk-kpis">
           <div><span>Chance de gain</span><b>${t.P < 0.05 ? `1 sur ${Math.round(1 / t.P)}` : pct(t.P)}</b>${t.kind === "system" ? `<span>${pct(t.Pany)} d'au moins 2 sur 3</span>` : ""}</div>
           <div><span>${t.kind === "system" ? "Rapporte (× la mise)" : "Cote totale"}</span><b>${t.kind === "system" ? `${fx(t.lo,1)} à ${fx(t.hi,1)}` : fx(t.O)}</b></div>
@@ -2100,7 +2206,7 @@ function renderTickets(){
       else { toast(`Ticket copié`); window.open(bu, "_blank", "noopener"); }
     });
   }
-  $("tNote").innerHTML = `Les tickets sont classés du <strong>plus risqué</strong> (grosse cote, rarement gagnant) au <strong>plus sûr</strong> (petite cote, gagne souvent). La chance de gain d'un combiné est le produit des chances de chaque sélection : trois paris à 80 % ne font qu'environ 51 % ensemble. Le <strong>système 2 sur 3</strong> joue les trois doubles possibles : il rapporte si au moins deux sélections passent. La mise conseillée suit la Kelly ¼ quand le ticket a une espérance positive ; sinon c'est une petite mise de loisir, à ne jamais augmenter pour « se refaire ». Une seule sélection par match, matchs des 3 prochains jours (7 s'il en manque). Les matchs où le bookmaker garde plus de 15 % de marge (taux de retour sous 85 %) sont écartés. Les cotes de double chance sont déduites des cotes 1N2 puis réduites de 3 %, comme le font en général les bookmakers. Les combinés sont des paris distincts sur Unibet : vérifiez chaque cote avant de valider.`;
+  $("tNote").innerHTML = `Les tickets sont classés du <strong>plus risqué</strong> (grosse cote, rarement gagnant) au <strong>plus sûr</strong> (petite cote, gagne souvent). La chance de gain d'un combiné est le produit des chances de chaque sélection : trois paris à 80 % ne font qu'environ 51 % ensemble. Le <strong>système 2 sur 3</strong> joue les trois doubles possibles : il rapporte si au moins deux sélections passent. La mise conseillée suit la Kelly ¼ quand le ticket a une espérance positive ; sinon c'est une petite mise de loisir, à ne jamais augmenter pour « se refaire ». Une seule sélection par match, un même match dans 2 tickets au plus ; matchs d'aujourd'hui et de demain (jusqu'au surlendemain s'il en manque, et pour les jackpots). Les matchs où le bookmaker garde plus de 15 % de marge (taux de retour sous 85 %) sont écartés. Les cotes de double chance sont déduites des cotes 1N2 puis réduites de 3 %, comme le font en général les bookmakers. Les combinés sont des paris distincts sur Unibet : vérifiez chaque cote avant de valider.`;
 }
 
 /* ================= Vue : Metabet (laboratoire métaphysique) =================
@@ -2188,7 +2294,7 @@ function metaLab(){
    La cote vient des vraies cotes (ou est estimée, ≈) et la « chance réelle » du modèle statistique : c'est ce que vous jouez vraiment. */
 function metaPool(){
   const now = nowStr(); let out = [];
-  for (const days of [3, 7]){
+  for (const days of [daysToEnd(1), daysToEnd(2)]){
     out = [];
     for (const [lg, L] of Object.entries(DATA.leagues)) if (CL[lg]) upcoming(lg, days).filter(m => m.d > now && !ctxAlert(m)).forEach(m => {
       const C = CL[lg], H = C.T[m.h].name, A = C.T[m.a].name, r = predict(C, m.h, m.a);
@@ -2235,14 +2341,14 @@ function buildMetaTickets(){
 }
 function renderMeta(){
   settleTickets("pl_mjournal");
-  const now = nowStr(), T = buildMetaTickets();
-  recordTickets(T, "pl_mjournal"); renderTicketStats("pl_mjournal", "mbStats"); renderHistory("pl_mjournal", "mbHist");
+  const now = nowStr(), DS = dailySet("m", buildMetaTickets), T = DS.T.slice().sort((a, b) => a.P - b.P);
+
   $("mbList").innerHTML = T.length ? T.map((t, i) => {
     const [rc, rl, col] = RISK(t.P);
     return `<article class="panel ticket">
-      <div class="thead"><span class="tag ${rc}">${rl}</span><strong>${esc(t.name)}</strong><span class="hint">${t.legs.length > 1 ? `Combiné · ${t.legs.length} sélections` : "Simple"}</span></div>
+      <div class="thead"><span class="tag ${rc}">${rl}</span><strong>${esc(t.name)}</strong><span class="hint">${t.legs.length > 1 ? `Combiné · ${t.legs.length} sélections` : "Simple"}</span>${resBadge(t)}</div>
       <div class="riskbar" title="Chance réelle de gain"><i style="width:${Math.max(2, t.P*100)}%;background:${col}"></i></div>
-      <ul class="legs">${t.legs.map(l => `<li class="leg"><div><strong>${esc(OUT_LAB(l.k, l.H, l.A))}</strong><br><span class="hint">${esc(l.H)} – ${esc(l.A)} · ${fmtDay(l.m.d)} ${fmtTime(l.m.d)}</span><br><span class="hint">${esc(l.why)}</span></div>
+      <ul class="legs">${t.legs.map(l => `<li class="leg"><div>${legIcon(l)} <strong>${esc(OUT_LAB(l.k, l.H, l.A))}</strong><br><span class="hint">${esc(l.H)} – ${esc(l.A)} · ${fmtDay(l.m.d)} ${fmtTime(l.m.d)}${legScore(l)}</span><br><span class="hint">${esc(l.why)}</span></div>
         <div class="r num">${l.est ? "≈ " : ""}${fx(l.o)}<br><span class="hint">${pct(l.p)}</span></div></li>`).join("")}</ul>
       <div class="tk-kpis">
         <div><span>Chance réelle (modèle)</span><b>${t.P < 0.05 ? `1 sur ${Math.round(1 / t.P)}` : pct(t.P)}</b></div>
@@ -2429,6 +2535,7 @@ applyLive();
 autoSettle();
 renderFresh();
 setView(ui.view);
-refresh(false).then(() => refreshLive(false)).then(() => refreshScores(false));
+ensureDaily();
+refresh(false).then(() => refreshLive(false)).then(() => refreshScores(false)).then(() => { ensureDaily(); if (ui.view === "archive") renderArchiveTab(); });
 checkApk();
 </script>
