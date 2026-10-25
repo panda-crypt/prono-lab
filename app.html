@@ -390,6 +390,7 @@ table{border-collapse:collapse;width:100%}
     <!-- TICKETS -->
     <section class="view" id="v-tickets" hidden>
       <div class="viewhead"><h2>Tickets du moment</h2><span class="hint" id="tHint"></span></div>
+      <div class="panel" style="margin-bottom:12px"><p class="label">Bilan des tickets proposés (sans miser)</p><div id="tStats"></div></div>
       <div class="stack" id="tList"></div>
       <div class="panel" style="margin-top:16px"><p class="label">Comment lire ces tickets</p><p class="hint" id="tNote"></p></div>
     </section>
@@ -1098,7 +1099,7 @@ function findMatch(b){
       || L.matches.find(m => m.h === b.h && m.a === b.a && m.s && m.d.slice(0,10) >= b.d.slice(0,10));
 }
 function autoSettle(){
-  settleJournal();
+  settleJournal(); settleTickets();
   const b = bets(); let changed = 0;
   b.forEach(x => {
     if (x.status !== "pending" || !MARKETS[x.mk]) return;
@@ -1629,7 +1630,7 @@ function ticketPool(){
   const list = [];
   for (const lg of Object.keys(DATA.leagues)) if (CL[lg]) upcoming(lg, 7).filter(m => m.odds && m.d > now).forEach(m => list.push({ lg, m, C: CL[lg] }));
   const value = planMatches(list).filter(x => x.best && x.stake > 0).sort((a,b) => b.edge - a.edge)
-    .map(x => ({ lg: x.lg, m: x.m, H: x.H, A: x.A, k: x.k, p: x.p, o: x.o, est: false, bk: x.bk || "", stake: x.stake, edge: x.edge }));
+    .map(x => ({ lg: x.lg, m: x.m, H: x.H, A: x.A, k: x.k, p: x.p, o: x.o, est: false, bk: x.bk || "", stake: x.stake, edge: x.edge, sharp: !!x.sharp }));
   return { pool, value };
 }
 function mkTicket(kind, name, legs, extra = {}){
@@ -1676,10 +1677,62 @@ function buildTickets(){
   if (safe.length >= 3) add(mkTicket("combo", "Combiné de 3 paris verts", safe.slice(0, 3)));
   if (sysLegs.length === 3) add(mkTicket("system", "Système 2 sur 3 (victoires)", sysLegs));
   if (value.length) add(mkTicket("simple", "Simple à valeur", value.slice(0, 1), { valueStake: value[0].stake }));
+  // combinés de paris à valeur : l'avantage de chaque sélection se multiplie (deux paris à +5 % font un combiné à +10 %)
+  // seulement des valeurs confirmées par les cotes de référence en direct, et pas de grosses cotes (l'erreur s'y multiplie)
+  const vc = value.filter(v => v.sharp && v.p >= 0.35);
+  if (vc.length >= 2) add(mkTicket("combo", "Combiné rentable ×2", vc.slice(0, 2)));
+  if (vc.length >= 3) add(mkTicket("combo", "Combiné rentable ×3", vc.slice(0, 3)));
   if (wins.length >= 3) add(mkTicket("combo", "Combiné de 3 victoires", wins.slice(0, 3)));
   if (wins.length >= 5) add(mkTicket("combo", "Grosse cote : 5 victoires", wins.slice(0, 5)));
   out.forEach(t => Object.assign(t, ticketStake(t)));
   return out.sort((a,b) => a.P - b.P);   // du moins sûr au plus sûr
+}
+/* Bilan : chaque ticket proposé est noté (une fois), puis réglé avec les résultats, à la mise conseillée.
+   C'est la mesure honnête de l'onglet, que vous ayez joué les tickets ou non. */
+const tjournal = () => LS.get("pl_tjournal", []);
+const ticketId = t => t.kind + "|" + t.legs.map(l => `${l.lg}:${l.m.h}:${l.m.a}:${l.k}`).sort().join(",");
+function recordTickets(T){
+  const j = tjournal(), ids = new Set(j.map(e => e.id)), now = nowStr(); let ch = false;
+  T.forEach(t => {
+    const id = ticketId(t); if (ids.has(id) || t.legs.some(l => l.m.d <= now) || !(t.stake > 0)) return;
+    j.push({ id, at: now, name: t.name, kind: t.kind, stake: t.stake, P: t.P, ev: t.ev, O: t.O,
+             legs: t.legs.map(l => ({ lg: l.lg, h: l.m.h, a: l.m.a, d: l.m.d, k: l.k, o: l.o, hn: l.H, an: l.A })) });
+    ids.add(id); ch = true;
+  });
+  if (ch) LS.set("pl_tjournal", j.slice(-400));
+}
+function settleTickets(){
+  const j = tjournal(); let ch = false;
+  j.forEach(e => {
+    if (e.res) return;
+    const st = e.legs.map(l => { const m = findMatch(l); return m && m.s ? (MARKETS[l.k].win(m.s[0], m.s[1]) ? 1 : 0) : null; });
+    if (e.kind === "system"){
+      if (st.some(x => x == null)) return;
+      const pairs = [[0,1],[0,2],[1,2]], ret = pairs.reduce((s,[x,y]) => s + (st[x] && st[y] ? e.legs[x].o * e.legs[y].o * e.stake / 3 : 0), 0);
+      e.ret = ret; e.res = ret > e.stake ? "won" : "lost";
+    } else if (st.some(x => x === 0)){ e.res = "lost"; e.ret = 0; }
+    else if (st.every(x => x === 1)){ e.res = "won"; e.ret = e.stake * e.legs.reduce((s,l) => s * l.o, 1); }
+    else return;
+    e.settledAt = nowStr(); ch = true;
+  });
+  if (ch) LS.set("pl_tjournal", j);
+}
+function renderTicketStats(){
+  const j = tjournal(), done = j.filter(e => e.res), pend = j.length - done.length;
+  if (!done.length){
+    $("tStats").innerHTML = `<p class="hint" style="margin:0">${j.length ? `${j.length} ticket${j.length>1?"s":""} noté${j.length>1?"s":""}, en attente des résultats.` : "Aucun ticket noté pour l'instant."} Chaque ticket affiché ci-dessous est noté automatiquement avec sa mise conseillée, puis réglé quand les résultats arrivent dans les données : vous verrez ici ce que vous auriez gagné ou perdu en les jouant tous.</p>`;
+    return;
+  }
+  const sum = list => { const st = list.reduce((s,e) => s + e.stake, 0), ret = list.reduce((s,e) => s + (e.ret || 0), 0); return { n: list.length, won: list.filter(e => e.res === "won").length, st, pr: ret - st, roi: st ? (ret - st) / st : 0 }; };
+  const all = sum(done), names = [...new Set(done.map(e => e.name))];
+  const row = (n, x) => `<tr><td class="l">${esc(n)}</td><td class="num">${x.won}/${x.n}</td><td class="num">${eur(x.st)}</td><td class="num ${x.pr>=0?"edge-pos":"edge-neg"}">${x.pr>=0?"+":""}${eur(x.pr)}</td><td class="num">${x.roi>=0?"+":""}${pct(x.roi)}</td></tr>`;
+  $("tStats").innerHTML = `<div class="tk-kpis" style="margin-bottom:10px">
+      <div><span>Tickets réglés</span><b>${all.won} gagnés / ${all.n}</b></div>
+      <div><span>Bénéfice</span><b class="${all.pr>=0?"edge-pos":"edge-neg"}">${all.pr>=0?"+":""}${eur(all.pr)}</b></div>
+      <div><span>Total misé</span><b>${eur(all.st)}</b></div>
+      <div><span>Rendement</span><b>${all.roi>=0?"+":""}${pct(all.roi)}</b></div></div>
+    <div class="scroll"><table class="vtable"><thead><tr><th class="l">Ticket</th><th>Gagnés</th><th>Misé</th><th>Bénéfice</th><th>Rendement</th></tr></thead><tbody>${names.map(n => row(n, sum(done.filter(e => e.name === n)))).join("")}</tbody></table></div>
+    <p class="hint" style="margin:8px 0 0">${pend ? `${pend} ticket${pend>1?"s":""} en attente. ` : ""}Comptez au moins une cinquantaine de tickets réglés avant de juger : sur quelques jours, la chance pèse plus que la méthode.</p>`;
 }
 function ticketText(t){
   const kind = t.kind === "system" ? "Système 2/3" : t.kind === "combo" ? `Combiné ${t.legs.length} sélections` : "Simple";
@@ -1687,7 +1740,9 @@ function ticketText(t){
           t.kind === "system" ? `Mise totale : ${eur(t.stake)} (3 doubles de ${eur(t.stake/3)})` : `Cote totale : ${fx(t.O)} · Mise : ${eur(t.stake)}`].join("\n");
 }
 function renderTickets(){
+  settleTickets();
   const T = buildTickets();
+  recordTickets(T); renderTicketStats();
   $("tHint").textContent = T.length ? `${T.length} tickets, du plus risqué au plus sûr · bankroll ${eur(currentBank())}` : "";
   if (!T.length){ $("tList").innerHTML = `<div class="empty">Pas assez de matchs dans les prochains jours pour composer des tickets. Revenez après la prochaine mise à jour des données.</div>`; }
   else {
@@ -1695,7 +1750,7 @@ function renderTickets(){
       const [rc, rl, col] = RISK(t.P), kind = t.kind === "system" ? "Système 2/3" : t.kind === "combo" ? `Combiné · ${t.legs.length} sélections` : "Simple";
       const gain = t.kind === "system" ? `${eur(t.stake * t.lo)} à ${eur(t.stake * t.hi)}` : eur(t.stake * t.O);
       return `<article class="panel ticket">
-        <div class="thead"><span class="tag ${rc}">${rl}</span><strong>${esc(t.name)}</strong><span class="hint">${kind}</span></div>
+        <div class="thead"><span class="tag ${rc}">${rl}</span>${t.ev > 0 && !t.est ? `<span class="tag" style="color:var(--warn)">★ rentable</span>` : ""}<strong>${esc(t.name)}</strong><span class="hint">${kind}</span></div>
         <div class="riskbar" title="Chance de gain"><i style="width:${Math.max(2, t.P*100)}%;background:${col}"></i></div>
         <ul class="legs">${t.legs.map(l => `<li class="leg"><div><strong>${esc(MARKETS[l.k].label(l.H, l.A))}</strong><br><span class="hint">${esc(l.H)} – ${esc(l.A)} · ${esc(DATA.leagues[l.lg].name)} · ${fmtDay(l.m.d)} ${fmtTime(l.m.d)}</span></div>
           <div class="r num">${l.est ? "≈ " : ""}${fx(l.o)}<br><span class="hint">${pct(l.p)}</span></div></li>`).join("")}</ul>
