@@ -641,7 +641,80 @@ const MARKETS = {
   "HP1_2": { label:(h,a)=>`Handicap ${a} (-1) : gagne par 2 buts ou plus`, p:r=>hcp(r, d => d <= -2), win:(x,y)=>x-y <= -2 },
   "HM2_2": { label:(h,a)=>`Handicap ${a} (+2) : ne perd pas par 2 buts ou plus`, p:r=>hcp(r, d => d <= 1), win:(x,y)=>x-y <= 1 },
   "HP2_1": { label:(h)=>`Handicap ${h} (+2) : ne perd pas par 2 buts ou plus`, p:r=>hcp(r, d => d >= -1), win:(x,y)=>x-y >= -1 },
+  // Remboursé si match nul : probabilité de gagner hors nul (le nul rembourse la mise)
+  "DNB1": { label:(h)=>`Remboursé si nul : ${h}`, p:r=>r.pH/(r.pH+r.pA), win:(x,y)=>x>y, push:(x,y)=>x===y },
+  "DNB2": { label:(h,a)=>`Remboursé si nul : ${a}`, p:r=>r.pA/(r.pH+r.pA), win:(x,y)=>y>x, push:(x,y)=>x===y },
+  // Buts d'une équipe
+  "HO05": { label:(h)=>`${h} marque au moins 1 but`, p:r=>sc(r, (i,j)=>i>=1), win:(x,y)=>x>=1 },
+  "AO05": { label:(h,a)=>`${a} marque au moins 1 but`, p:r=>sc(r, (i,j)=>j>=1), win:(x,y)=>y>=1 },
+  "HO15": { label:(h)=>`${h} marque 2 buts ou plus`, p:r=>sc(r, (i,j)=>i>=2), win:(x,y)=>x>=2 },
+  "AO15": { label:(h,a)=>`${a} marque 2 buts ou plus`, p:r=>sc(r, (i,j)=>j>=2), win:(x,y)=>y>=2 },
+  // Combinés du même match
+  "W1BY": { label:(h)=>`Victoire ${h} et les deux marquent`, p:r=>sc(r, (i,j)=>i>j&&j>0), win:(x,y)=>x>y&&y>0 },
+  "W2BY": { label:(h,a)=>`Victoire ${a} et les deux marquent`, p:r=>sc(r, (i,j)=>j>i&&i>0), win:(x,y)=>y>x&&x>0 },
+  "W1O25": { label:(h)=>`Victoire ${h} et plus de 2,5 buts`, p:r=>sc(r, (i,j)=>i>j&&i+j>2), win:(x,y)=>x>y&&x+y>2 },
+  "W2O25": { label:(h,a)=>`Victoire ${a} et plus de 2,5 buts`, p:r=>sc(r, (i,j)=>j>i&&i+j>2), win:(x,y)=>y>x&&x+y>2 },
+  "BYO25": { label:()=>"Les deux marquent et plus de 2,5 buts", p:r=>sc(r, (i,j)=>i>0&&j>0&&i+j>2), win:(x,y)=>x>0&&y>0&&x+y>2 },
+  // Sans encaisser
+  "CS1": { label:(h)=>`${h} gagne sans encaisser de but`, p:r=>sc(r, (i,j)=>i>0&&j===0), win:(x,y)=>x>0&&y===0 },
+  "CS2": { label:(h,a)=>`${a} gagne sans encaisser de but`, p:r=>sc(r, (i,j)=>j>0&&i===0), win:(x,y)=>y>0&&x===0 },
+  "NC1": { label:(h)=>`${h} n'encaisse aucun but`, p:r=>sc(r, (i,j)=>j===0), win:(x,y)=>y===0 },
+  "NC2": { label:(h,a)=>`${a} n'encaisse aucun but`, p:r=>sc(r, (i,j)=>i===0), win:(x,y)=>x===0 },
+  // Écart et nombre exact de buts
+  "M1_3": { label:(h)=>`${h} gagne par 3 buts ou plus`, p:r=>sc(r, (i,j)=>i-j>=3), win:(x,y)=>x-y>=3 },
+  "M2_3": { label:(h,a)=>`${a} gagne par 3 buts ou plus`, p:r=>sc(r, (i,j)=>j-i>=3), win:(x,y)=>y-x>=3 },
+  "TG0": { label:()=>"Aucun but (0-0)", p:r=>sc(r, (i,j)=>i+j===0), win:(x,y)=>x+y===0 },
+  "TG1": { label:()=>"Exactement 1 but", p:r=>sc(r, (i,j)=>i+j===1), win:(x,y)=>x+y===1 },
+  "TG2": { label:()=>"Exactement 2 buts", p:r=>sc(r, (i,j)=>i+j===2), win:(x,y)=>x+y===2 },
+  "TG3": { label:()=>"Exactement 3 buts", p:r=>sc(r, (i,j)=>i+j===3), win:(x,y)=>x+y===3 },
+  "TG4": { label:()=>"4 buts ou plus", p:r=>sc(r, (i,j)=>i+j>=4), win:(x,y)=>x+y>=4 },
+  "ODD": { label:()=>"Nombre de buts impair", p:r=>sc(r, (i,j)=>(i+j)%2===1), win:(x,y)=>(x+y)%2===1 },
+  "EVEN": { label:()=>"Nombre de buts pair (0 compris)", p:r=>sc(r, (i,j)=>(i+j)%2===0), win:(x,y)=>(x+y)%2===0 },
+  // Premier but (approximation : chaque but revient à une équipe en proportion de ses buts attendus)
+  "FS1": { label:(h)=>`${h} marque le premier`, p:r=>(1-sc(r, (i,j)=>i+j===0))*r.lh/(r.lh+r.la), win:null, nofs:true },
+  "FS2": { label:(h,a)=>`${a} marque le premier`, p:r=>(1-sc(r, (i,j)=>i+j===0))*r.la/(r.lh+r.la), win:null, nofs:true },
+  // Mi-temps (44,7 % des buts sont marqués avant la pause, mesuré sur 7 saisons ; les deux périodes sont traitées comme indépendantes)
+  "HT1": { label:(h)=>`Mi-temps : ${h} mène`, p:r=>half(r).A1, ht:true, win:(x,y,t)=>t[0]>t[1] },
+  "HTN": { label:()=>"Mi-temps : nul", p:r=>half(r).AN, ht:true, win:(x,y,t)=>t[0]===t[1] },
+  "HT2": { label:(h,a)=>`Mi-temps : ${a} mène`, p:r=>half(r).A2, ht:true, win:(x,y,t)=>t[0]<t[1] },
+  "HTO05": { label:()=>"Au moins 1 but en 1re mi-temps", p:r=>1-half(r).A[0][0], ht:true, win:(x,y,t)=>t[0]+t[1]>=1 },
+  "HTU15": { label:()=>"Moins de 1,5 but en 1re mi-temps", p:r=>half(r).U15, ht:true, win:(x,y,t)=>t[0]+t[1]<=1 },
+  "BH": { label:()=>"But dans les deux mi-temps", p:r=>(1-half(r).A[0][0])*(1-half(r).B[0][0]), ht:true, win:(x,y,t)=>t[0]+t[1]>0 && x+y-t[0]-t[1]>0 },
+  "MH1": { label:()=>"1re mi-temps plus prolifique", p:r=>half(r).more1, ht:true, win:(x,y,t)=>t[0]+t[1] > x+y-t[0]-t[1] },
+  "MH2": { label:()=>"2e mi-temps plus prolifique", p:r=>half(r).more2, ht:true, win:(x,y,t)=>t[0]+t[1] < x+y-t[0]-t[1] },
+  "MHE": { label:()=>"Autant de buts dans chaque mi-temps", p:r=>1-half(r).more1-half(r).more2, ht:true, win:(x,y,t)=>t[0]+t[1] === x+y-t[0]-t[1] },
 };
+// Mi-temps / fin de match : 9 combinaisons
+[["1","1"],["1","N"],["1","2"],["N","1"],["N","N"],["N","2"],["2","1"],["2","N"],["2","2"]].forEach(([u, v]) => {
+  const res = (a, b) => a > b ? "1" : a === b ? "N" : "2", nm = (k, h, a) => k === "1" ? h : k === "2" ? a : "Nul";
+  MARKETS[`HF_${u}${v}`] = { label:(h,a)=>`Mi-temps ${nm(u,h,a)} / Fin ${nm(v,h,a)}`, p:r=>half(r).hf[u+v], ht:true, win:(x,y,t)=>res(t[0],t[1])===u && res(x,y)===v };
+});
+function sc(r, f){ let p = 0; for (const [i, j, q] of r.sc) if (f(i, j)) p += q; return p; }
+const HT_SHARE = 0.447;
+function half(r){
+  if (r._half) return r._half;
+  const G = 7, po = (k, l) => { let f = 1; for (let i = 2; i <= k; i++) f *= i; return Math.exp(-l) * Math.pow(l, k) / f; };
+  const grid = s => { const M = []; let t = 0; for (let i = 0; i <= G; i++){ M[i] = []; for (let j = 0; j <= G; j++){ M[i][j] = po(i, r.lh*s) * po(j, r.la*s); t += M[i][j]; } } M.forEach(row => row.forEach((_, j, a) => a[j] /= t)); return M; };
+  const A = grid(HT_SHARE), B = grid(1 - HT_SHARE), o = { A, B, A1:0, AN:0, A2:0, U15:0, more1:0, more2:0, hf:{} };
+  ["11","1N","12","N1","NN","N2","21","2N","22"].forEach(k => o.hf[k] = 0);
+  const res = (a, b) => a > b ? "1" : a === b ? "N" : "2";
+  for (let i = 0; i <= G; i++) for (let j = 0; j <= G; j++){
+    const pa = A[i][j]; if (pa < 1e-9) continue;
+    const h1 = res(i, j); if (h1 === "1") o.A1 += pa; else if (h1 === "N") o.AN += pa; else o.A2 += pa;
+    if (i + j <= 1) o.U15 += pa;
+    for (let k = 0; k <= G; k++) for (let l = 0; l <= G; l++){ const pb = B[k][l]; if (pb < 1e-9) continue; const q = pa * pb;
+      o.hf[h1 + res(i + k, j + l)] += q; if (i + j > k + l) o.more1 += q; else if (i + j < k + l) o.more2 += q; }
+  }
+  return (r._half = o);
+}
+// Règlement d'un pari : "won" | "lost" | "void" (remboursé) | null (en attente : pas de score, ou score à la mi-temps manquant)
+function settleMk(k, m){
+  const M = MARKETS[k]; if (!M || !m || !m.s) return null;
+  if (M.ht && !m.ht) return null;
+  if (!M.win) return null;                       // premier buteur d'équipe : pas d'ordre des buts dans les données, à régler à la main
+  if (M.push && M.push(m.s[0], m.s[1])) return "void";
+  return M.win(m.s[0], m.s[1], m.ht) ? "won" : "lost";
+}
 function hcp(r, f){ let p = 0; for (const [i, j, q] of r.sc) if (f(i - j)) p += q; return p; }
 // Handicaps retenus pour les paris mis en avant : le favori à -1 (gagne nettement), l'outsider à +2 (ne s'effondre pas).
 // Les handicaps +1 / -1 inverses reviennent exactement à la double chance : inutile de les doubler.
@@ -672,7 +745,7 @@ const SAFE_P = 0.80;
 const WIN_P = 0.70;
 const pickOf = cands => cands.filter(c => (c.k === "1" || c.k === "2") && c.p >= WIN_P).sort((a,b) => b.p - a.p)[0] || cands.sort((a,b) => b.p - a.p)[0];
 const isSafe = c => c.p >= ((c.k === "1" || c.k === "2") ? WIN_P : SAFE_P);
-const TOP_KEYS = ["1","2","1N","N2","12","O15","O25","U25","U35","BY","BN","HM1_1","HP1_2","HM2_2","HP2_1"];
+const TOP_KEYS = ["1","2","1N","N2","12","O15","O25","U25","U35","BY","BN","HM1_1","HP1_2","HM2_2","HP2_1","HO05","AO05","HO15","AO15","W1BY","W2BY","W1O25","W2O25","BYO25","CS1","CS2","NC1","NC2"];
 if (!MARKETS.U35) MARKETS.U35 = { label:()=>"Moins de 3,5 buts", p:r=>1-r.o35, win:(x,y)=>x+y<4 };
 let CAL = null;
 function calib(){
@@ -1125,7 +1198,7 @@ function trackLive(){
 }
 function settleJournal(){
   const j = journal(); let ch = false;
-  j.forEach(e => { if (e.res) return; const m = findMatch(e); if (m && m.s){ e.res = MARKETS[e.mk].win(m.s[0], m.s[1]) ? "won" : "lost"; e.score = m.s; ch = true; } });
+  j.forEach(e => { if (e.res) return; const m = findMatch(e), st = settleMk(e.mk, m); if (st){ e.res = st; e.score = m.s; ch = true; } });
   if (ch) LS.set("pl_journal", j);
 }
 function journalStats(){
@@ -1150,8 +1223,8 @@ function autoSettle(){
   const b = bets(); let changed = 0;
   b.forEach(x => {
     if (x.status !== "pending" || !MARKETS[x.mk]) return;
-    const m = findMatch(x); if (!m || !m.s) return;
-    x.status = MARKETS[x.mk].win(m.s[0], m.s[1]) ? "won" : "lost"; x.score = m.s; x.settledAt = nowStr(); changed++;
+    const m = findMatch(x), st = settleMk(x.mk, m); if (!st) return;
+    x.status = st; x.score = m.s; if (m.ht) x.ht = m.ht; x.settledAt = nowStr(); changed++;
   });
   if (changed) saveBets(b);
   return changed;
@@ -1409,8 +1482,15 @@ function renderAnalyse(){
     return `<div class="pick${main?" main":""}"><div class="k">${k}</div><div class="v">${esc(v)}</div><div class="s"><span class="num">${pct(p)}</span><span class="tag ${c}">${l}</span></div></div>`; };
   $("aPicks").innerHTML = card("Pronostic principal", mp[1], mp[2], true) + card("Nombre de buts", gp[1], gp[2]) + card("Les deux marquent", bt[1], bt[2]) + card("Score le plus probable", `${r.sc[0][0]} – ${r.sc[0][1]}`, r.sc[0][2], false, true);
 
-  const mks = ["1","N","2","1N","N2","12","O15","O25","U25","O35","BY","BN","HM1_1","HM1_N","HP1_N","HP1_2","HM2_2","HP2_1"];
-  $("aMarkets").innerHTML = mks.map(k => { const p = MARKETS[k].p(r);
+  const mks = ["#Résultat","1","N","2","1N","N2","12","DNB1","DNB2",
+    "#Buts","O15","O25","U25","O35","U35","TG0","TG1","TG2","TG3","TG4","ODD","EVEN",
+    "#Les deux marquent","BY","BN","BYO25",
+    "#Buts par équipe","HO05","AO05","HO15","AO15","NC1","NC2","FS1","FS2",
+    "#Résultat et buts","W1BY","W2BY","W1O25","W2O25","CS1","CS2",
+    "#Handicap européen et écart","HM1_1","HM1_N","HP1_N","HP1_2","HM2_2","HP2_1","M1_3","M2_3",
+    "#Mi-temps","HT1","HTN","HT2","HTO05","HTU15","BH","MH1","MH2","MHE",
+    "#Mi-temps / fin de match","HF_11","HF_1N","HF_12","HF_N1","HF_NN","HF_N2","HF_21","HF_2N","HF_22"];
+  $("aMarkets").innerHTML = mks.map(k => { if (k[0] === "#") return `<tr><td colspan="4" style="padding-top:12px"><span class="label" style="margin:0">${esc(k.slice(1))}</span></td></tr>`; const p = MARKETS[k].p(r);
     return `<tr><td>${esc(MARKETS[k].label(H.name, A.name))}<div class="meter"><i style="width:${(p*100).toFixed(1)}%"></i></div></td><td class="r num">${pct(p,1)}</td><td class="r num">${p>0.01?fx(1/p):"—"}</td><td class="r"><button type="button" class="add" data-mk="${k}" title="Suivre ce pari" aria-label="Suivre ce pari">+</button></td></tr>`; }).join("");
   $("aMarkets").querySelectorAll("[data-mk]").forEach(b => b.onclick = () => {
     const k = b.dataset.mk, idmap = { "1":"ao1", "N":"aoN", "2":"ao2", "O25":"aoO", "U25":"aoU", "BY":"aoY", "BN":"aoNo" };
@@ -1657,6 +1737,9 @@ function oddsFor(m, k, p){
     if (k === "1N") return { o: dc(a, n), est: true };
     if (k === "N2") return { o: dc(n, b), est: true };
     if (k === "12") return { o: dc(a, b), est: true };
+    // remboursé si nul : cote1 × (coteN − 1) / coteN, avec la même décote de 3 %
+    if (k === "DNB1") return { o: Math.max(1.01, DC * a * (n - 1) / n), est: true };
+    if (k === "DNB2") return { o: Math.max(1.01, DC * b * (n - 1) / n), est: true };
   }
   if ((k === "O25" || k === "U25") && od && od.ou && ok(od.ou.o)) return { o: od.ou.o[k === "O25" ? 0 : 1], bk: od.ou.bk };
   if ((k === "BY" || k === "BN") && od && od.btts && ok(od.btts.o)) return { o: od.btts.o[k === "BY" ? 0 : 1], bk: od.btts.bk };
@@ -1754,7 +1837,7 @@ function buildTickets(){
       let ok;
       if (a.k === "1" || a.k === "2") ok = !a.guess && a.k === fav && p >= 0.45;                       // victoire du favori
       else if (a.k === "1N" || a.k === "N2") ok = !a.guess && p >= 0.6 && (a.k === "1N" ? fav === "1" : fav === "2");   // double chance du favori
-      else if (["O15","O25","U25","U35","BY","BN","HM2_2","HP2_1"].includes(a.k)) ok = p >= 0.6;      // buts, les deux marquent, outsider +2
+      else if (["O15","O25","U25","U35","BY","BN","HM2_2","HP2_1","HO05","AO05","HO15","AO15","W1BY","W2BY","W1O25","W2O25","BYO25","CS1","CS2","NC1","NC2"].includes(a.k)) ok = p >= 0.6;      // buts, les deux marquent, outsider +2, buts d'une équipe, combinés du match
       else if (a.k === "HM1_1" || a.k === "HP1_2") ok = p >= 0.45;                                       // favori -1 : gagne par 2 buts ou plus
       else ok = false;                                                                                  // ni nul, ni « pas de nul »
       if (!ok) return;
@@ -1803,13 +1886,14 @@ function settleTickets(key = "pl_tjournal"){
   const j = tjournal(key); let ch = false;
   j.forEach(e => {
     if (e.res) return;
-    const st = e.legs.map(l => { const m = findMatch(l); return m && m.s ? (MARKETS[l.k].win(m.s[0], m.s[1]) ? 1 : 0) : null; });
+    // sélection remboursée (« void ») : comptée à la cote 1, comme chez les bookmakers
+    const st = e.legs.map(l => settleMk(l.k, findMatch(l))), oddOf = (i) => st[i] === "void" ? 1 : e.legs[i].o, ok = i => st[i] === "won" || st[i] === "void";
     if (e.kind === "system"){
       if (st.some(x => x == null)) return;
-      const pairs = [[0,1],[0,2],[1,2]], ret = pairs.reduce((s,[x,y]) => s + (st[x] && st[y] ? e.legs[x].o * e.legs[y].o * e.stake / 3 : 0), 0);
+      const pairs = [[0,1],[0,2],[1,2]], ret = pairs.reduce((s,[x,y]) => s + (ok(x) && ok(y) ? oddOf(x) * oddOf(y) * e.stake / 3 : 0), 0);
       e.ret = ret; e.res = ret > e.stake ? "won" : "lost";
-    } else if (st.some(x => x === 0)){ e.res = "lost"; e.ret = 0; }
-    else if (st.every(x => x === 1)){ e.res = "won"; e.ret = e.stake * e.legs.reduce((s,l) => s * l.o, 1); }
+    } else if (st.some(x => x === "lost")){ e.res = "lost"; e.ret = 0; }
+    else if (st.every(x => x === "won" || x === "void")){ e.ret = e.stake * e.legs.reduce((s,l,i) => s * oddOf(i), 1); e.res = e.ret > e.stake ? "won" : "void"; }
     else return;
     e.settledAt = nowStr(); ch = true;
   });
@@ -1844,7 +1928,23 @@ function bookLabel(k, h, a){
     "HM1_1": ["Handicap (1N2, 90 min)", `${h} (-1)`], "HP1_2": ["Handicap (1N2, 90 min)", `${a} (-1)`],
     "HM2_2": ["Handicap (1N2, 90 min)", `${a} (+2)`], "HP2_1": ["Handicap (1N2, 90 min)", `${h} (+2)`],
     "HM1_N": ["Handicap (1N2, 90 min)", `Nul (${h} -1)`], "HP1_N": ["Handicap (1N2, 90 min)", `Nul (${a} -1)`],
+    "DNB1": ["Remboursé si match nul", h], "DNB2": ["Remboursé si match nul", a],
+    "HO05": [`Nombre de buts ${h}`, "Plus de 0,5"], "AO05": [`Nombre de buts ${a}`, "Plus de 0,5"],
+    "HO15": [`Nombre de buts ${h}`, "Plus de 1,5"], "AO15": [`Nombre de buts ${a}`, "Plus de 1,5"],
+    "W1BY": ["Résultat et les 2 équipes marquent", `${h} et Oui`], "W2BY": ["Résultat et les 2 équipes marquent", `${a} et Oui`],
+    "W1O25": ["Résultat et nombre de buts", `${h} et Plus de 2,5`], "W2O25": ["Résultat et nombre de buts", `${a} et Plus de 2,5`],
+    "BYO25": ["Les 2 équipes marquent et nombre de buts", "Oui et Plus de 2,5"],
+    "CS1": ["Gagne sans encaisser de but", h], "CS2": ["Gagne sans encaisser de but", a],
+    "NC1": [`${h} n'encaisse pas de but`, "Oui"], "NC2": [`${a} n'encaisse pas de but`, "Oui"],
+    "M1_3": ["Écart de buts", `${h} par 3 ou plus`], "M2_3": ["Écart de buts", `${a} par 3 ou plus`],
+    "TG0": ["Nombre exact de buts", "0"], "TG1": ["Nombre exact de buts", "1"], "TG2": ["Nombre exact de buts", "2"], "TG3": ["Nombre exact de buts", "3"], "TG4": ["Nombre exact de buts", "4 ou plus"],
+    "ODD": ["Nombre de buts pair / impair", "Impair"], "EVEN": ["Nombre de buts pair / impair", "Pair"],
+    "FS1": ["Équipe qui marque le premier but", h], "FS2": ["Équipe qui marque le premier but", a],
+    "HT1": ["Résultat à la mi-temps", h], "HTN": ["Résultat à la mi-temps", "Nul"], "HT2": ["Résultat à la mi-temps", a],
+    "HTO05": ["Nombre de buts en 1re mi-temps", "Plus de 0,5"], "HTU15": ["Nombre de buts en 1re mi-temps", "Moins de 1,5"],
+    "BH": ["But dans les 2 mi-temps", "Oui"], "MH1": ["Mi-temps la plus prolifique", "1re mi-temps"], "MH2": ["Mi-temps la plus prolifique", "2e mi-temps"], "MHE": ["Mi-temps la plus prolifique", "Égalité"],
   };
+  if (k.startsWith("HF_")){ const nm = c => c === "1" ? h : c === "2" ? a : "Nul"; return ["Mi-temps / Fin de match", `${nm(k[3])} / ${nm(k[4])}`]; }
   return L[k] || ["Pari", MARKETS[k] ? MARKETS[k].label(h, a) : k];
 }
 function openStepSheet(t){

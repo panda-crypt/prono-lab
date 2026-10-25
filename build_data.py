@@ -1,6 +1,7 @@
 """Assemble data.json for Prono Lab from raw/*.txt (results + fixtures) and raw/meta.py.
 
-Raw line format: "D Mon YYYY|HH:MM|Home|Away|score"  (time = UK local, Paris = UK + 1h; empty score = not played)
+Raw line format: "D Mon YYYY|HH:MM|Home|Away|score"  (time = UK local, Paris = UK + 1h; empty score = not played;
+score "2-1" or "2-1 (1-0)" with the half-time score in brackets when the source gives it)
 """
 import json, sys, datetime as dt, importlib.util, pathlib
 
@@ -23,10 +24,16 @@ def parse(lg):
         d, t, h, a, s = (ln.split("|") + [""])[:5]
         when = dt.datetime.strptime(f"{d.strip()} {t.strip()}", "%d %b %Y %H:%M") + dt.timedelta(hours=shift)
         m = {"d": when.strftime("%Y-%m-%dT%H:%M"), "h": h.strip(), "a": a.strip()}
-        s = s.strip()
+        s = s.strip().replace("–", "-")
         if s:
-            hs, as_ = s.replace("–", "-").split("-")
+            # score final, suivi éventuellement du score à la mi-temps entre parenthèses : « 2-1 (1-0) »
+            ft, _, ht = s.partition("(")
+            hs, as_ = ft.strip().split("-")
             m["s"] = [int(hs), int(as_)]
+            if ht.strip():
+                hh, ha = ht.strip(" )").split("-")
+                m["ht"] = [int(hh), int(ha)]
+                assert m["ht"][0] <= m["s"][0] and m["ht"][1] <= m["s"][1], f"{lg}: score mi-temps incohérent {ln}"
         out.append(m)
     out.sort(key=lambda m: m["d"])
     return out

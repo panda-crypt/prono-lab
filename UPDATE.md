@@ -10,7 +10,7 @@ garder les données précédentes de ce championnat et le signaler dans le messa
 
 | Fichier | Contenu |
 |---|---|
-| `raw/l1.txt`, `raw/pl.txt`, `raw/liga.txt`, `raw/sa.txt`, `raw/bl.txt` | Une ligne par match : `D Mon YYYY\|HH:MM\|Domicile\|Extérieur\|score` (heure du Royaume-Uni telle qu'affichée par statz.ai ; score vide si non joué, sinon `2-1`) |
+| `raw/l1.txt`, `raw/pl.txt`, `raw/liga.txt`, `raw/sa.txt`, `raw/bl.txt` | Une ligne par match : `D Mon YYYY\|HH:MM\|Domicile\|Extérieur\|score` (heure du Royaume-Uni telle qu'affichée par statz.ai ; score vide si non joué, sinon `2-1`, ou `2-1 (1-0)` avec le score à la mi-temps) |
 | `raw/meta.py` | `xg` (MJ, xG pour, xG contre), `xgAsOf`, `odds` (cotes 1/N/2 des matchs à venir) |
 | `raw/context.py` | Absences importantes, équipes remaniées, matchs sans enjeu des 4 prochains jours (avec source) |
 
@@ -22,6 +22,8 @@ Les noms d'équipes doivent être **exactement** ceux de statz.ai (ceux déjà p
    (slugs : `ligue-1`, `premier-league`, `la-liga`, `serie-a`, `bundesliga`). Si l'outil refuse l'URL,
    faire d'abord une recherche web « statz.ai <championnat> fixtures 2026/2027 » puis ouvrir le lien trouvé.
    - Ajouter le score de chaque match joué depuis la dernière mise à jour.
+     Quand la source le donne, ajouter le score à la mi-temps entre parenthèses : `2-1 (1-0)`. Il sert à régler les paris
+     « mi-temps » ; sans lui, ces paris restent en attente (ne jamais l'inventer).
    - Ajouter les matchs à venir des 12 prochains jours qui manquent. Inutile de garder plus loin.
    - Un match reporté : supprimer sa ligne s'il n'a plus de date.
 2. **xG.** Lire `https://statz.ai/competitions/<slug>/xg` (même méthode) et mettre à jour `xg` et `xgAsOf` dans `raw/meta.py`.
