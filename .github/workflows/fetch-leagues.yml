@@ -1,0 +1,52 @@
+name: Autres championnats (mise à jour quotidienne)
+
+# Résultats, saison précédente et calendrier avec cotes (football-data.co.uk) des championnats ajoutés,
+# puis reconstruction de data.json. Deux fois par jour ; ne touche pas à l'application (pas de nouvelle APK).
+on:
+  schedule:
+    - cron: "17 5 * * *"
+    - cron: "47 16 * * *"
+  workflow_dispatch:
+  push:
+    branches: [main]
+    paths: [".github/workflows/fetch-leagues.yml"]
+
+permissions:
+  contents: write
+
+concurrency:
+  group: data-json
+  cancel-in-progress: false
+
+jobs:
+  fetch:
+    runs-on: ubuntu-24.04
+    steps:
+      - uses: actions/checkout@v5
+      - name: Télécharger
+        run: |
+          mkdir -p fd
+          LEAGUES="E1 E2 E3 SC0 SC1 D2 I2 SP2 F2 N1 B1 P1 T1 G1"
+          ok=0
+          for l in $LEAGUES; do
+            for s in 2627 2526; do
+              if curl -sSfL --retry 3 -o "fd/${l}_${s}.csv.tmp" "https://www.football-data.co.uk/mmz4281/${s}/${l}.csv"; then
+                mv "fd/${l}_${s}.csv.tmp" "fd/${l}_${s}.csv"; ok=$((ok+1))
+              else rm -f "fd/${l}_${s}.csv.tmp"; echo "::warning::${l} ${s} indisponible (fichier précédent conservé)"; fi
+            done
+          done
+          curl -sSfL --retry 3 -o fd/fixtures.csv.tmp "https://www.football-data.co.uk/fixtures.csv" && mv fd/fixtures.csv.tmp fd/fixtures.csv || echo "::warning::calendrier indisponible"
+          echo "fichiers récupérés : $ok"; ls -la fd
+      - name: Reconstruire les données et publier
+        run: |
+          git config user.name "github-actions"; git config user.email "github-actions@users.noreply.github.com"
+          for i in 1 2 3; do
+            git pull -q --rebase origin main || { git rebase --abort; git reset -q --hard origin/main; }
+            if grep -q "def load_fd" build_data.py; then python3 build_data.py --auto || exit 1; fi
+            git add fd data.json
+            git diff --cached --quiet && { echo "rien de nouveau"; exit 0; }
+            git commit -qm "Autres championnats : résultats et calendrier du $(TZ=Europe/Paris date +%d/%m)"
+            git push -q origin HEAD:main && exit 0
+            git reset -q --soft HEAD~1; sleep 5
+          done
+          exit 1
