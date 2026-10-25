@@ -75,6 +75,11 @@ main .wrap{padding-block:16px 28px}
 .daylabel{font-family:var(--font-display);font-weight:700;font-size:15px;letter-spacing:.06em;text-transform:uppercase;color:var(--muted);margin:10px 0 6px}
 .mlist{display:grid;grid-template-columns:repeat(auto-fill,minmax(min(100%,330px),1fr));gap:10px}
 .ticket{display:flex;flex-direction:column;gap:10px}
+#goldBar{margin:0 0 10px;padding:8px 10px;border-radius:10px;background:var(--warn);color:var(--pitch-ink);font-size:13.5px;display:flex;align-items:center;gap:8px;flex-wrap:wrap}
+#goldBar[hidden]{display:none}
+#goldBar .gtxt{flex:1;min-width:180px}
+#goldBar button{border:0 !important;border-radius:8px !important;padding:6px 14px !important;font-weight:700 !important;background:#10231a !important;color:#fff !important;cursor:pointer;font-size:13px !important}
+#goldBar.muted{background:color-mix(in srgb,var(--warn) 35%,transparent);color:inherit}
 .arch-t{border:1px solid var(--line);border-radius:10px;background:var(--surface);margin-bottom:8px}
 .arch-t > summary{list-style:none;cursor:pointer;padding:10px 12px;display:grid;grid-template-columns:1fr auto;gap:2px 10px;align-items:center}
 .arch-t > summary::-webkit-details-marker{display:none}
@@ -246,6 +251,7 @@ table{border-collapse:collapse;width:100%}
       <div class="fresh"><span id="freshTxt">Données…</span><br><button type="button" id="refreshBtn">Mettre à jour</button></div>
     </div>
     <div class="chips" id="leagueChips" role="group" aria-label="Championnat"></div>
+    <div id="goldBar" hidden></div>
     <p id="apkBanner" hidden style="margin:0 0 10px;font-size:13px">Une nouvelle version de l'application est disponible : <a id="apkLink" href="#" style="color:inherit;font-weight:600" target="_blank" rel="noopener">télécharger la mise à jour</a></p>
   </div>
 </header>
@@ -430,7 +436,7 @@ table{border-collapse:collapse;width:100%}
         <div class="panel">
           <p class="label">Test sur 7 saisons passées (2019-2026)</p>
           <p class="hint" style="margin:0 0 8px">10 510 matchs des 5 grands championnats, rejoués journée par journée avec les vraies cotes de l'époque (Pinnacle et Bet365, source football-data.co.uk). Bet365 sert d'équivalent aux bookmakers français, qui prennent en général un peu plus de marge : la réalité en France est un peu moins favorable.</p>
-          <ul class="legs bt-list"><li class="leg"><div><strong>Paris dorés</strong> : cote supérieure d'au moins 2 % à la juste cote de Pinnacle<br><span class="hint">148 paris</span></div><div class="r num">+6 % (± 25)<br>CLV +1,3 %</div></li><li class="leg"><div>Valeur selon le modèle seul (sans cotes en direct)<br><span class="hint">2 637 paris</span></div><div class="r num edge-neg">−6,4 % (± 6)</div></li><li class="leg"><div>Paris verts (événement le plus probable)<br><span class="hint">2 440 paris · réussis ≈ 82 %</span></div><div class="r num edge-neg">−5,2 %</div></li><li class="leg"><div>Simple le plus sûr de la semaine<br><span class="hint">224 paris · réussis 81 %</span></div><div class="r num edge-neg">−8 %</div></li><li class="leg"><div>Combiné de 3 paris verts<br><span class="hint">216 paris · réussis 73 %</span></div><div class="r num edge-neg">−16 %</div></li><li class="leg"><div>Combiné de 3 victoires<br><span class="hint">222 paris · réussis 47 %</span></div><div class="r num edge-neg">−13 %</div></li><li class="leg"><div>Jackpot ×50 (7 matchs en moyenne)<br><span class="hint">206 paris · réussis 0</span></div><div class="r num edge-neg">−100 %</div></li></ul>
+          <ul class="legs bt-list"><li class="leg"><div><strong>Paris verts, test honnête</strong> : corrections apprises uniquement sur les saisons précédentes<br><span class="hint">5 389 paris · réussis 84,3 % pour 82,7 % annoncé</span></div><div class="r num edge-neg">−5,6 %<br><span class="hint">aux vraies cotes</span></div></li><li class="leg"><div><strong>Paris dorés</strong> : cote supérieure d'au moins 2 % à la juste cote de Pinnacle<br><span class="hint">148 paris</span></div><div class="r num">+6 % (± 25)<br>CLV +1,3 %</div></li><li class="leg"><div>Valeur selon le modèle seul (sans cotes en direct)<br><span class="hint">2 637 paris</span></div><div class="r num edge-neg">−6,4 % (± 6)</div></li><li class="leg"><div>Paris verts (événement le plus probable)<br><span class="hint">2 440 paris · réussis ≈ 82 %</span></div><div class="r num edge-neg">−5,2 %</div></li><li class="leg"><div>Simple le plus sûr de la semaine<br><span class="hint">224 paris · réussis 81 %</span></div><div class="r num edge-neg">−8 %</div></li><li class="leg"><div>Combiné de 3 paris verts<br><span class="hint">216 paris · réussis 73 %</span></div><div class="r num edge-neg">−16 %</div></li><li class="leg"><div>Combiné de 3 victoires<br><span class="hint">222 paris · réussis 47 %</span></div><div class="r num edge-neg">−13 %</div></li><li class="leg"><div>Jackpot ×50 (7 matchs en moyenne)<br><span class="hint">206 paris · réussis 0</span></div><div class="r num edge-neg">−100 %</div></li></ul>
           <p class="hint" style="margin:8px 0 0"><strong>Ce qu'il faut en retenir.</strong> Seuls les paris dorés, fondés sur les cotes de Pinnacle, battent la cote de clôture (CLV positif) : la méthode est juste, mais les occasions sont rares (environ une toutes les deux semaines sur les 5 championnats) et le résultat reste incertain. Les paris verts passent aussi souvent qu'annoncé mais perdent la marge du bookmaker ; les combinés la multiplient. Le modèle seul perd : sans cotes en direct, l'application ne conseille plus de mise.</p>
         </div>
         <div class="panel">
@@ -773,7 +779,9 @@ function calib(){
       // facteur = réussites / réussites annoncées sur les pronostics à 70 % ou plus, ramené vers 1 (poids de 10) et jamais au-dessus de 1
       let hit = 0, exp = 0;
       recs.forEach(x => { const p = MARKETS[k].p(x.q); if (p >= 0.7){ exp += p; hit += MARKETS[k].win(x.sc[0], x.sc[1]) ? 1 : 0; } });
-      f[g][k] = Math.min(1, (hit + 10) / (exp + 10));
+      // base : correction apprise sur 7 saisons (2019-2026, poids de 30 réussites), ajustée par la saison en cours
+      const h0 = g === "dom" && HIST_F[k] != null ? HIST_F[k] : 1;
+      f[g][k] = Math.min(1, (hit + 30 * h0) / (exp + 30));
     });
     // l'excès de confiance restant quand ce type de pari est mis en avant (75 % ou plus) est retiré, type par type
     for (let it = 0; it < 2; it++){
@@ -795,6 +803,9 @@ function calib(){
   CAL = { at: DATA.generatedAt, f, st, grp };
   return CAL;
 }
+// Corrections des paris mis en avant apprises sur 7 saisons de championnats (10 510 matchs) ; test hors échantillon :
+// 84,3 % de réussite pour 82,7 % annoncé sur 5 389 paris verts (corrections apprises uniquement sur les saisons précédentes).
+const HIST_F = {"1":0.994,"2":1,"1N":1,"N2":1,"12":1,"O15":0.9356,"O25":0.8677,"U25":0.7291,"U35":0.9076,"BY":0.8806,"BN":0.9132,"HM1_1":0.8533,"HP1_2":1,"HM2_2":0.9928,"HP2_1":0.9649,"HO05":0.9706,"AO05":0.9648,"HO15":0.9445,"AO15":0.8628,"W1BY":1,"W2BY":1,"W1O25":0.953,"W2O25":1,"BYO25":0.7945,"CS1":1,"CS2":1,"NC1":1,"NC2":1};
 function marketP(m, k){
   const od = m.odds; if (!od) return null;
   let x = null;
@@ -1396,8 +1407,32 @@ function setView(v){
 }
 document.querySelectorAll(".nav button").forEach(b => b.onclick = () => setView(b.dataset.v));
 
+/* Paris dorés au centre : bandeau en haut de chaque onglet quand un pari à valeur (confirmé par les cotes de référence) est disponible */
+function goldBets(){
+  const list = [], now = nowStr();
+  for (const [lg, L] of Object.entries(DATA.leagues)) if (CL[lg]) L.matches.filter(m => !m.s && m.odds && m.odds.sharp && m.d > now).forEach(m => list.push({ lg, m, C: CL[lg] }));
+  return planMatches(list).filter(x => x.best && x.stake > 0).sort((a, b) => b.edge - a.edge);
+}
+function renderGold(){
+  const el = $("goldBar"); if (!el) return;
+  if (!liveKey()){ el.hidden = true; return; }
+  const st = liveState(), g = goldBets(); el.className = "";
+  if (g.length){
+    const x = g[0];
+    el.innerHTML = `<span class="gtxt">★ <strong>${g.length} pari${g.length > 1 ? "s" : ""} à valeur</strong> · ${esc(MARKETS[x.k].label(x.H, x.A))} @ ${fx(x.o)}${x.bk ? " chez " + esc(x.bk) : ""} (+${(x.edge * 100).toFixed(0)} %) · mise ${eur(x.stake)}</span><button type="button" id="goldGo">Voir</button>`;
+    $("goldGo").onclick = () => { ui.lg = "all"; saveUi(); $("vOnly").checked = true; setView("valeur"); };
+    // signaler une seule fois chaque nouveau pari à valeur
+    const seen = new Set(LS.get("pl_goldseen", [])), fresh = g.filter(y => !seen.has(`${y.lg}|${y.m.h}|${y.m.a}|${y.k}`));
+    if (fresh.length){ toast(`★ Nouveau pari à valeur : ${MARKETS[fresh[0].k].label(fresh[0].H, fresh[0].A)} @ ${fx(fresh[0].o)}`); fresh.forEach(y => seen.add(`${y.lg}|${y.m.h}|${y.m.a}|${y.k}`)); LS.set("pl_goldseen", [...seen].slice(-300)); }
+  } else if (!st.at || hoursSince(st.at) > SHARP_STALE_H){
+    el.className = "muted";
+    el.innerHTML = `<span class="gtxt">Pas de cotes de référence récentes : actualisez pour chercher les paris à valeur.</span><button type="button" id="goldGo">Actualiser</button>`;
+    $("goldGo").onclick = () => refreshLive(true);
+  } else { el.hidden = true; return; }
+  el.hidden = false;
+}
 function render(){
-  renderChips();
+  renderChips(); renderGold();
   if (ui.view === "matchs") renderMatchs();
   else if (ui.view === "valeur") renderValeur();
   else if (ui.view === "analyse") renderAnalyse();
