@@ -10,6 +10,7 @@ def _load(name):
     mod = importlib.util.module_from_spec(spec); spec.loader.exec_module(mod); return mod
 meta = _load("meta")
 euro = _load("euro")
+context = _load("context")
 
 def parse(lg):
     out, shift = [], 1          # par défaut : heure du Royaume-Uni (+1 h pour Paris)
@@ -49,8 +50,17 @@ def attach_odds(lg, matches, odds, odds_at):
         assert all(x > 1 for x in od.get("o", []) + sum((od[k]["o"] for k in ("ou", "btts") if k in od), []))
         hit[0]["odds"] = od
 
+def attach_context(lg, matches):
+    for (h, a), c in context.CONTEXT.get(lg, {}).items():
+        hit = [m for m in matches if m["h"] == h and m["a"] == a and "s" not in m]
+        if not hit:
+            print(f"  ! {lg}: contexte ignoré (match joué ou absent) {h}-{a}")
+            continue
+        assert c.get("lvl") in ("alerte", "info") and c.get("why") and str(c.get("src", "")).startswith("http"), f"contexte incomplet {lg} {h}-{a}"
+        hit[0]["ctx"] = {"lvl": c["lvl"], "why": c["why"], "src": c["src"], "at": context.CHECKED_AT}
+
 def build(generated_at, odds_at):
-    data = {"generatedAt": generated_at, "version": 2, "sources": meta.SOURCES, "leagues": {}}
+    data = {"generatedAt": generated_at, "version": 2, "sources": meta.SOURCES, "leagues": {}, "contextAt": context.CHECKED_AT}
     for lg, L in meta.LEAGUES.items():
         matches = parse(lg)
         names = sorted({m["h"] for m in matches} | {m["a"] for m in matches})
@@ -58,6 +68,7 @@ def build(generated_at, odds_at):
         if missing:
             sys.exit(f"{lg}: équipes sans xG ou prior: {missing}")
         attach_odds(lg, matches, L["odds"], odds_at)
+        attach_context(lg, matches)
         pg, pgf = L["priorTotals"]
         teams = []
         for n in names:
@@ -82,6 +93,7 @@ def build(generated_at, odds_at):
             if dom and dom[1] not in {t["id"] for t in data["leagues"][dom[0]]["teams"]}:
                 sys.exit(f"{lg}: lien domestique introuvable {n} -> {dom}")
         attach_odds(lg, matches, getattr(euro, "ODDS", {}).get(lg, {}), odds_at)
+        attach_context(lg, matches)
         data["leagues"][lg] = {"name": euro.NAMES[lg], "type": "euro", "coefAsOf": euro.COEF_AS_OF,
             "teams": [{"id": n, "name": d, "country": c, "dom": ({"lg": dm[0], "id": dm[1]} if dm else None)} for n, (d, c, dm) in clubs.items()],
             "matches": matches}

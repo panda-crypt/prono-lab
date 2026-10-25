@@ -704,13 +704,20 @@ function marketP(m, k){
   if ((k === "BY" || k === "BN") && od.btts && od.btts.o && od.btts.o.every(v => v > 1)){ const q = marketProbs(od.btts.o); return k === "BY" ? q[0] : q[1]; }
   return null;
 }
+// Contexte vérifié (absences, rotation, enjeu) : « alerte » = le modèle ignore une information qui fausse son pronostic
+const ctxAlert = m => !!(m.ctx && m.ctx.lvl === "alerte");
+function ctxBox(m){
+  if (!m.ctx) return "";
+  const a = m.ctx.lvl === "alerte";
+  return `<div class="alert ${a ? "bad" : "warn"}" style="margin:0"><div><strong>${a ? "⚠ Contexte : match retiré des paris verts et des tickets" : "ℹ Contexte"}</strong>${esc(m.ctx.why)}${m.ctx.src ? ` · <a href="${esc(m.ctx.src)}" target="_blank" rel="noopener">source</a>` : ""}${m.ctx.at ? ` <span class="hint">(vérifié le ${fmtDay(m.ctx.at)} ${fmtTime(m.ctx.at)})</span>` : ""}</div></div>`;
+}
 function topPick(m, r, lg){
   const c = calib(), g = c.grp(lg);
   const cands = TOP_KEYS.filter(k => allowedK(k, r)).map(k => {
     const pm = MARKETS[k].p(r), pc = pm * c.f[g][k], pk = marketP(m, k);
     return { k, pm, pc, pk, p: pk == null ? pc : (pc + pk) / 2 };
   });
-  const all = cands.slice(), t = pickOf(cands); t.safe = isSafe(t); t.season = c.st[g][t.k] || null; t.all = all;
+  const all = cands.slice(), t = pickOf(cands); t.safe = isSafe(t) && !ctxAlert(m); t.season = c.st[g][t.k] || null; t.all = all;
   return t;
 }
 function goalsPick(r){
@@ -1284,6 +1291,7 @@ function renderMatchs(){
       html += `<article class="mcard${sf?" safe":""}${best?" value":""}">
         ${sf ? `<div class="ribbon"><span>✓ Pari mis en avant : ${esc(MARKETS[sf.k].label(H.name, A.name))}</span><span class="num">${pct(sf.p)}</span></div>` : ""}
         ${best ? `<div class="ribbon gold"><span>★ Pari à valeur : ${esc(MARKETS[best.k].label(H.name, A.name))}</span><span class="num">cote ≥ ${fx(best.sharp ? (1+sharpMinFor(m.d))/best.p : minOdds(best.p, best.mp))} · mise ${eur(best.stake)}</span></div>` : ""}
+        ${ctxBox(m)}
         <div class="mtop"><span>${fmtTime(m.d)}${started?" · en cours ou joué":""}</span><span>${H.rank}e contre ${A.rank}e</span></div>
         <div class="mteams"><div class="t${H.name.length>9?" long":""}">${esc(H.name)}</div><div class="xg">${fx(r.lh,1)} – ${fx(r.la,1)}</div><div class="t a${A.name.length>9?" long":""}">${esc(A.name)}</div></div>
         <div class="minibar"><i class="h" style="width:${r.pH*100}%"></i><i class="d" style="width:${r.pD*100}%"></i><i class="a" style="width:${r.pA*100}%"></i></div>
@@ -1651,7 +1659,7 @@ function ticketPool(){
     pool = [];
     for (const lg of Object.keys(DATA.leagues)){
       const C = CL[lg]; if (!C) continue;
-      upcoming(lg, days).filter(m => m.d > now && !lowTrj(m)).forEach(m => {
+      upcoming(lg, days).filter(m => m.d > now && !lowTrj(m) && !ctxAlert(m)).forEach(m => {
         const r = predict(C, m.h, m.a), t = topPick(m, r, lg), H = C.T[m.h].name, A = C.T[m.a].name;
         const sel = c => { const od = oddsFor(m, c.k, c.p); return { lg, m, H, A, k: c.k, p: c.p, pk: c.pk, o: +od.o.toFixed(2), est: !!od.est, guess: !!od.guess, bk: od.bk || "" }; };
         const win = t.all.filter(c => c.k === "1" || c.k === "2").sort((a,b) => b.p - a.p)[0];
