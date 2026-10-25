@@ -1689,10 +1689,17 @@ function buildTickets(){
   // On ajoute les sélections qui « coûtent » le moins de probabilité par unité de cote : rapport log(1/p) / log(cote) le plus bas.
   const jp = [];
   // Probabilité prudente : jamais au-dessus de celle des cotes (sur un long combiné, un excès d'optimisme se multiplie).
-  pool.forEach(x => x.alts.filter(a => !a.guess && a.o >= 1.25 && a.o <= 4).forEach(a => {
-    const p = a.pk != null ? Math.min(a.p, a.pk) : a.p;
-    if (p >= 0.3) jp.push(Object.assign({}, a, { key: x.key, p, eff: Math.log(1 / p) / Math.log(a.o) }));
-  }));
+  // Des sélections qui ont un sens : la victoire du favori (issue la plus probable, 45 % ou plus) ou une double chance à 60 % ou plus.
+  // Ni nul, ni « pas de nul », ni outsider glissé pour gonfler la cote.
+  pool.forEach(x => {
+    const pr = k => { const a = x.alts.find(c => c.k === k); return a ? (a.pk != null ? Math.min(a.p, a.pk) : a.p) : 0; };
+    const fav = pr("1") >= pr("2") ? "1" : "2";
+    x.alts.filter(a => !a.guess && a.o >= 1.2 && ["1","2","1N","N2"].includes(a.k)).forEach(a => {
+      const p = pr(a.k);
+      const ok = (a.k === "1" || a.k === "2") ? a.k === fav && p >= 0.45 && p >= pr("N") : p >= 0.6 && (a.k === "1N" ? fav === "1" : fav === "2");
+      if (ok) jp.push(Object.assign({}, a, { key: x.key, p, eff: Math.log(1 / p) / Math.log(a.o) }));
+    });
+  });
   jp.sort((a,b) => a.eff - b.eff);
   [[50, "Jackpot ×50"], [150, "Jackpot ×150"], [500, "Jackpot ×500"]].forEach(([target, name]) => {
     const legs = [], used = new Set(); let O = 1;
