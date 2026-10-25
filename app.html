@@ -64,7 +64,7 @@ main .wrap{padding-block:16px 28px}
 
 /* Barre d'onglets */
 .nav{position:fixed;left:0;right:0;bottom:0;z-index:6;background:var(--surface);border-top:1px solid var(--line);padding-bottom:env(safe-area-inset-bottom,0px);padding-left:env(safe-area-inset-left,0px);padding-right:env(safe-area-inset-right,0px)}
-.nav ul{list-style:none;margin:0 auto;padding:0;display:grid;grid-template-columns:repeat(5,1fr);max-width:640px;height:var(--nav-h)}
+.nav ul{list-style:none;margin:0 auto;padding:0;display:grid;grid-template-columns:repeat(6,1fr);max-width:640px;height:var(--nav-h)}
 .nav button{width:100%;height:100%;border:0;background:transparent;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:2px;font-size:11.5px;color:var(--muted);cursor:pointer}
 .nav button svg{width:22px;height:22px;stroke:currentColor;fill:none;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round}
 .nav button[aria-current="page"]{color:var(--pitch);font-weight:600}
@@ -74,6 +74,18 @@ main .wrap{padding-block:16px 28px}
 /* Cartes de match */
 .daylabel{font-family:var(--font-display);font-weight:700;font-size:15px;letter-spacing:.06em;text-transform:uppercase;color:var(--muted);margin:10px 0 6px}
 .mlist{display:grid;grid-template-columns:repeat(auto-fill,minmax(min(100%,330px),1fr));gap:10px}
+.ticket{display:flex;flex-direction:column;gap:10px}
+.ticket .thead{display:flex;align-items:center;gap:8px;flex-wrap:wrap}
+.ticket .thead strong{font-family:var(--font-display);font-size:18px;text-transform:uppercase;letter-spacing:.02em}
+.ticket .legs{list-style:none;margin:0;padding:0;display:grid;gap:8px}
+.ticket .leg{display:flex;justify-content:space-between;align-items:flex-start;gap:10px;padding-bottom:8px;border-bottom:1px dashed var(--line)}
+.ticket .leg .r{text-align:right;white-space:nowrap}
+.tk-kpis{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px}
+.tk-kpis div{background:var(--surface-2);border-radius:8px;padding:8px 10px}
+.tk-kpis b{display:block;font-family:var(--font-data);font-size:17px}
+.tk-kpis span{font-size:12px;color:var(--muted)}
+.riskbar{height:6px;border-radius:3px;background:var(--surface-2);overflow:hidden}
+.riskbar i{display:block;height:100%}
 .mcard{background:var(--surface);border:1px solid var(--line);border-radius:var(--r);padding:12px 14px;display:flex;flex-direction:column;gap:8px;min-width:0}
 .mcard.safe{border:2px solid var(--good);background:color-mix(in srgb,var(--good) 8%,var(--surface));box-shadow:0 0 0 3px color-mix(in srgb,var(--good) 18%,transparent)}
 .mcard.value{border:2px solid var(--warn);background:color-mix(in srgb,var(--warn) 6%,var(--surface));box-shadow:0 0 0 3px color-mix(in srgb,var(--warn) 14%,transparent)}
@@ -375,6 +387,13 @@ table{border-collapse:collapse;width:100%}
       </div>
     </section>
 
+    <!-- TICKETS -->
+    <section class="view" id="v-tickets" hidden>
+      <div class="viewhead"><h2>Tickets du moment</h2><span class="hint" id="tHint"></span></div>
+      <div class="stack" id="tList"></div>
+      <div class="panel" style="margin-top:16px"><p class="label">Comment lire ces tickets</p><p class="hint" id="tNote"></p></div>
+    </section>
+
     <!-- FIABILITÉ -->
     <section class="view" id="v-fiab" hidden>
       <div class="viewhead"><h2>Fiabilité du modèle</h2></div>
@@ -427,6 +446,7 @@ table{border-collapse:collapse;width:100%}
     <li><button type="button" data-v="analyse"><svg viewBox="0 0 24 24"><rect x="4" y="4" width="16" height="16" rx="2"/><path d="M8 15v-3M12 15V9M16 15v-5"/></svg>Analyse</button></li>
     <li><button type="button" data-v="paris"><svg viewBox="0 0 24 24"><path d="M6 3h9l3 3v15H6z"/><path d="M9 10h6M9 14h6M9 18h3"/></svg>Mes paris<span class="badge" id="navBadge" hidden></span></button></li>
     <li><button type="button" data-v="fiab"><svg viewBox="0 0 24 24"><path d="M12 3l8 3v6c0 4.5-3.4 8.2-8 9-4.6-.8-8-4.5-8-9V6z"/><path d="M8.5 12l2.5 2.5 4.5-5"/></svg>Fiabilité</button></li>
+    <li><button type="button" data-v="tickets"><svg viewBox="0 0 24 24"><path d="M3 7h18v3a2 2 0 0 0 0 4v3H3v-3a2 2 0 0 0 0-4z"/><path d="M15 7v2M15 11v2M15 15v2"/></svg>Tickets</button></li>
   </ul>
 </nav>
 
@@ -663,7 +683,7 @@ function topPick(m, r, lg){
     const pm = MARKETS[k].p(r), pc = pm * c.f[g][k], pk = marketP(m, k);
     return { k, pm, pc, pk, p: pk == null ? pc : (pc + pk) / 2 };
   });
-  const t = pickOf(cands); t.safe = isSafe(t); t.season = c.st[g][t.k] || null;
+  const all = cands.slice(), t = pickOf(cands); t.safe = isSafe(t); t.season = c.st[g][t.k] || null; t.all = all;
   return t;
 }
 function goalsPick(r){
@@ -1166,6 +1186,7 @@ function computeAll(){
 }
 
 function renderChips(){
+  $("leagueChips").style.display = ui.view === "tickets" ? "none" : "";   // les tickets puisent dans toutes les compétitions
   const showAll = ui.view === "valeur" || ui.view === "fiab" || ui.view === "paris";
   const items = (showAll ? [["all","Tous"]] : []).concat(Object.entries(DATA.leagues).map(([k,L]) => [k, L.name]));
   if (!showAll && ui.lg === "all") ui.lg = "l1";
@@ -1188,6 +1209,7 @@ function render(){
   else if (ui.view === "analyse") renderAnalyse();
   else if (ui.view === "paris") renderParis();
   else if (ui.view === "fiab") renderFiab();
+  else if (ui.view === "tickets") renderTickets();
   renderBadge();
 }
 
@@ -1568,6 +1590,135 @@ function renderJournal(){
     : s.done < 50 ? `Encore trop tôt pour conclure (${s.done} pari${s.done>1?"s":""} réglé${s.done>1?"s":""}). Le CLV moyen est le premier indicateur fiable : s'il reste positif, la méthode bat le marché.`
     : s.clv >= 0 ? "Le CLV moyen est positif sur un échantillon déjà significatif : la méthode bat le marché. Les résultats suivront à long terme." : "Le CLV moyen est négatif : la méthode ne bat pas le marché pour l'instant. Réduisez vos mises et parlez-en avec Claude.";
 }
+/* ================= Vue : Tickets =================
+   Sélections : le pari mis en avant de chaque match (probabilité corrigée, voir topPick), la victoire la plus probable,
+   et les paris à valeur. Une seule sélection par match (des issues d'un même match ne sont pas indépendantes).
+   Probabilité d'un combiné = produit des probabilités (matchs différents, supposés indépendants). */
+function oddsFor(m, k, p){
+  const od = m.odds, ok = a => a && a.every(x => x > 1);
+  if (od && od.o && od.o.length === 3 && ok(od.o)){
+    const [a, n, b] = od.o, bk = i => od.bkPer ? od.bkPer[i] : (od.bk || "");
+    if (k === "1") return { o: a, bk: bk(0) };
+    if (k === "N") return { o: n, bk: bk(1) };
+    if (k === "2") return { o: b, bk: bk(2) };
+    // double chance : déduite des cotes 1N2 (les bookmakers l'affichent à peu près à ce niveau)
+    if (k === "1N") return { o: 1/(1/a + 1/n), est: true };
+    if (k === "N2") return { o: 1/(1/n + 1/b), est: true };
+    if (k === "12") return { o: 1/(1/a + 1/b), est: true };
+  }
+  if ((k === "O25" || k === "U25") && od && od.ou && ok(od.ou.o)) return { o: od.ou.o[k === "O25" ? 0 : 1], bk: od.ou.bk };
+  if ((k === "BY" || k === "BN") && od && od.btts && ok(od.btts.o)) return { o: od.btts.o[k === "BY" ? 0 : 1], bk: od.btts.bk };
+  return { o: Math.max(1.02, 0.95 / p), est: true };     // pas de cote relevée : estimation avec une marge de 5 %
+}
+function ticketPool(){
+  const now = nowStr(); let pool = [];
+  for (const days of [3, 7]){
+    pool = [];
+    for (const lg of Object.keys(DATA.leagues)){
+      const C = CL[lg]; if (!C) continue;
+      upcoming(lg, days).filter(m => m.d > now).forEach(m => {
+        const r = predict(C, m.h, m.a), t = topPick(m, r, lg), H = C.T[m.h].name, A = C.T[m.a].name;
+        const sel = c => { const od = oddsFor(m, c.k, c.p); return { lg, m, H, A, k: c.k, p: c.p, o: +od.o.toFixed(2), est: !!od.est, bk: od.bk || "" }; };
+        const win = t.all.filter(c => c.k === "1" || c.k === "2").sort((a,b) => b.p - a.p)[0];
+        pool.push({ key: `${lg}|${m.h}|${m.a}`, top: sel(t), safe: t.safe, win: sel(win) });
+      });
+    }
+    if (pool.filter(x => x.safe).length >= 5) break;
+  }
+  // paris à valeur (cadre doré), avec leur mise de Kelly
+  const list = [];
+  for (const lg of Object.keys(DATA.leagues)) if (CL[lg]) upcoming(lg, 7).filter(m => m.odds && m.d > now).forEach(m => list.push({ lg, m, C: CL[lg] }));
+  const value = planMatches(list).filter(x => x.best && x.stake > 0).sort((a,b) => b.edge - a.edge)
+    .map(x => ({ lg: x.lg, m: x.m, H: x.H, A: x.A, k: x.k, p: x.p, o: x.o, est: false, bk: x.bk || "", stake: x.stake, edge: x.edge }));
+  return { pool, value };
+}
+function mkTicket(kind, name, legs, extra = {}){
+  const t = Object.assign({ kind, name, legs, est: legs.some(l => l.est) }, extra);
+  if (kind === "system"){
+    // système 2 sur 3 : trois doubles, chacun un tiers de la mise ; gagne si au moins 2 sélections passent
+    const [a, b, c] = legs, pairs = [[a,b],[a,c],[b,c]];
+    let P = 0, Pany = 0, ER = 0, lo = Infinity, hi = 0;
+    for (let mask = 0; mask < 8; mask++){
+      const hit = [0,1,2].map(i => !!(mask & (1 << i))), pr = legs.reduce((s,l,i) => s * (hit[i] ? l.p : 1 - l.p), 1);
+      const ret = pairs.reduce((s,[x,y]) => s + (hit[legs.indexOf(x)] && hit[legs.indexOf(y)] ? x.o * y.o / 3 : 0), 0);
+      if (hit.filter(Boolean).length >= 2){ Pany += pr; lo = Math.min(lo, ret); hi = Math.max(hi, ret); }
+      if (ret > 1) P += pr;   // « chance de gain » = finir en bénéfice, pas seulement récupérer une partie de la mise
+      ER += pr * ret;
+    }
+    Object.assign(t, { P, Pany, O: hi, lo, hi, ev: ER - 1 });
+  } else {
+    t.P = legs.reduce((s,l) => s * l.p, 1); t.O = legs.reduce((s,l) => s * l.o, 1); t.ev = t.P * t.O - 1;
+  }
+  return t;
+}
+function ticketStake(t){
+  const s = settings(), bank = currentBank();
+  if (bank <= 0) return { stake: 0, why: "bankroll épuisée" };
+  if (t.valueStake) return { stake: t.valueStake, why: "Pari à valeur : Kelly ¼, comme dans l'onglet Valeur" };
+  if (t.ev > 0.02 && !t.est && t.kind !== "system"){
+    const k = (t.P * t.O - 1) / (t.O - 1) * 0.25, st = Math.min(bank * k, bank * s.max / 100);
+    if (st >= 0.5) return { stake: Math.round(st * 2) / 2, why: "Espérance positive : Kelly ¼" };
+  }
+  // espérance négative ou incertaine : petite mise de loisir, d'autant plus petite que le ticket est risqué
+  const st = Math.min(bank * s.max / 100, Math.max(0.5, Math.round(bank * 0.02 * t.P * 2) / 2));
+  return { stake: st, why: "Mise de loisir : 2 % de la bankroll × la chance de gain" };
+}
+const RISK = P => P >= 0.75 ? ["good","Très sûr","var(--good)"] : P >= 0.55 ? ["good","Sûr","var(--good)"] : P >= 0.35 ? ["warn","Moyen","var(--warn)"] : P >= 0.15 ? ["bad","Risqué","var(--bad)"] : ["bad","Très risqué","var(--bad)"];
+function buildTickets(){
+  const { pool, value } = ticketPool();
+  const safe = pool.filter(x => x.safe).map(x => x.top).sort((a,b) => b.p - a.p);
+  const wins = pool.map(x => x.win).filter(w => w.p >= 0.5).sort((a,b) => b.p - a.p);
+  // système 2/3 : chaque double doit rapporter plus que la mise totale (cote ≥ 1,75 par sélection), sinon deux sur trois font perdre
+  const sysLegs = wins.filter(w => w.o >= 1.75).slice(0, 3);
+  const out = [], seen = new Set(), add = t => { const id = t.kind + t.legs.map(l => l.lg + l.m.h + l.k).sort().join(); if (!seen.has(id)){ seen.add(id); out.push(t); } };
+  if (safe.length >= 1) add(mkTicket("simple", "Simple le plus sûr", safe.slice(0, 1)));
+  if (safe.length >= 2) add(mkTicket("combo", "Combiné sûr", safe.slice(0, 2)));
+  if (safe.length >= 3) add(mkTicket("combo", "Combiné de 3 paris verts", safe.slice(0, 3)));
+  if (sysLegs.length === 3) add(mkTicket("system", "Système 2 sur 3 (victoires)", sysLegs));
+  if (value.length) add(mkTicket("simple", "Simple à valeur", value.slice(0, 1), { valueStake: value[0].stake }));
+  if (wins.length >= 3) add(mkTicket("combo", "Combiné de 3 victoires", wins.slice(0, 3)));
+  if (wins.length >= 5) add(mkTicket("combo", "Grosse cote : 5 victoires", wins.slice(0, 5)));
+  out.forEach(t => Object.assign(t, ticketStake(t)));
+  return out.sort((a,b) => a.P - b.P);   // du moins sûr au plus sûr
+}
+function ticketText(t){
+  const kind = t.kind === "system" ? "Système 2/3" : t.kind === "combo" ? `Combiné ${t.legs.length} sélections` : "Simple";
+  return [`${t.name} (${kind})`, ...t.legs.map(l => `• ${l.H} – ${l.A} (${fmtDay(l.m.d)} ${fmtTime(l.m.d)}) : ${MARKETS[l.k].label(l.H, l.A)} @ ${fx(l.o)}${l.est ? " (cote à vérifier)" : ""}`),
+          t.kind === "system" ? `Mise totale : ${eur(t.stake)} (3 doubles de ${eur(t.stake/3)})` : `Cote totale : ${fx(t.O)} · Mise : ${eur(t.stake)}`].join("\n");
+}
+function renderTickets(){
+  const T = buildTickets();
+  $("tHint").textContent = T.length ? `${T.length} tickets, du plus risqué au plus sûr · bankroll ${eur(currentBank())}` : "";
+  if (!T.length){ $("tList").innerHTML = `<div class="empty">Pas assez de matchs dans les prochains jours pour composer des tickets. Revenez après la prochaine mise à jour des données.</div>`; }
+  else {
+    $("tList").innerHTML = T.map((t, i) => {
+      const [rc, rl, col] = RISK(t.P), kind = t.kind === "system" ? "Système 2/3" : t.kind === "combo" ? `Combiné · ${t.legs.length} sélections` : "Simple";
+      const gain = t.kind === "system" ? `${eur(t.stake * t.lo)} à ${eur(t.stake * t.hi)}` : eur(t.stake * t.O);
+      return `<article class="panel ticket">
+        <div class="thead"><span class="tag ${rc}">${rl}</span><strong>${esc(t.name)}</strong><span class="hint">${kind}</span></div>
+        <div class="riskbar" title="Chance de gain"><i style="width:${Math.max(2, t.P*100)}%;background:${col}"></i></div>
+        <ul class="legs">${t.legs.map(l => `<li class="leg"><div><strong>${esc(MARKETS[l.k].label(l.H, l.A))}</strong><br><span class="hint">${esc(l.H)} – ${esc(l.A)} · ${esc(DATA.leagues[l.lg].name)} · ${fmtDay(l.m.d)} ${fmtTime(l.m.d)}</span></div>
+          <div class="r num">${l.est ? "≈ " : ""}${fx(l.o)}<br><span class="hint">${pct(l.p)}</span></div></li>`).join("")}</ul>
+        <div class="tk-kpis">
+          <div><span>Chance de gain</span><b>${pct(t.P)}</b>${t.kind === "system" ? `<span>${pct(t.Pany)} d'au moins 2 sur 3</span>` : ""}</div>
+          <div><span>${t.kind === "system" ? "Rapporte (× la mise)" : "Cote totale"}</span><b>${t.kind === "system" ? `${fx(t.lo,1)} à ${fx(t.hi,1)}` : fx(t.O)}</b></div>
+          <div><span>Mise conseillée</span><b>${eur(t.stake)}</b></div>
+          <div><span>Gain possible</span><b>${gain}</b></div>
+        </div>
+        <p class="hint" style="margin:0">${t.ev >= 0 ? `<strong class="edge-pos">Espérance positive : ${pct(t.ev)}</strong> par euro misé.` : `Espérance : <strong>${pct(t.ev)}</strong> par euro misé (la marge des bookmakers${t.legs.length > 1 ? " se multiplie à chaque sélection" : ""}).`} ${esc(t.why)}.${t.est ? " Cotes marquées ≈ : estimées, vérifiez-les chez votre bookmaker." : ""}</p>
+        <div class="row"><button class="btn sm" type="button" data-tk="${i}">Copier et ouvrir ${esc(book()[0])}</button></div>
+      </article>`;
+    }).join("");
+    $("tList").querySelectorAll("[data-tk]").forEach(b => b.onclick = () => {
+      const t = T[+b.dataset.tk]; copyText(ticketText(t));
+      const [bn, bu, kw] = book();
+      if (window.ProNoLab && window.ProNoLab.openApp){ let how = "web"; try { how = window.ProNoLab.openApp(kw, bu); } catch {} toast(how === "app" ? `Ticket copié · ouverture de ${bn}` : `Ticket copié · ${bn} introuvable, ouverture du site`); }
+      else { toast(`Ticket copié`); window.open(bu, "_blank", "noopener"); }
+    });
+  }
+  $("tNote").innerHTML = `Les tickets sont classés du <strong>plus risqué</strong> (grosse cote, rarement gagnant) au <strong>plus sûr</strong> (petite cote, gagne souvent). La chance de gain d'un combiné est le produit des chances de chaque sélection : trois paris à 80 % ne font qu'environ 51 % ensemble. Le <strong>système 2 sur 3</strong> joue les trois doubles possibles : il rapporte si au moins deux sélections passent. La mise conseillée suit la Kelly ¼ quand le ticket a une espérance positive ; sinon c'est une petite mise de loisir, à ne jamais augmenter pour « se refaire ». Une seule sélection par match, matchs des 3 prochains jours (7 s'il en manque). Les combinés sont des paris distincts sur Unibet : vérifiez chaque cote avant de valider.`;
+}
+
 function renderFiab(){
   renderJournal();
   const B = BT || backtest();
