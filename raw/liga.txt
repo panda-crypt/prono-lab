@@ -88,15 +88,15 @@
 18 Oct 2026|20:00|Real Madrid|Sevilla|4-1
 19 Oct 2026|20:00|Getafe|Rayo Vallecano|1-1
 21 Oct 2026|19:00|Levante|Athletic Club|3-1
-23 Oct 2026|20:00|Deportivo Alavés|Málaga|
-24 Oct 2026|13:00|Rayo Vallecano|Elche|
-24 Oct 2026|15:15|Racing Santander|Espanyol|
-24 Oct 2026|17:30|Valencia|Villarreal|
-24 Oct 2026|20:00|Atlético Madrid|Deportivo La Coruña|
-25 Oct 2026|13:00|Athletic Club|Getafe|
-25 Oct 2026|15:15|Celta de Vigo|Real Betis|
-25 Oct 2026|17:30|Real Sociedad|Levante|
-25 Oct 2026|20:00|FC Barcelona|Real Madrid|
+23 Oct 2026|20:00|Deportivo Alavés|Málaga|1-1
+24 Oct 2026|13:00|Rayo Vallecano|Elche|0-3
+24 Oct 2026|15:15|Racing Santander|Espanyol|2-1
+24 Oct 2026|17:30|Valencia|Villarreal|1-2
+24 Oct 2026|20:00|Atlético Madrid|Deportivo La Coruña|1-0
+25 Oct 2026|13:00|Athletic Club|Getafe|4-0
+25 Oct 2026|15:15|Celta de Vigo|Real Betis|0-0
+25 Oct 2026|17:30|Real Sociedad|Levante|2-1
+25 Oct 2026|20:00|FC Barcelona|Real Madrid|1-2
 26 Oct 2026|20:00|Sevilla|Osasuna|
 30 Oct 2026|20:00|Villarreal|Espanyol|
 31 Oct 2026|13:00|Levante|Atlético Madrid|
@@ -108,3 +108,13 @@
 1 Nov 2026|17:30|Elche|Valencia|
 1 Nov 2026|20:00|Athletic Club|Real Sociedad|
 2 Nov 2026|20:00|Deportivo La Coruña|Osasuna|
+6 Nov 2026|20:00|Sevilla|Deportivo Alavés|
+7 Nov 2026|13:00|Málaga|Racing Santander|
+7 Nov 2026|15:15|Espanyol|Deportivo La Coruña|
+7 Nov 2026|17:30|Osasuna|Athletic Club|
+7 Nov 2026|20:00|Valencia|Real Madrid|
+8 Nov 2026|13:00|Elche|Real Betis|
+8 Nov 2026|15:15|Real Sociedad|Rayo Vallecano|
+8 Nov 2026|17:30|Villarreal|Getafe|
+8 Nov 2026|17:30|Celta de Vigo|Levante|
+8 Nov 2026|20:00|Atlético Madrid|FC Barcelona|

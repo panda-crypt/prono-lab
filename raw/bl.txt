@@ -52,15 +52,15 @@
 17 Oct 2026|17:30|FC Bayern München|RB Leipzig|6-1
 18 Oct 2026|14:30|Bayer 04 Leverkusen|SC Freiburg|2-1
 18 Oct 2026|16:30|Borussia Mönchengladbach|TSG Hoffenheim|1-2
-23 Oct 2026|19:30|VfB Stuttgart|Borussia Mönchengladbach|
-24 Oct 2026|14:30|Paderborn|Hamburger SV|
-24 Oct 2026|14:30|FC Köln|Schalke 04|
-24 Oct 2026|14:30|FSV Mainz 05|Werder Bremen|
-24 Oct 2026|14:30|FC Augsburg|FC Union Berlin|
-24 Oct 2026|14:30|RB Leipzig|Elversberg|
-24 Oct 2026|17:30|Borussia Dortmund|Eintracht Frankfurt|
-25 Oct 2026|14:30|TSG Hoffenheim|Bayer 04 Leverkusen|
-25 Oct 2026|16:30|SC Freiburg|FC Bayern München|
+23 Oct 2026|19:30|VfB Stuttgart|Borussia Mönchengladbach|2-3
+24 Oct 2026|14:30|Paderborn|Hamburger SV|1-0
+24 Oct 2026|14:30|FC Köln|Schalke 04|0-0
+24 Oct 2026|14:30|FSV Mainz 05|Werder Bremen|2-3
+24 Oct 2026|14:30|FC Augsburg|FC Union Berlin|1-1
+24 Oct 2026|14:30|RB Leipzig|Elversberg|4-0
+24 Oct 2026|17:30|Borussia Dortmund|Eintracht Frankfurt|1-0
+25 Oct 2026|14:30|TSG Hoffenheim|Bayer 04 Leverkusen|3-0
+25 Oct 2026|16:30|SC Freiburg|FC Bayern München|0-2
 30 Oct 2026|19:30|Elversberg|FSV Mainz 05|
 31 Oct 2026|14:30|Schalke 04|RB Leipzig|
 31 Oct 2026|14:30|Werder Bremen|TSG Hoffenheim|
@@ -70,3 +70,12 @@
 31 Oct 2026|17:30|FC Bayern München|Borussia Dortmund|
 1 Nov 2026|14:30|FC Union Berlin|FC Köln|
 1 Nov 2026|16:30|Eintracht Frankfurt|Hamburger SV|
+6 Nov 2026|19:30|Hamburger SV|Borussia Mönchengladbach|
+7 Nov 2026|14:30|Paderborn|Eintracht Frankfurt|
+7 Nov 2026|14:30|FSV Mainz 05|FC Bayern München|
+7 Nov 2026|14:30|RB Leipzig|FC Augsburg|
+7 Nov 2026|14:30|Borussia Dortmund|Elversberg|
+7 Nov 2026|17:30|VfB Stuttgart|Werder Bremen|
+8 Nov 2026|14:30|FC Köln|Bayer 04 Leverkusen|
+8 Nov 2026|16:30|SC Freiburg|FC Union Berlin|
+8 Nov 2026|18:30|TSG Hoffenheim|Schalke 04|
