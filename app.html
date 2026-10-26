@@ -278,16 +278,14 @@ table{border-collapse:collapse;width:100%}
     <section class="view" id="v-valeur" hidden>
       <div class="viewhead"><h2>Paris à valeur</h2></div>
       <div class="stack">
-        <p class="hint"><strong>Avec les cotes en direct</strong>, la vraie probabilité de chaque issue est tirée des cotes de Pinnacle, le bookmaker de référence des professionnels, marge retirée. Un pari a de la valeur quand votre bookmaker paie plus que cette vraie probabilité (écart d'au moins 2 %). « Proba. » est l'avis du modèle, donné pour comparaison. <strong>Sans cotes en direct</strong>, la valeur repose sur le modèle (60 %) et le marché (40 %), avec un seuil de 4 %.</p>
+        <p class="hint"><strong>Avec les cotes en direct</strong>, la vraie probabilité de chaque issue est tirée des cotes de Pinnacle, le bookmaker de référence des professionnels, marge retirée. Un pari a de la valeur quand votre bookmaker paie plus que cette vraie probabilité (écart d'au moins 2 %). La « chance selon le modèle » est donnée pour comparaison. <strong>Sans cotes en direct</strong>, la valeur repose sur le modèle (60 %) et le marché (40 %), avec un seuil de 4 %.</p>
         <div class="row">
-          <label class="check"><input type="checkbox" id="vOnly" checked> Seulement les paris à valeur (≥ 4 %, cote ≤ 6)</label>
+          <label class="check"><input type="checkbox" id="vOnly" checked> Seulement les paris à jouer (avec une mise conseillée)</label>
         </div>
         <div class="panel row" style="justify-content:space-between;padding:12px 14px"><span class="hint" id="liveStatus" style="flex:1;min-width:200px"></span><button class="btn sm" type="button" id="liveBtn">Actualiser les cotes</button> <button class="btn sm ghost" type="button" id="scoreBtn" title="Récupérer les scores des matchs terminés">Scores</button>
           <details id="liveMissed" class="hint" style="flex-basis:100%" hidden></details></div>
         <p id="vSummary" style="margin:0"></p>
-        <div class="panel scroll" style="padding:0 8px"><table class="vtable"><thead><tr>
-          <th class="l">Match</th><th class="l">Pari</th><th>Cote</th><th>Proba.</th><th>Réf.</th><th>Valeur</th><th>Mise conseillée</th><th></th></tr></thead>
-          <tbody id="vBody"></tbody></table></div>
+        <div class="stack" id="vBody"></div>
         <p class="hint" id="vNote"></p>
       </div>
     </section>
@@ -1533,18 +1531,32 @@ function renderValeur(){
   const only = $("vOnly").checked;
   let rows = valueRows();
   const total = rows.length;
-  if (only) rows = rows.filter(isValue);
+  // filtre coché : seulement les paris qui ont une vraie mise conseillée
+  if (only) rows = rows.filter(r => r.stake > 0);
   const s = settings(), plan = rows.filter(r => r.stake > 0), tot = plan.reduce((a,r)=>a+r.stake,0);
-  $("vSummary").innerHTML = plan.length ? `<strong>${plan.length} pari${plan.length>1?"s":""} conseillé${plan.length>1?"s":""}</strong> · ${eur(tot)} au total, soit ${pct(tot/Math.max(currentBank(),1),1)} de votre bankroll (plafond ${s.expo} %, mises déjà en cours comprises).` : "Aucune mise conseillée pour l'instant.";
+  $("vSummary").innerHTML = plan.length ? `<strong>${plan.length} pari${plan.length>1?"s":""} conseillé${plan.length>1?"s":""}</strong> · ${eur(tot)} au total, soit ${pct(tot/Math.max(currentBank(),1),1)} de votre bankroll (plafond ${s.expo} %, mises déjà en cours comprises).` : "Aucune mise conseillée pour l'instant : seuls les paris marqués « ★ À jouer » sont à miser.";
   if (!rows.length){
-    $("vBody").innerHTML = `<tr><td class="l" colspan="8" style="padding:20px;text-align:center;color:var(--muted)">${total ? "Aucun pari ne dépasse le seuil de valeur pour l'instant. Décochez le filtre pour voir toutes les cotes." : "Aucune cote relevée pour les matchs à venir de ce championnat."}</td></tr>`;
+    $("vBody").innerHTML = `<div class="empty">${only ? `Aucun pari à jouer pour l'instant.${total ? " Décochez « Seulement les paris à jouer » pour voir les écarts repérés mais écartés, et pourquoi." : ""}` : "Aucune cote relevée pour les matchs à venir de ce championnat."}</div>`;
   } else {
+    const why = r => {
+      const w = r.why || "";
+      if (/écart suspect/.test(w)) return "le modèle s'écarte trop des bookmakers : il ignore sans doute une information (absence, forme, niveau européen)";
+      if (/référence/.test(w)) return "pas encore de cote de référence en direct (Pinnacle) pour confirmer la valeur";
+      if (/sans cotes en direct/.test(w)) return "sans cotes en direct, le modèle seul n'est pas assez fiable (il perd sur 7 saisons)";
+      if (/6 h|actualisez|revérifier/.test(w)) return "cotes trop anciennes : actualisez-les";
+      if (/un seul pari/.test(w)) return "un autre pari de ce match est retenu (un seul par match)";
+      return w || "pas de valeur suffisante";
+    };
     $("vBody").innerHTML = rows.map(r => {
-      const warn = (r.sharp && r.pModel != null && r.pModel < r.p - 0.10 ? ` <span class="tag warn" title="Les cotes de référence et le modèle divergent fortement.">modèle en désaccord</span>` : "") + (!r.sharp && r.p - r.mp > 0.08 ? ` <span class="tag warn" title="Le modèle s'écarte fortement du marché : vérifiez les absences.">écart suspect</span>` : "") + (r.stale ? ` <span class="tag warn">cotes anciennes</span>` : "");
-      return `<tr${r.stake > 0 ? ' class="reco"' : ""}><td class="l"><strong>${esc(r.H)} – ${esc(r.A)}</strong><br><span class="hint">${esc(DATA.leagues[r.lg].name)} · ${fmtDay(r.m.d)} ${fmtTime(r.m.d)}</span></td>
-      <td class="l">${esc(MARKETS[r.k].label(r.H, r.A))}${warn}<br><span class="hint">${esc(r.bk || "")}</span></td><td class="num">${fx(r.o)}</td><td class="num">${pct(r.sharp ? r.pModel : r.p)}</td><td class="num">${pct(r.mp)}</td>
-      <td class="num ${r.edge>=(r.sharp?SHARP_MIN:VALUE_MIN)?"edge-pos":"edge-neg"}">${r.edge>0?"+":""}${(r.edge*100).toFixed(0)} %</td><td class="num">${r.stake>0?`<strong>${eur(r.stake)}</strong>`:`<span class="hint">${esc(r.why || "—")}</span>`}</td>
-      <td><button class="btn sm ${r.stake>0?"":"ghost"}" type="button" data-vb="${r.lg}|${esc(r.m.d)}|${esc(r.m.h)}|${esc(r.m.a)}|${r.k}|${r.o}">Suivre</button> <button class="btn sm ghost" type="button" data-vbk="${r.lg}|${esc(r.m.d)}|${esc(r.m.h)}|${esc(r.m.a)}|${r.k}|${r.stake}">${esc(book(r.bkKey)[0])} ↗</button></td></tr>`;
+      const play = r.stake > 0, pm = r.sharp ? r.pModel : r.p;
+      return `<article class="panel ticket" style="${play ? "border:2px solid var(--warn)" : ""}">
+        <div class="thead" style="justify-content:space-between"><strong style="font-size:16px">${esc(r.H)} – ${esc(r.A)}</strong><span class="hint">${esc(DATA.leagues[r.lg].name)} · ${fmtDay(r.m.d)} ${fmtTime(r.m.d)}</span></div>
+        <div class="row" style="justify-content:space-between;align-items:baseline"><span><strong>${esc(MARKETS[r.k].label(r.H, r.A))}</strong>${r.bk ? ` <span class="hint">${Object.values(BOOKS).some(b => b[0] === r.bk) ? "chez " : "cote relevée : "}${esc(r.bk)}</span>` : ""}</span><span class="num" style="font-size:18px">cote ${fx(r.o)}</span></div>
+        <p class="hint" style="margin:0">Chance selon le modèle ${pm != null ? pct(pm) : "—"} · selon les bookmakers ${pct(r.mp)} · valeur <strong class="${r.edge > 0 ? "edge-pos" : "edge-neg"}">${r.edge > 0 ? "+" : ""}${(r.edge*100).toFixed(0)} %</strong></p>
+        ${play ? `<div class="alert" style="margin:0;background:color-mix(in srgb,var(--warn) 18%,transparent);border:1px solid var(--warn)"><div><strong>★ À jouer : mise ${eur(r.stake)}</strong>Cote minimale ${fx(r.sharp ? (1 + sharpMinFor(r.m.d)) / r.p : (minOdds(r.p, r.mp) || r.o))} : en dessous, ne jouez pas.</div></div>
+          <div class="row"><button class="btn sm" type="button" data-vbk="${r.lg}|${esc(r.m.d)}|${esc(r.m.h)}|${esc(r.m.a)}|${r.k}|${r.stake}">Jouer chez ${esc(book(r.bkKey)[0])} ↗</button><button class="btn sm ghost" type="button" data-vb="${r.lg}|${esc(r.m.d)}|${esc(r.m.h)}|${esc(r.m.a)}|${r.k}|${r.o}">Suivre dans Mes paris</button></div>`
+        : `<p style="margin:0;color:var(--muted)"><strong>Pas de mise :</strong> ${esc(why(r))}.</p>`}
+      </article>`;
     }).join("");
     $("vBody").querySelectorAll("[data-vb]").forEach(b => b.onclick = () => { const [lg,d,h,a,k,o] = b.dataset.vb.split("|"); openBetSheet({ lg, d, h, a, mk:k, odds:+o }); });
     $("vBody").querySelectorAll("[data-vbk]").forEach(b => b.onclick = () => { const [lg,d,h,a,k,st] = b.dataset.vbk.split("|"); openBookSheet({ lg, d, h, a, mk:k, stake: +st || undefined }); });
