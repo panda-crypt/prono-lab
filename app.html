@@ -2046,8 +2046,14 @@ function buildTickets(){
   const vc = value.filter(v => v.sharp && v.p >= 0.35);
   addIf("combo", "Combiné rentable ×2", vc.length >= 2 ? pick(vc, 2) : null);
   addIf("combo", "Combiné rentable ×3", vc.length >= 3 ? pick(vc, 3) : null);
-  addIf("simple", "Simple le plus sûr", pick(safe, 1));
-  addIf("combo", "Combiné sûr", pick(safe, 2));
+  // Cote minimale 1,30 pour le simple et le combiné sûr : en dessous, une seule défaite efface une dizaine de gains
+  const MIN_SAFE_O = 1.30, tops = pool.map(x => x.top).filter(Boolean).sort((a,b) => b.p - a.p);
+  addIf("simple", "Simple le plus sûr", pick(tops.filter(l => l.o >= MIN_SAFE_O), 1));
+  { let best = null;
+    for (const l1 of tops){ if (!free(l1)) continue;
+      const l2 = tops.find(l => l !== l1 && free(l) && mkey(l) !== mkey(l1) && l1.o * l.o >= MIN_SAFE_O);
+      if (l2 && (!best || l1.p * l2.p > best[0].p * best[1].p)) best = [l1, l2]; }
+    addIf("combo", "Combiné sûr", best); }
   addIf("combo", "Combiné de 3 paris verts", pick(safe, 3));
   addIf("combo", "Combiné de 3 victoires", pick(wins, 3));
   addIf("combo", "Grosse cote : 5 victoires", pick(wins, 5));
