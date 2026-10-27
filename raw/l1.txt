@@ -69,7 +69,7 @@
 25 Oct 2026|16:15|Olympique Marseille|Le Havre|2-0
 25 Oct 2026|16:15|Auxerre|Le Mans|0-0
 25 Oct 2026|16:15|Angers SCO|Lorient|0-0
-26 Oct 2026|19:30|Paris Saint Germain|Olympique Lyonnais|
+26 Oct 2026|19:30|Paris Saint Germain|Olympique Lyonnais|2-0 (0-0)
 30 Oct 2026|18:00|Le Havre|Paris Saint Germain|
 30 Oct 2026|20:05|LOSC Lille|Lens|
 31 Oct 2026|16:15|Nice|Rennes|
