@@ -1,6 +1,7 @@
 name: Cotes historiques (test de la méthode)
 
-# Télécharge les résultats et cotes historiques de football-data.co.uk (5 grands championnats)
+# Télécharge les résultats et cotes historiques de football-data.co.uk (5 grands championnats, et divisions
+# inférieures qui servent à mesurer l'écart de niveau entre divisions pour les coupes nationales)
 # dans la branche « history ». Ne touche ni à l'application ni à l'APK.
 on:
   workflow_dispatch:
@@ -19,7 +20,7 @@ jobs:
         run: |
           mkdir -p history
           for s in 1920 2021 2122 2223 2324 2425 2526 2627; do
-            for l in E0 SP1 I1 D1 F1; do
+            for l in E0 SP1 I1 D1 F1 E1 E2 E3 SP2 I2 D2 F2; do
               curl -sSfL --retry 3 -o "history/${l}_${s}.csv" "https://www.football-data.co.uk/mmz4281/${s}/${l}.csv" || echo "manquant ${l} ${s}"
             done
           done
