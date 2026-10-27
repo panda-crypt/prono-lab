@@ -39,6 +39,11 @@ Portugal, Turquie, Grèce) : le dossier `fd/` est mis à jour automatiquement de
    (l'ancienne forme `("Bookmaker", [c1, cN, c2])` reste acceptée). Préférer la meilleure cote disponible.
    Cotes américaines : `+150` → 2,50 ; `-200` → 1,50 (formule : `+X` → 1 + X/100, `-X` → 1 + 100/X).
    Supprimer les cotes des matchs déjà joués (le script les ignore de toute façon).
+   **Cotes automatiques** : `build_data.py` reprend aussi les cotes moyennes des 5 grands championnats publiées dans
+   `fd/fixtures.csv` (football-data.co.uk, téléchargé deux fois par jour). Elles remplacent le relevé manuel quand elles
+   sont plus récentes (à date égale, le relevé manuel est gardé). Leur date est celle où le fichier a changé pour la
+   dernière fois (`fd/fixtures.stamp.json`, à ne pas modifier), pas celle de la reconstruction. Si le script affiche
+   « équipe football-data inconnue », ajouter le nom dans `FD_ALIAS` ; « date différente » signale un match déplacé à vérifier.
 4. **Coupes d'Europe** (`raw/ucl.txt`, `raw/uel.txt`, `raw/uecl.txt`, `raw/euro.py`).
    - Ligue des champions : `https://statz.ai/competitions/champions-league/fixtures` (heures du Royaume-Uni, fichier marqué `#tz=uk`).
    - Ligue Europa et Ligue Conférence : articles uefa.com « all the league phase fixtures and results » (liens dans `raw/euro.py`,

@@ -86,6 +86,70 @@ def _fd_when(r):
 def _num(x):
     try: return float(x)
     except (TypeError, ValueError): return None
+def fixtures_at(now_paris):
+    """Date (AAAA-MM-JJ) à laquelle le contenu actuel de fd/fixtures.csv a été vu pour la première fois.
+    Les cotes de ce fichier datent de sa publication, pas de la reconstruction de data.json : l'empreinte
+    fd/fixtures.stamp.json garde la date tant que le fichier ne change pas (règle des 72 h de l'application)."""
+    import hashlib
+    f, st = ROOT / "fd" / "fixtures.csv", ROOT / "fd" / "fixtures.stamp.json"
+    if not f.exists(): return None
+    sha = hashlib.sha256(f.read_bytes()).hexdigest()
+    prev = json.loads(st.read_text(encoding="utf-8")) if st.exists() else {}
+    if prev.get("sha256") == sha and prev.get("at"):
+        return prev["at"][:10]
+    st.write_text(json.dumps({"sha256": sha, "at": now_paris}, ensure_ascii=False) + "\n", encoding="utf-8")
+    return now_paris[:10]
+
+# Cotes des 5 grands championnats tirées du même fixtures.csv (codes football-data → clés et noms statz.ai)
+FD_BIG = {"E0": "pl", "F1": "l1", "SP1": "liga", "I1": "sa", "D1": "bl"}
+FD_ALIAS = {   # nom football-data → nom statz.ai (les noms identiques n'ont pas besoin d'y figurer)
+    "pl": {"Bournemouth": "AFC Bournemouth", "Brighton": "Brighton & Hove Albion", "Coventry": "Coventry City", "Hull": "Hull City",
+           "Ipswich": "Ipswich Town", "Leeds": "Leeds United", "Man City": "Manchester City", "Man United": "Manchester United",
+           "Newcastle": "Newcastle United", "Nott'm Forest": "Nottingham Forest", "Tottenham": "Tottenham Hotspur"},
+    "l1": {"Angers": "Angers SCO", "Lille": "LOSC Lille", "Lyon": "Olympique Lyonnais", "Marseille": "Olympique Marseille",
+           "Paris FC": "Paris", "Paris SG": "Paris Saint Germain"},
+    "liga": {"Alaves": "Deportivo Alavés", "Ath Bilbao": "Athletic Club", "Ath Madrid": "Atlético Madrid", "Barcelona": "FC Barcelona",
+             "Betis": "Real Betis", "Celta": "Celta de Vigo", "Espanol": "Espanyol", "La Coruna": "Deportivo La Coruña", "Malaga": "Málaga",
+             "Santander": "Racing Santander", "Sociedad": "Real Sociedad", "Vallecano": "Rayo Vallecano"},
+    "sa": {"Milan": "AC Milan"},
+    "bl": {"Augsburg": "FC Augsburg", "Bayern Munich": "FC Bayern München", "Dortmund": "Borussia Dortmund", "Ein Frankfurt": "Eintracht Frankfurt",
+           "FC Koln": "FC Köln", "Freiburg": "SC Freiburg", "Hamburg": "Hamburger SV", "Hoffenheim": "TSG Hoffenheim",
+           "Leverkusen": "Bayer 04 Leverkusen", "M'gladbach": "Borussia Mönchengladbach", "Mainz": "FSV Mainz 05",
+           "Stuttgart": "VfB Stuttgart", "Union Berlin": "FC Union Berlin"},
+}
+def _fd_odds(r, at):
+    o = [_num(r.get(c)) for c in ("AvgH", "AvgD", "AvgA")]
+    if not all(x and x > 1 for x in o): return None
+    od = {"at": at, "bk": "moyenne des bookmakers", "o": o, "src": "fd"}
+    ou = [_num(r.get("Avg>2.5")), _num(r.get("Avg<2.5"))]
+    if all(x and x > 1 for x in ou): od["ou"] = {"bk": "moyenne des bookmakers", "o": ou}
+    return od
+
+def attach_fd_big(data, at):
+    """Cotes football-data pour les 5 grands championnats : remplacent le relevé manuel (raw/meta.py) quand elles sont
+    au moins aussi récentes ; à date égale, le relevé manuel (meilleure cote, parfois « les deux marquent ») est gardé."""
+    if not at: return
+    n = 0
+    for r in _rows(ROOT / "fd" / "fixtures.csv"):
+        lg = FD_BIG.get(r.get("Div", "").strip())
+        if not lg or lg not in data["leagues"]: continue
+        L = data["leagues"][lg]; alias = FD_ALIAS.get(lg, {})
+        h, a = (alias.get(x.strip(), x.strip()) for x in (r["HomeTeam"], r["AwayTeam"]))
+        ids = {t["id"] for t in L["teams"]}
+        if h not in ids or a not in ids:
+            print(f"  ! {lg}: équipe football-data inconnue {r['HomeTeam']}-{r['AwayTeam']} (ajouter à FD_ALIAS)"); continue
+        hit = [m for m in L["matches"] if m["h"] == h and m["a"] == a and "s" not in m]
+        if not hit: continue                                  # déjà joué, ou pas encore dans raw/
+        m = hit[0]
+        if _fd_when(r)[:10] != m["d"][:10]:
+            print(f"  ! {lg}: date différente pour {h}-{a} : raw {m['d']} / football-data {_fd_when(r)} (vérifier le calendrier)")
+        od = _fd_odds(r, at)
+        if not od: continue
+        if "odds" in m and m["odds"].get("at", "") > at: continue
+        if "odds" in m and m["odds"].get("at", "") == at and m["odds"].get("src") != "fd": continue
+        m["odds"] = od; n += 1
+    print(f"cotes football-data des 5 grands championnats : {n} match(s), relevé du {at}")
+
 def load_fd(data, odds_at):
     root = ROOT / "fd"
     if not root.exists(): return
@@ -104,11 +168,8 @@ def load_fd(data, odds_at):
             h, a = r["HomeTeam"].strip(), r["AwayTeam"].strip()
             if (h, a) in seen: continue           # déjà joué et dans les résultats
             m = {"d": _fd_when(r), "h": h, "a": a}
-            o = [_num(r.get(c)) for c in ("AvgH", "AvgD", "AvgA")]
-            if all(x and x > 1 for x in o):
-                m["odds"] = {"at": odds_at, "bk": "moyenne des bookmakers", "o": o}
-                ou = [_num(r.get("Avg>2.5")), _num(r.get("Avg<2.5"))]
-                if all(x and x > 1 for x in ou): m["odds"]["ou"] = {"bk": "moyenne des bookmakers", "o": ou}
+            od = _fd_odds(r, odds_at)
+            if od: m["odds"] = od
             matches.append(m); seen.add((h, a))
         matches.sort(key=lambda m: m["d"])
         names = sorted({m["h"] for m in matches} | {m["a"] for m in matches})
@@ -123,10 +184,11 @@ def load_fd(data, odds_at):
             "teams": [{"id": n, "name": n, "xg": {"p": 0, "f": 0, "a": 0},
                        "prior": ({"p": tot[n][0], "f": tot[n][1], "a": tot[n][2]} if n in tot else None)} for n in names],
             "matches": matches}
-    data["sources"] = data["sources"] + [["football-data.co.uk (autres championnats)", "https://www.football-data.co.uk/data.php"]]
+    data["sources"] = data["sources"] + [["football-data.co.uk (autres championnats, et cotes moyennes des 5 grands championnats quand elles sont plus récentes)", "https://www.football-data.co.uk/data.php"]]
 
 def build(generated_at, odds_at):
-    data = {"generatedAt": generated_at, "version": 2, "sources": meta.SOURCES, "leagues": {}, "contextAt": context.CHECKED_AT}
+    data = {"generatedAt": generated_at, "version": 2, "sources": meta.SOURCES, "leagues": {}, "contextAt": context.CHECKED_AT,
+            "oddsManualAt": odds_at}   # date du relevé manuel (raw/meta.py, raw/euro.py), reprise telle quelle par --auto
     for lg, L in meta.LEAGUES.items():
         matches = parse(lg)
         names = sorted({m["h"] for m in matches} | {m["a"] for m in matches})
@@ -163,7 +225,9 @@ def build(generated_at, odds_at):
         data["leagues"][lg] = {"name": euro.NAMES[lg], "type": "euro", "coefAsOf": euro.COEF_AS_OF,
             "teams": [{"id": n, "name": d, "country": c, "dom": ({"lg": dm[0], "id": dm[1]} if dm else None)} for n, (d, c, dm) in clubs.items()],
             "matches": matches}
-    load_fd(data, generated_at[:10])
+    fx_at = fixtures_at(generated_at)
+    attach_fd_big(data, fx_at)
+    load_fd(data, fx_at or generated_at[:10])
     return data
 
 if __name__ == "__main__":
@@ -172,8 +236,8 @@ if __name__ == "__main__":
         from zoneinfo import ZoneInfo
         gen = dt.datetime.now(ZoneInfo("Europe/Paris")).strftime("%Y-%m-%dT%H:%M")
         prev = json.loads((ROOT / "data.json").read_text(encoding="utf-8"))
-        ats = [m["odds"]["at"] for k, L in prev["leagues"].items() if L.get("source") != "fd" for m in L["matches"] if "odds" in m]
-        odds_at = max(ats) if ats else gen[:10]
+        ats = [m["odds"]["at"] for k, L in prev["leagues"].items() if L.get("source") != "fd" for m in L["matches"] if "odds" in m and m["odds"].get("src") != "fd"]
+        odds_at = prev.get("oddsManualAt") or (max(ats) if ats else gen[:10])
     else:
         gen = sys.argv[1] if len(sys.argv) > 1 else dt.datetime.now().strftime("%Y-%m-%dT%H:%M")
         odds_at = sys.argv[2] if len(sys.argv) > 2 else gen[:10]
