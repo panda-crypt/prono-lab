@@ -7,3 +7,4 @@ android/release.jks
 android/local.properties
 *.apk
 __pycache__/
+backtest/data/
