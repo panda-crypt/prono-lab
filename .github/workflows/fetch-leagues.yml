@@ -42,6 +42,8 @@ jobs:
           git config user.name "github-actions"; git config user.email "github-actions@users.noreply.github.com"
           for i in 1 2 3; do
             git pull -q --rebase --autostash origin main || { git rebase --abort; git reset -q --hard origin/main; }
+            # rien de neuf dans fd/ (ni modifié ni nouveau fichier) : pas de reconstruction, pas de commit
+            if git diff HEAD --quiet -- fd && [ -z "$(git ls-files --others --exclude-standard -- fd)" ]; then echo "fd/ inchangé : rien à publier"; exit 0; fi
             if grep -q "def load_fd" build_data.py; then python3 build_data.py --auto || exit 1; fi
             git add fd data.json
             git diff --cached --quiet && { echo "rien de nouveau"; exit 0; }

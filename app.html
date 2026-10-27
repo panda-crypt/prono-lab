@@ -2005,18 +2005,28 @@ function mkTicket(kind, name, legs, extra = {}){
   }
   return t;
 }
+// Garde-fous communs (audit du 27/10) : pas de mise sur les jackpots, les tickets nettement perdants ou les cotes périmées
+const EV_FLOOR = -0.05;
+const legOdds = l => { const m = l.m && l.m.odds ? l.m : findMatch({ lg: l.lg, h: l.h || (l.m && l.m.h), a: l.a || (l.m && l.m.a), d: l.d || (l.m && l.m.d) }); return m && m.odds ? m : null; };
+const staleLeg = l => { if (l.est) return false; const m = legOdds(l); return !!(m && m.odds.at && hoursSince(m.odds.at) > STALE_H); };
+function stakeGuard(t){
+  if (t.jackpot) return { stake: 0, why: "Jeu, pas un placement : aucune mise conseillée (0 jackpot gagnant sur 206 en 7 saisons testées). Si vous jouez, misez une somme que vous acceptez de perdre" };
+  if (t.legs.some(staleLeg)) return { stake: 0, why: "Aucune mise conseillée : une des cotes date de plus de 72 h, elle a pu bouger" };
+  if (t.ev < EV_FLOOR) return { stake: 0, why: `Aucune mise conseillée : espérance de ${pct(t.ev)} par euro misé, ce ticket perd de l'argent sur la durée` };
+  return null;
+}
 function ticketStake(t){
   const s = settings(), bank = currentBank();
   if (bank <= 0) return { stake: 0, why: "bankroll épuisée" };
   if (t.valueStake) return { stake: t.valueStake, why: "Pari à valeur : Kelly ¼, comme dans l'onglet Valeur" };
-  if (t.jackpot) return { stake: Math.min(bank * s.max / 100, Math.max(0.5, Math.round(bank * 0.005 * 2) / 2)), why: "Grosse cote : mise symbolique (0,5 % de la bankroll), à considérer comme perdue d'avance" };
+  const g = stakeGuard(t); if (g) return g;
   if (t.ev > 0.02 && !t.est && t.kind !== "system"){
     const k = (t.P * t.O - 1) / (t.O - 1) * 0.25, st = Math.min(bank * k, bank * s.max / 100);
     if (st >= 0.5) return { stake: Math.floor(st * 2) / 2, why: "Espérance positive : Kelly ¼" };
   }
-  // espérance négative ou incertaine : petite mise de loisir, d'autant plus petite que le ticket est risqué
-  const st = Math.min(bank * s.max / 100, Math.max(0.5, Math.round(bank * 0.02 * t.P * 2) / 2));
-  return { stake: st, why: "Mise de loisir : 2 % de la bankroll × la chance de gain" };
+  // espérance proche de zéro (entre −5 % et +2 %) : petite mise de loisir fixe, qui ne grossit pas avec la sûreté
+  const st = Math.min(bank * s.max / 100, Math.max(0.5, Math.floor(bank * 0.005 * 2) / 2));
+  return { stake: st, why: "Mise de loisir : 0,5 % de la bankroll (espérance proche de zéro, pas un placement)" };
 }
 const RISK = P => P >= 0.75 ? ["good","Très sûr","var(--good)"] : P >= 0.55 ? ["good","Sûr","var(--good)"] : P >= 0.35 ? ["warn","Moyen","var(--warn)"] : P >= 0.15 ? ["bad","Risqué","var(--bad)"] : ["bad","Très risqué","var(--bad)"];
 function buildTickets(){
@@ -2231,6 +2241,7 @@ function dailySet(tab, build){
 }
 const legSt = l => settleMk(l.k, findMatch({ lg: l.lg, h: l.h || l.m.h, a: l.a || l.m.a, d: l.d || l.m.d }));
 const legIcon = l => { const st = legSt(l); return st === "won" ? "✅" : st === "lost" ? "❌" : st === "void" ? "↩️" : (l.d || l.m.d) <= nowStr() ? "⏱️" : "⏳"; };
+const legDis = l => { const m = legOdds(l); if (!m || l.p == null) return ""; const mp = marketP(m, l.k); return mp != null && Math.abs(l.p - mp) > 0.08 ? ` <span class="tag warn" title="Le modèle et les bookmakers ne sont pas d'accord : prudence">⚠️ désaccord ${pct(l.p)} vs marché ${pct(mp)}</span>` : ""; };
 const legScore = l => { const m = findMatch({ lg: l.lg, h: l.h || l.m.h, a: l.a || l.m.a, d: l.d || l.m.d }); return m && m.s ? ` · <strong>${m.s[0]}-${m.s[1]}</strong>${m.ht ? ` (mi-temps ${m.ht[0]}-${m.ht[1]})` : ""}` : ""; };
 function ticketRes(t){
   const st = t.legs.map(legSt), ok = i => st[i] === "won" || st[i] === "void", odd = i => st[i] === "void" ? 1 : t.legs[i].o;
@@ -2266,7 +2277,7 @@ function renderArchive(arch, host){
     return `<details style="border:1px solid var(--line);border-radius:10px;padding:8px 12px;margin-bottom:8px"><summary style="cursor:pointer"><strong>${fmtDay(d.day + "T12:00")}</strong> <span class="hint">· ${d.tickets.length} tickets · ${won} gagné${won > 1 ? "s" : ""}${fin < d.tickets.length ? ` · ${d.tickets.length - fin} en cours` : ""}</span></summary>
       ${d.tickets.map(t => `<div style="margin-top:10px;padding-top:8px;border-top:1px dashed var(--line)"><div class="row" style="justify-content:space-between;align-items:center"><strong>${esc(t.name)}</strong>${resBadge(t)}</div>
         <p class="hint" style="margin:2px 0 6px">cote ${fx(t.kind === "system" ? (t.hi || t.O || 0) : t.legs.reduce((a, l) => a * l.o, 1))} · mise ${eur(t.stake)}</p>
-        <ul class="legs bt-list">${t.legs.map(l => `<li class="leg"><div>${legIcon(l)} <strong>${esc(MARKETS[l.k] ? MARKETS[l.k].label(l.H, l.A) : l.k)}</strong><br><span class="hint">${esc(l.H)} – ${esc(l.A)} · ${fmtDay(l.d)} ${fmtTime(l.d)}${legScore(l)}</span></div><div class="r num">${fx(l.o)}</div></li>`).join("")}</ul></div>`).join("")}
+        <ul class="legs bt-list">${t.legs.map(l => `<li class="leg"><div>${legIcon(l)} <strong>${esc(MARKETS[l.k] ? MARKETS[l.k].label(l.H, l.A) : l.k)}</strong>${legDis(l)}<br><span class="hint">${esc(l.H)} – ${esc(l.A)} · ${fmtDay(l.d)} ${fmtTime(l.d)}${legScore(l)}</span></div><div class="r num">${fx(l.o)}</div></li>`).join("")}</ul></div>`).join("")}
     </details>`;
   }).join("");
 }
@@ -2291,7 +2302,7 @@ function renderArchiveTab(){
       return `<details class="arch-t ${r.res || ""}" data-id="${esc(id)}"${opened.has(id) ? " open" : ""}><summary>
           <strong>${esc(t.name)}</strong>${badge}
           <span class="hint">${src[t.src]} · ${t.legs.length} match${t.legs.length > 1 ? "s" : ""} · cote ${fx(O)} · mise ${eur(t.stake)}</span><span class="dots">${t.legs.map(legIcon).join("")}</span>
-        </summary><div class="body"><ul class="legs bt-list">${t.legs.map(l => `<li class="leg"><div>${legIcon(l)} <strong>${esc(MARKETS[l.k] ? MARKETS[l.k].label(l.H, l.A) : l.k)}</strong><br><span class="hint">${esc(l.H)} – ${esc(l.A)} · ${fmtDay(l.d)} ${fmtTime(l.d)}${legScore(l)}</span></div><div class="r num">${fx(l.o)}</div></li>`).join("")}</ul>
+        </summary><div class="body"><ul class="legs bt-list">${t.legs.map(l => `<li class="leg"><div>${legIcon(l)} <strong>${esc(MARKETS[l.k] ? MARKETS[l.k].label(l.H, l.A) : l.k)}</strong>${legDis(l)}<br><span class="hint">${esc(l.H)} – ${esc(l.A)} · ${fmtDay(l.d)} ${fmtTime(l.d)}${legScore(l)}</span></div><div class="r num">${fx(l.o)}</div></li>`).join("")}</ul>
         <p class="hint" style="margin:6px 0 0">${nOk} sur ${t.legs.length} sélection${t.legs.length > 1 ? "s" : ""} passée${nOk > 1 ? "s" : ""} · proposé le ${fmtDay(t.at || t.setAt)} à ${fmtTime(t.at || t.setAt)}</p></div></details>`;
     }).join("");
   }).join("") : `<div class="empty">L'archive est vide pour l'instant. Les tickets du jour y seront enregistrés dès la prochaine ouverture.</div>`;
@@ -2331,13 +2342,13 @@ function renderTickets(){
       return `<article class="panel ticket">
         <div class="thead"><span class="tag ${rc}">${rl}</span>${t.ev > 0 && !t.est ? `<span class="tag" style="color:var(--warn)">★ rentable</span>` : ""}<strong>${esc(t.name)}</strong><span class="hint">${kind}</span>${resBadge(t)}</div>
         <div class="riskbar" title="Chance de gain"><i style="width:${Math.max(2, t.P*100)}%;background:${col}"></i></div>
-        <ul class="legs">${t.legs.map(l => `<li class="leg"><div>${legIcon(l)} <strong>${esc(MARKETS[l.k].label(l.H, l.A))}</strong><br><span class="hint">${esc(l.H)} – ${esc(l.A)} · ${esc(DATA.leagues[l.lg].name)} · ${fmtDay(l.m.d)} ${fmtTime(l.m.d)}${legScore(l)}</span></div>
+        <ul class="legs">${t.legs.map(l => `<li class="leg"><div>${legIcon(l)} <strong>${esc(MARKETS[l.k].label(l.H, l.A))}</strong>${legDis(l)}<br><span class="hint">${esc(l.H)} – ${esc(l.A)} · ${esc(DATA.leagues[l.lg].name)} · ${fmtDay(l.m.d)} ${fmtTime(l.m.d)}${legScore(l)}</span></div>
           <div class="r num">${l.est ? "≈ " : ""}${fx(l.o)}<br><span class="hint">${l.p != null ? pct(l.p) : ""}</span></div></li>`).join("")}</ul>
         <div class="tk-kpis">
           <div><span>Chance de gain</span><b>${t.P < 0.05 ? `1 sur ${Math.round(1 / t.P)}` : pct(t.P)}</b>${t.kind === "system" ? `<span>${pct(t.Pany)} d'au moins 2 sur 3</span>` : ""}</div>
           <div><span>${t.kind === "system" ? "Rapporte (× la mise)" : "Cote totale"}</span><b>${t.kind === "system" ? `${fx(t.lo,1)} à ${fx(t.hi,1)}` : fx(t.O)}</b></div>
-          <div><span>Mise conseillée</span><b>${eur(t.stake)}</b></div>
-          <div><span>Gain possible</span><b>${gain}</b></div>
+          <div><span>Mise conseillée</span><b>${t.stake > 0 ? eur(t.stake) : "Aucune"}</b></div>
+          <div><span>Gain possible</span><b>${t.stake > 0 ? gain : `× ${t.kind === "system" ? fx(t.hi,1) : fx(t.O)} la mise`}</b></div>
         </div>
         <p class="hint" style="margin:0">${t.ev >= 0 ? `<strong class="edge-pos">Espérance positive : ${pct(t.ev)}</strong> par euro misé.` : `Espérance : <strong>${pct(t.ev)}</strong> par euro misé (la marge des bookmakers${t.legs.length > 1 ? " se multiplie à chaque sélection" : ""}).`} ${esc(t.why)}.${t.est ? " Cotes marquées ≈ : estimées, vérifiez-les chez votre bookmaker." : ""}${t.jackpot ? (t.mixed ? " Version mixte : victoires, doubles chances, buts et « les deux marquent » ; plus de matchs pour la même cote, donc moins de chances que la version simple." : " Version optimale : la combinaison qui a le plus de chances d'atteindre cette cote, surtout des victoires de favoris.") : ""}</p>
         <div class="row"><button class="btn sm" type="button" data-tkstep="${i}">Reporter pas à pas</button><button class="btn sm ghost" type="button" data-tk="${i}">Copier et ouvrir ${esc(book()[0])}</button></div>
@@ -2481,7 +2492,8 @@ function buildMetaTickets(){
   // 9. Jackpot cosmique : accord des oracles jusqu'à une cote de 50
   { const legs = []; let O = 1; for (const x of [...all3, ...two]){ if (O >= 50 || legs.length >= 14) break; if ((use[mkey(x)] || 0) >= CAP) continue; const l = x.leg(x.agree[0], `✨ ${x.agree[1]} oracles sur 3`); legs.push(l); O *= l.o; } if (O >= 40) mk("Jackpot cosmique ×50", legs, { jackpot: true }); }
   const s = settings(), bank = currentBank();
-  T.forEach(t => { t.stake = Math.min(bank * s.max / 100, Math.max(0.5, Math.round(bank * 0.005 * 2) / 2)); t.why = "Mise symbolique (0,5 % de la bankroll) : aucune méthode métaphysique n'a montré d'avantage"; });
+  T.forEach(t => { const g = bank > 0 ? stakeGuard(t) : { stake: 0, why: "bankroll épuisée" };
+    if (g){ t.stake = 0; t.why = g.why; } else { t.stake = Math.min(bank * s.max / 100, Math.max(0.5, Math.floor(bank * 0.005 * 2) / 2)); t.why = "Mise symbolique (0,5 % de la bankroll) : aucune méthode métaphysique n'a montré d'avantage"; } });
   return T.sort((a, b) => a.P - b.P);
 }
 function renderMeta(){
@@ -2493,13 +2505,13 @@ function renderMeta(){
     return `<article class="panel ticket">
       <div class="thead"><span class="tag ${rc}">${rl}</span><strong>${esc(t.name)}</strong><span class="hint">${t.legs.length > 1 ? `Combiné · ${t.legs.length} sélections` : "Simple"}</span>${resBadge(t)}</div>
       <div class="riskbar" title="Chance réelle de gain"><i style="width:${Math.max(2, t.P*100)}%;background:${col}"></i></div>
-      <ul class="legs">${t.legs.map(l => `<li class="leg"><div>${legIcon(l)} <strong>${esc(OUT_LAB(l.k, l.H, l.A))}</strong><br><span class="hint">${esc(l.H)} – ${esc(l.A)} · ${fmtDay(l.m.d)} ${fmtTime(l.m.d)}${legScore(l)}</span><br><span class="hint">${esc(l.why)}</span></div>
+      <ul class="legs">${t.legs.map(l => `<li class="leg"><div>${legIcon(l)} <strong>${esc(OUT_LAB(l.k, l.H, l.A))}</strong>${legDis(l)}<br><span class="hint">${esc(l.H)} – ${esc(l.A)} · ${fmtDay(l.m.d)} ${fmtTime(l.m.d)}${legScore(l)}</span><br><span class="hint">${esc(l.why)}</span></div>
         <div class="r num">${l.est ? "≈ " : ""}${fx(l.o)}<br><span class="hint">${pct(l.p)}</span></div></li>`).join("")}</ul>
       <div class="tk-kpis">
         <div><span>Chance réelle (modèle)</span><b>${t.P < 0.05 ? `1 sur ${Math.round(1 / t.P)}` : pct(t.P)}</b></div>
         <div><span>Cote totale</span><b>${fx(t.O)}</b></div>
-        <div><span>Mise symbolique</span><b>${eur(t.stake)}</b></div>
-        <div><span>Gain possible</span><b>${eur(t.stake * t.O)}</b></div>
+        <div><span>Mise symbolique</span><b>${t.stake > 0 ? eur(t.stake) : "Aucune"}</b></div>
+        <div><span>Gain possible</span><b>${t.stake > 0 ? eur(t.stake * t.O) : `× ${fx(t.O)} la mise`}</b></div>
       </div>
       <p class="hint" style="margin:0">Espérance selon le modèle et les cotes : <strong>${t.ev >= 0 ? "+" : ""}${pct(t.ev)}</strong> par euro misé. ${esc(t.why)}.${t.est ? " Cotes marquées ≈ : estimées, vérifiez-les." : ""}</p>
       <div class="row"><button class="btn sm" type="button" data-mstep="${i}">Reporter pas à pas</button><button class="btn sm ghost" type="button" data-mtk="${i}">Copier et ouvrir ${esc(book()[0])}</button></div>
