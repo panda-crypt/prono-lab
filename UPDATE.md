@@ -53,6 +53,18 @@ Portugal, Turquie, Grèce) : le dossier `fd/` est mis à jour automatiquement de
    - Cotes des matchs européens : dictionnaire `ODDS` de `raw/euro.py`, par compétition :
      `ODDS = {"ucl": {("Domicile","Extérieur"): {"1x2": ("Bookmaker", [c1, cN, c2])}}}`.
    - Coefficients des pays (`COUNTRY_COEF`) : à rafraîchir une fois par mois depuis Wikipédia « UEFA coefficient ».
+4 bis. **Coupes nationales** (`raw/cup_<clé>.txt`, `raw/cups.py`) : Coupe de France (`cdf`), FA Cup (`fac`), Coupe de la Ligue
+   anglaise (`efl`), Copa del Rey (`cdr`), Coppa Italia (`cit`), Coupe d'Allemagne (`dfb`).
+   - Chercher les tirages et horaires des 16 prochains jours (sites officiels : fff.fr, thefa.com, efl.com, rfef.es, legaseriea.it, dfb.de,
+     ou un article de presse fiable). Heures **de Paris** (fichiers marqués `#tz=paris`).
+   - Ne saisir que les matchs entre **deux équipes suivies** (5 grands championnats et divisions inférieures suivies du même pays) ;
+     les matchs contre un club non suivi (3e division, amateurs) sont ignorés. Noms exactement comme dans `raw/<championnat>.txt`
+     (5 grands) ou dans `fd/` (autres divisions) ; le script signale tout nom inconnu (« match ignoré »).
+   - Score : celui **à 90 minutes** (sans prolongation ni tirs au but, c'est ce qui règle les paris), mi-temps entre parenthèses si connue.
+     Sixième champ `n` pour un terrain neutre (finales, demi-finales de FA Cup).
+   - Cotes 1N2 dans `ODDS` de `raw/cups.py`, avec `ODDS_AT` (date du relevé) ; effacer celles des matchs joués.
+   - Les cotes en direct (clé The Odds API) couvrent aussi ces coupes ; les scores en direct non (prolongations).
+
 5. **Contexte des prochains matchs** (`raw/context.py`) — le « vérificateur » : le modèle ignore les absences et les compositions.
    Pour chaque match des **4 prochains jours** (championnats et coupes d'Europe) :
    - Chercher les nouvelles d'avant-match (conférence de presse, sites des clubs, L'Équipe, BBC Sport, Marca, Gazzetta, Kicker,

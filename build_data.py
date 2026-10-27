@@ -11,6 +11,7 @@ def _load(name):
     mod = importlib.util.module_from_spec(spec); spec.loader.exec_module(mod); return mod
 meta = _load("meta")
 euro = _load("euro")
+cups = _load("cups")
 context = _load("context")
 
 def parse(lg):
@@ -21,9 +22,10 @@ def parse(lg):
         if ln.startswith("#"):
             if "tz=paris" in ln: shift = 0
             continue
-        d, t, h, a, s = (ln.split("|") + [""])[:5]
+        d, t, h, a, s, flag = (ln.split("|") + ["", ""])[:6]
         when = dt.datetime.strptime(f"{d.strip()} {t.strip()}", "%d %b %Y %H:%M") + dt.timedelta(hours=shift)
         m = {"d": when.strftime("%Y-%m-%dT%H:%M"), "h": h.strip(), "a": a.strip()}
+        if flag.strip() == "n": m["n"] = 1      # terrain neutre (coupes : finales, certaines demi-finales)
         s = s.strip().replace("–", "-")
         if s:
             # score final, suivi éventuellement du score à la mi-temps entre parenthèses : « 2-1 (1-0) »
@@ -186,6 +188,30 @@ def load_fd(data, odds_at):
             "matches": matches}
     data["sources"] = data["sources"] + [["football-data.co.uk (autres championnats, et cotes moyennes des 5 grands championnats quand elles sont plus récentes)", "https://www.football-data.co.uk/data.php"]]
 
+def load_cups(data, odds_at):
+    """Coupes nationales : seuls les matchs entre deux équipes suivies (même pays) sont gardés ; la force de chaque
+    équipe vient de son championnat, corrigée de l'écart entre divisions (calculé dans l'application, voir bt_cups.py)."""
+    for key, (name, country, lgs) in cups.CUPS.items():
+        f = ROOT / "raw" / f"cup_{key}.txt"
+        if not f.exists(): continue
+        owner = {}
+        for lg in lgs:
+            for t in data["leagues"].get(lg, {}).get("teams", []):
+                if t["id"] in owner: sys.exit(f"{key}: nom d'équipe ambigu {t['id']} ({owner[t['id']]} et {lg})")
+                owner[t["id"]] = (lg, t["name"])
+        matches = []
+        for m in parse(f"cup_{key}"):
+            miss = [x for x in (m["h"], m["a"]) if x not in owner]
+            if miss:
+                print(f"  ! {key}: match ignoré (équipe non suivie ou nom inexact) {m['h']}-{m['a']} : {miss}"); continue
+            matches.append(m)
+        if not matches: continue                 # pas de match à afficher : la coupe n'apparaît pas dans l'application
+        attach_odds(key, matches, cups.ODDS.get(key, {}), getattr(cups, "ODDS_AT", odds_at))
+        ids = sorted({m["h"] for m in matches} | {m["a"] for m in matches}, key=lambda i: (lgs.index(owner[i][0]), i))
+        data["leagues"][key] = {"name": name, "country": country, "type": "cup", "leagues": lgs,
+            "teams": [{"id": i, "name": owner[i][1], "lg": owner[i][0]} for i in ids], "matches": matches}
+    data["sources"] = data["sources"] + cups.SOURCES
+
 def build(generated_at, odds_at):
     data = {"generatedAt": generated_at, "version": 2, "sources": meta.SOURCES, "leagues": {}, "contextAt": context.CHECKED_AT,
             "oddsManualAt": odds_at}   # date du relevé manuel (raw/meta.py, raw/euro.py), reprise telle quelle par --auto
@@ -228,6 +254,7 @@ def build(generated_at, odds_at):
     fx_at = fixtures_at(generated_at)
     attach_fd_big(data, fx_at)
     load_fd(data, fx_at or generated_at[:10])
+    load_cups(data, odds_at)
     return data
 
 if __name__ == "__main__":
