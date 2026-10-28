@@ -207,6 +207,7 @@ def load_cups(data, odds_at):
             matches.append(m)
         if not matches: continue                 # pas de match à afficher : la coupe n'apparaît pas dans l'application
         attach_odds(key, matches, cups.ODDS.get(key, {}), getattr(cups, "ODDS_AT", odds_at))
+        attach_context(key, matches)            # contexte vérifié aussi en coupe : c'est là que la rotation est la plus fréquente
         ids = sorted({m["h"] for m in matches} | {m["a"] for m in matches}, key=lambda i: (lgs.index(owner[i][0]), i))
         data["leagues"][key] = {"name": name, "country": country, "type": "cup", "leagues": lgs,
             "teams": [{"id": i, "name": owner[i][1], "lg": owner[i][0]} for i in ids], "matches": matches}

@@ -66,7 +66,12 @@ Portugal, Turquie, Grèce) : le dossier `fd/` est mis à jour automatiquement de
    - Les cotes en direct (clé The Odds API) couvrent aussi ces coupes ; les scores en direct non (prolongations).
 
 5. **Contexte des prochains matchs** (`raw/context.py`) — le « vérificateur » : le modèle ignore les absences et les compositions.
-   Pour chaque match des **4 prochains jours** (championnats et coupes d'Europe) :
+   Pour chaque match des **4 prochains jours** (championnats, coupes d'Europe **et coupes nationales**) :
+   - **Coupes nationales en priorité** (clés `cdf`, `fac`, `efl`, `cdr`, `cit`, `dfb` de `raw/cups.py`, noms comme dans
+     `raw/cup_<clé>.txt`) : c'est là que la rotation est la plus fréquente. Chercher les compositions annoncées ou les
+     déclarations de l'entraîneur (« X joueurs ménagés », « équipe B », gardien de coupe). Équipe largement remaniée
+     confirmée chez le favori → `"alerte"`. L'application signale déjà seule le risque de rotation (autre match du favori
+     dans les 5 jours) : le contexte sert à **confirmer** ou à signaler l'inverse (`"info"` : « équipe type annoncée »).
    - Chercher les nouvelles d'avant-match (conférence de presse, sites des clubs, L'Équipe, BBC Sport, Marca, Gazzetta, Kicker,
      ou une page « injuries / team news » de la journée). Une recherche par championnat et par journée suffit le plus souvent.
    - `"alerte"` **seulement** si une information confirmée fausse nettement le pronostic :

@@ -822,18 +822,49 @@ function marketP(m, k){
 }
 // Contexte vérifié (absences, rotation, enjeu) : « alerte » = le modèle ignore une information qui fausse son pronostic
 const ctxAlert = m => !!(m.ctx && m.ctx.lvl === "alerte");
+/* Risque de rotation en coupe nationale : le favori joue un autre match (championnat ou coupe d'Europe) dans les 5 jours
+   suivants (ou en a joué un dans les 3 jours précédents). Ex. : Arsenal, annoncé à 92 % à Fleetwood le 27/10 avec Liverpool
+   le 1/11, a fait 1-1 avec une équipe remaniée. Le match est retiré des paris verts et des tickets, et sa probabilité
+   n'est jamais plus haute que celle des bookmakers. */
+const ROT_AFTER = 5, ROT_BEFORE = 3;
+function markRotation(){
+  const dayDiff = (a, b) => (pDate(a) - pDate(b)) / 864e5;
+  const euroOf = {};
+  Object.entries(DATA.leagues).filter(([, L]) => L.type === "euro").forEach(([k, L]) => L.teams.forEach(t => { if (t.dom) euroOf[t.dom.lg + "|" + t.dom.id] = { k, id: t.id }; }));
+  const otherMatches = (lg, id) => {
+    const out = (DATA.leagues[lg] ? DATA.leagues[lg].matches : []).filter(x => x.h === id || x.a === id).map(x => ({ x, comp: DATA.leagues[lg].name, opp: x.h === id ? x.a : x.h, lg }));
+    const e = euroOf[lg + "|" + id];
+    if (e) DATA.leagues[e.k].matches.filter(x => x.h === e.id || x.a === e.id).forEach(x => out.push({ x, comp: DATA.leagues[e.k].name, opp: x.h === e.id ? x.a : x.h, lg: e.k }));
+    return out;
+  };
+  for (const [lg, L] of Object.entries(DATA.leagues)){
+    if (L.type !== "cup" || !CL[lg]) continue;
+    const C = CL[lg];
+    L.matches.forEach(m => {
+      delete m.rot;
+      const H = C.T[m.h], A = C.T[m.a]; if (!H || !A) return;
+      const fav = H.s >= A.s ? H : A;
+      const near = otherMatches(fav.lg, fav.id).filter(o => { const dd = dayDiff(o.x.d, m.d); return (dd > 0 && dd <= ROT_AFTER) || (dd < 0 && dd >= -ROT_BEFORE); }).sort((a, b) => a.x.d < b.x.d ? -1 : 1);
+      if (!near.length) return;
+      const o = near.find(z => z.x.d > m.d) || near[0], oppT = CL[o.lg] && CL[o.lg].T[o.opp];
+      m.rot = { team: fav.name, opp: oppT ? oppT.name : o.opp, comp: o.comp, d: o.x.d, after: o.x.d > m.d };
+    });
+  }
+}
+const rotRisk = m => !!m.rot;
 function ctxBox(m){
-  if (!m.ctx) return "";
+  const rot = m.rot ? `<div class="alert warn" style="margin:0"><div><strong>⚠️ Risque de rotation : match retiré des paris verts et des tickets</strong>${esc(m.rot.team)} ${m.rot.after ? "joue" : "a joué"} ${esc(m.rot.opp)} (${esc(m.rot.comp)}) le ${fmtDay(m.rot.d)} : en coupe, les favoris font souvent tourner leur effectif. Probabilités ramenées au plus à celles des bookmakers.</div></div>` : "";
+  if (!m.ctx) return rot;
   const a = m.ctx.lvl === "alerte";
-  return `<div class="alert ${a ? "bad" : "warn"}" style="margin:0"><div><strong>${a ? "⚠ Contexte : match retiré des paris verts et des tickets" : "ℹ Contexte"}</strong>${esc(m.ctx.why)}${m.ctx.src ? ` · <a href="${esc(m.ctx.src)}" target="_blank" rel="noopener">source</a>` : ""}${m.ctx.at ? ` <span class="hint">(vérifié le ${fmtDay(m.ctx.at)} ${fmtTime(m.ctx.at)})</span>` : ""}</div></div>`;
+  return rot + `<div class="alert ${a ? "bad" : "warn"}" style="margin:0"><div><strong>${a ? "⚠ Contexte : match retiré des paris verts et des tickets" : "ℹ Contexte"}</strong>${esc(m.ctx.why)}${m.ctx.src ? ` · <a href="${esc(m.ctx.src)}" target="_blank" rel="noopener">source</a>` : ""}${m.ctx.at ? ` <span class="hint">(vérifié le ${fmtDay(m.ctx.at)} ${fmtTime(m.ctx.at)})</span>` : ""}</div></div>`;
 }
 function topPick(m, r, lg){
   const c = calib(), g = c.grp(lg);
   const cands = TOP_KEYS.filter(k => allowedK(k, r)).map(k => {
     const pm = MARKETS[k].p(r), pc = pm * c.f[g][k], pk = marketP(m, k);
-    return { k, pm, pc, pk, p: pk == null ? pc : (pc + pk) / 2 };
+    return { k, pm, pc, pk, p: pk == null ? pc : m.rot ? Math.min(pc, pk) : (pc + pk) / 2 };
   });
-  const all = cands.slice(), t = pickOf(cands); t.safe = isSafe(t) && !ctxAlert(m); t.season = c.st[g][t.k] || null; t.all = all;
+  const all = cands.slice(), t = pickOf(cands); t.safe = isSafe(t) && !ctxAlert(m) && !rotRisk(m); t.season = c.st[g][t.k] || null; t.all = all;
   return t;
 }
 function goalsPick(r){
@@ -1423,6 +1454,7 @@ function computeAll(){
   const euroKeys = Object.keys(DATA.leagues).filter(k => DATA.leagues[k].type === "euro");
   if (euroKeys.length){ const E = euroFit(); euroKeys.forEach(k => CL[k] = computeEuroComp(DATA.leagues[k], E)); }
   for (const [lg, L] of Object.entries(DATA.leagues)) if (L.type === "cup") CL[lg] = computeCup(L);
+  markRotation();
   BT = null;
 }
 
@@ -1970,7 +2002,7 @@ function ticketPool(wide){
     pool = [];
     for (const lg of Object.keys(DATA.leagues)){
       const C = CL[lg]; if (!C) continue;
-      upcoming(lg, days).filter(m => m.d > now && !lowTrj(m) && !ctxAlert(m)).forEach(m => {
+      upcoming(lg, days).filter(m => m.d > now && !lowTrj(m) && !ctxAlert(m) && !rotRisk(m)).forEach(m => {
         const r = predict(C, m.h, m.a), t = topPick(m, r, lg), H = C.T[m.h].name, A = C.T[m.a].name;
         const sel = c => { const od = oddsFor(m, c.k, c.p); return { lg, m, H, A, k: c.k, p: c.p, pk: c.pk, o: +od.o.toFixed(2), est: !!od.est, guess: !!od.guess, bk: od.bk || "" }; };
         const win = t.all.filter(c => c.k === "1" || c.k === "2").sort((a,b) => b.p - a.p)[0];
