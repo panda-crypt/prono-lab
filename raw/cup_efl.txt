@@ -1,9 +1,9 @@
 #tz=paris  (heures de Paris = heure britannique + 1 h ; source dave.sport)
 27 Oct 2026|20:45|Bradford|Peterboro|2-0
 27 Oct 2026|21:00|Fleetwood Town|Arsenal|1-1 (1-0)
-28 Oct 2026|20:30|Manchester City|Brighton & Hove Albion|
-28 Oct 2026|20:45|AFC Bournemouth|Aston Villa|
-28 Oct 2026|20:45|Fulham|Crystal Palace|
-28 Oct 2026|20:45|Sunderland|Brentford|
-28 Oct 2026|21:00|Liverpool|Chelsea|
+28 Oct 2026|20:30|Manchester City|Brighton & Hove Albion|2-2
+28 Oct 2026|20:45|AFC Bournemouth|Aston Villa|3-0
+28 Oct 2026|20:45|Fulham|Crystal Palace|0-1
+28 Oct 2026|20:45|Sunderland|Brentford|3-2
+28 Oct 2026|21:00|Liverpool|Chelsea|1-1
 29 Oct 2026|20:45|Everton|Newcastle United|

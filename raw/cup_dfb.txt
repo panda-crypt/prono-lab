@@ -5,10 +5,10 @@
 27 Oct 2026|20:45|Borussia Mönchengladbach|Karlsruhe|2-0 (1-0)
 27 Oct 2026|20:45|Elversberg|Darmstadt|0-2 (0-1)
 27 Oct 2026|20:45|Borussia Dortmund|Werder Bremen|3-2 (2-0)
-28 Oct 2026|18:00|SC Freiburg|Wolfsburg|
-28 Oct 2026|18:00|Dresden|Schalke 04|
-28 Oct 2026|18:00|Paderborn|VfB Stuttgart|
-28 Oct 2026|20:45|Holstein Kiel|TSG Hoffenheim|
-28 Oct 2026|20:45|Hannover|Kaiserslautern|
-28 Oct 2026|20:45|Bayer 04 Leverkusen|Nurnberg|
-28 Oct 2026|20:45|FC Bayern München|Magdeburg|
+28 Oct 2026|18:00|SC Freiburg|Wolfsburg|3-2 (1-2)
+28 Oct 2026|18:00|Dresden|Schalke 04|2-0 (0-0)
+28 Oct 2026|18:00|Paderborn|VfB Stuttgart|0-1
+28 Oct 2026|20:45|Holstein Kiel|TSG Hoffenheim|1-1 (1-1)
+28 Oct 2026|20:45|Hannover|Kaiserslautern|0-2
+28 Oct 2026|20:45|Bayer 04 Leverkusen|Nurnberg|5-2
+28 Oct 2026|20:45|FC Bayern München|Magdeburg|6-1
