@@ -2725,12 +2725,8 @@ Explique ce qui fait pencher le modèle, la principale incertitude, et termine p
 })();
 
 /* ================= Démarrage ================= */
-computeAll();
-applyLive();
-autoSettle();
-renderFresh();
-setView(ui.view);
-ensureDaily();
+try { computeAll(); applyLive(); autoSettle(); renderFresh(); setView(ui.view); ensureDaily(); }
+catch (e) { console.error(e); }   // données intégrées illisibles : la mise à jour en ligne ci-dessous doit quand même partir
 refresh(false).then(() => refreshLive(false)).then(() => refreshScores(false)).then(() => { ensureDaily(); if (ui.view === "archive") renderArchiveTab(); });
 checkApk();
 </script>
