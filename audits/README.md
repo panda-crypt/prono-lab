@@ -1,5 +1,6 @@
 # Audits de nuit
 
+- 2026-10-30 : scores du 29/10 ajoutés (Frosinone-Lecce 5-1, Fiorentina-Atalanta 2-2, Everton-Newcastle 3-1), calendrier conforme, aucune erreur dans l'application ; alerte : aucune cote en Serie A ce week-end et cotes de 7 jours ailleurs, contexte non vérifié depuis le 26/10 ; à décider : heure à laquelle les tickets du jour sont figés.
 - 2026-10-29 : application vide depuis le 28/10 au soir (data.json daté « --help ») réparée, démarrage rendu capable de se mettre à jour seul, 3 matchs de Ligue 1 déplacés et 17 scores du 28/10 ajoutés ; à décider : valider les dates dans build_data.py et comprendre la mise à jour du mercredi restée sans commit.
 - 2026-10-28 : scores du 27/10 ajoutés (Serie A, Coupe d'Allemagne, Coupe de la Ligue anglaise), calendrier conforme, aucune erreur dans l'application ; à décider : mise Kelly des tickets sur l'avis du seul modèle (Inter 2,50 €) et contrôle de la rotation en coupe nationale (Arsenal 92 % → 1-1).
 - 2026-10-27 : 5 scores manquants ajoutés (Serie A 25/10, PSG-Lyon, Séville-Osasuna), date des cotes corrigée dans Valeur ; à décider : mises conseillées sur des tickets à espérance négative et cotes de plus de 72 h dans les tickets.
