@@ -86,8 +86,8 @@
 28 Oct 2026|17:30|AC Milan|Bologna|2-4
 28 Oct 2026|19:45|Monza|Napoli|1-4
 28 Oct 2026|19:45|Genoa|Juventus|2-0
-29 Oct 2026|17:30|Frosinone|Lecce|
-29 Oct 2026|19:45|Fiorentina|Atalanta|
+29 Oct 2026|17:30|Frosinone|Lecce|5-1 (2-0)
+29 Oct 2026|19:45|Fiorentina|Atalanta|2-2
 31 Oct 2026|14:00|Bologna|Monza|
 31 Oct 2026|17:00|Udinese|Roma|
 31 Oct 2026|19:45|AC Milan|Inter|
