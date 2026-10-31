@@ -53,6 +53,7 @@
 22 Oct 2026|21:00|Olympiacos|Sparta Praha|1-0
 22 Oct 2026|21:00|Omonia|Benfica|1-4
 22 Oct 2026|21:00|Hoffenheim|Lyon|3-0
+4 Nov 2026|16:30|Rennes|Olympiacos|
 5 Nov 2026|18:45|Milan|Ferencváros|
 5 Nov 2026|18:45|Sparta Praha|Bournemouth|
 5 Nov 2026|18:45|Crystal Palace|Hoffenheim|
@@ -61,7 +62,6 @@
 5 Nov 2026|18:45|Levski Sofia|Jagiellonia|
 5 Nov 2026|18:45|Real Sociedad|Lyon|
 5 Nov 2026|18:45|Anderlecht|Salzburg|
-5 Nov 2026|18:45|Rennes|Olympiacos|
 5 Nov 2026|21:00|AZ Alkmaar|Juventus|
 5 Nov 2026|21:00|Leverkusen|Marseille|
 5 Nov 2026|21:00|Celtic|Beşiktaş|
