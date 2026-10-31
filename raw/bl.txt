@@ -61,7 +61,7 @@
 24 Oct 2026|17:30|Borussia Dortmund|Eintracht Frankfurt|1-0
 25 Oct 2026|14:30|TSG Hoffenheim|Bayer 04 Leverkusen|3-0
 25 Oct 2026|16:30|SC Freiburg|FC Bayern München|0-2
-30 Oct 2026|19:30|Elversberg|FSV Mainz 05|
+30 Oct 2026|19:30|Elversberg|FSV Mainz 05|4-1
 31 Oct 2026|14:30|Schalke 04|RB Leipzig|
 31 Oct 2026|14:30|Werder Bremen|TSG Hoffenheim|
 31 Oct 2026|14:30|Borussia Mönchengladbach|Paderborn|
