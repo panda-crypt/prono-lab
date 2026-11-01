@@ -78,14 +78,14 @@
 25 Oct 2026|14:00|Hull City|Brentford|1-1
 25 Oct 2026|14:00|Crystal Palace|Newcastle United|0-2
 25 Oct 2026|16:30|Sunderland|Leeds United|0-0
-31 Oct 2026|12:30|Chelsea|Manchester United|
-31 Oct 2026|15:00|Manchester City|Brighton & Hove Albion|
-31 Oct 2026|15:00|Hull City|Ipswich Town|
-31 Oct 2026|15:00|Coventry City|Sunderland|
-31 Oct 2026|15:00|Brentford|Nottingham Forest|
-31 Oct 2026|15:00|AFC Bournemouth|Leeds United|
-31 Oct 2026|17:30|Tottenham Hotspur|Crystal Palace|
-31 Oct 2026|20:00|Aston Villa|Fulham|
+31 Oct 2026|12:30|Chelsea|Manchester United|2-0
+31 Oct 2026|15:00|Manchester City|Brighton & Hove Albion|0-1 (0-1)
+31 Oct 2026|15:00|Hull City|Ipswich Town|2-2
+31 Oct 2026|15:00|Coventry City|Sunderland|3-1 (2-0)
+31 Oct 2026|15:00|Brentford|Nottingham Forest|2-0
+31 Oct 2026|15:00|AFC Bournemouth|Leeds United|2-0 (0-0)
+31 Oct 2026|17:30|Tottenham Hotspur|Crystal Palace|2-0 (1-0)
+31 Oct 2026|20:00|Aston Villa|Fulham|1-1 (1-0)
 1 Nov 2026|16:30|Liverpool|Arsenal|
 2 Nov 2026|20:00|Newcastle United|Everton|
 6 Nov 2026|20:00|Everton|Coventry City|
