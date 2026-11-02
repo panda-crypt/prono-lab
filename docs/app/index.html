@@ -2824,7 +2824,7 @@ async function refresh(manual){
 $("refreshBtn").onclick = () => refresh(true);
 
 /* Nouvelle version de l'application disponible ? (une vérification par jour) */
-const APP_BUILD = 0;
+const APP_BUILD = 53;
 async function checkApk(){
   const m = /raw\.githubusercontent\.com\/([^/]+)\/([^/]+)\//.exec(REMOTE_URL || "");
   if (!m || !APP_BUILD) return;
