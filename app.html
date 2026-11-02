@@ -267,8 +267,8 @@ table{border-collapse:collapse;width:100%}
     <!-- MATCHS -->
     <section class="view" id="v-matchs">
       <div class="viewhead"><h2 id="mTitle">Prochains matchs</h2><span class="hint" id="mHint"></span></div>
-      <label class="field" style="margin:-4px 0 10px;max-width:340px"><span>Afficher</span><select id="mFilter"><option value="all">Tous les matchs</option><option value="safe">Seulement les paris très probables (vert)</option><option value="value">Seulement les paris à valeur (doré)</option><option value="fav">Mes équipes (☆ pour suivre une équipe)</option><option value="live">Matchs en cours</option></select></label>
-      <div class="row" id="dirRow" hidden style="margin:-2px 0 10px"><button class="btn sm" type="button" id="dirBtn"><span class="live-dot" style="color:var(--bad)"></span>Actualiser le direct</button><span class="hint" id="dirInfo"></span></div>
+      <label class="field" style="margin:-4px 0 10px;max-width:340px"><span>Afficher</span><select id="mFilter"><option value="all">Tous les matchs</option><option value="safe">Seulement les paris très probables (vert)</option><option value="value">Seulement les paris à valeur (doré)</option><option value="live">Matchs en cours</option></select></label>
+      <div class="row" id="dirRow" style="display:none;margin:-2px 0 10px"><button class="btn sm" type="button" id="dirBtn"><span class="live-dot" style="color:var(--bad)"></span>Actualiser le direct</button><span class="hint" id="dirInfo"></span></div>
       <div id="mList"></div>
       <div class="panel" style="margin-top:16px">
         <p class="label" id="stdTitle">Classement</p>
@@ -1541,7 +1541,7 @@ if (PUB){
   const mb = document.querySelector('.nav [data-v="metabet"]'); if (mb) mb.closest("li").remove();
   if (ui.view === "metabet") ui.view = "matchs";
 }
-if (!DATA.leagues[ui.lg] && ui.lg !== "all") ui.lg = "l1";
+if (!DATA.leagues[ui.lg] && ui.lg !== "all" && ui.lg !== "favs") ui.lg = "l1";
 const saveUi = () => LS.set("pl_ui", { view:ui.view, lg:ui.lg, aH:ui.aH, aA:ui.aA, mF:ui.mF, arF:ui.arF });
 let CL = {};
 function computeAll(){
@@ -1558,8 +1558,9 @@ function computeAll(){
 function renderChips(){
   $("leagueChips").style.display = ui.view === "tickets" || ui.view === "metabet" || ui.view === "archive" ? "none" : "";   // les tickets puisent dans toutes les compétitions
   const showAll = ui.view === "valeur" || ui.view === "fiab" || ui.view === "paris";
-  const items = (showAll ? [["all","Tous"]] : []).concat(Object.entries(DATA.leagues).map(([k,L]) => [k, L.name]));
+  const items = (showAll ? [["all","Tous"]] : ui.view === "matchs" ? [["favs","★ Mes équipes"]] : []).concat(Object.entries(DATA.leagues).map(([k,L]) => [k, L.name]));
   if (!showAll && ui.lg === "all") ui.lg = "l1";
+  if (ui.view !== "matchs" && ui.lg === "favs") ui.lg = "l1";
   $("leagueChips").innerHTML = items.map(([k,n]) => `<button type="button" class="chip-btn" data-lg="${k}" aria-pressed="${k===ui.lg}">${esc(n)}</button>`).join("");
   $("leagueChips").querySelectorAll("button").forEach(b => b.onclick = () => { ui.lg = b.dataset.lg; saveUi(); render(); });
 }
@@ -1615,33 +1616,42 @@ function upcoming(lg, days = 10){
   return DATA.leagues[lg].matches.filter(m => !m.s && m.d <= lim && m.d.slice(0,10) >= now.slice(0,10));
 }
 function renderMatchs(){
-  const lg = ui.lg, L = DATA.leagues[lg], C = CL[lg];
-  $("mTitle").textContent = `${L.name} · prochains matchs`;
-  const days = L.type === "euro" || L.type === "cup" ? 16 : 10, all = upcoming(lg, days);
+  // « Mes équipes » : tous les matchs des équipes suivies, toutes compétitions confondues ; sinon une compétition
+  const FAVS = ui.lg === "favs", favs = LS.get("pl_favs", {}), nFav = Object.keys(favs).length;
+  let entries = [], days = 16;
+  if (FAVS){
+    for (const [lg2, L2] of Object.entries(DATA.leagues)) if (CL[lg2]) upcoming(lg2, days).forEach(m => { if (favs[m.h] || favs[m.a]) entries.push({ lg: lg2, m }); });
+    entries.sort((a, b) => a.m.d < b.m.d ? -1 : a.m.d > b.m.d ? 1 : 0);
+    $("mTitle").textContent = "Mes équipes · prochains matchs";
+  } else {
+    const L0 = DATA.leagues[ui.lg]; days = L0.type === "euro" || L0.type === "cup" ? 16 : 10;
+    entries = upcoming(ui.lg, days).map(m => ({ lg: ui.lg, m }));
+    $("mTitle").textContent = `${L0.name} · prochains matchs`;
+  }
   // pari conseillé = issue retenue par le moteur de valeur (valeur, cote, probabilité, cotes fraîches, limites de mise)
-  const recoOf = m => m.odds ? planMatches([{ lg, m, C }]).filter(x => x.best)[0] || null : null;
-  const recos = new Map(all.map(m => [m, recoOf(m)]));
-  const tops = new Map(all.map(m => [m, topPick(m, predict(C, m.h, m.a), lg)]));
-  const safes = new Map(all.map(m => [m, m.d > nowStr() && tops.get(m).safe ? tops.get(m) : null]));
-  const nReco = [...recos.values()].filter(Boolean).length, nSafe = [...safes.values()].filter(Boolean).length;
-  if (!["all","safe","value","fav","live"].includes(ui.mF)) ui.mF = "all";
+  const info = new Map(entries.map(e => {
+    const C2 = CL[e.lg], reco = e.m.odds ? planMatches([{ lg: e.lg, m: e.m, C: C2 }]).filter(x => x.best)[0] || null : null, top = topPick(e.m, predict(C2, e.m.h, e.m.a), e.lg);
+    return [e, { reco, top, safe: e.m.d > nowStr() && top.safe ? top : null }];
+  }));
+  const all = entries, nReco = all.filter(e => info.get(e).reco).length, nSafe = all.filter(e => info.get(e).safe).length;
+  if (!["all","safe","value","live"].includes(ui.mF)) ui.mF = "all";
   $("mFilter").value = ui.mF;
-  const favs = LS.get("pl_favs", {});
-  const list = ui.mF === "safe" ? all.filter(m => safes.get(m)) : ui.mF === "value" ? all.filter(m => recos.get(m)) : ui.mF === "fav" ? all.filter(m => favs[m.h] || favs[m.a]) : ui.mF === "live" ? all.filter(inPlay) : all;
-  const nPlay = all.filter(inPlay).length;
-  $("dirRow").hidden = !nPlay;
+  const list = ui.mF === "safe" ? all.filter(e => info.get(e).safe) : ui.mF === "value" ? all.filter(e => info.get(e).reco) : ui.mF === "live" ? all.filter(e => inPlay(e.m)) : all;
+  const nPlay = all.filter(e => inPlay(e.m)).length;
+  $("dirRow").style.display = nPlay ? "" : "none";   // (l'attribut hidden ne l'emporte pas sur .row{display:flex})
   if (nPlay){
     const meta = LS.get("pl_scores_meta", {});
     $("dirInfo").textContent = PUB ? `${nPlay} match${nPlay > 1 ? "s" : ""} en cours · scores en direct bientôt disponibles dans cette version` : !liveKey() ? "Ajoutez votre clé The Odds API dans Mes paris pour suivre les scores en direct." : `${nPlay} match${nPlay > 1 ? "s" : ""} en cours${meta.liveAt ? ` · score relevé il y a ${Math.max(1, Math.round((Date.now() - meta.liveAt) / 6e4))} min` : ""} · actualisation automatique toutes les ${LIVE_EVERY_MIN} min (1 crédit par compétition)`;
-    $("dirBtn").hidden = PUB || !liveKey();
+    $("dirBtn").style.display = PUB || !liveKey() ? "none" : "";
     $("dirBtn").onclick = () => refreshScores(true);
   }
-  $("mHint").textContent = all.length ? `${all.length} rencontres sur ${days} jours · ${nSafe} très probable${nSafe>1?"s":""} (vert) · ${nReco} pari${nReco>1?"s":""} à valeur (doré)` : "";
-  if (!list.length){ $("mList").innerHTML = `<div class="empty">${ui.mF === "fav" ? "Aucun match de vos équipes dans les prochains jours ici. Touchez ☆ à côté d'un nom d'équipe pour la suivre." : ui.mF === "live" ? "Aucun match en cours dans cette compétition." : ui.mF !== "all" && all.length ? (ui.mF === "safe" ? "Aucune issue très probable dans ce championnat pour l'instant : il faut que le modèle et les cotes donnent le meilleur pari d'un match à ${Math.round(SAFE_P*100)} % ou plus." : `Aucun pari à valeur dans ce championnat pour l'instant. ${liveKey() ? "Actualisez les cotes dans l'onglet Valeur." : PUB ? "Ils apparaissent quand les cotes relevées paient plus que le risque." : "Activez les cotes en direct dans Mes paris pour en obtenir."}`) : `Aucun match programmé dans les ${days} prochains jours. Le calendrier se met à jour avec les données.`}</div>`; }
+  $("mHint").textContent = FAVS ? (nFav ? `${nFav} équipe${nFav > 1 ? "s" : ""} suivie${nFav > 1 ? "s" : ""} · ${all.length} match${all.length > 1 ? "s" : ""} sur ${days} jours · touchez ★ pour ne plus suivre une équipe` : "") : all.length ? `${all.length} rencontres sur ${days} jours · ${nSafe} très probable${nSafe>1?"s":""} (vert) · ${nReco} pari${nReco>1?"s":""} à valeur (doré)` : "";
+  if (!list.length){ $("mList").innerHTML = `<div class="empty">${FAVS && !nFav ? "Vous ne suivez encore aucune équipe. Ouvrez un championnat et touchez ☆ à côté du nom d'une équipe : tous ses matchs apparaîtront ici, quelle que soit la compétition." : FAVS && ui.mF === "all" ? `Aucun match de vos équipes dans les ${days} prochains jours.` : ui.mF === "live" ? "Aucun match en cours dans cette compétition." : ui.mF !== "all" && all.length ? (ui.mF === "safe" ? "Aucune issue très probable dans ce championnat pour l'instant : il faut que le modèle et les cotes donnent le meilleur pari d'un match à ${Math.round(SAFE_P*100)} % ou plus." : `Aucun pari à valeur dans ce championnat pour l'instant. ${liveKey() ? "Actualisez les cotes dans l'onglet Valeur." : PUB ? "Ils apparaissent quand les cotes relevées paient plus que le risque." : "Activez les cotes en direct dans Mes paris pour en obtenir."}`) : `Aucun match programmé dans les ${days} prochains jours. Le calendrier se met à jour avec les données.`}</div>`; }
   else {
     let html = "", day = "";
     const now = nowStr();
-    list.forEach(m => {
+    list.forEach(e => {
+      const lg = e.lg, m = e.m, C = CL[lg], I = info.get(e);
       const dl = fmtDay(m.d);
       if (dl !== day){ if (day) html += `</div>`; html += `<p class="daylabel">${dl}</p><div class="mlist">`; day = dl; }
       const H = C.T[m.h], A = C.T[m.a], r = predict(C, m.h, m.a);
@@ -1649,7 +1659,7 @@ function renderMatchs(){
       const playing = inPlay(m), lv = playing ? liveOf(lg, m) : null, clk = playing ? liveClock(m) : null, lp = lv ? livePredict(r, lv.s, clk.min) : null, q = lp || r;
       const star = id => `<button class="fav" type="button" data-fav="${esc(id)}" aria-label="${favs[id] ? "Ne plus suivre" : "Suivre"} cette équipe">${favs[id] ? "★" : "☆"}</button>`;
       let val = "", bookMk = mk;
-      const best = recos.get(m);
+      const best = I.reco;
       if (m.odds){
         if (best) bookMk = best.k;
         if (best) val = `<span class="tag good">Valeur : ${esc(MARKETS[best.k].label(H.name, A.name))} @ ${fx(best.o)}${best.sharp && best.bk ? " " + esc(best.bk) : ""} (+${(best.edge*100).toFixed(0)} %)</span>`;
@@ -1657,14 +1667,14 @@ function renderMatchs(){
         else if (m.odds.o) val = `<span class="tag muted">Cotes : ${m.odds.o.map(x=>x>1?fx(x):"–").join(" · ")}</span>`;
         if (hoursSince(m.odds.at) > STALE_H) val += ` <span class="tag warn">cotes anciennes</span>`;
       }
-      const started = m.d <= now, sf = safes.get(m), tp = tops.get(m);
+      const started = m.d <= now, sf = I.safe, tp = I.top;
       if (!best) bookMk = tp.k;   // bouton bookmaker et suivi : le pari le plus probable
       html += `<article class="mcard${sf?" safe":""}${best?" value":""}">
         ${playing ? `<div class="ribbon live"><span><span class="live-dot"></span>EN DIRECT${lv ? ` · ${lv.s[0]}-${lv.s[1]}` : ""} · ${clk.lab}</span><span class="num">${lv ? "probabilités en direct" : "score pas encore relevé"}</span></div>` : ""}
         ${sf ? `<div class="ribbon"><span>✓ Pari mis en avant : ${esc(MARKETS[sf.k].label(H.name, A.name))}</span><span class="num">${pct(sf.p)}</span></div>` : ""}
         ${best ? `<div class="ribbon gold"><span>★ Pari à valeur : ${esc(MARKETS[best.k].label(H.name, A.name))}</span><span class="num">cote ≥ ${fx(best.sharp ? (1+sharpMinFor(m.d))/best.p : minOdds(best.p, best.mp))} · mise ${eur(best.stake)}</span></div>` : ""}
         ${ctxBox(m)}
-        <div class="mtop"><span>${fmtTime(m.d)}${started?" · en cours ou joué":""}</span><span>${C.cup ? `${esc(H.lgName)} ${H.rank}e contre ${esc(A.lgName)} ${A.rank}e` : `${H.rank}e contre ${A.rank}e`}</span></div>
+        <div class="mtop"><span>${fmtTime(m.d)}${FAVS ? ` · <strong>${esc(DATA.leagues[lg].name)}</strong>` : ""}${started?" · en cours ou joué":""}</span><span>${C.cup ? `${esc(H.lgName)} ${H.rank}e contre ${esc(A.lgName)} ${A.rank}e` : `${H.rank}e contre ${A.rank}e`}</span></div>
         <div class="mteams"><div class="t${H.name.length>9?" long":""}">${star(m.h)}${esc(H.name)}</div><div class="xg">${lv ? `<strong style="font-size:20px">${lv.s[0]} – ${lv.s[1]}</strong>` : `${fx(r.lh,1)} – ${fx(r.la,1)}`}</div><div class="t a${A.name.length>9?" long":""}">${esc(A.name)}${star(m.a)}</div></div>
         <div class="minibar"><i class="h" style="width:${q.pH*100}%"></i><i class="d" style="width:${q.pD*100}%"></i><i class="a" style="width:${q.pA*100}%"></i></div>
         <div class="mprobs num"><span>${pct(q.pH)}</span><span>${pct(q.pD)}</span><span>${pct(q.pA)}</span></div>
@@ -1672,18 +1682,21 @@ function renderMatchs(){
         <div class="mfoot"><span class="pickline"><span class="hint" style="font-weight:400">Pari mis en avant :</span> ${esc(MARKETS[tp.k].label(H.name, A.name))} <span class="num">${pct(tp.p)}</span>${sf ? "" : ` <span class="tag ${tp.p >= 0.7 ? "warn" : "bad"}">${tp.p >= 0.7 ? "probable" : "incertain"}</span>`}</span>${best ? "" : val}</div>
         ${sf ? `<p class="hint" style="margin:0;color:var(--fg)"><strong>Pourquoi en vert ?</strong> ${sf.k === "1" || sf.k === "2" ? "Victoire assez probable pour passer avant les paris plus sûrs mais moins payés : environ" : "De tous les paris de ce match (résultat, double chance, buts, les deux marquent), c'est celui qui a le plus de chances : environ"} <strong>${Math.round(sf.p*10)} fois sur 10</strong>. Modèle ${pct(sf.pc)}${sf.pk != null ? `, cotes ${pct(sf.pk)}` : " (pas de cote pour ce pari : avis du modèle seul, corrigé de ses erreurs passées)"}.${sf.season && sf.season.n >= 10 ? ` Cette saison, ce pari mis en avant a réussi <strong>${sf.season.hit} fois sur ${sf.season.n}</strong> (${pct(sf.season.hit/sf.season.n)}).` : ""} ${best && best.k === sf.k ? "C'est aussi un pari à valeur." : "Cote faible : ne misez que s'il est aussi en doré."}</p>` : ""}
         ${best ? `<p class="hint" style="margin:0;color:var(--fg)"><strong>Pourquoi ce pari ?</strong> Il a ${pct(best.p)} de chances de passer${best.sharp ? " selon les cotes de référence" : ""} et la cote ${fx(best.o)}${best.bk ? " (" + esc(best.bk) + ")" : ""} paie plus que ce risque : <strong class="edge-pos">+${(best.edge*100).toFixed(0)} % de valeur</strong>. ${best.p < 0.5 ? "Il perdra souvent, mais sur la durée il rapporte." : ""}</p>` : ""}
-        <div class="row"><button class="btn sm" type="button" data-an="${esc(m.h)}|${esc(m.a)}">Analyser</button><button class="btn ghost sm" type="button" data-bet="${lg}|${esc(m.d)}|${esc(m.h)}|${esc(m.a)}|${bookMk}">+ Suivre ce pari</button><button class="btn ${best ? "" : "ghost "}sm" type="button" data-book="${lg}|${esc(m.d)}|${esc(m.h)}|${esc(m.a)}|${bookMk}">${esc(book(best && best.bkKey)[0])} ↗</button></div>
+        <div class="row"><button class="btn sm" type="button" data-an="${lg}|${esc(m.h)}|${esc(m.a)}">Analyser</button><button class="btn ghost sm" type="button" data-bet="${lg}|${esc(m.d)}|${esc(m.h)}|${esc(m.a)}|${bookMk}">+ Suivre ce pari</button><button class="btn ${best ? "" : "ghost "}sm" type="button" data-book="${lg}|${esc(m.d)}|${esc(m.h)}|${esc(m.a)}|${bookMk}">${esc(book(best && best.bkKey)[0])} ↗</button></div>
       </article>`;
     });
     html += `</div>`;
     $("mList").innerHTML = html;
     $("mList").querySelectorAll("[data-fav]").forEach(b => b.onclick = () => { const f = LS.get("pl_favs", {}), id = b.dataset.fav; if (f[id]) delete f[id]; else f[id] = true; LS.set("pl_favs", f); toast(f[id] ? "Équipe suivie : rappel avant ses matchs si les notifications sont activées" : "Équipe retirée de vos équipes"); scheduleNotifs(true); renderMatchs(); });
-    $("mList").querySelectorAll("[data-an]").forEach(b => b.onclick = () => { const [h,a] = b.dataset.an.split("|"); ui.aH = h; ui.aA = a; ui.aOddsKey = null; setView("analyse"); });
+    $("mList").querySelectorAll("[data-an]").forEach(b => b.onclick = () => { const [l,h,a] = b.dataset.an.split("|"); ui.lg = l; ui.aH = h; ui.aA = a; ui.aOddsKey = null; setView("analyse"); });
     $("mList").querySelectorAll("[data-bet]").forEach(b => b.onclick = () => { const [l,d,h,a,mk] = b.dataset.bet.split("|"); openBetSheet({ lg:l, d, h, a, mk }); });
     $("mList").querySelectorAll("[data-book]").forEach(b => b.onclick = () => { const [l,d,h,a,mk] = b.dataset.book.split("|"); openBookSheet({ lg:l, d, h, a, mk }); });
   }
   $("mFilter").onchange = () => { ui.mF = $("mFilter").value; saveUi(); renderMatchs(); };
-  // classement
+  // classement (pas de classement sur « Mes équipes »)
+  $("stdTitle").closest(".panel").hidden = FAVS;
+  if (FAVS) return;
+  const L = DATA.leagues[ui.lg], C = CL[ui.lg];
   $("stdTitle").textContent = L.type === "euro" ? `${L.name} · phase de ligue` : L.type === "cup" ? `${L.name} · équipes suivies, de la plus forte à la plus faible (bilans en championnat)` : `Classement ${L.name}`;
   const sp = s => `<td class="num">${s.w}-${s.d}-${s.l}</td><td class="num">${s.f}-${s.a}</td><td class="num">${3*s.w+s.d}</td>`;
   $("stBody").innerHTML = C.order.map(t => `<tr><td class="num">${C.cup ? C.order.indexOf(t) + 1 : t.rank}</td><td class="t">${esc(t.name)}${C.cup ? ` <span class="hint">${esc(t.lgName)} ${t.rank}e</span>` : ""}</td><td class="num">${t.p}</td><td class="num">${t.w}</td><td class="num">${t.dr}</td><td class="num">${t.l}</td><td class="num">${t.f}-${t.a}</td><td class="num"><strong>${t.pts}</strong></td>${sp(t.home)}${sp(t.away)}<td class="num">${t.raw.xg.p?fx(t.raw.xg.f/t.raw.xg.p):"—"}</td><td class="num">${t.raw.xg.p?fx(t.raw.xg.a/t.raw.xg.p):"—"}</td><td class="t"><span class="form">${t.form.map(f=>`<b class="${f}">${f==="W"?"V":f==="D"?"N":"D"}</b>`).join("")}</span></td></tr>`).join("");
