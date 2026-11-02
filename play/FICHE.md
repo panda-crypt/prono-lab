@@ -34,7 +34,7 @@ Prono Lab ne permet pas de parier et ne garantit aucun gain. Jouer comporte des 
 Sports
 
 ## Coordonnées
-- E-mail : [adresse de contact]
+- E-mail : pronolab.app@gmail.com
 - Site web : https://panda-crypt.github.io/prono-lab/
 - Politique de confidentialité : https://panda-crypt.github.io/prono-lab/confidentialite.html
 
