@@ -11,3 +11,4 @@ android/local.properties
 *.apk
 __pycache__/
 backtest/data/
+web-index.html

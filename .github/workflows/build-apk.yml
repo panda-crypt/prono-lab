@@ -47,6 +47,9 @@ jobs:
             mkdir -p android/app/src/$ed/assets
             cp dist/index.html android/app/src/$ed/assets/index.html
           done
+          # version web (iPhone, ordinateur) : édition publique, publiée sur GitHub Pages (docs/app)
+          WEB=1 EDITION=pub python3 build_app.py "$URL"
+          cp dist/index.html web-index.html
 
       - name: Clé de signature
         env:
@@ -94,6 +97,19 @@ jobs:
             prono-lab.apk
             prono-lab-public.apk
             prono-lab-google-play.aab
+
+      - name: Publier la version web (iPhone)
+        run: |
+          git config user.name "github-actions"; git config user.email "github-actions@users.noreply.github.com"
+          for i in 1 2 3; do
+            git pull -q --rebase --autostash origin main || { git rebase --abort; git reset -q --hard origin/main; }
+            mkdir -p docs/app && cp web-index.html docs/app/index.html
+            git add docs/app/index.html
+            git diff --cached --quiet && { echo "version web inchangée"; break; }
+            git commit -qm "Version web 2.${{ github.run_number }} (iPhone)"
+            git push -q origin HEAD:main && break
+            git reset -q --soft HEAD~1; sleep 5
+          done
 
       - name: Publier la version
         uses: softprops/action-gh-release@v2

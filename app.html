@@ -2916,5 +2916,5 @@ setInterval(() => {
   const any = Object.values(DATA.leagues).some(L => L.matches.some(inPlay)); if (!any) return;
   refreshScores(false).then(n => { if (!n && ["matchs","tickets","archive"].includes(ui.view)) render(); });
 }, 60e3);
-checkApk();
+if (window.ProNoLab) checkApk();   // version web (iPhone) : pas de fichier APK à proposer
 </script>
