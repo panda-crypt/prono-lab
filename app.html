@@ -64,7 +64,7 @@ main .wrap{padding-block:16px 28px}
 
 /* Barre d'onglets */
 .nav{position:fixed;left:0;right:0;bottom:0;z-index:6;background:var(--surface);border-top:1px solid var(--line);padding-bottom:env(safe-area-inset-bottom,0px);padding-left:env(safe-area-inset-left,0px);padding-right:env(safe-area-inset-right,0px)}
-.nav ul{list-style:none;margin:0 auto;padding:0;display:grid;grid-template-columns:repeat(8,1fr);max-width:640px;height:var(--nav-h)}
+.nav ul{list-style:none;margin:0 auto;padding:0;display:grid;grid-auto-flow:column;grid-auto-columns:1fr;max-width:640px;height:var(--nav-h)}
 .nav button{width:100%;height:100%;border:0;background:transparent;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:2px;font-size:9.5px;color:var(--muted);cursor:pointer}
 .nav button svg{width:22px;height:22px;stroke:currentColor;fill:none;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round}
 .nav button[aria-current="page"]{color:var(--pitch);font-weight:600}
@@ -1545,6 +1545,7 @@ if (PUB){
   document.documentElement.classList.add("pub");
   const mb = document.querySelector('.nav [data-v="metabet"]'); if (mb) mb.closest("li").remove();
   if (ui.view === "metabet") ui.view = "matchs";
+  const af = $("arFilter"); if (af) af.closest("label").style.display = "none";   // pas de Metabet dans l'Archive publique : pas de filtre
 }
 if (!DATA.leagues[ui.lg] && ui.lg !== "all" && ui.lg !== "favs") ui.lg = "l1";
 const saveUi = () => LS.set("pl_ui", { view:ui.view, lg:ui.lg, aH:ui.aH, aA:ui.aA, mF:ui.mF, arF:ui.arF });
@@ -2448,11 +2449,11 @@ function renderArchive(arch, host){
   }).join("");
 }
 // enregistre les tickets du jour des deux onglets, même s'ils n'ont pas été ouverts
-function ensureDaily(){ try { dailySet("t", buildTickets); dailySet("m", buildMetaTickets); } catch (e) { console.warn(e); } }
+function ensureDaily(){ try { dailySet("t", buildTickets); if (!PUB) dailySet("m", buildMetaTickets); } catch (e) { console.warn(e); } }
 function renderArchiveTab(){
   ensureDaily();
   const f = ["all","t","m"].includes(ui.arF) ? ui.arF : "all"; $("arFilter").value = f;
-  const tabs = f === "all" ? ["t","m"] : [f], src = { t: "Tickets", m: "Metabet" };
+  const tabs = PUB ? ["t"] : f === "all" ? ["t","m"] : [f], src = { t: "Tickets", m: "Metabet" };
   const byDay = {};
   tabs.forEach(tab => LS.get("pl_arch_" + tab, []).forEach(d => { (byDay[d.day] = byDay[d.day] || []).push(...d.tickets.map(t => Object.assign({ src: tab, setAt: d.at }, t))); }));
   const days = Object.keys(byDay).sort().reverse();
