@@ -103,10 +103,10 @@
 31 Oct 2026|15:15|Rayo Vallecano|Celta de Vigo|3-0
 31 Oct 2026|17:30|Real Betis|Málaga|2-1 (2-0)
 31 Oct 2026|20:00|FC Barcelona|Deportivo Alavés|6-1
-1 Nov 2026|13:00|Getafe|Sevilla|
-1 Nov 2026|15:15|Racing Santander|Real Madrid|
-1 Nov 2026|17:30|Elche|Valencia|
-1 Nov 2026|20:00|Athletic Club|Real Sociedad|
+1 Nov 2026|13:00|Getafe|Sevilla|3-1
+1 Nov 2026|15:15|Racing Santander|Real Madrid|0-3 (0-3)
+1 Nov 2026|17:30|Elche|Valencia|0-1
+1 Nov 2026|20:00|Athletic Club|Real Sociedad|2-1
 2 Nov 2026|20:00|Deportivo La Coruña|Osasuna|
 6 Nov 2026|20:00|Sevilla|Deportivo Alavés|
 7 Nov 2026|13:00|Málaga|Racing Santander|
