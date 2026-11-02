@@ -31,24 +31,29 @@ jobs:
           echo "sdk.dir=$SDK" > android/local.properties
           SM=$(ls "$SDK"/cmdline-tools/*/bin/sdkmanager | head -1)
           yes | "$SM" --licenses > /dev/null || true
-          "$SM" "platforms;android-34" "build-tools;34.0.0" > /dev/null
+          "$SM" "platforms;android-36" "build-tools;36.0.0" > /dev/null
 
       - uses: gradle/actions/setup-gradle@v4
         with:
-          gradle-version: "8.7"
+          gradle-version: "8.13"
 
-      - name: Préparer la page de l'application
+      - name: Préparer les pages des deux éditions
         env:
           VERSION_CODE: ${{ github.run_number }}
         run: |
-          python3 build_app.py "https://raw.githubusercontent.com/${{ github.repository }}/main/data.json"
-          mkdir -p android/app/src/main/assets
-          cp dist/index.html android/app/src/main/assets/index.html
+          URL="https://raw.githubusercontent.com/${{ github.repository }}/main/data.json"
+          for ed in perso pub; do
+            EDITION=$ed python3 build_app.py "$URL"
+            mkdir -p android/app/src/$ed/assets
+            cp dist/index.html android/app/src/$ed/assets/index.html
+          done
 
       - name: Clé de signature
         env:
           KEYSTORE_B64: ${{ secrets.KEYSTORE_B64 }}
           KS_PASS: ${{ secrets.KS_PASS }}
+          UPLOAD_KS_B64: ${{ secrets.UPLOAD_KS_B64 }}
+          UPLOAD_KS_PASS: ${{ secrets.UPLOAD_KS_PASS }}
         run: |
           if [ -n "$KEYSTORE_B64" ] && [ -n "$KS_PASS" ]; then
             echo "$KEYSTORE_B64" | base64 -d > android/release.jks
@@ -58,6 +63,11 @@ jobs:
             cp android/signing/pronolab.jks android/release.jks
             echo "KS_PASS=SAwNSWkFqYolJVNHcdlhlL7w" >> "$GITHUB_ENV"
           fi
+          # Version publique (Google Play) : clé d'envoi dans les secrets UPLOAD_KS_B64 / UPLOAD_KS_PASS si elle existe
+          if [ -n "$UPLOAD_KS_B64" ] && [ -n "$UPLOAD_KS_PASS" ]; then
+            echo "$UPLOAD_KS_B64" | base64 -d > android/upload.jks
+            echo "UPLOAD_KS_PATH=$PWD/android/upload.jks" >> "$GITHUB_ENV"; echo "UPLOAD_KS_PASS=$UPLOAD_KS_PASS" >> "$GITHUB_ENV"
+          fi
 
       - name: Compiler
         working-directory: android
@@ -65,19 +75,25 @@ jobs:
           VERSION_CODE: ${{ github.run_number }}
         run: |
           set -o pipefail
-          if ! gradle assembleRelease --no-daemon 2>&1 | tee build.log; then
+          if ! gradle assemblePersoRelease assemblePubRelease bundlePubRelease --no-daemon 2>&1 | tee build.log; then
             # Faire remonter l'erreur dans les annotations (lisibles via l'API)
             grep -E "What went wrong|error:|Error:|FAILURE|> " build.log | grep -v "^> Task" | head -40 | while IFS= read -r l; do echo "::error::${l:0:400}"; done
             exit 1
           fi
 
       - name: Renommer
-        run: cp android/app/build/outputs/apk/release/app-release.apk prono-lab.apk
+        run: |
+          cp android/app/build/outputs/apk/perso/release/app-perso-release.apk prono-lab.apk
+          cp android/app/build/outputs/apk/pub/release/app-pub-release.apk prono-lab-public.apk
+          cp android/app/build/outputs/bundle/pubRelease/app-pub-release.aab prono-lab-google-play.aab
 
       - uses: actions/upload-artifact@v4
         with:
           name: prono-lab-apk
-          path: prono-lab.apk
+          path: |
+            prono-lab.apk
+            prono-lab-public.apk
+            prono-lab-google-play.aab
 
       - name: Publier la version
         uses: softprops/action-gh-release@v2
@@ -85,7 +101,11 @@ jobs:
           tag_name: v2.${{ github.run_number }}
           name: Prono Lab 2.${{ github.run_number }}
           body: |
-            Téléchargez **prono-lab.apk** ci-dessous depuis votre téléphone Android, puis ouvrez le fichier pour l'installer.
+            Téléchargez **prono-lab.apk** ci-dessous depuis votre téléphone Android, puis ouvrez le fichier pour l'installer (application personnelle).
+            **prono-lab-public.apk** : version publique (bêta) à envoyer aux testeurs. **prono-lab-google-play.aab** : fichier à déposer dans la Google Play Console.
             Les données (matchs, cotes, statistiques) se mettent à jour toutes seules depuis internet : pas besoin de réinstaller pour ça.
-          files: prono-lab.apk
+          files: |
+            prono-lab.apk
+            prono-lab-public.apk
+            prono-lab-google-play.aab
           make_latest: true

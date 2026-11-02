@@ -106,6 +106,11 @@ main .wrap{padding-block:16px 28px}
 .mcard.safe.value{border-color:var(--good)}
 .ribbon{margin:-12px -14px 2px;padding:7px 14px;background:var(--good);color:var(--pitch-ink);font-weight:600;font-size:13px;border-radius:8px 8px 0 0;display:flex;justify-content:space-between;gap:8px;flex-wrap:wrap}
 .ribbon.gold{background:var(--warn)}
+.ribbon.live{background:var(--bad);color:#fff}
+.live-dot{display:inline-block;width:8px;height:8px;border-radius:50%;background:currentColor;margin-right:6px;animation:blink 1.4s infinite}
+@keyframes blink{50%{opacity:.25}}
+.fav{background:none;border:0;padding:0 4px;font-size:17px;line-height:1;cursor:pointer;color:var(--warn);vertical-align:middle}
+.pub .perso-only,.pub [data-book],.pub [data-vbk],.pub [data-bk],.pub #stGo{display:none!important}
 .ribbon + .ribbon{margin-top:0;border-radius:0}
 .ribbon .num{font-weight:600}
 .vtable tr.reco td{background:color-mix(in srgb,var(--warn) 10%,transparent)}
@@ -262,7 +267,8 @@ table{border-collapse:collapse;width:100%}
     <!-- MATCHS -->
     <section class="view" id="v-matchs">
       <div class="viewhead"><h2 id="mTitle">Prochains matchs</h2><span class="hint" id="mHint"></span></div>
-      <label class="field" style="margin:-4px 0 10px;max-width:340px"><span>Afficher</span><select id="mFilter"><option value="all">Tous les matchs</option><option value="safe">Seulement les paris très probables (vert)</option><option value="value">Seulement les paris à valeur (doré)</option></select></label>
+      <label class="field" style="margin:-4px 0 10px;max-width:340px"><span>Afficher</span><select id="mFilter"><option value="all">Tous les matchs</option><option value="safe">Seulement les paris très probables (vert)</option><option value="value">Seulement les paris à valeur (doré)</option><option value="fav">Mes équipes (☆ pour suivre une équipe)</option><option value="live">Matchs en cours</option></select></label>
+      <div class="row" id="dirRow" hidden style="margin:-2px 0 10px"><button class="btn sm" type="button" id="dirBtn"><span class="live-dot" style="color:var(--bad)"></span>Actualiser le direct</button><span class="hint" id="dirInfo"></span></div>
       <div id="mList"></div>
       <div class="panel" style="margin-top:16px">
         <p class="label" id="stdTitle">Classement</p>
@@ -377,7 +383,7 @@ table{border-collapse:collapse;width:100%}
             <label class="field"><span>Mise maximale par pari (% bankroll)</span><input type="number" id="sMax" min="0.5" max="10" step="0.5" inputmode="decimal"></label>
             <label class="field"><span>Exposition maximale (% bankroll en jeu)</span><input type="number" id="sExpo" min="1" max="50" step="1" inputmode="decimal"></label>
           </div>
-          <div class="field" style="margin-top:12px"><span>Clé The Odds API (cotes en direct)</span>
+          <div class="field perso-only" style="margin-top:12px"><span>Clé The Odds API (cotes en direct)</span>
             <div class="row"><input type="password" id="sKey" autocomplete="off" spellcheck="false" placeholder="Collez votre clé ici" style="flex:1;min-width:180px"><button class="btn sm" type="button" id="sKeySave">Enregistrer</button></div>
             <span class="hint" id="sKeyInfo"></span>
             <div style="margin-top:8px"><span class="hint">Mes autres comptes : l'application prend la meilleure cote parmi vos bookmakers (agréés en France uniquement)</span>
@@ -385,6 +391,17 @@ table{border-collapse:collapse;width:100%}
             <span class="hint">Parions Sport n'est pas couvert par le service de cotes.</span></div>
           </div>
           <p class="hint" style="margin-top:10px">Kelly fractionné : la mise grandit avec l'écart de valeur, divisée par 4 par prudence, plafonnée par pari et pour l'ensemble des paris en cours. Elle utilise une probabilité prudente (60 % modèle, 40 % marché). Pour une bankroll de 100 €, le plafond d'exposition de 15 % limite à 15 € la somme des paris en attente.</p>
+        </div>
+        <div class="panel" id="notifPanel">
+          <p class="label">Notifications et direct</p>
+          <div class="stack" style="gap:8px">
+            <label class="check"><input type="checkbox" id="nFav"> Rappel 15 min avant les matchs de mes équipes (☆ dans Matchs)</label>
+            <label class="check"><input type="checkbox" id="nTk"> Rappel 15 min avant les matchs des tickets du jour</label>
+            <label class="check"><input type="checkbox" id="nEnd"> Fin de match : rappel pour voir le score et les tickets</label>
+            <label class="check"><input type="checkbox" id="nDaily"> Chaque matin à 10 h : les tickets du jour sont prêts</label>
+            <label class="check perso-only"><input type="checkbox" id="nLive"> Direct : actualiser les scores toutes les 4 min pendant les matchs (1 crédit par compétition en cours)</label>
+          </div>
+          <p class="hint" id="nInfo" style="margin:8px 0 0"></p>
         </div>
         <div class="panel" id="backupPanel">
           <p class="label">Sauvegarde de mes données</p>
@@ -503,6 +520,9 @@ table{border-collapse:collapse;width:100%}
 /* ================= Données ================= */
 const EMBEDDED = /*DATA*/null;
 const REMOTE_URL = "/*REMOTE*/";
+// Deux éditions construites depuis ce fichier : « perso » (complète) et « pub » (version publique : sans Metabet, sans clé de
+// cotes personnelle, sans ouverture des sites de paris, porte 18 ans et plus).
+const EDITION = "/*EDITION*/perso", PUB = EDITION === "pub";
 const LS = {
   get(k, d){ try { const v = localStorage.getItem(k); return v == null ? d : JSON.parse(v); } catch { return d; } },
   set(k, v){ try { localStorage.setItem(k, JSON.stringify(v)); } catch {} }
@@ -1005,6 +1025,12 @@ const FR_KEY = { unibet_fr:"unibet", winamax_fr:"winamax", betclic_fr:"betclic",
 const myBooks = () => { const s = settings(); return [...new Set([s.book, ...(s.accounts || [])])].filter(k => BOOKS[k]); };
 // cote en dessous de laquelle le pari n'a plus de valeur (même seuil que l'onglet Valeur)
 const minOdds = (p, mp) => { const q = prudent(p, mp); return q > 0 ? (1 + VALUE_MIN) / q : null; };
+function openBook(kw, bu, bn, what){
+  const pre = what ? what + " copié" : "";
+  if (PUB){ toast(`${pre || "Copié"} : collez-le chez votre bookmaker`); return; }
+  if (window.ProNoLab && window.ProNoLab.openApp){ let how = "web"; try { how = window.ProNoLab.openApp(kw, bu); } catch {} toast(how === "app" ? `${pre ? pre + " · " : ""}ouverture de ${bn}` : `${pre ? pre + " · " : ""}${bn} introuvable, ouverture du site`); }
+  else { toast(pre || `Ouverture de ${bn}`); window.open(bu, "_blank", "noopener"); }
+}
 function copyText(t){
   let ok = false;
   try { if (window.ProNoLab && window.ProNoLab.copy(t)) return true; } catch {}
@@ -1037,13 +1063,14 @@ function openBookSheet(pre){
     <div class="row" style="justify-content:flex-end">
       <button type="button" class="btn ghost" id="bkClose">Fermer</button>
       ${pre.recorded ? "" : `<button type="button" class="btn ghost" id="bkRecord">Enregistrer dans Mes paris</button>`}
-      <a class="btn" id="bkGo" href="${esc(bu)}" target="_blank" rel="noopener" style="text-decoration:none">Copier et ouvrir ${esc(bn)}</a>
+      <a class="btn" id="bkGo" href="${esc(bu)}" target="_blank" rel="noopener" style="text-decoration:none">${PUB ? "Copier le récapitulatif" : "Copier et ouvrir " + esc(bn)}</a>
     </div></div></div>`;
   const close = () => { $("sheetHost").innerHTML = ""; };
   $("bkClose").onclick = close;
   $("sheetBg").addEventListener("click", e => { if (e.target.id === "sheetBg") close(); });
   $("bkGo").addEventListener("click", e => {
     copyText(txt);
+    if (PUB){ e.preventDefault(); toast("Récapitulatif copié : collez-le chez votre bookmaker"); return; }
     // Dans l'application Android : ouvrir directement l'application du bookmaker si elle est installée
     if (window.ProNoLab && window.ProNoLab.openApp){
       e.preventDefault();
@@ -1136,7 +1163,7 @@ const SHARP_BOOK = "pinnacle", EXCHANGES = /betfair|matchbook|smarkets|betdaq/i,
 // Crédits gratuits : 500 par mois, 1 par compétition interrogée. On n'interroge que les compétitions qui jouent bientôt :
 // une cote vieille de plus de 6 h n'est plus une référence, inutile de relever les matchs lointains.
 const LIVE_DAYS_MANUAL = 4, LIVE_DAYS_AUTO = 2, LIVE_RESERVE = 40;
-const liveKey = () => (LS.get("pl_oddskey", "") || "").trim();
+const liveKey = () => PUB ? "" : (LS.get("pl_oddskey", "") || "").trim();
 const liveState = () => LS.get("pl_live", { at:null, remaining:null, used:null, data:{}, msg:"" });
 window.__nfCb = {};
 window.__nf = (id, status, body, remaining, used) => { const cb = window.__nfCb[id]; delete window.__nfCb[id]; if (cb) cb({ status, body, remaining, used }); };
@@ -1264,6 +1291,52 @@ const SCORE_KEYS = Object.assign({}, SPORT_KEYS, { champ:"soccer_efl_champ", eng
 // coupes : le score du fournisseur peut inclure la prolongation, or les paris se règlent à 90 minutes → scores des données seulement
 ["cdf","fac","efl","cdr","cit","dfb"].forEach(k => delete SCORE_KEYS[k]);
 const scoreOverlay = () => LS.get("pl_scores", {});
+/* ================= Direct =================
+   Pendant un match, les probabilités repartent du score et du temps restant : buts encore attendus = buts attendus avant
+   le match × part du temps restant (loi de Poisson), ajoutés au score actuel. Le score vient du service de scores. */
+const LIVE_EVERY_MIN = 4;   // actualisation automatique du direct (1 crédit par compétition en cours)
+const liveSc = () => LS.get("pl_livesc", {});
+const liveKeyOf = (lg, m) => `${lg}|${m.h}|${m.a}|${m.d.slice(0, 10)}`;
+function inPlay(m){ if (!m || m.s) return false; const el = (Date.now() - parisToUtcMs(m.d)) / 6e4; return el >= 0 && el <= 135; }
+function liveClock(m){
+  const el = (Date.now() - parisToUtcMs(m.d)) / 6e4;
+  if (el <= 47){ const x = Math.max(1, Math.ceil(el)); return { min: Math.min(45, x), lab: el > 45 ? "45'+" : `${x}'` }; }
+  if (el <= 62) return { min: 45, lab: "mi-temps" };
+  const x = Math.ceil(el - 17); return x <= 90 ? { min: x, lab: `${x}'` } : { min: 90, lab: "90'+" };
+}
+function liveOf(lg, m){ const v = liveSc()[liveKeyOf(lg, m)]; return v && inPlay(m) ? v : null; }
+function livePredict(r, s, min){
+  const f = Math.max(0.01, (90 - min) / 90), lh = r.lh * f, la = r.la * f, sc = [];
+  for (let i = 0; i <= 8; i++) for (let j = 0; j <= 8; j++) sc.push([s[0] + i, s[1] + j, pois(i, lh) * pois(j, la)]);
+  const tot = sc.reduce((a, x) => a + x[2], 0); sc.forEach(x => x[2] /= tot);
+  const P = f2 => sc.reduce((a, [x, y, p]) => a + (f2(x, y) ? p : 0), 0);
+  const top = sc.reduce((a, x) => x[2] > a[2] ? x : a);
+  return { s, min, lh, la, P, top, pH: P((x, y) => x > y), pD: P((x, y) => x === y), pA: P((x, y) => x < y), more: 1 - pois(0, lh + la) };
+}
+// probabilité en direct qu'un pari passe (null pour les paris à la mi-temps ou sans règle de règlement)
+function liveLegP(lg, m, k){
+  const M = MARKETS[k], v = liveOf(lg, m); if (!M || !M.win || M.ht || !v || !CL[lg]) return null;
+  const r = predict(CL[lg], m.h, m.a), lp = livePredict(r, v.s, liveClock(m).min);
+  return lp.P((x, y) => M.win(x, y));
+}
+function liveLegHtml(l){
+  const m = l.m || findMatch({ lg: l.lg, h: l.h, a: l.a, d: l.d }); if (!m || !inPlay(m)) return "";
+  const v = liveOf(l.lg, m), c = liveClock(m);
+  if (!v) return ` · <strong style="color:var(--bad)"><span class="live-dot"></span>en cours ${c.lab}</strong>`;
+  const p = liveLegP(l.lg, m, l.k);
+  return ` · <strong style="color:var(--bad)"><span class="live-dot"></span>${v.s[0]}-${v.s[1]} ${c.lab}</strong>${p != null ? ` · <strong>${pct(p)}</strong> de passer` : ""}`;
+}
+// chance de gain d'un combiné en direct : sélections réglées (0 ou 1), en cours (direct) ou à venir (avant-match)
+function ticketLiveP(t){
+  if (t.kind === "system" || !t.legs.some(l => { const m = l.m || findMatch({ lg: l.lg, h: l.h, a: l.a, d: l.d }); return m && liveOf(l.lg, m); })) return null;
+  let P = 1;
+  for (const l of t.legs){
+    const m = l.m || findMatch({ lg: l.lg, h: l.h, a: l.a, d: l.d }), st = m ? settleMk(l.k, m) : null;
+    if (st === "lost") return 0; if (st === "won" || st === "void") continue;
+    const q = m ? liveLegP(l.lg, m, l.k) : null; P *= q != null ? q : (l.p || 0);
+  }
+  return P;
+}
 function applyScores(){
   const ov = scoreOverlay();
   Object.entries(ov).forEach(([k, v]) => {
@@ -1276,23 +1349,39 @@ async function refreshScores(manual){
   const key = liveKey();
   if (!key){ if (manual) toast("Saisissez d'abord votre clé The Odds API dans Mes paris."); return 0; }
   const meta = LS.get("pl_scores_meta", { at: null }), st = liveState();
-  if (!manual && meta.at && hoursSince(meta.at) < SCORES_MIN_H) return 0;
-  if (!manual && st.remaining != null && st.remaining < LIVE_RESERVE) return 0;
   const now = Date.now(), limit = parisStr(now - 2.25 * 36e5), from = parisStr(now - 3 * 864e5);
-  // seulement les compétitions qui ont un match terminé (coup d'envoi il y a plus de 2 h 15) sans score
-  const leagues = Object.keys(SCORE_KEYS).filter(lg => DATA.leagues[lg] && DATA.leagues[lg].matches.some(m => !m.s && m.d <= limit && m.d >= from));
-  if (!leagues.length){ if (manual) toast("Aucun match terminé en attente de score."); return 0; }
+  // compétitions avec un match en cours (direct) ou un match terminé (coup d'envoi il y a plus de 2 h 15) sans score
+  const liveLgs = Object.keys(SCORE_KEYS).filter(lg => DATA.leagues[lg] && DATA.leagues[lg].matches.some(inPlay));
+  const doneLgs = Object.keys(SCORE_KEYS).filter(lg => DATA.leagues[lg] && DATA.leagues[lg].matches.some(m => !m.s && m.d <= limit && m.d >= from));
+  if (!manual){
+    if (st.remaining != null && st.remaining < LIVE_RESERVE) return 0;
+    const liveDue = liveLgs.length && settings().liveAuto !== false && (!meta.liveAt || (now - meta.liveAt) / 6e4 >= LIVE_EVERY_MIN);
+    const doneDue = doneLgs.length && (!meta.at || hoursSince(meta.at) >= SCORES_MIN_H);
+    if (!liveDue && !doneDue) return 0;
+  }
+  const leagues = [...new Set([...liveLgs, ...doneLgs])];
+  if (!leagues.length){ if (manual) toast("Aucun match en cours ni terminé en attente de score."); return 0; }
   const btn = $("scoreBtn"); if (btn){ btn.disabled = true; btn.textContent = "…"; }
-  const ov = scoreOverlay(); let found = 0, remaining = st.remaining, err = "";
+  const ov = scoreOverlay(), lv = liveSc(); let found = 0, nLive = 0, remaining = st.remaining, err = "";
   for (const lg of leagues){
     const L = DATA.leagues[lg];
-    const r = await nativeFetch(`${ODDS_API}/sports/${SCORE_KEYS[lg]}/scores/?apiKey=${encodeURIComponent(key)}&daysFrom=3&dateFormat=iso`);
+    // sans « daysFrom », le service ne renvoie que les matchs en cours et à venir (1 crédit au lieu de 2)
+    const r = await nativeFetch(`${ODDS_API}/sports/${SCORE_KEYS[lg]}/scores/?apiKey=${encodeURIComponent(key)}${doneLgs.includes(lg) ? "&daysFrom=3" : ""}&dateFormat=iso`);
     if (r.remaining != null && r.remaining !== "") remaining = +r.remaining;
     if (r.status === 401){ err = "Clé refusée."; break; }
     if (r.status === 429){ err = "Crédits épuisés pour ce mois-ci."; break; }
     if (r.status !== 200) continue;
     let evs = []; try { evs = JSON.parse(r.body); } catch { continue; }
     const waiting = L.matches.filter(m => !m.s && m.d <= limit && m.d >= from);
+    // direct : score des matchs en cours
+    const playing = L.matches.filter(inPlay);
+    evs.filter(ev => !ev.completed && Array.isArray(ev.scores) && ev.scores.length === 2).forEach(ev => {
+      const hc = teamCands(L, ev.home_team), ac = teamCands(L, ev.away_team), t = parisOfIso(ev.commence_time);
+      const m = playing.find(f => Math.abs(pDate(f.d) - pDate(t)) <= 3 * 36e5 && (hc.includes(f.h) || ac.includes(f.a))); if (!m) return;
+      const sc = n => { const x = ev.scores.find(z => z.name === n); return x ? parseInt(x.score, 10) : NaN; };
+      const s = [sc(ev.home_team), sc(ev.away_team)]; if (!s.every(Number.isFinite)) return;
+      lv[liveKeyOf(lg, m)] = { s, at: Date.now() }; nLive++;
+    });
     evs.filter(ev => ev.completed && Array.isArray(ev.scores) && ev.scores.length === 2).forEach(ev => {
       const hc = teamCands(L, ev.home_team), ac = teamCands(L, ev.away_team), t = parisOfIso(ev.commence_time);
       const near = h => waiting.filter(f => Math.abs(pDate(f.d) - pDate(t)) <= h * 36e5);
@@ -1305,17 +1394,20 @@ async function refreshScores(manual){
   }
   // on oublie les scores de plus de 10 jours (les données officielles les ont repris)
   Object.keys(ov).forEach(k => { const d = k.split("|")[3]; if (pDate(d + "T12:00") < now - 10 * 864e5) delete ov[k]; });
-  LS.set("pl_scores", ov); LS.set("pl_scores_meta", { at: nowStr() });
+  Object.keys(lv).forEach(k => { if (Date.now() - lv[k].at > 6 * 36e5) delete lv[k]; });
+  LS.set("pl_scores", ov); LS.set("pl_livesc", lv);
+  LS.set("pl_scores_meta", { at: doneLgs.length || !meta.at ? nowStr() : meta.at, liveAt: liveLgs.length ? Date.now() : meta.liveAt || null });
   if (remaining != null){ const s2 = liveState(); s2.remaining = remaining; LS.set("pl_live", s2); }
   if (btn){ btn.disabled = false; btn.textContent = "Scores"; }
   let n = 0;
-  if (found){ computeAll(); applyLive(); n = autoSettle(); render(); }
-  if (manual || found) toast(err || (found ? `${found} score${found > 1 ? "s" : ""} récupéré${found > 1 ? "s" : ""}${n ? ` · ${n} pari${n > 1 ? "s" : ""} réglé${n > 1 ? "s" : ""}` : ""}` : "Pas encore de nouveau score."));
+  if (found){ computeAll(); applyLive(); n = autoSettle(); }
+  if (found || nLive) render();
+  if (manual || found) toast(err || (found || nLive ? [found ? `${found} score${found > 1 ? "s" : ""} final${found > 1 ? "s" : ""}${n ? ` · ${n} pari${n > 1 ? "s" : ""} réglé${n > 1 ? "s" : ""}` : ""}` : "", nLive ? `${nLive} match${nLive > 1 ? "s" : ""} en direct` : ""].filter(Boolean).join(" · ") : "Pas encore de nouveau score."));
   return found;
 }
 function liveStatus(){
   const st = liveState(), k = liveKey();
-  if (!k) return "Cotes en direct désactivées : ajoutez votre clé The Odds API dans Mes paris.";
+  if (!k) return PUB ? "Cotes : relevé inclus dans les données, mis à jour plusieurs fois par semaine." : "Cotes en direct désactivées : ajoutez votre clé The Odds API dans Mes paris.";
   if (!st.at) return "Cotes en direct prêtes : touchez « Actualiser les cotes ».";
   const h = hoursSince(st.at), ago = h < 1 ? `${Math.max(1, Math.round(h*60))} min` : `${Math.round(h)} h`;
   return `Cotes en direct actualisées il y a ${ago}${st.matched ? ` · ${st.matched} matchs` : ""}${st.remaining != null ? ` · ${st.remaining} crédits restants ce mois-ci` : ""}${st.remaining != null && st.remaining < LIVE_RESERVE ? " (peu de crédits : actualisation automatique suspendue, actualisez juste avant de parier)" : ""}${st.msg ? " · " + st.msg : ""}`;
@@ -1444,6 +1536,11 @@ function backtest(){
 
 /* ================= État & navigation ================= */
 const ui = Object.assign({ view:"matchs", lg:"l1" }, LS.get("pl_ui", {}));
+if (PUB){
+  document.documentElement.classList.add("pub");
+  const mb = document.querySelector('.nav [data-v="metabet"]'); if (mb) mb.closest("li").remove();
+  if (ui.view === "metabet") ui.view = "matchs";
+}
 if (!DATA.leagues[ui.lg] && ui.lg !== "all") ui.lg = "l1";
 const saveUi = () => LS.set("pl_ui", { view:ui.view, lg:ui.lg, aH:ui.aH, aA:ui.aA, mF:ui.mF, arF:ui.arF });
 let CL = {};
@@ -1527,11 +1624,20 @@ function renderMatchs(){
   const tops = new Map(all.map(m => [m, topPick(m, predict(C, m.h, m.a), lg)]));
   const safes = new Map(all.map(m => [m, m.d > nowStr() && tops.get(m).safe ? tops.get(m) : null]));
   const nReco = [...recos.values()].filter(Boolean).length, nSafe = [...safes.values()].filter(Boolean).length;
-  if (!["all","safe","value"].includes(ui.mF)) ui.mF = "all";
+  if (!["all","safe","value","fav","live"].includes(ui.mF)) ui.mF = "all";
   $("mFilter").value = ui.mF;
-  const list = ui.mF === "safe" ? all.filter(m => safes.get(m)) : ui.mF === "value" ? all.filter(m => recos.get(m)) : all;
+  const favs = LS.get("pl_favs", {});
+  const list = ui.mF === "safe" ? all.filter(m => safes.get(m)) : ui.mF === "value" ? all.filter(m => recos.get(m)) : ui.mF === "fav" ? all.filter(m => favs[m.h] || favs[m.a]) : ui.mF === "live" ? all.filter(inPlay) : all;
+  const nPlay = all.filter(inPlay).length;
+  $("dirRow").hidden = !nPlay;
+  if (nPlay){
+    const meta = LS.get("pl_scores_meta", {});
+    $("dirInfo").textContent = PUB ? `${nPlay} match${nPlay > 1 ? "s" : ""} en cours · scores en direct bientôt disponibles dans cette version` : !liveKey() ? "Ajoutez votre clé The Odds API dans Mes paris pour suivre les scores en direct." : `${nPlay} match${nPlay > 1 ? "s" : ""} en cours${meta.liveAt ? ` · score relevé il y a ${Math.max(1, Math.round((Date.now() - meta.liveAt) / 6e4))} min` : ""} · actualisation automatique toutes les ${LIVE_EVERY_MIN} min (1 crédit par compétition)`;
+    $("dirBtn").hidden = PUB || !liveKey();
+    $("dirBtn").onclick = () => refreshScores(true);
+  }
   $("mHint").textContent = all.length ? `${all.length} rencontres sur ${days} jours · ${nSafe} très probable${nSafe>1?"s":""} (vert) · ${nReco} pari${nReco>1?"s":""} à valeur (doré)` : "";
-  if (!list.length){ $("mList").innerHTML = `<div class="empty">${ui.mF !== "all" && all.length ? (ui.mF === "safe" ? "Aucune issue très probable dans ce championnat pour l'instant : il faut que le modèle et les cotes donnent le meilleur pari d'un match à ${Math.round(SAFE_P*100)} % ou plus." : `Aucun pari à valeur dans ce championnat pour l'instant. ${liveKey() ? "Actualisez les cotes dans l'onglet Valeur." : "Activez les cotes en direct dans Mes paris pour en obtenir."}`) : `Aucun match programmé dans les ${days} prochains jours. Le calendrier se met à jour avec les données.`}</div>`; }
+  if (!list.length){ $("mList").innerHTML = `<div class="empty">${ui.mF === "fav" ? "Aucun match de vos équipes dans les prochains jours ici. Touchez ☆ à côté d'un nom d'équipe pour la suivre." : ui.mF === "live" ? "Aucun match en cours dans cette compétition." : ui.mF !== "all" && all.length ? (ui.mF === "safe" ? "Aucune issue très probable dans ce championnat pour l'instant : il faut que le modèle et les cotes donnent le meilleur pari d'un match à ${Math.round(SAFE_P*100)} % ou plus." : `Aucun pari à valeur dans ce championnat pour l'instant. ${liveKey() ? "Actualisez les cotes dans l'onglet Valeur." : PUB ? "Ils apparaissent quand les cotes relevées paient plus que le risque." : "Activez les cotes en direct dans Mes paris pour en obtenir."}`) : `Aucun match programmé dans les ${days} prochains jours. Le calendrier se met à jour avec les données.`}</div>`; }
   else {
     let html = "", day = "";
     const now = nowStr();
@@ -1540,6 +1646,8 @@ function renderMatchs(){
       if (dl !== day){ if (day) html += `</div>`; html += `<p class="daylabel">${dl}</p><div class="mlist">`; day = dl; }
       const H = C.T[m.h], A = C.T[m.a], r = predict(C, m.h, m.a);
       const [mk, lab, p] = mainPick(r, H.name, A.name), [cc, cl] = confidence(p, Math.min(H.p, A.p));
+      const playing = inPlay(m), lv = playing ? liveOf(lg, m) : null, clk = playing ? liveClock(m) : null, lp = lv ? livePredict(r, lv.s, clk.min) : null, q = lp || r;
+      const star = id => `<button class="fav" type="button" data-fav="${esc(id)}" aria-label="${favs[id] ? "Ne plus suivre" : "Suivre"} cette équipe">${favs[id] ? "★" : "☆"}</button>`;
       let val = "", bookMk = mk;
       const best = recos.get(m);
       if (m.odds){
@@ -1552,13 +1660,15 @@ function renderMatchs(){
       const started = m.d <= now, sf = safes.get(m), tp = tops.get(m);
       if (!best) bookMk = tp.k;   // bouton bookmaker et suivi : le pari le plus probable
       html += `<article class="mcard${sf?" safe":""}${best?" value":""}">
+        ${playing ? `<div class="ribbon live"><span><span class="live-dot"></span>EN DIRECT${lv ? ` · ${lv.s[0]}-${lv.s[1]}` : ""} · ${clk.lab}</span><span class="num">${lv ? "probabilités en direct" : "score pas encore relevé"}</span></div>` : ""}
         ${sf ? `<div class="ribbon"><span>✓ Pari mis en avant : ${esc(MARKETS[sf.k].label(H.name, A.name))}</span><span class="num">${pct(sf.p)}</span></div>` : ""}
         ${best ? `<div class="ribbon gold"><span>★ Pari à valeur : ${esc(MARKETS[best.k].label(H.name, A.name))}</span><span class="num">cote ≥ ${fx(best.sharp ? (1+sharpMinFor(m.d))/best.p : minOdds(best.p, best.mp))} · mise ${eur(best.stake)}</span></div>` : ""}
         ${ctxBox(m)}
         <div class="mtop"><span>${fmtTime(m.d)}${started?" · en cours ou joué":""}</span><span>${C.cup ? `${esc(H.lgName)} ${H.rank}e contre ${esc(A.lgName)} ${A.rank}e` : `${H.rank}e contre ${A.rank}e`}</span></div>
-        <div class="mteams"><div class="t${H.name.length>9?" long":""}">${esc(H.name)}</div><div class="xg">${fx(r.lh,1)} – ${fx(r.la,1)}</div><div class="t a${A.name.length>9?" long":""}">${esc(A.name)}</div></div>
-        <div class="minibar"><i class="h" style="width:${r.pH*100}%"></i><i class="d" style="width:${r.pD*100}%"></i><i class="a" style="width:${r.pA*100}%"></i></div>
-        <div class="mprobs num"><span>${pct(r.pH)}</span><span>${pct(r.pD)}</span><span>${pct(r.pA)}</span></div>
+        <div class="mteams"><div class="t${H.name.length>9?" long":""}">${star(m.h)}${esc(H.name)}</div><div class="xg">${lv ? `<strong style="font-size:20px">${lv.s[0]} – ${lv.s[1]}</strong>` : `${fx(r.lh,1)} – ${fx(r.la,1)}`}</div><div class="t a${A.name.length>9?" long":""}">${esc(A.name)}${star(m.a)}</div></div>
+        <div class="minibar"><i class="h" style="width:${q.pH*100}%"></i><i class="d" style="width:${q.pD*100}%"></i><i class="a" style="width:${q.pA*100}%"></i></div>
+        <div class="mprobs num"><span>${pct(q.pH)}</span><span>${pct(q.pD)}</span><span>${pct(q.pA)}</span></div>
+        ${lp ? `<p class="hint" style="margin:0;color:var(--fg)"><strong>En direct (${clk.lab}) :</strong> ${lv.s[0] === lv.s[1] ? "match nul pour l'instant" : `${esc(lv.s[0] > lv.s[1] ? H.name : A.name)} mène`} · encore au moins un but : <strong>${pct(lp.more)}</strong> · score final le plus probable : <strong>${lp.top[0]}-${lp.top[1]}</strong> (${pct(lp.top[2])}). Le pronostic d'avant-match reste affiché ci-dessous.</p>` : ""}
         <div class="mfoot"><span class="pickline"><span class="hint" style="font-weight:400">Pari mis en avant :</span> ${esc(MARKETS[tp.k].label(H.name, A.name))} <span class="num">${pct(tp.p)}</span>${sf ? "" : ` <span class="tag ${tp.p >= 0.7 ? "warn" : "bad"}">${tp.p >= 0.7 ? "probable" : "incertain"}</span>`}</span>${best ? "" : val}</div>
         ${sf ? `<p class="hint" style="margin:0;color:var(--fg)"><strong>Pourquoi en vert ?</strong> ${sf.k === "1" || sf.k === "2" ? "Victoire assez probable pour passer avant les paris plus sûrs mais moins payés : environ" : "De tous les paris de ce match (résultat, double chance, buts, les deux marquent), c'est celui qui a le plus de chances : environ"} <strong>${Math.round(sf.p*10)} fois sur 10</strong>. Modèle ${pct(sf.pc)}${sf.pk != null ? `, cotes ${pct(sf.pk)}` : " (pas de cote pour ce pari : avis du modèle seul, corrigé de ses erreurs passées)"}.${sf.season && sf.season.n >= 10 ? ` Cette saison, ce pari mis en avant a réussi <strong>${sf.season.hit} fois sur ${sf.season.n}</strong> (${pct(sf.season.hit/sf.season.n)}).` : ""} ${best && best.k === sf.k ? "C'est aussi un pari à valeur." : "Cote faible : ne misez que s'il est aussi en doré."}</p>` : ""}
         ${best ? `<p class="hint" style="margin:0;color:var(--fg)"><strong>Pourquoi ce pari ?</strong> Il a ${pct(best.p)} de chances de passer${best.sharp ? " selon les cotes de référence" : ""} et la cote ${fx(best.o)}${best.bk ? " (" + esc(best.bk) + ")" : ""} paie plus que ce risque : <strong class="edge-pos">+${(best.edge*100).toFixed(0)} % de valeur</strong>. ${best.p < 0.5 ? "Il perdra souvent, mais sur la durée il rapporte." : ""}</p>` : ""}
@@ -1567,6 +1677,7 @@ function renderMatchs(){
     });
     html += `</div>`;
     $("mList").innerHTML = html;
+    $("mList").querySelectorAll("[data-fav]").forEach(b => b.onclick = () => { const f = LS.get("pl_favs", {}), id = b.dataset.fav; if (f[id]) delete f[id]; else f[id] = true; LS.set("pl_favs", f); toast(f[id] ? "Équipe suivie : rappel avant ses matchs si les notifications sont activées" : "Équipe retirée de vos équipes"); scheduleNotifs(true); renderMatchs(); });
     $("mList").querySelectorAll("[data-an]").forEach(b => b.onclick = () => { const [h,a] = b.dataset.an.split("|"); ui.aH = h; ui.aA = a; ui.aOddsKey = null; setView("analyse"); });
     $("mList").querySelectorAll("[data-bet]").forEach(b => b.onclick = () => { const [l,d,h,a,mk] = b.dataset.bet.split("|"); openBetSheet({ lg:l, d, h, a, mk }); });
     $("mList").querySelectorAll("[data-book]").forEach(b => b.onclick = () => { const [l,d,h,a,mk] = b.dataset.book.split("|"); openBookSheet({ lg:l, d, h, a, mk }); });
@@ -1812,7 +1923,7 @@ function toast(msg){ $("toastHost").innerHTML = `<div class="toast" role="status
 
 /* ================= Vue : Mes paris ================= */
 /* ===== Sauvegarde : export / import de toutes les données personnelles (sauf la clé de cotes et le cache des données) ===== */
-const BACKUP_KEYS = ["pl_bets","pl_settings","pl_journal","pl_tjournal","pl_mjournal","pl_arch_t","pl_arch_m","pl_intuit","pl_step","pl_scores","pl_goldseen","pl_ui"];
+const BACKUP_KEYS = ["pl_favs","pl_notif","pl_age18","pl_bets","pl_settings","pl_journal","pl_tjournal","pl_mjournal","pl_arch_t","pl_arch_m","pl_intuit","pl_step","pl_scores","pl_goldseen","pl_ui"];
 function backupJson(){
   const data = {}; BACKUP_KEYS.forEach(k => { const v = LS.get(k, null); if (v != null) data[k] = v; });
   return JSON.stringify({ app: "Prono Lab", format: 1, at: nowStr(), data });
@@ -2243,8 +2354,7 @@ function openStepSheet(t){
     $("stClose").onclick = () => { $("sheetHost").innerHTML = ""; };
     $("stReset").onclick = () => { cur.done = {}; save(); draw(); };
     $("stGo").onclick = () => {
-      if (window.ProNoLab && window.ProNoLab.openApp){ let how = "web"; try { how = window.ProNoLab.openApp(kw, bu); } catch {} toast(how === "app" ? `Ouverture de ${bn}` : `${bn} introuvable, ouverture du site`); }
-      else window.open(bu, "_blank", "noopener");
+      openBook(kw, bu, bn, "");
     };
     $("sheetHost").querySelectorAll("[data-sd]").forEach(c => c.onchange = () => { cur.done[c.dataset.sd] = c.checked; save(); draw(); });
     $("sheetHost").querySelectorAll("[data-so]").forEach(inp => inp.onchange = () => { const v = parseFloat(String(inp.value).replace(",", ".")); if (v > 1) cur.odds[inp.dataset.so] = v; else delete cur.odds[inp.dataset.so]; save(); draw(); });
@@ -2315,7 +2425,7 @@ function renderArchive(arch, host){
     return `<details style="border:1px solid var(--line);border-radius:10px;padding:8px 12px;margin-bottom:8px"><summary style="cursor:pointer"><strong>${fmtDay(d.day + "T12:00")}</strong> <span class="hint">· ${d.tickets.length} tickets · ${won} gagné${won > 1 ? "s" : ""}${fin < d.tickets.length ? ` · ${d.tickets.length - fin} en cours` : ""}</span></summary>
       ${d.tickets.map(t => `<div style="margin-top:10px;padding-top:8px;border-top:1px dashed var(--line)"><div class="row" style="justify-content:space-between;align-items:center"><strong>${esc(t.name)}</strong>${resBadge(t)}</div>
         <p class="hint" style="margin:2px 0 6px">cote ${fx(t.kind === "system" ? (t.hi || t.O || 0) : t.legs.reduce((a, l) => a * l.o, 1))} · mise ${eur(t.stake)}</p>
-        <ul class="legs bt-list">${t.legs.map(l => `<li class="leg"><div>${legIcon(l)} <strong>${esc(MARKETS[l.k] ? MARKETS[l.k].label(l.H, l.A) : l.k)}</strong>${legDis(l)}<br><span class="hint">${esc(l.H)} – ${esc(l.A)} · ${fmtDay(l.d)} ${fmtTime(l.d)}${legScore(l)}</span></div><div class="r num">${fx(l.o)}</div></li>`).join("")}</ul></div>`).join("")}
+        <ul class="legs bt-list">${t.legs.map(l => `<li class="leg"><div>${legIcon(l)} <strong>${esc(MARKETS[l.k] ? MARKETS[l.k].label(l.H, l.A) : l.k)}</strong>${legDis(l)}<br><span class="hint">${esc(l.H)} – ${esc(l.A)} · ${fmtDay(l.d)} ${fmtTime(l.d)}${legScore(l)}${liveLegHtml(l)}</span></div><div class="r num">${fx(l.o)}</div></li>`).join("")}</ul></div>`).join("")}
     </details>`;
   }).join("");
 }
@@ -2340,7 +2450,7 @@ function renderArchiveTab(){
       return `<details class="arch-t ${r.res || ""}" data-id="${esc(id)}"${opened.has(id) ? " open" : ""}><summary>
           <strong>${esc(t.name)}</strong>${badge}
           <span class="hint">${src[t.src]} · ${t.legs.length} match${t.legs.length > 1 ? "s" : ""} · cote ${fx(O)} · mise ${eur(t.stake)}</span><span class="dots">${t.legs.map(legIcon).join("")}</span>
-        </summary><div class="body"><ul class="legs bt-list">${t.legs.map(l => `<li class="leg"><div>${legIcon(l)} <strong>${esc(MARKETS[l.k] ? MARKETS[l.k].label(l.H, l.A) : l.k)}</strong>${legDis(l)}<br><span class="hint">${esc(l.H)} – ${esc(l.A)} · ${fmtDay(l.d)} ${fmtTime(l.d)}${legScore(l)}</span></div><div class="r num">${fx(l.o)}</div></li>`).join("")}</ul>
+        </summary><div class="body"><ul class="legs bt-list">${t.legs.map(l => `<li class="leg"><div>${legIcon(l)} <strong>${esc(MARKETS[l.k] ? MARKETS[l.k].label(l.H, l.A) : l.k)}</strong>${legDis(l)}<br><span class="hint">${esc(l.H)} – ${esc(l.A)} · ${fmtDay(l.d)} ${fmtTime(l.d)}${legScore(l)}${liveLegHtml(l)}</span></div><div class="r num">${fx(l.o)}</div></li>`).join("")}</ul>
         <p class="hint" style="margin:6px 0 0">${nOk} sur ${t.legs.length} sélection${t.legs.length > 1 ? "s" : ""} passée${nOk > 1 ? "s" : ""} · proposé le ${fmtDay(t.at || t.setAt)} à ${fmtTime(t.at || t.setAt)}</p></div></details>`;
     }).join("");
   }).join("") : `<div class="empty">L'archive est vide pour l'instant. Les tickets du jour y seront enregistrés dès la prochaine ouverture.</div>`;
@@ -2380,24 +2490,23 @@ function renderTickets(){
       return `<article class="panel ticket">
         <div class="thead"><span class="tag ${rc}">${rl}</span>${t.ev > 0 && !t.est ? `<span class="tag" style="color:var(--warn)">★ rentable</span>` : ""}<strong>${esc(t.name)}</strong><span class="hint">${kind}</span>${resBadge(t)}</div>
         <div class="riskbar" title="Chance de gain"><i style="width:${Math.max(2, t.P*100)}%;background:${col}"></i></div>
-        <ul class="legs">${t.legs.map(l => `<li class="leg"><div>${legIcon(l)} <strong>${esc(MARKETS[l.k].label(l.H, l.A))}</strong>${legDis(l)}<br><span class="hint">${esc(l.H)} – ${esc(l.A)} · ${esc(DATA.leagues[l.lg].name)} · ${fmtDay(l.m.d)} ${fmtTime(l.m.d)}${legScore(l)}</span></div>
+        <ul class="legs">${t.legs.map(l => `<li class="leg"><div>${legIcon(l)} <strong>${esc(MARKETS[l.k].label(l.H, l.A))}</strong>${legDis(l)}<br><span class="hint">${esc(l.H)} – ${esc(l.A)} · ${esc(DATA.leagues[l.lg].name)} · ${fmtDay(l.m.d)} ${fmtTime(l.m.d)}${legScore(l)}${liveLegHtml(l)}</span></div>
           <div class="r num">${l.est ? "≈ " : ""}${fx(l.o)}<br><span class="hint">${l.p != null ? pct(l.p) : ""}</span></div></li>`).join("")}</ul>
         <div class="tk-kpis">
-          <div><span>Chance de gain</span><b>${t.P < 0.05 ? `1 sur ${Math.round(1 / t.P)}` : pct(t.P)}</b>${t.kind === "system" ? `<span>${pct(t.Pany)} d'au moins 2 sur 3</span>` : ""}</div>
+          <div><span>Chance de gain</span><b>${t.P < 0.05 ? `1 sur ${Math.round(1 / t.P)}` : pct(t.P)}</b>${t.kind === "system" ? `<span>${pct(t.Pany)} d'au moins 2 sur 3</span>` : ""}${(lq => lq != null ? `<span style="color:var(--bad)"><span class="live-dot"></span>en direct : ${lq < 0.05 && lq > 0 ? `1 sur ${Math.round(1 / lq)}` : pct(lq)}</span>` : "")(ticketLiveP(t))}</div>
           <div><span>${t.kind === "system" ? "Rapporte (× la mise)" : "Cote totale"}</span><b>${t.kind === "system" ? `${fx(t.lo,1)} à ${fx(t.hi,1)}` : fx(t.O)}</b></div>
           <div><span>Mise conseillée</span><b>${t.stake > 0 ? eur(t.stake) : "Aucune"}</b></div>
           <div><span>Gain possible</span><b>${t.stake > 0 ? gain : `× ${t.kind === "system" ? fx(t.hi,1) : fx(t.O)} la mise`}</b></div>
         </div>
         <p class="hint" style="margin:0">${t.ev >= 0 ? `<strong class="edge-pos">Espérance positive : ${pct(t.ev)}</strong> par euro misé.` : `Espérance : <strong>${pct(t.ev)}</strong> par euro misé (la marge des bookmakers${t.legs.length > 1 ? " se multiplie à chaque sélection" : ""}).`} ${esc(t.why)}.${t.est ? " Cotes marquées ≈ : estimées, vérifiez-les chez votre bookmaker." : ""}${t.jackpot ? (t.mixed ? " Version mixte : victoires, doubles chances, buts et « les deux marquent » ; plus de matchs pour la même cote, donc moins de chances que la version simple." : " Version optimale : la combinaison qui a le plus de chances d'atteindre cette cote, surtout des victoires de favoris.") : ""}</p>
-        <div class="row"><button class="btn sm" type="button" data-tkstep="${i}">Reporter pas à pas</button><button class="btn sm ghost" type="button" data-tk="${i}">Copier et ouvrir ${esc(book()[0])}</button></div>
+        <div class="row"><button class="btn sm" type="button" data-tkstep="${i}">Reporter pas à pas</button><button class="btn sm ghost" type="button" data-tk="${i}">${PUB ? "Copier le ticket" : "Copier et ouvrir " + esc(book()[0])}</button></div>
       </article>`;
     }).join("");
     $("tList").querySelectorAll("[data-tkstep]").forEach(b => b.onclick = () => openStepSheet(T[+b.dataset.tkstep]));
     $("tList").querySelectorAll("[data-tk]").forEach(b => b.onclick = () => {
       const t = T[+b.dataset.tk]; copyText(ticketText(t));
       const [bn, bu, kw] = book();
-      if (window.ProNoLab && window.ProNoLab.openApp){ let how = "web"; try { how = window.ProNoLab.openApp(kw, bu); } catch {} toast(how === "app" ? `Ticket copié · ouverture de ${bn}` : `Ticket copié · ${bn} introuvable, ouverture du site`); }
-      else { toast(`Ticket copié`); window.open(bu, "_blank", "noopener"); }
+      openBook(kw, bu, bn, "Ticket");
     });
   }
   $("tNote").innerHTML = `Les tickets sont classés du <strong>plus risqué</strong> (grosse cote, rarement gagnant) au <strong>plus sûr</strong> (petite cote, gagne souvent). La chance de gain d'un combiné est le produit des chances de chaque sélection : trois paris à 80 % ne font qu'environ 51 % ensemble. Le <strong>système 2 sur 3</strong> joue les trois doubles possibles : il rapporte si au moins deux sélections passent. La mise conseillée suit la Kelly ¼ quand le ticket a une espérance positive ; sinon c'est une petite mise de loisir, à ne jamais augmenter pour « se refaire ». Une seule sélection par match, un même match dans 2 tickets au plus ; matchs d'aujourd'hui et de demain (jusqu'au surlendemain s'il en manque, et pour les jackpots). Les matchs où le bookmaker garde plus de 15 % de marge (taux de retour sous 85 %) sont écartés. Les cotes de double chance sont déduites des cotes 1N2 puis réduites de 3 %, comme le font en général les bookmakers. Les combinés sont des paris distincts sur Unibet : vérifiez chaque cote avant de valider.`;
@@ -2543,7 +2652,7 @@ function renderMeta(){
     return `<article class="panel ticket">
       <div class="thead"><span class="tag ${rc}">${rl}</span><strong>${esc(t.name)}</strong><span class="hint">${t.legs.length > 1 ? `Combiné · ${t.legs.length} sélections` : "Simple"}</span>${resBadge(t)}</div>
       <div class="riskbar" title="Chance réelle de gain"><i style="width:${Math.max(2, t.P*100)}%;background:${col}"></i></div>
-      <ul class="legs">${t.legs.map(l => `<li class="leg"><div>${legIcon(l)} <strong>${esc(OUT_LAB(l.k, l.H, l.A))}</strong>${legDis(l)}<br><span class="hint">${esc(l.H)} – ${esc(l.A)} · ${fmtDay(l.m.d)} ${fmtTime(l.m.d)}${legScore(l)}</span><br><span class="hint">${esc(l.why)}</span></div>
+      <ul class="legs">${t.legs.map(l => `<li class="leg"><div>${legIcon(l)} <strong>${esc(OUT_LAB(l.k, l.H, l.A))}</strong>${legDis(l)}<br><span class="hint">${esc(l.H)} – ${esc(l.A)} · ${fmtDay(l.m.d)} ${fmtTime(l.m.d)}${legScore(l)}${liveLegHtml(l)}</span><br><span class="hint">${esc(l.why)}</span></div>
         <div class="r num">${l.est ? "≈ " : ""}${fx(l.o)}<br><span class="hint">${pct(l.p)}</span></div></li>`).join("")}</ul>
       <div class="tk-kpis">
         <div><span>Chance réelle (modèle)</span><b>${t.P < 0.05 ? `1 sur ${Math.round(1 / t.P)}` : pct(t.P)}</b></div>
@@ -2552,14 +2661,13 @@ function renderMeta(){
         <div><span>Gain possible</span><b>${t.stake > 0 ? eur(t.stake * t.O) : `× ${fx(t.O)} la mise`}</b></div>
       </div>
       <p class="hint" style="margin:0">Espérance selon le modèle et les cotes : <strong>${t.ev >= 0 ? "+" : ""}${pct(t.ev)}</strong> par euro misé. ${esc(t.why)}.${t.est ? " Cotes marquées ≈ : estimées, vérifiez-les." : ""}</p>
-      <div class="row"><button class="btn sm" type="button" data-mstep="${i}">Reporter pas à pas</button><button class="btn sm ghost" type="button" data-mtk="${i}">Copier et ouvrir ${esc(book()[0])}</button></div>
+      <div class="row"><button class="btn sm" type="button" data-mstep="${i}">Reporter pas à pas</button><button class="btn sm ghost" type="button" data-mtk="${i}">${PUB ? "Copier le ticket" : "Copier et ouvrir " + esc(book()[0])}</button></div>
     </article>`; }).join("") : `<div class="empty">Pas assez de matchs dans les prochains jours pour composer les tickets.</div>`;
   $("mbList").querySelectorAll("[data-mstep]").forEach(b => b.onclick = () => openStepSheet(T[+b.dataset.mstep]));
   $("mbList").querySelectorAll("[data-mtk]").forEach(b => b.onclick = () => {
     const t = T[+b.dataset.mtk]; copyText(["Metabet · " + t.name, ...t.legs.map(l => `• ${l.H} – ${l.A} (${fmtDay(l.m.d)} ${fmtTime(l.m.d)}) : ${OUT_LAB(l.k, l.H, l.A)} @ ${fx(l.o)}`), `Cote totale : ${fx(t.O)} · Mise : ${eur(t.stake)}`].join("\n"));
     const [bn, bu, kw] = book();
-    if (window.ProNoLab && window.ProNoLab.openApp){ let how = "web"; try { how = window.ProNoLab.openApp(kw, bu); } catch {} toast(how === "app" ? `Ticket copié · ouverture de ${bn}` : `Ticket copié · ${bn} introuvable, ouverture du site`); }
-    else { toast("Ticket copié"); window.open(bu, "_blank", "noopener"); }
+    openBook(kw, bu, bn, "Ticket");
   });
   // intuitions : saisie par match, verrouillée au coup d'envoi
   const I = intuitions(), list = metaPool();
@@ -2696,7 +2804,7 @@ async function checkApk(){
       const res = await fetch(`https://api.github.com/repos/${m[1]}/${m[2]}/releases/latest`, { cache:"no-store" });
       if (!res.ok) return; const j = await res.json(); LS.set("pl_apkcheck", Date.now());
       const b = parseInt(String(j.tag_name || "").split(".").pop(), 10);
-      info = b > APP_BUILD ? { b, url: `https://github.com/${m[1]}/${m[2]}/releases/latest/download/prono-lab.apk` } : null;
+      info = b > APP_BUILD ? { b, url: `https://github.com/${m[1]}/${m[2]}/releases/latest/download/${PUB ? "prono-lab-public.apk" : "prono-lab.apk"}` } : null;
       LS.set("pl_apknew", info);
     }
     if (info && info.b > APP_BUILD) { $("apkBanner").hidden = false; $("apkLink").href = info.url; }
@@ -2724,9 +2832,67 @@ Explique ce qui fait pencher le modèle, la principale incertitude, et termine p
   };
 })();
 
+/* ================= Notifications (application Android) =================
+   Rappels programmés sur le téléphone, sans serveur : avant les matchs des équipes suivies et des tickets du jour,
+   en fin de match et chaque matin. Ils sont reprogrammés à chaque ouverture de l'application (3 jours à l'avance). */
+const notifCfg = () => Object.assign({ fav: true, tickets: true, end: false, daily: true }, LS.get("pl_notif", {}));
+const hasNotif = () => !!(window.ProNoLab && window.ProNoLab.schedule);
+function scheduleNotifs(ask){
+  if (!hasNotif()) return 0;
+  const B = window.ProNoLab, cfg = notifCfg(), favs = LS.get("pl_favs", {}), now = Date.now(), lim = now + 3 * 864e5, want = new Map();
+  const nameOf = (lg, id) => (CL[lg] && CL[lg].T[id] ? CL[lg].T[id].name : id);
+  const addMatch = (lg, h, a, d, hn, an, why) => {
+    const t = parisToUtcMs(d); if (t + 115 * 6e4 < now || t > lim) return;
+    const L = DATA.leagues[lg], base = `${lg}|${h}|${a}|${d}`;
+    if (t - 15 * 6e4 > now) want.set("k|" + base, [t - 15 * 6e4, `${hn} – ${an} dans 15 min`, `${L ? L.name + " · " : ""}coup d'envoi à ${fmtTime(d)}${why ? " · " + why : ""}. Touchez pour voir le pronostic.`]);
+    if (cfg.end) want.set("e|" + base, [t + 115 * 6e4, `Fin de ${hn} – ${an}`, "Touchez pour voir le score et vos tickets."]);
+  };
+  if (cfg.fav) for (const [lg, L] of Object.entries(DATA.leagues)) L.matches.forEach(m => { if (!m.s && (favs[m.h] || favs[m.a])) addMatch(lg, m.h, m.a, m.d, nameOf(lg, m.h), nameOf(lg, m.a), "équipe suivie"); });
+  if (cfg.tickets){
+    const cur = LS.get("pl_arch_t", []).find(x => x.day === nowStr().slice(0, 10));
+    if (cur) cur.tickets.forEach(tk => tk.legs.forEach(l => { if (!want.has(`k|${l.lg}|${l.h}|${l.a}|${l.d}`)) addMatch(l.lg, l.h, l.a, l.d, l.H, l.A, "dans vos tickets du jour"); }));
+  }
+  if (cfg.daily){
+    const d = new Date(parisToUtcMs(nowStr().slice(0, 10) + "T10:00")); let t = d.getTime(); if (t <= now) t = parisToUtcMs(parisStr(now + 864e5).slice(0, 10) + "T10:00");
+    want.set("daily", [t, "Les tickets du jour sont prêts", "Ouvrez Prono Lab : tickets, paris mis en avant et bilan d'hier."]);
+  }
+  const prev = LS.get("pl_notif_ids", []);
+  prev.forEach(id => { if (!want.has(id)) { try { B.cancel(id); } catch {} } });
+  want.forEach(([at, title, body], id) => { try { B.schedule(id, at, title, body); } catch {} });
+  LS.set("pl_notif_ids", [...want.keys()]);
+  if (ask && want.size && B.askNotif) { try { B.askNotif(); } catch {} }
+  return want.size;
+}
+function renderNotifPanel(){
+  const cfg = notifCfg(), st = settings();
+  $("nFav").checked = cfg.fav; $("nTk").checked = cfg.tickets; $("nEnd").checked = cfg.end; $("nDaily").checked = cfg.daily; $("nLive").checked = st.liveAuto !== false;
+  const nf = Object.keys(LS.get("pl_favs", {})).length;
+  $("nInfo").textContent = hasNotif() ? `${nf} équipe${nf > 1 ? "s" : ""} suivie${nf > 1 ? "s" : ""} · ${LS.get("pl_notif_ids", []).length} rappel${LS.get("pl_notif_ids", []).length > 1 ? "s" : ""} programmé${LS.get("pl_notif_ids", []).length > 1 ? "s" : ""} pour les 3 prochains jours.` : "Les notifications fonctionnent dans l'application Android.";
+  [["nFav","fav"],["nTk","tickets"],["nEnd","end"],["nDaily","daily"]].forEach(([id, k]) => $(id).onchange = () => { const c = LS.get("pl_notif", {}); c[k] = $(id).checked; LS.set("pl_notif", c); scheduleNotifs($(id).checked); renderNotifPanel(); });
+  $("nLive").onchange = () => { const x = LS.get("pl_settings", {}); x.liveAuto = $("nLive").checked; LS.set("pl_settings", x); };
+}
+/* Porte d'entrée de la version publique : réservée aux majeurs, sans promesse de gain */
+function ageGate(){
+  if (!PUB || LS.get("pl_age18", false)) return;
+  $("sheetHost").innerHTML = `<div class="sheet-bg"><div class="sheet">
+    <h2 style="font-size:22px">Bienvenue sur Prono Lab</h2>
+    <p>Prono Lab calcule des probabilités pour les matchs de football et publie chaque jour tous ses tickets, gagnants comme perdants, dans l'Archive. <strong>Aucun pronostic n'est garanti</strong> : même un pari à 80 % perd une fois sur cinq.</p>
+    <p class="hint">Les paris sportifs sont interdits aux moins de 18 ans. Jouer comporte des risques : endettement, isolement, dépendance. Pour être aidé : 09 74 75 13 13 (Joueurs Info Service, appel non surtaxé).</p>
+    <div class="row" style="justify-content:flex-end"><button type="button" class="btn ghost" id="ageNo">J'ai moins de 18 ans</button><button type="button" class="btn" id="ageYes">J'ai 18 ans ou plus</button></div>
+  </div></div>`;
+  $("ageYes").onclick = () => { LS.set("pl_age18", true); $("sheetHost").innerHTML = ""; };
+  $("ageNo").onclick = () => { $("sheetHost").innerHTML = `<div class="sheet-bg"><div class="sheet"><h2 style="font-size:22px">Désolé</h2><p>Prono Lab est réservé aux personnes majeures. Vous pouvez désinstaller l'application.</p></div></div>`; };
+}
+
 /* ================= Démarrage ================= */
-try { computeAll(); applyLive(); autoSettle(); renderFresh(); setView(ui.view); ensureDaily(); }
+try { computeAll(); applyLive(); autoSettle(); renderFresh(); setView(ui.view); ensureDaily(); renderNotifPanel(); ageGate(); }
 catch (e) { console.error(e); }   // données intégrées illisibles : la mise à jour en ligne ci-dessous doit quand même partir
-refresh(false).then(() => refreshLive(false)).then(() => refreshScores(false)).then(() => { ensureDaily(); if (ui.view === "archive") renderArchiveTab(); });
+refresh(false).then(() => refreshLive(false)).then(() => refreshScores(false)).then(() => { ensureDaily(); if (ui.view === "archive") renderArchiveTab(); try { scheduleNotifs(!LS.get("pl_notif_asked", false)); if (hasNotif()) LS.set("pl_notif_asked", true); renderNotifPanel(); } catch {} });
+// Direct : chaque minute, si un match est en cours, l'horloge avance à l'écran et le score est relevé toutes les 4 min
+setInterval(() => {
+  if (document.visibilityState !== "visible") return;
+  const any = Object.values(DATA.leagues).some(L => L.matches.some(inPlay)); if (!any) return;
+  refreshScores(false).then(n => { if (!n && ["matchs","tickets","archive"].includes(ui.view)) render(); });
+}, 60e3);
 checkApk();
 </script>

@@ -3,6 +3,9 @@ android/.gradle/
 android/build/
 android/app/build/
 android/app/src/main/assets/
+android/app/src/perso/assets/
+android/app/src/pub/assets/
+android/upload.jks
 android/release.jks
 android/local.properties
 *.apk

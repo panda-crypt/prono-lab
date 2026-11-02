@@ -1,6 +1,16 @@
 package fr.pronolab.app;
 
+import android.Manifest;
 import android.annotation.SuppressLint;
+import android.app.AlarmManager;
+import android.app.PendingIntent;
+import android.widget.FrameLayout;
+import androidx.activity.OnBackPressedCallback;
+import androidx.core.app.ActivityCompat;
+import androidx.core.content.ContextCompat;
+import androidx.core.graphics.Insets;
+import androidx.core.view.ViewCompat;
+import androidx.core.view.WindowInsetsCompat;
 import android.content.ClipData;
 import android.content.ContentValues;
 import android.os.Build;
@@ -50,7 +60,22 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         web = new WebView(this);
-        setContentView(web);
+        // Android 15+ : l'application s'affiche sous les barres système ; on décale la page de leur hauteur (et du clavier).
+        FrameLayout root = new FrameLayout(this);
+        root.addView(web, new FrameLayout.LayoutParams(FrameLayout.LayoutParams.MATCH_PARENT, FrameLayout.LayoutParams.MATCH_PARENT));
+        setContentView(root);
+        ViewCompat.setOnApplyWindowInsetsListener(root, (v, insets) -> {
+            Insets b = insets.getInsets(WindowInsetsCompat.Type.systemBars() | WindowInsetsCompat.Type.displayCutout() | WindowInsetsCompat.Type.ime());
+            v.setPadding(b.left, b.top, b.right, b.bottom);
+            return WindowInsetsCompat.CONSUMED;
+        });
+        // Retour : page précédente dans la page, sinon fermeture (compatible avec le retour prédictif d'Android 16)
+        getOnBackPressedDispatcher().addCallback(this, new OnBackPressedCallback(true) {
+            @Override public void handleOnBackPressed() {
+                if (web.canGoBack()) web.goBack();
+                else { setEnabled(false); getOnBackPressedDispatcher().onBackPressed(); }
+            }
+        });
 
         final WebViewAssetLoader loader = new WebViewAssetLoader.Builder()
                 .setDomain(HOST)
@@ -111,6 +136,7 @@ public class MainActivity extends AppCompatActivity {
         /** Ouvre l'application installée dont le nom ou l'identifiant contient {@code keyword} ; sinon ouvre {@code fallbackUrl}. Renvoie "app" ou "web". */
         @JavascriptInterface
         public String openApp(String keyword, String fallbackUrl) {
+            if (BuildConfig.PUB) return "none";   // version publique : l'application ne dirige pas vers les sites de paris
             String k = keyword == null ? "" : keyword.toLowerCase(Locale.ROOT);
             PackageManager pm = getPackageManager();
             Intent main = new Intent(Intent.ACTION_MAIN).addCategory(Intent.CATEGORY_LAUNCHER);
@@ -196,6 +222,33 @@ public class MainActivity extends AppCompatActivity {
             });
         }
 
+        /** Programme un rappel : {@code whenMs} = instant (ms depuis 1970), remplacé si le même {@code id} est reprogrammé. */
+        @JavascriptInterface
+        public void schedule(String id, double whenMs, String title, String body) {
+            try {
+                AlarmManager am = (AlarmManager) getSystemService(Context.ALARM_SERVICE);
+                if (am == null || id == null) return;
+                am.setAndAllowWhileIdle(AlarmManager.RTC_WAKEUP, (long) whenMs, pending(id, title, body, PendingIntent.FLAG_UPDATE_CURRENT));
+            } catch (Exception ignored) { }
+        }
+
+        @JavascriptInterface
+        public void cancel(String id) {
+            try {
+                AlarmManager am = (AlarmManager) getSystemService(Context.ALARM_SERVICE);
+                PendingIntent pi = pending(id, null, null, PendingIntent.FLAG_NO_CREATE);
+                if (am != null && pi != null) { am.cancel(pi); pi.cancel(); }
+            } catch (Exception ignored) { }
+        }
+
+        /** Android 13+ : demande l'autorisation d'afficher des notifications (une seule fois si l'utilisateur refuse). */
+        @JavascriptInterface
+        public void askNotif() {
+            if (Build.VERSION.SDK_INT >= 33 && ContextCompat.checkSelfPermission(MainActivity.this, Manifest.permission.POST_NOTIFICATIONS) != PackageManager.PERMISSION_GRANTED) {
+                runOnUiThread(() -> ActivityCompat.requestPermissions(MainActivity.this, new String[]{ Manifest.permission.POST_NOTIFICATIONS }, 7));
+            }
+        }
+
         @JavascriptInterface
         public boolean copy(String text) {
             try {
@@ -206,6 +259,14 @@ public class MainActivity extends AppCompatActivity {
                 return false;
             }
         }
+    }
+
+    private PendingIntent pending(String id, String title, String body, int flag) {
+        Intent i = new Intent(this, NotifReceiver.class).setAction(NotifReceiver.ACTION + "." + id.hashCode());
+        if (title != null) i.putExtra("title", title);
+        if (body != null) i.putExtra("body", body);
+        i.putExtra("nid", id.hashCode());
+        return PendingIntent.getBroadcast(this, id.hashCode(), i, flag | PendingIntent.FLAG_IMMUTABLE);
     }
 
     @SuppressWarnings("deprecation")
@@ -226,10 +287,4 @@ public class MainActivity extends AppCompatActivity {
         web.saveState(outState);
     }
 
-    @SuppressWarnings("deprecation")
-    @Override
-    public void onBackPressed() {
-        if (web.canGoBack()) web.goBack();
-        else super.onBackPressed();
-    }
 }
