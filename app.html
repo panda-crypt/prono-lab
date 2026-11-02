@@ -494,7 +494,7 @@ table{border-collapse:collapse;width:100%}
     <footer class="foot">
       <p><strong>Méthode.</strong> Pour chaque équipe : xG et buts de la saison (les matchs récents comptent davantage, la force des adversaires est prise en compte), mélangés avec la saison 2025-26 (poids équivalent à 16 matchs, qui s'efface à mesure que la saison avance), plus l'avantage du terrain mesuré dans chaque championnat. Les bilans domicile/extérieur de chaque équipe sont affichés mais pas utilisés : sur 3 ou 4 matchs, ils dégradaient les prévisions lors des tests. Probabilités par loi de Poisson corrigée (Dixon-Coles, ρ = −0,10 mesuré sur la saison).</p>
       <p><strong>Coupes d'Europe.</strong> Tous les clubs sont placés sur une même échelle de force : coefficient UEFA de leur pays, niveau mesuré dans leur championnat pour les clubs des cinq grands championnats (sinon niveau de la coupe disputée), et résultats européens de la saison. Le modèle est recalé sur chaque nouveau match européen.</p>
-      <p><strong>Jouer comporte des risques</strong> : endettement, isolement, dépendance. Pour être aidé : 09 74 75 13 13 (Joueurs Info Service, appel non surtaxé). Interdit aux moins de 18 ans.</p>
+      <p id="rgMsg"><strong>Jouer comporte des risques</strong> : endettement, isolement, dépendance. Pour être aidé : 09 74 75 13 13 (Joueurs Info Service, appel non surtaxé). Interdit aux moins de 18 ans.</p>
       <p id="srcList"></p>
     </footer>
   </div>
@@ -537,8 +537,13 @@ const fx = (x, d=2) => (+x).toFixed(d).replace(".", ",");
 const eur = x => (x<0?"−":"") + Math.abs(x).toFixed(2).replace(".", ",") + " €";
 const DAYS = ["dim.","lun.","mar.","mer.","jeu.","ven.","sam."], MONTHS = ["janv.","févr.","mars","avr.","mai","juin","juil.","août","sept.","oct.","nov.","déc."];
 const pDate = s => { const [d,t] = s.split("T"); const [y,m,dd] = d.split("-").map(Number); const [hh,mm] = t.split(":").map(Number); return new Date(y, m-1, dd, hh, mm); };
-const fmtDay = s => { const d = pDate(s); return `${DAYS[d.getDay()]} ${d.getDate()} ${MONTHS[d.getMonth()]}`; };
-const fmtTime = s => s.slice(11,16).replace(":", "h");
+// Heures affichées dans le fuseau du téléphone (les données sont à l'heure de Paris) : utile hors de France (ex. Cameroun,
+// UTC+1 toute l'année, une heure de moins que Paris en été) ou en voyage. En France, rien ne change.
+const LOCAL_TZ = (() => { try { return Intl.DateTimeFormat().resolvedOptions().timeZone || ""; } catch { return ""; } })();
+const IN_FR = !LOCAL_TZ || LOCAL_TZ === "Europe/Paris";
+const locDate = s => { const t = s.includes("T") ? s : s + "T12:00"; return IN_FR ? pDate(t) : new Date(parisToUtcMs(t)); };
+const fmtDay = s => { const d = locDate(s); return `${DAYS[d.getDay()]} ${d.getDate()} ${MONTHS[d.getMonth()]}`; };
+const fmtTime = s => { if (IN_FR) return s.slice(11,16).replace(":", "h"); const d = locDate(s); return `${String(d.getHours()).padStart(2, "0")}h${String(d.getMinutes()).padStart(2, "0")}`; };
 // Toutes les heures des données sont à l'heure de Paris : on calcule « maintenant » à Paris, quel que soit le fuseau du téléphone.
 const parisStr = ms => {
   try {
@@ -2884,13 +2889,16 @@ function renderNotifPanel(){
   [["nFav","fav"],["nTk","tickets"],["nEnd","end"],["nDaily","daily"]].forEach(([id, k]) => $(id).onchange = () => { const c = LS.get("pl_notif", {}); c[k] = $(id).checked; LS.set("pl_notif", c); scheduleNotifs($(id).checked); renderNotifPanel(); });
   $("nLive").onchange = () => { const x = LS.get("pl_settings", {}); x.liveAuto = $("nLive").checked; LS.set("pl_settings", x); };
 }
+// Message d'aide aux joueurs : numéro français en France, message général ailleurs
+const RG_HELP = IN_FR ? "Pour être aidé : 09 74 75 13 13 (Joueurs Info Service, appel non surtaxé)." : "Si le jeu devient un problème, parlez-en à un proche ou à un professionnel de santé, et fixez-vous des limites.";
+if (!IN_FR && $("rgMsg")) $("rgMsg").innerHTML = `<strong>Jouer comporte des risques</strong> : endettement, isolement, dépendance. ${RG_HELP} Interdit aux moins de 18 ans.`;
 /* Porte d'entrée de la version publique : réservée aux majeurs, sans promesse de gain */
 function ageGate(){
   if (!PUB || LS.get("pl_age18", false)) return;
   $("sheetHost").innerHTML = `<div class="sheet-bg"><div class="sheet">
     <h2 style="font-size:22px">Bienvenue sur Prono Lab</h2>
     <p>Prono Lab calcule des probabilités pour les matchs de football et publie chaque jour tous ses tickets, gagnants comme perdants, dans l'Archive. <strong>Aucun pronostic n'est garanti</strong> : même un pari à 80 % perd une fois sur cinq.</p>
-    <p class="hint">Les paris sportifs sont interdits aux moins de 18 ans. Jouer comporte des risques : endettement, isolement, dépendance. Pour être aidé : 09 74 75 13 13 (Joueurs Info Service, appel non surtaxé).</p>
+    <p class="hint">Les paris sportifs sont interdits aux moins de 18 ans. Jouer comporte des risques : endettement, isolement, dépendance. ${RG_HELP}</p>
     <div class="row" style="justify-content:flex-end"><button type="button" class="btn ghost" id="ageNo">J'ai moins de 18 ans</button><button type="button" class="btn" id="ageYes">J'ai 18 ans ou plus</button></div>
   </div></div>`;
   $("ageYes").onclick = () => { LS.set("pl_age18", true); $("sheetHost").innerHTML = ""; };
