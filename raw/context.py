@@ -6,7 +6,7 @@ Clés : noms des équipes exactement comme dans raw/<championnat>.txt.
                    le match est retiré des paris verts, des tickets et des jackpots.
   lvl = "info"   : à savoir, sans effet sur les propositions (ex. un titulaire incertain).
 """
-CHECKED_AT = "2026-10-31T06:30"   # date et heure de Paris de la dernière vérification
+CHECKED_AT = "2026-11-03T02:40"   # date et heure de Paris de la dernière vérification
 CONTEXT = {
     "l1": {
         ("Olympique Lyonnais", "Angers SCO"): {"lvl": "info", "why": "Lyon sans Openda (fissure du péroné).", "src": "https://m.maxifoot.fr/lyon/coup-dur-pour-openda-foot-465540.htm"},
@@ -50,5 +50,12 @@ CONTEXT = {
         ("Werder Bremen", "TSG Hoffenheim"): {"lvl": "info", "why": "Brême : 7 absents dont Stage et Musah ; Hoffenheim : Prass suspendu.", "src": "https://bundesliga.com/en/bundesliga/news/team-news-line-ups-2026-27-bayern-dortmund-fantasy-20707"},
         ("FC Union Berlin", "FC Köln"): {"lvl": "info", "why": "Cologne sans Dallinga ni Skhiri ; Uduokhai suspendu.", "src": "https://bundesliga.com/en/bundesliga/news/team-news-line-ups-2026-27-bayern-dortmund-fantasy-20707"},
         ("Eintracht Frankfurt", "Hamburger SV"): {"lvl": "info", "why": "Hambourg : 6 absents dont Remberg et Vieira.", "src": "https://bundesliga.com/en/bundesliga/news/team-news-line-ups-2026-27-bayern-dortmund-fantasy-20707"},
+    },
+    "ucl": {
+        ("Villarreal", "Paris Saint Germain"): {"lvl": "alerte", "why": "PSG sans Dembélé, Kvaratskhelia, Marquinhos ni Nuno Mendes (absents du groupe).", "src": "https://www.beinsports.com/fr-fr/football/uefa-ligue-des-champions/articles/ligue-des-champions-avec-quatre-grosses-absences-le-groupe-du-psg-contre-villarreal-2026-11-02"},
+        ("Atlético Madrid", "FC Bayern München"): {"lvl": "alerte", "why": "Bayern sans Luis Díaz, Musiala, Gnabry ni Saibari ; Neuer et Olise dans le groupe mais incertains. Atlético : Hjulmand suspendu, Cardoso blessé.", "src": "https://www.espn.com/soccer/story/_/id/50359298/michael-olise-rejoin-bayern-ucl-clash-atletico-madrid"},
+        ("FC Barcelona", "Aston Villa"): {"lvl": "alerte", "why": "Barcelone sans Koundé, Olmo, Christensen ni Eric García.", "src": "https://www.uefa.com/uefachampionsleague/news/02ab-21f9907f0a27-6a6a67e9775d-1000--champions-league-predicted-line-ups-matchday-4-team-news-/"},
+        ("Feyenoord", "Inter"): {"lvl": "alerte", "why": "Inter sans Lautaro Martínez, Bastoni (suspendu), Stones ni Jones ; Feyenoord : 6 absents.", "src": "https://www.uefa.com/uefachampionsleague/news/02ab-21f9907f0a27-6a6a67e9775d-1000--champions-league-predicted-line-ups-matchday-4-team-news-/"},
+        ("Manchester United", "Roma"): {"lvl": "alerte", "why": "Roma sans Svilar (gardien), Pellegrini ni Koné, Dybala incertain ; United sans Šeško, Shaw ni Dorgu.", "src": "https://www.uefa.com/uefachampionsleague/news/02ab-21f9907f0a27-6a6a67e9775d-1000--champions-league-predicted-line-ups-matchday-4-team-news-/"},
     },
 }

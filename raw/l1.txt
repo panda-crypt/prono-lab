@@ -75,7 +75,7 @@
 30 Oct 2026|18:00|Nice|Rennes|5-2 (3-1)
 31 Oct 2026|19:45|Troyes|Le Mans|2-0
 1 Nov 2026|16:15|Olympique Lyonnais|Angers SCO|2-0
-2 Nov 2026|19:45|Lorient|Brest|
+2 Nov 2026|19:45|Lorient|Brest|0-2 (0-0)
 1 Nov 2026|14:00|Strasbourg|Auxerre|5-1 (1-0)
 1 Nov 2026|16:15|Paris|Monaco|3-1
 1 Nov 2026|19:45|Olympique Marseille|Toulouse|2-0

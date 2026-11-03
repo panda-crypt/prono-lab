@@ -87,7 +87,7 @@
 31 Oct 2026|17:30|Tottenham Hotspur|Crystal Palace|2-0 (1-0)
 31 Oct 2026|20:00|Aston Villa|Fulham|1-1 (1-0)
 1 Nov 2026|16:30|Liverpool|Arsenal|0-1 (0-1)
-2 Nov 2026|20:00|Newcastle United|Everton|
+2 Nov 2026|20:00|Newcastle United|Everton|0-1
 6 Nov 2026|20:00|Everton|Coventry City|
 7 Nov 2026|12:30|Leeds United|Tottenham Hotspur|
 7 Nov 2026|15:00|Fulham|Newcastle United|
