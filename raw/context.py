@@ -6,7 +6,7 @@ Clés : noms des équipes exactement comme dans raw/<championnat>.txt.
                    le match est retiré des paris verts, des tickets et des jackpots.
   lvl = "info"   : à savoir, sans effet sur les propositions (ex. un titulaire incertain).
 """
-CHECKED_AT = "2026-11-03T02:40"   # date et heure de Paris de la dernière vérification
+CHECKED_AT = "2026-11-04T02:45"   # date et heure de Paris de la dernière vérification
 CONTEXT = {
     "l1": {
         ("Olympique Lyonnais", "Angers SCO"): {"lvl": "info", "why": "Lyon sans Openda (fissure du péroné).", "src": "https://m.maxifoot.fr/lyon/coup-dur-pour-openda-foot-465540.htm"},
@@ -52,6 +52,13 @@ CONTEXT = {
         ("Eintracht Frankfurt", "Hamburger SV"): {"lvl": "info", "why": "Hambourg : 6 absents dont Remberg et Vieira.", "src": "https://bundesliga.com/en/bundesliga/news/team-news-line-ups-2026-27-bayern-dortmund-fantasy-20707"},
     },
     "ucl": {
+        ("Porto", "Napoli"): {"lvl": "alerte", "why": "Naples : 7 absents dont Lobotka, Di Lorenzo (capitaine), Neres et Spinazzola ; De Bruyne, Højlund et Milinković-Savić incertains.", "src": "https://www.uefa.com/uefachampionsleague/news/02ab-21f9907f0a27-6a6a67e9775d-1000--champions-league-predicted-line-ups-matchday-4-team-news-/"},
+        ("Slavia Praha", "Arsenal"): {"lvl": "alerte", "why": "Arsenal sans Saka ni Saliba, Eze incertain ; Slavia sans Ouanda, Piták, Schranz.", "src": "https://www.uefa.com/uefachampionsleague/news/02ab-21f9907f0a27-6a6a67e9775d-1000--champions-league-predicted-line-ups-matchday-4-team-news-/"},
+        ("Lens", "Como"): {"lvl": "alerte", "why": "Côme sans Kean ni Diao, Chalobah incertain ; Lens sans Édouard, Ganiou, Sima.", "src": "https://www.uefa.com/uefachampionsleague/news/02ab-21f9907f0a27-6a6a67e9775d-1000--champions-league-predicted-line-ups-matchday-4-team-news-/"},
+        ("Fenerbahçe", "Liverpool"): {"lvl": "info", "why": "Liverpool sans Ekitiké, Frimpong, Bradley, Leoni ; Fenerbahçe sans Asensio ni Aké.", "src": "https://www.uefa.com/uefachampionsleague/news/02ab-21f9907f0a27-6a6a67e9775d-1000--champions-league-predicted-line-ups-matchday-4-team-news-/"},
+        ("AEK Athens", "Real Madrid"): {"lvl": "info", "why": "Real Madrid sans Rodrygo ni Raúl Asencio ; AEK sans João Mario, Strakosha (gardien) incertain.", "src": "https://www.uefa.com/uefachampionsleague/news/02ab-21f9907f0a27-6a6a67e9775d-1000--champions-league-predicted-line-ups-matchday-4-team-news-/"},
+        ("RB Leipzig", "Manchester City"): {"lvl": "info", "why": "City sans Semenyo ; Leipzig sans Ouédraogo.", "src": "https://www.uefa.com/uefachampionsleague/news/02ab-21f9907f0a27-6a6a67e9775d-1000--champions-league-predicted-line-ups-matchday-4-team-news-/"},
+        ("Borussia Dortmund", "Real Betis"): {"lvl": "info", "why": "Betis sans Cucho Hernández ni Junior Firpo.", "src": "https://www.uefa.com/uefachampionsleague/news/02ab-21f9907f0a27-6a6a67e9775d-1000--champions-league-predicted-line-ups-matchday-4-team-news-/"},
         ("Villarreal", "Paris Saint Germain"): {"lvl": "alerte", "why": "PSG sans Dembélé, Kvaratskhelia, Marquinhos ni Nuno Mendes (absents du groupe).", "src": "https://www.beinsports.com/fr-fr/football/uefa-ligue-des-champions/articles/ligue-des-champions-avec-quatre-grosses-absences-le-groupe-du-psg-contre-villarreal-2026-11-02"},
         ("Atlético Madrid", "FC Bayern München"): {"lvl": "alerte", "why": "Bayern sans Luis Díaz, Musiala, Gnabry ni Saibari ; Neuer et Olise dans le groupe mais incertains. Atlético : Hjulmand suspendu, Cardoso blessé.", "src": "https://www.espn.com/soccer/story/_/id/50359298/michael-olise-rejoin-bayern-ucl-clash-atletico-madrid"},
         ("FC Barcelona", "Aston Villa"): {"lvl": "alerte", "why": "Barcelone sans Koundé, Olmo, Christensen ni Eric García.", "src": "https://www.uefa.com/uefachampionsleague/news/02ab-21f9907f0a27-6a6a67e9775d-1000--champions-league-predicted-line-ups-matchday-4-team-news-/"},
