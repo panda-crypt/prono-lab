@@ -1,0 +1,63 @@
+Matchs évalués : 117 (chronologique, 7 journées)
+modèle  Brier 1N2  log-loss  Brier +2,5  favori juste   écart Brier vs actuel [IC 90 %]
+cur        0.5520    0.9396      0.2243          56%   +0.0000 [+0.0000 ; +0.0000]
+lien       0.5477    0.9263      0.2262          58%   -0.0043 [-0.0304 ; +0.0223]
+A          0.5509    0.9333      0.2260          57%   -0.0011 [-0.0287 ; +0.0272]
+B          0.5557    0.9397      0.2252          54%   +0.0037 [-0.0141 ; +0.0231]
+C          0.5503    0.9335      0.2258          56%   -0.0017 [-0.0303 ; +0.0264]
+
+Paramètres appris (dernier jour) A : {'m': np.float64(0.465), 'h': np.float64(0.109), 'a': np.float64(0.732), 'b': np.float64(0.568), 'c': np.float64(0.18)} · C : {'tau': np.float64(0.175), 'phi': np.float64(-0.016)} · mélange B : part de A = 0.5
+   ('2026-10-13', {'m': np.float64(0.357), 'h': np.float64(0.128), 'a': np.float64(0.76), 'b': np.float64(0.73), 'c': np.float64(0.403)}, {'tau': np.float64(0.129), 'phi': np.float64(-0.032)})
+   ('2026-10-14', {'m': np.float64(0.392), 'h': np.float64(0.146), 'a': np.float64(0.719), 'b': np.float64(0.713), 'c': np.float64(0.349)}, {'tau': np.float64(0.242), 'phi': np.float64(-0.01)})
+   ('2026-10-15', {'m': np.float64(0.499), 'h': np.float64(0.16), 'a': np.float64(0.803), 'b': np.float64(0.549), 'c': np.float64(0.072)}, {'tau': np.float64(0.189), 'phi': np.float64(-0.03)})
+   ('2026-10-20', {'m': np.float64(0.437), 'h': np.float64(0.133), 'a': np.float64(0.728), 'b': np.float64(0.557), 'c': np.float64(0.184)}, {'tau': np.float64(0.28), 'phi': np.float64(-0.02)})
+   ('2026-10-21', {'m': np.float64(0.466), 'h': np.float64(0.134), 'a': np.float64(0.734), 'b': np.float64(0.505), 'c': np.float64(0.175)}, {'tau': np.float64(0.299), 'phi': np.float64(-0.031)})
+   ('2026-10-22', {'m': np.float64(0.479), 'h': np.float64(0.133), 'a': np.float64(0.702), 'b': np.float64(0.515), 'c': np.float64(0.171)}, {'tau': np.float64(0.228), 'phi': np.float64(-0.029)})
+   ('2026-11-03', {'m': np.float64(0.465), 'h': np.float64(0.109), 'a': np.float64(0.732), 'b': np.float64(0.568), 'c': np.float64(0.18)}, {'tau': np.float64(0.175), 'phi': np.float64(-0.016)})
+
+Sous-ensemble avec cotes retrouvées : 9 matchs
+  marché  Brier 0.3877
+  cur     Brier 0.5000
+  lien    Brier 0.4603
+  A       Brier 0.4534
+  B       Brier 0.4733
+  C       Brier 0.4472
+
+Prochains matchs avec cotes (36 sur 45) : victoire domicile / nul / victoire extérieur, en %
+  Fenerbahçe       - Liverpool        marché 20/22/58  actuel 18/22/60  lien 28/25/47  A 28/25/47  C 27/25/48 
+  AEK Athens       - Real Madrid      marché 12/13/75  actuel 8/15/77   lien 22/23/55  A 19/22/59  C 19/23/58 
+  RB Leipzig       - Manchester City  marché 17/21/62  actuel 31/25/43  lien 29/25/46  A 30/25/45  C 30/25/45 
+  Slavia Praha     - Arsenal          marché 11/14/75  actuel 6/13/81   lien 9/16/75   A 7/14/79   C 7/14/79  
+  Borussia Dortmun - Real Betis       marché 54/24/22  actuel 56/23/21  lien 52/24/24  A 55/23/21  C 56/24/21 
+  Porto            - Napoli           marché 44/27/29  actuel 29/25/46  lien 57/23/20  A 60/22/18  C 59/23/18 
+  Viking           - Sabah            marché 61/21/18  actuel 58/23/20  lien 58/22/20  A 57/23/20  C 57/23/20 
+  PSV              - Club Brugge      marché 45/23/32  actuel 36/26/38  lien 39/26/35  A 39/26/35  C 40/25/35 
+  Lens             - Como             marché 33/23/44  actuel 22/23/55  lien 23/24/53  A 21/23/56  C 21/24/55 
+  Milan            - Ferencváros      marché 67/19/13  actuel 75/16/9   lien 75/16/9   A 76/15/9   C 76/15/9  
+  Crystal Palace   - Hoffenheim       marché 49/25/25  actuel 40/26/34  lien 42/26/32  A 37/26/37  C 37/26/37 
+  Lillestrøm       - Viktoria Plzeň   marché 39/27/34  actuel 41/26/33  lien 40/26/34  A 40/26/35  C 40/26/35 
+  N.E.C. Nijmegen  - Omonia           marché 51/25/24  actuel 49/25/27  lien 51/24/25  A 51/24/25  C 51/24/25 
+  Levski Sofia     - Jagiellonia      marché 44/27/29  actuel 33/26/42  lien 31/25/44  A 32/25/43  C 32/26/43 
+  Real Sociedad    - Lyon             marché 45/26/30  actuel 48/25/28  lien 50/24/26  A 49/25/27  C 48/25/27 
+  Anderlecht       - Salzburg         marché 47/26/27  actuel 66/20/14  lien 67/19/14  A 66/20/14  C 66/20/15 
+  AZ Alkmaar       - Juventus         marché 28/26/46  actuel 21/23/57  lien 23/24/54  A 21/23/56  C 21/24/55 
+  Leverkusen       - Marseille        marché 57/24/19  actuel 58/23/20  lien 56/23/21  A 54/24/23  C 55/23/22 
+  Celtic           - Beşiktaş         marché 31/27/42  actuel 21/23/57  lien 25/24/51  A 24/24/52  C 23/23/54 
+  Torreense        - Ararat-Armenia   marché 61/24/15  actuel 80/13/7   lien 81/13/6   A 80/13/7   C 80/13/7  
+  Benfica          - Lech Poznań      marché 70/18/12  actuel 71/18/11  lien 89/8/3    A 91/7/2    C 91/7/2   
+  Sunderland       - GNK Dinamo       marché 67/20/14  actuel 70/18/12  lien 72/17/11  A 68/19/13  C 68/19/13 
+  Aarhus           - Braga            marché 31/27/41  actuel 32/25/43  lien 31/25/44  A 30/25/45  C 29/25/46 
+  Atalanta         - Kairat Almaty    marché 83/12/5   actuel 81/13/6   lien 82/12/6   A 80/13/7   C 80/13/7  
+  Midtjylland      - Ajax             marché 33/27/40  actuel 34/26/40  lien 31/25/43  A 30/25/44  C 30/26/45 
+  Thun             - Hearts           marché 36/27/36  actuel 48/25/27  lien 46/25/29  A 46/25/29  C 46/25/29 
+  Crvena Zvezda    - Inter Escaldes   marché 84/11/5   actuel 68/19/13  lien 69/18/12  A 69/19/13  C 69/19/13 
+  KuPS Kuopio      - Gent             marché 17/23/60  actuel 14/19/67  lien 16/20/64  A 16/21/63  C 16/21/63 
+  Lincoln Red Imps - Hajduk Split     marché 10/19/72  actuel 15/20/65  lien 14/19/67  A 14/20/66  C 14/20/66 
+  Mjällby          - Borac            marché 41/27/32  actuel 56/23/21  lien 56/23/21  A 56/23/21  C 56/23/21 
+  Trabzonspor      - Freiburg         marché 35/27/38  actuel 47/25/28  lien 53/24/23  A 54/24/23  C 53/24/23 
+  Copenhagen       - Iberia Tbilisi   marché 86/10/4   actuel 85/10/4   lien 87/9/4    A 86/10/4   C 86/10/4  
+  Lugano           - Kauno Žalgiris   marché 77/15/8   actuel 81/12/6   lien 83/12/6   A 82/12/6   C 82/12/6  
+  Twente           - Pafos            marché 63/22/15  actuel 60/22/18  lien 66/20/14  A 68/19/13  C 67/20/14 
+  Getafe           - Brighton         marché 25/25/50  actuel 13/19/68  lien 15/20/64  A 12/18/70  C 12/19/69 
+  Riga             - Jablonec         marché 41/28/31  actuel 20/22/58  lien 18/22/60  A 19/22/59  C 19/22/59 
+  Écart moyen au marché (points de probabilité) : cur 8.4, lien 9.1, A 9.7, C 9.5
