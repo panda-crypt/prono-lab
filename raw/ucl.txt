@@ -62,12 +62,12 @@
 3 Nov 2026|20:00|Feyenoord|Inter|0-3
 3 Nov 2026|20:00|Bodø / Glimt|LOSC Lille|0-0
 3 Nov 2026|20:00|LASK Linz|Slovan Bratislava|4-0
-4 Nov 2026|17:45|Fenerbahçe|Liverpool|
-4 Nov 2026|17:45|AEK Athens|Real Madrid|
-4 Nov 2026|20:00|RB Leipzig|Manchester City|
-4 Nov 2026|20:00|Slavia Praha|Arsenal|
-4 Nov 2026|20:00|Borussia Dortmund|Real Betis|
-4 Nov 2026|20:00|Porto|Napoli|
-4 Nov 2026|20:00|Viking|Sabah|
-4 Nov 2026|20:00|PSV|Club Brugge|
-4 Nov 2026|20:00|Lens|Como|
+4 Nov 2026|17:45|Fenerbahçe|Liverpool|3-2
+4 Nov 2026|17:45|AEK Athens|Real Madrid|2-3
+4 Nov 2026|20:00|RB Leipzig|Manchester City|2-3 (0-1)
+4 Nov 2026|20:00|Slavia Praha|Arsenal|1-2
+4 Nov 2026|20:00|Borussia Dortmund|Real Betis|2-1
+4 Nov 2026|20:00|Porto|Napoli|4-1 (1-1)
+4 Nov 2026|20:00|Viking|Sabah|4-1
+4 Nov 2026|20:00|PSV|Club Brugge|1-2
+4 Nov 2026|20:00|Lens|Como|1-9 (0-3)

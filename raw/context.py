@@ -6,7 +6,7 @@ Clés : noms des équipes exactement comme dans raw/<championnat>.txt.
                    le match est retiré des paris verts, des tickets et des jackpots.
   lvl = "info"   : à savoir, sans effet sur les propositions (ex. un titulaire incertain).
 """
-CHECKED_AT = "2026-11-04T02:45"   # date et heure de Paris de la dernière vérification
+CHECKED_AT = "2026-11-05T03:40"   # date et heure de Paris de la dernière vérification
 CONTEXT = {
     "l1": {
         ("Olympique Lyonnais", "Angers SCO"): {"lvl": "info", "why": "Lyon sans Openda (fissure du péroné).", "src": "https://m.maxifoot.fr/lyon/coup-dur-pour-openda-foot-465540.htm"},
@@ -43,6 +43,7 @@ CONTEXT = {
         ("Sassuolo", "Fiorentina"): {"lvl": "info", "why": "Sassuolo : Thorstvedt suspendu ; Fiorentina sans Ranieri ni Pongracic.", "src": "https://www.gianlucadimarzio.com/news-calcio/serie-a-probabili-formazioni-10a-giornata-498935"},
     },
     "bl": {
+        ("Hamburger SV", "Borussia Mönchengladbach"): {"lvl": "alerte", "why": "Gladbach sans Kleindienst (avant-centre), Honorat ni Bolin ; HSV sans Bornauw, Capaldo, Poulsen.", "src": "https://www.sportsmole.co.uk/football/hamburger-sv/preview/hamburger-sv-vs-borussia-mbach-prediction-team-news-lineups_608398.html"},
         ("FC Bayern München", "Borussia Dortmund"): {"lvl": "alerte", "why": "Bayern sans Neuer (gardien, capitaine), Musiala ni Luis Díaz ; Kimmich incertain.", "src": "https://www.t-online.de/sport/fussball/bundesliga/fc-bayern-muenchen/id_101504822/fc-bayern-neuer-fehlt-auch-gegen-dortmund-kimmich-rueckkehr-offen.html"},
         ("Borussia Mönchengladbach", "Paderborn"): {"lvl": "alerte", "why": "Gladbach sans Kleindienst ni Honorat ; Paderborn : 5 absents.", "src": "https://bundesliga.com/en/bundesliga/news/team-news-line-ups-2026-27-bayern-dortmund-fantasy-20707"},
         ("Bayer 04 Leverkusen", "VfB Stuttgart"): {"lvl": "alerte", "why": "Leverkusen sans Terrier, Kofane, Ben Seghir ; Stuttgart sans Diehl.", "src": "https://bundesliga.com/en/bundesliga/news/team-news-line-ups-2026-27-bayern-dortmund-fantasy-20707"},
@@ -64,5 +65,22 @@ CONTEXT = {
         ("FC Barcelona", "Aston Villa"): {"lvl": "alerte", "why": "Barcelone sans Koundé, Olmo, Christensen ni Eric García.", "src": "https://www.uefa.com/uefachampionsleague/news/02ab-21f9907f0a27-6a6a67e9775d-1000--champions-league-predicted-line-ups-matchday-4-team-news-/"},
         ("Feyenoord", "Inter"): {"lvl": "alerte", "why": "Inter sans Lautaro Martínez, Bastoni (suspendu), Stones ni Jones ; Feyenoord : 6 absents.", "src": "https://www.uefa.com/uefachampionsleague/news/02ab-21f9907f0a27-6a6a67e9775d-1000--champions-league-predicted-line-ups-matchday-4-team-news-/"},
         ("Manchester United", "Roma"): {"lvl": "alerte", "why": "Roma sans Svilar (gardien), Pellegrini ni Koné, Dybala incertain ; United sans Šeško, Shaw ni Dorgu.", "src": "https://www.uefa.com/uefachampionsleague/news/02ab-21f9907f0a27-6a6a67e9775d-1000--champions-league-predicted-line-ups-matchday-4-team-news-/"},
+    },
+    "uel": {
+        ("Milan", "Ferencváros"): {"lvl": "alerte", "why": "Milan sans Maignan (gardien, suspendu), Tomori, Gabbia, Saelemaekers, Loftus-Cheek ni Chukwueze ; rotation annoncée.", "src": "https://www.sportsmole.co.uk/football/ac-milan/europa-league/preview/ac-milan-vs-ferencvaros-prediction-team-news-lineups_608327.html"},
+        ("AZ Alkmaar", "Juventus"): {"lvl": "alerte", "why": "Juventus sans Locatelli (capitaine), Yildiz, Grabara, K. Thuram, Conceição, Nico González ni Çelik.", "src": "https://www.sportsmole.co.uk/football/az/europa-league/preview/az-vs-juventus-prediction-team-news-lineups_608333.html"},
+        ("Leverkusen", "Marseille"): {"lvl": "alerte", "why": "Leverkusen sans quatre attaquants (Ben Seghir, Terrier, Kofane, Diaby) ni Doué ; Marseille : Emerson incertain.", "src": "https://www.sportsmole.co.uk/football/bayer-leverkusen/europa-league/preview/b-leverkusen-vs-marseille-prediction-team-news-lineups_608338.html"},
+        ("Real Sociedad", "Lyon"): {"lvl": "info", "why": "Lyon sans Tagliafico, Openda, Šulc, Morton ni Ouédraogo ; Real Sociedad sans Beitia, Odriozola, Zakharyan.", "src": "https://www.sportsmole.co.uk/football/real-sociedad/europa-league/preview/real-sociedad-vs-lyon-prediction-team-news-lineups_608324.html"},
+        ("Celtic", "Beşiktaş"): {"lvl": "info", "why": "Beşiktaş sans Kökçü, Miretti ni Akdağ (suspendu), Černý incertain.", "src": "https://starting11.com/fixtures/celtic-vs-besiktas"},
+        ("Sunderland", "GNK Dinamo"): {"lvl": "info", "why": "Sunderland sans ses défenseurs centraux Alderete et Danso (suspendus), ni Ballard ni Mundle.", "src": "https://starting11.com/fixtures/sunderland-vs-dinamo-zagreb"},
+        ("N.E.C. Nijmegen", "Omonia"): {"lvl": "info", "why": "NEC sans Tadić, Sandler, Nuytinck, Emre Mor ni Geiger.", "src": "https://sportsmole.co.uk/football/nec/europa-league/preview/nijmegen-vs-omonia-prediction-team-news-lineups_608344.html"},
+    },
+    "uecl": {
+        ("Atalanta", "Kairat Almaty"): {"lvl": "info", "why": "Atalanta sans Hien, Kristensen, Bellanova, Kossounou ni Gaetano ; Kessié, Kolasinac, Raspadori et Scamacca incertains.", "src": "https://www.sportsmole.co.uk/football/atalanta-bc/europa-conference-league/preview/atalanta-vs-kairat-prediction-team-news-lineups_608346.html"},
+        ("Getafe", "Brighton"): {"lvl": "info", "why": "Brighton sans Mitoma, Ferguson, Tzimas, Azeez, plusieurs changements attendus ; Getafe sans Uche ni Juanmi.", "src": "https://www.sportsmole.co.uk/football/getafe/europa-conference-league/preview/getafe-vs-brighton-prediction-team-news-lineups_608340.html"},
+        ("Trabzonspor", "Freiburg"): {"lvl": "info", "why": "Trabzonspor sans Malinovskyi, Okay Yokuşlu, Franculino ni Lopes Cabral (suspendu), gardien Çevikkan incertain.", "src": "https://www.sportsmole.co.uk/football/trabzonspor/europa-conference-league/preview/trabzonspor-vs-freiburg-prediction-team-news-lineups_608341.html"},
+        ("Midtjylland", "Ajax"): {"lvl": "info", "why": "Ajax : Brandt très incertain, Adingra, Dolberg et Edvardsen possiblement absents ; Midtjylland : 6 absents.", "src": "https://www.sportsmole.co.uk/football/ajax/europa-conference-league/preview/midtjylland-vs-ajax-prediction-team-news-lineups_608320.html"},
+        ("Twente", "Pafos"): {"lvl": "info", "why": "Twente sans son gardien Unnerstall ni Bruns ; Pafos sans son gardien Gorter ni Jaja.", "src": "https://www.sportsmole.co.uk/football/fc-twente/europa-conference-league/preview/fc-twente-vs-pafos-prediction-team-news-lineups_608352.html"},
+        ("Monaco", "Nordsjælland"): {"lvl": "info", "why": "Monaco sans Ansu Fati ni Idumbo ; Nordsjælland : Janssen suspendu.", "src": "https://www.sportsmole.co.uk/football/as-monaco/europa-conference-league/preview/monaco-vs-nordsjaelland-prediction-team-news-lineups_608291.html"},
     },
 }
