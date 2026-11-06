@@ -6,13 +6,18 @@ Clés : noms des équipes exactement comme dans raw/<championnat>.txt.
                    le match est retiré des paris verts, des tickets et des jackpots.
   lvl = "info"   : à savoir, sans effet sur les propositions (ex. un titulaire incertain).
 """
-CHECKED_AT = "2026-11-05T03:40"   # date et heure de Paris de la dernière vérification
+CHECKED_AT = "2026-11-06T03:30"   # date et heure de Paris de la dernière vérification
 CONTEXT = {
     "l1": {
+        ("Paris Saint Germain", "Troyes"): {"lvl": "alerte", "why": "PSG toujours sans Dembélé, Kvaratskhelia, Marquinhos (capitaine) ni Nuno Mendes ; rotation possible après la Ligue des champions (non confirmée).", "src": "https://paris-supporters.fr/2026/11/05/infos-psg/psg-troyes-les-premieres-tendances-sur-la-compo-115883.html"},
         ("Olympique Lyonnais", "Angers SCO"): {"lvl": "info", "why": "Lyon sans Openda (fissure du péroné).", "src": "https://m.maxifoot.fr/lyon/coup-dur-pour-openda-foot-465540.htm"},
         ("Paris", "Monaco"): {"lvl": "info", "why": "Monaco sans Ansu Fati ni Idumbo ; Dier incertain.", "src": "https://butfootballclub.fr/1708950-pronostic-paris-fc-as-monaco-01-11-prono-cotes-et-compos"},
     },
     "pl": {
+        ("Arsenal", "Hull City"): {"lvl": "info", "why": "Arsenal sans Saka (quadriceps) ; Saliba de retour à l'entraînement ; Hull : Crooks suspendu.", "src": "https://thefalse9.com/2026/11/arsenal-predicted-lineup-hull-city-saliba-back-no-saka.html"},
+        ("Nottingham Forest", "Manchester City"): {"lvl": "info", "why": "Forest sans Domínguez ni Savona, Muñoz incertain ; City sans Semenyo.", "src": "https://dave.sport/news/nottingham-forest-man-city-injury-news/"},
+        ("Fulham", "Newcastle United"): {"lvl": "info", "why": "Newcastle sans Joelinton (blessé) ni Jacob Ramsey (suspendu).", "src": "https://dave.sport/news/fulham-newcastle-preview/"},
+        ("Leeds United", "Tottenham Hotspur"): {"lvl": "info", "why": "Leeds : Okafor et Stach très incertains, Calvert-Lewin incertain.", "src": "https://insidefutbol.com/2026/11/05/major-doubts-daniel-farke-gives-leeds-united-team-news-ahead-of-tottenham-clash/732217/"},
         ("Liverpool", "Arsenal"): {"lvl": "alerte", "why": "Arsenal sans Saka ni Saliba (blessés), Dowman suspendu ; Liverpool sans Ekitike, Szoboszlai incertain.", "src": "https://www.sportsmole.co.uk/football/liverpool/preview/liverpool-vs-arsenal-prediction-team-news-lineups_608057.html"},
         ("Chelsea", "Manchester United"): {"lvl": "alerte", "why": "Chelsea sans João Pedro, Reece James, Lacroix, Gittens ; United sans Sesko, Ugarte, Dorgu.", "src": "https://dave.sport/news/premier-league-weekend-preview-team-news/"},
         ("Tottenham Hotspur", "Crystal Palace"): {"lvl": "alerte", "why": "Tottenham sans Xavi Simons, Bergvall, Odobert, Mudryk ; Palace sans Ismaïla Sarr.", "src": "https://dave.sport/news/premier-league-weekend-preview-team-news/"},
@@ -23,6 +28,10 @@ CONTEXT = {
         ("Newcastle United", "Everton"): {"lvl": "info", "why": "Newcastle sans Livramento ; Grealish incertain.", "src": "https://dave.sport/news/premier-league-weekend-preview-team-news/"},
     },
     "liga": {
+        ("Valencia", "Real Madrid"): {"lvl": "info", "why": "Real Madrid sans Vinícius (suspendu), Rodrygo ni Asencio (blessés).", "src": "https://www.futbolfantasy.com/laliga/noticias/154187-posibles-alineaciones-y-previa-fantasy-del-valencia-real-madrid"},
+        ("Osasuna", "Athletic Club"): {"lvl": "info", "why": "Athletic sans Guruzeta ni Sannadi ; Nico Williams absent de l'entraînement mercredi. Osasuna sans Aimar Oroz.", "src": "https://www.futbolfantasy.com/laliga/noticias/154186-alineaciones-probables-y-previa-fantasy-del-osasuna-athletic"},
+        ("Málaga", "Racing Santander"): {"lvl": "info", "why": "Racing sans Andrés Martín ni Mantilla (ligaments croisés) ; Málaga sans Lobete ni Ochoa.", "src": "https://www.futbolfantasy.com/laliga/noticias/154184-posibles-alineaciones-y-previa-fantasy-del-malaga-racing"},
+        ("Espanyol", "Deportivo La Coruña"): {"lvl": "info", "why": "Espanyol sans Kike García (blessé) ni Hinojo (suspendu) ; Depor sans Bright Ede ni Eddahchouri.", "src": "https://www.futbolfantasy.com/laliga/noticias/154185-alineaciones-probables-y-previa-fantasy-del-espanyol-deportivo"},
         ("FC Barcelona", "Deportivo Alavés"): {"lvl": "alerte", "why": "Barcelone sans Olmo, Koundé, Eric García ni Christensen.", "src": "https://www.futbolfantasy.com/laliga/lesionados"},
         ("Athletic Club", "Real Sociedad"): {"lvl": "alerte", "why": "Athletic sans Guruzeta ni Galarreta, Sancet incertain ; Real Sociedad sans Zakharyan.", "src": "https://www.futbolfantasy.com/laliga/lesionados"},
         ("Deportivo La Coruña", "Osasuna"): {"lvl": "alerte", "why": "La Corogne sans Aubameyang ni Casadó ; Osasuna sans Aimar Oroz ni Herrando.", "src": "https://www.futbolfantasy.com/laliga/lesionados"},
@@ -32,6 +41,9 @@ CONTEXT = {
         ("Real Betis", "Málaga"): {"lvl": "info", "why": "Betis sans Cucho Hernández.", "src": "https://www.futbolfantasy.com/laliga/lesionados"},
     },
     "sa": {
+        ("Roma", "Sassuolo"): {"lvl": "alerte", "why": "Roma sans son gardien Svilar, Dybala, Pellegrini, M. Koné ni Rensch ; Gollini incertain.", "src": "https://www.tuttofantacalcio.it/probabili-formazioni/serie-a-probabili-formazioni-roma-sassuolo-fantacalcio-35347"},
+        ("Torino", "Lecce"): {"lvl": "info", "why": "Lecce : 6 absents (Berisha, Pierotti, Ilić, L. Coulibaly, Monteiro, Geubbels) ; Torino sans Mandragora.", "src": "https://www.tuttofantacalcio.it/probabili-formazioni/serie-a-probabili-formazioni-torino-lecce-fantacalcio-35345"},
+        ("Cagliari", "Frosinone"): {"lvl": "info", "why": "Cagliari sans Nzola ni Fadera en attaque.", "src": "https://www.cagliaricalcio-news.it/notizie/cagliari-emergenza-in-attacco-contro-il-frosinone-out-nzola-e-fadera/"},
         ("Udinese", "Roma"): {"lvl": "alerte", "why": "Roma sans Svilar (gardien), Dybala, Pellegrini ni Koné.", "src": "https://www.gianlucadimarzio.com/news-calcio/serie-a-probabili-formazioni-10a-giornata-498935"},
         ("AC Milan", "Inter"): {"lvl": "alerte", "why": "Inter sans Lautaro (capitaine, buteur), Stones, Pavard ; Milan sans Tomori, Gabbia, Loftus-Cheek.", "src": "https://www.goal.com/it/liste/chi-salta-milan-inter-i-giocatori-infortunati-e-squalificati-chi-recupera-per-il-derby-di-milano/blt1cba8faa5762701b"},
         ("Como", "Venezia"): {"lvl": "alerte", "why": "Como sans Kean, Diao, Chalobah ; Venezia sans Adorante.", "src": "https://www.gianlucadimarzio.com/news-calcio/serie-a-probabili-formazioni-10a-giornata-498935"},
@@ -43,6 +55,9 @@ CONTEXT = {
         ("Sassuolo", "Fiorentina"): {"lvl": "info", "why": "Sassuolo : Thorstvedt suspendu ; Fiorentina sans Ranieri ni Pongracic.", "src": "https://www.gianlucadimarzio.com/news-calcio/serie-a-probabili-formazioni-10a-giornata-498935"},
     },
     "bl": {
+        ("FSV Mainz 05", "FC Bayern München"): {"lvl": "alerte", "why": "Bayern sans Musiala, Luis Díaz, Gnabry ni Saibari, Olise touché ; Kompany absent (méningite), remplacé par Danks.", "src": "https://www.wochenblatt-reporter.de/rheinhessen/c-sport/mainz-05-vor-duell-mit-bayern-personalsorgen-beim-meister_a930314"},
+        ("Paderborn", "Eintracht Frankfurt"): {"lvl": "info", "why": "Francfort : Götze probablement forfait, Koch incertain.", "src": "https://www.90min.de/doppel-ausfall-fur-frankfurt-personalsorgen-vor-duell-mit-paderborn"},
+        ("Borussia Dortmund", "Elversberg"): {"lvl": "info", "why": "Dortmund sans Emre Can, Lerma ni Konstantelias ; Guirassy léger doute.", "src": "https://www.sportsmole.co.uk/football/borussia-dortmund/bundesliga-title-race/preview/dortmund-vs-elversberg-prediction-team-news-lineups_608500.html"},
         ("Hamburger SV", "Borussia Mönchengladbach"): {"lvl": "alerte", "why": "Gladbach sans Kleindienst (avant-centre), Honorat ni Bolin ; HSV sans Bornauw, Capaldo, Poulsen.", "src": "https://www.sportsmole.co.uk/football/hamburger-sv/preview/hamburger-sv-vs-borussia-mbach-prediction-team-news-lineups_608398.html"},
         ("FC Bayern München", "Borussia Dortmund"): {"lvl": "alerte", "why": "Bayern sans Neuer (gardien, capitaine), Musiala ni Luis Díaz ; Kimmich incertain.", "src": "https://www.t-online.de/sport/fussball/bundesliga/fc-bayern-muenchen/id_101504822/fc-bayern-neuer-fehlt-auch-gegen-dortmund-kimmich-rueckkehr-offen.html"},
         ("Borussia Mönchengladbach", "Paderborn"): {"lvl": "alerte", "why": "Gladbach sans Kleindienst ni Honorat ; Paderborn : 5 absents.", "src": "https://bundesliga.com/en/bundesliga/news/team-news-line-ups-2026-27-bayern-dortmund-fantasy-20707"},

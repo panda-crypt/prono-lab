@@ -35,21 +35,21 @@
 22 Oct 2026|21:00|Borac|KuPS Kuopio|2-0
 22 Oct 2026|21:00|Lincoln Red Imps|Twente|1-4
 22 Oct 2026|21:00|Braga|Gent|2-0
-5 Nov 2026|18:45|Aarhus|Braga|
-5 Nov 2026|18:45|Atalanta|Kairat Almaty|
-5 Nov 2026|18:45|Midtjylland|Ajax|
-5 Nov 2026|18:45|Thun|Hearts|
-5 Nov 2026|18:45|Crvena Zvezda|Inter Escaldes|
-5 Nov 2026|18:45|KuPS Kuopio|Gent|
-5 Nov 2026|18:45|Lincoln Red Imps|Hajduk Split|
-5 Nov 2026|18:45|Mjällby|Borac|
-5 Nov 2026|18:45|Trabzonspor|Freiburg|
-5 Nov 2026|21:00|Monaco|Nordsjælland|
-5 Nov 2026|21:00|Copenhagen|Iberia Tbilisi|
-5 Nov 2026|21:00|Lugano|Kauno Žalgiris|
-5 Nov 2026|21:00|Twente|Pafos|
-5 Nov 2026|21:00|Getafe|Brighton|
-5 Nov 2026|21:00|Sint-Truidense|Brann|
-5 Nov 2026|21:00|Panathinaikos|CSKA Sofia|
-5 Nov 2026|21:00|Riga|Jablonec|
-5 Nov 2026|21:00|Universitatea Craiova|Egnatia|
+5 Nov 2026|18:45|Aarhus|Braga|0-0 (0-0)
+5 Nov 2026|18:45|Atalanta|Kairat Almaty|1-1
+5 Nov 2026|18:45|Midtjylland|Ajax|1-6 (1-1)
+5 Nov 2026|18:45|Thun|Hearts|3-1
+5 Nov 2026|18:45|Crvena Zvezda|Inter Escaldes|2-1
+5 Nov 2026|18:45|KuPS Kuopio|Gent|0-0 (0-0)
+5 Nov 2026|18:45|Lincoln Red Imps|Hajduk Split|1-0
+5 Nov 2026|18:45|Mjällby|Borac|2-0
+5 Nov 2026|18:45|Trabzonspor|Freiburg|0-1
+5 Nov 2026|21:00|Monaco|Nordsjælland|2-0
+5 Nov 2026|21:00|Copenhagen|Iberia Tbilisi|2-1
+5 Nov 2026|21:00|Lugano|Kauno Žalgiris|3-0
+5 Nov 2026|21:00|Twente|Pafos|3-1
+5 Nov 2026|21:00|Getafe|Brighton|0-1 (0-0)
+5 Nov 2026|21:00|Sint-Truidense|Brann|1-1
+5 Nov 2026|21:00|Panathinaikos|CSKA Sofia|2-1
+5 Nov 2026|21:00|Riga|Jablonec|1-1
+5 Nov 2026|21:00|Universitatea Craiova|Egnatia|2-0
