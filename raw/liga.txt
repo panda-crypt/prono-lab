@@ -108,7 +108,7 @@
 1 Nov 2026|17:30|Elche|Valencia|0-1
 1 Nov 2026|20:00|Athletic Club|Real Sociedad|2-1
 2 Nov 2026|20:00|Deportivo La Coruña|Osasuna|2-1
-6 Nov 2026|20:00|Sevilla|Deportivo Alavés|
+6 Nov 2026|20:00|Sevilla|Deportivo Alavés|0-0 (0-0)
 7 Nov 2026|13:00|Málaga|Racing Santander|
 7 Nov 2026|15:15|Espanyol|Deportivo La Coruña|
 7 Nov 2026|17:30|Osasuna|Athletic Club|

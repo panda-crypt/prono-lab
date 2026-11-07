@@ -98,7 +98,7 @@
 1 Nov 2026|19:45|Juventus|Napoli|2-0 (0-0)
 2 Nov 2026|17:30|Sassuolo|Fiorentina|2-4 (1-1)
 2 Nov 2026|19:45|Atalanta|Parma|0-3
-6 Nov 2026|19:45|Venezia|Udinese|
+6 Nov 2026|19:45|Venezia|Udinese|2-1 (0-0)
 7 Nov 2026|14:00|Torino|Lecce|
 7 Nov 2026|14:00|Cagliari|Frosinone|
 7 Nov 2026|17:00|Parma|Bologna|

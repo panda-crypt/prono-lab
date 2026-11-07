@@ -70,7 +70,7 @@
 31 Oct 2026|17:30|FC Bayern München|Borussia Dortmund|2-2
 1 Nov 2026|14:30|FC Union Berlin|FC Köln|1-1 (1-0)
 1 Nov 2026|16:30|Eintracht Frankfurt|Hamburger SV|3-1
-6 Nov 2026|19:30|Hamburger SV|Borussia Mönchengladbach|
+6 Nov 2026|19:30|Hamburger SV|Borussia Mönchengladbach|3-1 (1-1)
 7 Nov 2026|14:30|Paderborn|Eintracht Frankfurt|
 7 Nov 2026|14:30|FSV Mainz 05|FC Bayern München|
 7 Nov 2026|14:30|RB Leipzig|FC Augsburg|

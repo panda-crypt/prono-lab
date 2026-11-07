@@ -79,9 +79,9 @@
 1 Nov 2026|14:00|Strasbourg|Auxerre|5-1 (1-0)
 1 Nov 2026|16:15|Paris|Monaco|3-1
 1 Nov 2026|19:45|Olympique Marseille|Toulouse|2-0
-6 Nov 2026|19:45|Toulouse|Strasbourg|
-7 Nov 2026|16:15|Auxerre|Paris|
-7 Nov 2026|19:45|Paris Saint Germain|Troyes|
+6 Nov 2026|19:45|Toulouse|Strasbourg|3-1 (1-0)
+7 Nov 2026|18:00|Auxerre|Paris|
+7 Nov 2026|20:05|Paris Saint Germain|Troyes|
 8 Nov 2026|14:00|Rennes|LOSC Lille|
 8 Nov 2026|16:15|Le Mans|Monaco|
 8 Nov 2026|16:15|Le Havre|Lorient|
