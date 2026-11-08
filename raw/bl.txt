@@ -72,10 +72,10 @@
 1 Nov 2026|16:30|Eintracht Frankfurt|Hamburger SV|3-1
 6 Nov 2026|19:30|Hamburger SV|Borussia Mönchengladbach|3-1 (1-1)
 7 Nov 2026|14:30|Paderborn|Eintracht Frankfurt|
-7 Nov 2026|14:30|FSV Mainz 05|FC Bayern München|
+7 Nov 2026|14:30|FSV Mainz 05|FC Bayern München|1-2 (0-1)
 7 Nov 2026|14:30|RB Leipzig|FC Augsburg|
-7 Nov 2026|14:30|Borussia Dortmund|Elversberg|
-7 Nov 2026|17:30|VfB Stuttgart|Werder Bremen|
+7 Nov 2026|14:30|Borussia Dortmund|Elversberg|2-1 (0-0)
+7 Nov 2026|17:30|VfB Stuttgart|Werder Bremen|1-0 (1-0)
 8 Nov 2026|14:30|FC Köln|Bayer 04 Leverkusen|
 8 Nov 2026|16:30|SC Freiburg|FC Union Berlin|
 8 Nov 2026|18:30|TSG Hoffenheim|Schalke 04|

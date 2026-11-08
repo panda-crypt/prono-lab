@@ -99,10 +99,10 @@
 2 Nov 2026|17:30|Sassuolo|Fiorentina|2-4 (1-1)
 2 Nov 2026|19:45|Atalanta|Parma|0-3
 6 Nov 2026|19:45|Venezia|Udinese|2-1 (0-0)
-7 Nov 2026|14:00|Torino|Lecce|
-7 Nov 2026|14:00|Cagliari|Frosinone|
-7 Nov 2026|17:00|Parma|Bologna|
-7 Nov 2026|19:45|Roma|Sassuolo|
+7 Nov 2026|14:00|Torino|Lecce|1-1 (0-0)
+7 Nov 2026|14:00|Cagliari|Frosinone|1-0 (1-0)
+7 Nov 2026|17:00|Parma|Bologna|1-2 (0-1)
+7 Nov 2026|19:45|Roma|Sassuolo|3-0 (2-0)
 8 Nov 2026|11:30|Napoli|Lazio|
 8 Nov 2026|14:00|Monza|Atalanta|
 8 Nov 2026|14:00|Genoa|AC Milan|
