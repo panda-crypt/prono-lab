@@ -82,9 +82,9 @@
 6 Nov 2026|19:45|Toulouse|Strasbourg|3-1 (1-0)
 7 Nov 2026|18:00|Auxerre|Paris|0-1 (0-0)
 7 Nov 2026|20:05|Paris Saint Germain|Troyes|1-0 (1-0)
-8 Nov 2026|14:00|Rennes|LOSC Lille|
-8 Nov 2026|16:15|Le Mans|Monaco|
+8 Nov 2026|14:00|Rennes|LOSC Lille|1-2 (1-1)
+8 Nov 2026|16:15|Le Mans|Monaco|1-1 (0-1)
 8 Nov 2026|16:15|Le Havre|Lorient|
-8 Nov 2026|16:15|Brest|Olympique Lyonnais|
+8 Nov 2026|16:15|Brest|Olympique Lyonnais|2-0 (1-0)
 8 Nov 2026|16:15|Angers SCO|Nice|
-8 Nov 2026|19:45|Lens|Olympique Marseille|
+8 Nov 2026|19:45|Lens|Olympique Marseille|1-2 (1-1)

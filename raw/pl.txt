@@ -93,8 +93,8 @@
 7 Nov 2026|15:00|Fulham|Newcastle United|1-1 (0-0)
 7 Nov 2026|15:00|Arsenal|Hull City|1-0 (0-0)
 7 Nov 2026|17:30|Nottingham Forest|Manchester City|3-1 (2-0)
-8 Nov 2026|14:00|Sunderland|Chelsea|
-8 Nov 2026|14:00|Ipswich Town|AFC Bournemouth|
-8 Nov 2026|14:00|Crystal Palace|Liverpool|
-8 Nov 2026|14:00|Brighton & Hove Albion|Brentford|
-8 Nov 2026|16:30|Manchester United|Aston Villa|
+8 Nov 2026|14:00|Sunderland|Chelsea|1-0 (1-0)
+8 Nov 2026|14:00|Ipswich Town|AFC Bournemouth|1-2 (0-1)
+8 Nov 2026|14:00|Crystal Palace|Liverpool|1-3
+8 Nov 2026|14:00|Brighton & Hove Albion|Brentford|2-0
+8 Nov 2026|16:30|Manchester United|Aston Villa|4-4 (2-2)

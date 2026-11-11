@@ -113,8 +113,8 @@
 7 Nov 2026|15:15|Espanyol|Deportivo La Coruña|0-0 (0-0)
 7 Nov 2026|17:30|Osasuna|Athletic Club|1-1 (0-0)
 7 Nov 2026|20:00|Valencia|Real Madrid|0-3 (0-2)
-8 Nov 2026|13:00|Elche|Real Betis|
-8 Nov 2026|15:15|Real Sociedad|Rayo Vallecano|
-8 Nov 2026|17:30|Villarreal|Getafe|
-8 Nov 2026|17:30|Celta de Vigo|Levante|
-8 Nov 2026|20:00|Atlético Madrid|FC Barcelona|
+8 Nov 2026|13:00|Elche|Real Betis|0-2
+8 Nov 2026|15:15|Real Sociedad|Rayo Vallecano|1-0
+8 Nov 2026|17:30|Villarreal|Getafe|2-0
+8 Nov 2026|17:30|Celta de Vigo|Levante|0-0 (0-0)
+8 Nov 2026|20:00|Atlético Madrid|FC Barcelona|1-2 (1-1)
