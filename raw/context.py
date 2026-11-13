@@ -6,7 +6,7 @@ Clés : noms des équipes exactement comme dans raw/<championnat>.txt.
                    le match est retiré des paris verts, des tickets et des jackpots.
   lvl = "info"   : à savoir, sans effet sur les propositions (ex. un titulaire incertain).
 """
-CHECKED_AT = "2026-11-11T08:45"   # date et heure de Paris de la dernière vérification
+CHECKED_AT = "2026-11-13T08:45"   # date et heure de Paris de la dernière vérification
 CONTEXT = {
     "l1": {}, "pl": {}, "liga": {}, "sa": {}, "bl": {}, "ucl": {}, "uel": {}, "uecl": {},
 }
