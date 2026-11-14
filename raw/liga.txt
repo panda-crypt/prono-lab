@@ -118,3 +118,13 @@
 8 Nov 2026|17:30|Villarreal|Getafe|2-0
 8 Nov 2026|17:30|Celta de Vigo|Levante|0-0 (0-0)
 8 Nov 2026|20:00|Atlético Madrid|FC Barcelona|1-2 (1-1)
+20 Nov 2026|20:00|Athletic Club|Espanyol|
+21 Nov 2026|13:00|Deportivo Alavés|Deportivo La Coruña|
+21 Nov 2026|15:15|Rayo Vallecano|Valencia|
+21 Nov 2026|17:30|Sevilla|Real Betis|
+21 Nov 2026|20:00|Real Madrid|Celta de Vigo|
+22 Nov 2026|13:00|FC Barcelona|Villarreal|
+22 Nov 2026|15:15|Racing Santander|Real Sociedad|
+22 Nov 2026|17:30|Osasuna|Málaga|
+22 Nov 2026|20:00|Getafe|Atlético Madrid|
+23 Nov 2026|20:00|Levante|Elche|

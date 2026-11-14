@@ -108,3 +108,13 @@
 8 Nov 2026|14:00|Genoa|AC Milan|1-2 (0-2)
 8 Nov 2026|17:00|Inter|Como|2-0 (2-0)
 8 Nov 2026|19:45|Fiorentina|Juventus|2-2 (1-1)
+21 Nov 2026|14:00|Lazio|Lecce|
+21 Nov 2026|14:00|Como|Cagliari|
+21 Nov 2026|17:00|Parma|Roma|
+21 Nov 2026|19:45|Napoli|Torino|
+22 Nov 2026|11:30|Juventus|Venezia|
+22 Nov 2026|14:00|Sassuolo|Genoa|
+22 Nov 2026|14:00|Bologna|Udinese|
+22 Nov 2026|17:00|AC Milan|Frosinone|
+22 Nov 2026|19:45|Atalanta|Inter|
+23 Nov 2026|19:45|Monza|Fiorentina|
