@@ -1,0 +1,11 @@
+eng.w.1 400 80
+fra.w.1 400 80
+esp.w.1 400 80
+ger.w.1 400 80
+ita.w.1 400 80
+ned.w.1 400 80
+por.w.1 400 80
+uefa.wchampions 400 80
+usa.nwsl 400 80
+fra_future 400 80
+intl_w 400 80
