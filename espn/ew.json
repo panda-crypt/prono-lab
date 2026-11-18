@@ -1,0 +1,2273 @@
+[
+{
+"id": "754295",
+"utc": "2025-09-05T18:30Z",
+"h": "Chelsea",
+"a": "Manchester City",
+"st": "STATUS_FULL_TIME",
+"s": [
+2,
+1
+]
+},
+{
+"id": "754296",
+"utc": "2025-09-06T12:30Z",
+"h": "Arsenal",
+"a": "London City Lionesses",
+"st": "STATUS_FULL_TIME",
+"s": [
+4,
+1
+]
+},
+{
+"id": "754299",
+"utc": "2025-09-07T11:00Z",
+"h": "Brighton & Hove Albion",
+"a": "Aston Villa",
+"st": "STATUS_FULL_TIME",
+"s": [
+0,
+0
+]
+},
+{
+"id": "754300",
+"utc": "2025-09-07T11:00Z",
+"h": "Liverpool",
+"a": "Everton",
+"st": "STATUS_FULL_TIME",
+"s": [
+1,
+4
+]
+},
+{
+"id": "754298",
+"utc": "2025-09-07T11:00Z",
+"h": "Manchester United",
+"a": "Leicester City",
+"st": "STATUS_FULL_TIME",
+"s": [
+4,
+0
+]
+},
+{
+"id": "754297",
+"utc": "2025-09-07T11:00Z",
+"h": "Tottenham Hotspur",
+"a": "West Ham United",
+"st": "STATUS_FULL_TIME",
+"s": [
+1,
+0
+]
+},
+{
+"id": "754301",
+"utc": "2025-09-12T18:30Z",
+"h": "Manchester City",
+"a": "Brighton & Hove Albion",
+"st": "STATUS_FULL_TIME",
+"s": [
+2,
+1
+]
+},
+{
+"id": "754303",
+"utc": "2025-09-12T18:30Z",
+"h": "West Ham United",
+"a": "Arsenal",
+"st": "STATUS_FULL_TIME",
+"s": [
+1,
+5
+]
+},
+{
+"id": "754305",
+"utc": "2025-09-14T11:00Z",
+"h": "Aston Villa",
+"a": "Chelsea",
+"st": "STATUS_FULL_TIME",
+"s": [
+1,
+3
+]
+},
+{
+"id": "754306",
+"utc": "2025-09-14T11:00Z",
+"h": "Leicester City",
+"a": "Liverpool",
+"st": "STATUS_FULL_TIME",
+"s": [
+1,
+0
+]
+},
+{
+"id": "754302",
+"utc": "2025-09-14T11:00Z",
+"h": "London City Lionesses",
+"a": "Manchester United",
+"st": "STATUS_FULL_TIME",
+"s": [
+1,
+5
+]
+},
+{
+"id": "754304",
+"utc": "2025-09-14T13:30Z",
+"h": "Everton",
+"a": "Tottenham Hotspur",
+"st": "STATUS_FULL_TIME",
+"s": [
+0,
+2
+]
+},
+{
+"id": "754312",
+"utc": "2025-09-19T18:30Z",
+"h": "Everton",
+"a": "London City Lionesses",
+"st": "STATUS_FULL_TIME",
+"s": [
+1,
+2
+]
+},
+{
+"id": "754308",
+"utc": "2025-09-19T18:30Z",
+"h": "Tottenham Hotspur",
+"a": "Manchester City",
+"st": "STATUS_FULL_TIME",
+"s": [
+1,
+5
+]
+},
+{
+"id": "754309",
+"utc": "2025-09-21T11:00Z",
+"h": "Brighton & Hove Albion",
+"a": "West Ham United",
+"st": "STATUS_FULL_TIME",
+"s": [
+4,
+1
+]
+},
+{
+"id": "754310",
+"utc": "2025-09-21T11:00Z",
+"h": "Chelsea",
+"a": "Leicester City",
+"st": "STATUS_FULL_TIME",
+"s": [
+1,
+0
+]
+},
+{
+"id": "754307",
+"utc": "2025-09-21T13:50Z",
+"h": "Manchester United",
+"a": "Arsenal",
+"st": "STATUS_FULL_TIME",
+"s": [
+0,
+0
+]
+},
+{
+"id": "754313",
+"utc": "2025-09-27T11:00Z",
+"h": "Arsenal",
+"a": "Aston Villa",
+"st": "STATUS_FULL_TIME",
+"s": [
+1,
+1
+]
+},
+{
+"id": "754317",
+"utc": "2025-09-28T11:00Z",
+"h": "Brighton & Hove Albion",
+"a": "Everton",
+"st": "STATUS_FULL_TIME",
+"s": [
+1,
+0
+]
+},
+{
+"id": "754314",
+"utc": "2025-09-28T11:00Z",
+"h": "Leicester City",
+"a": "Tottenham Hotspur",
+"st": "STATUS_FULL_TIME",
+"s": [
+1,
+2
+]
+},
+{
+"id": "754318",
+"utc": "2025-09-28T11:00Z",
+"h": "Liverpool",
+"a": "Manchester United",
+"st": "STATUS_FULL_TIME",
+"s": [
+0,
+2
+]
+},
+{
+"id": "754315",
+"utc": "2025-09-28T11:00Z",
+"h": "Manchester City",
+"a": "London City Lionesses",
+"st": "STATUS_FULL_TIME",
+"s": [
+4,
+1
+]
+},
+{
+"id": "754316",
+"utc": "2025-09-28T13:30Z",
+"h": "West Ham United",
+"a": "Chelsea",
+"st": "STATUS_FULL_TIME",
+"s": [
+0,
+4
+]
+},
+{
+"id": "754320",
+"utc": "2025-10-03T18:30Z",
+"h": "Manchester United",
+"a": "Chelsea",
+"st": "STATUS_FULL_TIME",
+"s": [
+1,
+1
+]
+},
+{
+"id": "754319",
+"utc": "2025-10-04T11:00Z",
+"h": "Manchester City",
+"a": "Arsenal",
+"st": "STATUS_FULL_TIME",
+"s": [
+3,
+2
+]
+},
+{
+"id": "754324",
+"utc": "2025-10-05T10:55Z",
+"h": "Leicester City",
+"a": "Everton",
+"st": "STATUS_FULL_TIME",
+"s": [
+1,
+1
+]
+},
+{
+"id": "754323",
+"utc": "2025-10-05T10:55Z",
+"h": "London City Lionesses",
+"a": "Liverpool",
+"st": "STATUS_FULL_TIME",
+"s": [
+1,
+0
+]
+},
+{
+"id": "754322",
+"utc": "2025-10-05T10:55Z",
+"h": "Tottenham Hotspur",
+"a": "Brighton & Hove Albion",
+"st": "STATUS_FULL_TIME",
+"s": [
+1,
+0
+]
+},
+{
+"id": "754321",
+"utc": "2025-10-05T10:55Z",
+"h": "West Ham United",
+"a": "Aston Villa",
+"st": "STATUS_FULL_TIME",
+"s": [
+0,
+2
+]
+},
+{
+"id": "754327",
+"utc": "2025-10-12T11:00Z",
+"h": "Aston Villa",
+"a": "Leicester City",
+"st": "STATUS_FULL_TIME",
+"s": [
+0,
+0
+]
+},
+{
+"id": "754325",
+"utc": "2025-10-12T11:00Z",
+"h": "Chelsea",
+"a": "Tottenham Hotspur",
+"st": "STATUS_FULL_TIME",
+"s": [
+1,
+0
+]
+},
+{
+"id": "754329",
+"utc": "2025-10-12T11:00Z",
+"h": "Everton",
+"a": "Manchester United",
+"st": "STATUS_FULL_TIME",
+"s": [
+1,
+4
+]
+},
+{
+"id": "754326",
+"utc": "2025-10-12T11:00Z",
+"h": "London City Lionesses",
+"a": "West Ham United",
+"st": "STATUS_FULL_TIME",
+"s": [
+1,
+0
+]
+},
+{
+"id": "754328",
+"utc": "2025-10-12T13:30Z",
+"h": "Arsenal",
+"a": "Brighton & Hove Albion",
+"st": "STATUS_FULL_TIME",
+"s": [
+1,
+0
+]
+},
+{
+"id": "754330",
+"utc": "2025-10-12T15:45Z",
+"h": "Liverpool",
+"a": "Manchester City",
+"st": "STATUS_FULL_TIME",
+"s": [
+1,
+2
+]
+},
+{
+"id": "754333",
+"utc": "2025-11-01T12:00Z",
+"h": "Chelsea",
+"a": "London City Lionesses",
+"st": "STATUS_FULL_TIME",
+"s": [
+2,
+0
+]
+},
+{
+"id": "754331",
+"utc": "2025-11-01T12:00Z",
+"h": "Manchester City",
+"a": "West Ham United",
+"st": "STATUS_FULL_TIME",
+"s": [
+1,
+0
+]
+},
+{
+"id": "754335",
+"utc": "2025-11-02T12:00Z",
+"h": "Aston Villa",
+"a": "Everton",
+"st": "STATUS_FULL_TIME",
+"s": [
+3,
+3
+]
+},
+{
+"id": "754332",
+"utc": "2025-11-02T12:00Z",
+"h": "Brighton & Hove Albion",
+"a": "Manchester United",
+"st": "STATUS_FULL_TIME",
+"s": [
+2,
+3
+]
+},
+{
+"id": "754336",
+"utc": "2025-11-02T12:00Z",
+"h": "Leicester City",
+"a": "Arsenal",
+"st": "STATUS_FULL_TIME",
+"s": [
+1,
+4
+]
+},
+{
+"id": "754334",
+"utc": "2025-11-02T12:15Z",
+"h": "Tottenham Hotspur",
+"a": "Liverpool",
+"st": "STATUS_FULL_TIME",
+"s": [
+2,
+1
+]
+},
+{
+"id": "754337",
+"utc": "2025-11-08T12:00Z",
+"h": "Arsenal",
+"a": "Chelsea",
+"st": "STATUS_FULL_TIME",
+"s": [
+1,
+1
+]
+},
+{
+"id": "754338",
+"utc": "2025-11-08T12:00Z",
+"h": "Manchester United",
+"a": "Aston Villa",
+"st": "STATUS_FULL_TIME",
+"s": [
+0,
+1
+]
+},
+{
+"id": "754339",
+"utc": "2025-11-09T11:55Z",
+"h": "London City Lionesses",
+"a": "Tottenham Hotspur",
+"st": "STATUS_FULL_TIME",
+"s": [
+4,
+2
+]
+},
+{
+"id": "754342",
+"utc": "2025-11-09T12:00Z",
+"h": "Liverpool",
+"a": "Brighton & Hove Albion",
+"st": "STATUS_FULL_TIME",
+"s": [
+1,
+1
+]
+},
+{
+"id": "754340",
+"utc": "2025-11-09T12:00Z",
+"h": "West Ham United",
+"a": "Leicester City",
+"st": "STATUS_FULL_TIME",
+"s": [
+1,
+1
+]
+},
+{
+"id": "754341",
+"utc": "2025-11-09T14:30Z",
+"h": "Everton",
+"a": "Manchester City",
+"st": "STATUS_FULL_TIME",
+"s": [
+1,
+2
+]
+},
+{
+"id": "754348",
+"utc": "2025-11-15T13:30Z",
+"h": "Manchester City",
+"a": "Manchester United",
+"st": "STATUS_FULL_TIME",
+"s": [
+3,
+0
+]
+},
+{
+"id": "754346",
+"utc": "2025-11-16T12:00Z",
+"h": "Aston Villa",
+"a": "London City Lionesses",
+"st": "STATUS_FULL_TIME",
+"s": [
+1,
+3
+]
+},
+{
+"id": "754345",
+"utc": "2025-11-16T12:00Z",
+"h": "Brighton & Hove Albion",
+"a": "Leicester City",
+"st": "STATUS_FULL_TIME",
+"s": [
+4,
+1
+]
+},
+{
+"id": "754344",
+"utc": "2025-11-16T12:00Z",
+"h": "Liverpool",
+"a": "Chelsea",
+"st": "STATUS_FULL_TIME",
+"s": [
+1,
+1
+]
+},
+{
+"id": "754343",
+"utc": "2025-11-16T12:00Z",
+"h": "West Ham United",
+"a": "Everton",
+"st": "STATUS_FULL_TIME",
+"s": [
+3,
+1
+]
+},
+{
+"id": "754347",
+"utc": "2025-11-16T14:30Z",
+"h": "Tottenham Hotspur",
+"a": "Arsenal",
+"st": "STATUS_FULL_TIME",
+"s": [
+0,
+0
+]
+},
+{
+"id": "754349",
+"utc": "2025-12-06T12:00Z",
+"h": "Arsenal",
+"a": "Liverpool",
+"st": "STATUS_FULL_TIME",
+"s": [
+2,
+1
+]
+},
+{
+"id": "754354",
+"utc": "2025-12-07T12:00Z",
+"h": "Leicester City",
+"a": "Manchester City",
+"st": "STATUS_FULL_TIME",
+"s": [
+0,
+3
+]
+},
+{
+"id": "754352",
+"utc": "2025-12-07T12:00Z",
+"h": "London City Lionesses",
+"a": "Brighton & Hove Albion",
+"st": "STATUS_FULL_TIME",
+"s": [
+0,
+1
+]
+},
+{
+"id": "754350",
+"utc": "2025-12-07T12:00Z",
+"h": "Manchester United",
+"a": "West Ham United",
+"st": "STATUS_FULL_TIME",
+"s": [
+2,
+1
+]
+},
+{
+"id": "754353",
+"utc": "2025-12-07T12:00Z",
+"h": "Tottenham Hotspur",
+"a": "Aston Villa",
+"st": "STATUS_FULL_TIME",
+"s": [
+2,
+1
+]
+},
+{
+"id": "754351",
+"utc": "2025-12-07T14:30Z",
+"h": "Chelsea",
+"a": "Everton",
+"st": "STATUS_FULL_TIME",
+"s": [
+0,
+1
+]
+},
+{
+"id": "754311",
+"utc": "2025-12-11T19:00Z",
+"h": "Aston Villa",
+"a": "Liverpool",
+"st": "STATUS_FULL_TIME",
+"s": [
+3,
+0
+]
+},
+{
+"id": "754358",
+"utc": "2025-12-13T12:00Z",
+"h": "Everton",
+"a": "Arsenal",
+"st": "STATUS_FULL_TIME",
+"s": [
+1,
+3
+]
+},
+{
+"id": "754359",
+"utc": "2025-12-14T11:55Z",
+"h": "Brighton & Hove Albion",
+"a": "Chelsea",
+"st": "STATUS_FULL_TIME",
+"s": [
+0,
+3
+]
+},
+{
+"id": "754360",
+"utc": "2025-12-14T11:55Z",
+"h": "Leicester City",
+"a": "London City Lionesses",
+"st": "STATUS_FULL_TIME",
+"s": [
+1,
+0
+]
+},
+{
+"id": "754356",
+"utc": "2025-12-14T11:55Z",
+"h": "Manchester City",
+"a": "Aston Villa",
+"st": "STATUS_FULL_TIME",
+"s": [
+6,
+1
+]
+},
+{
+"id": "754355",
+"utc": "2025-12-14T11:55Z",
+"h": "West Ham United",
+"a": "Liverpool",
+"st": "STATUS_FULL_TIME",
+"s": [
+2,
+2
+]
+},
+{
+"id": "754357",
+"utc": "2025-12-14T14:30Z",
+"h": "Manchester United",
+"a": "Tottenham Hotspur",
+"st": "STATUS_FULL_TIME",
+"s": [
+3,
+3
+]
+},
+{
+"id": "754365",
+"utc": "2026-01-10T12:30Z",
+"h": "Arsenal",
+"a": "Manchester United",
+"st": "STATUS_FULL_TIME",
+"s": [
+0,
+0
+]
+},
+{
+"id": "754362",
+"utc": "2026-01-11T12:00Z",
+"h": "Aston Villa",
+"a": "Brighton & Hove Albion",
+"st": "STATUS_FULL_TIME",
+"s": [
+2,
+1
+]
+},
+{
+"id": "754363",
+"utc": "2026-01-11T12:00Z",
+"h": "Chelsea",
+"a": "West Ham United",
+"st": "STATUS_FULL_TIME",
+"s": [
+5,
+0
+]
+},
+{
+"id": "754361",
+"utc": "2026-01-11T12:00Z",
+"h": "Manchester City",
+"a": "Everton",
+"st": "STATUS_FULL_TIME",
+"s": [
+2,
+0
+]
+},
+{
+"id": "754366",
+"utc": "2026-01-11T12:00Z",
+"h": "Tottenham Hotspur",
+"a": "Leicester City",
+"st": "STATUS_FULL_TIME",
+"s": [
+1,
+0
+]
+},
+{
+"id": "754364",
+"utc": "2026-01-11T14:30Z",
+"h": "Liverpool",
+"a": "London City Lionesses",
+"st": "STATUS_FULL_TIME",
+"s": [
+0,
+0
+]
+},
+{
+"id": "754370",
+"utc": "2026-01-23T19:00Z",
+"h": "Everton",
+"a": "Brighton & Hove Albion",
+"st": "STATUS_FULL_TIME",
+"s": [
+0,
+1
+]
+},
+{
+"id": "754369",
+"utc": "2026-01-24T12:30Z",
+"h": "Chelsea",
+"a": "Arsenal",
+"st": "STATUS_FULL_TIME",
+"s": [
+0,
+2
+]
+},
+{
+"id": "754367",
+"utc": "2026-01-25T11:55Z",
+"h": "Aston Villa",
+"a": "Manchester United",
+"st": "STATUS_FULL_TIME",
+"s": [
+1,
+4
+]
+},
+{
+"id": "754372",
+"utc": "2026-01-25T11:55Z",
+"h": "Leicester City",
+"a": "West Ham United",
+"st": "STATUS_FULL_TIME",
+"s": [
+1,
+2
+]
+},
+{
+"id": "754371",
+"utc": "2026-01-25T11:55Z",
+"h": "Liverpool",
+"a": "Tottenham Hotspur",
+"st": "STATUS_FULL_TIME",
+"s": [
+2,
+0
+]
+},
+{
+"id": "754368",
+"utc": "2026-01-25T11:55Z",
+"h": "London City Lionesses",
+"a": "Manchester City",
+"st": "STATUS_FULL_TIME",
+"s": [
+1,
+2
+]
+},
+{
+"id": "754376",
+"utc": "2026-02-01T11:55Z",
+"h": "Brighton & Hove Albion",
+"a": "London City Lionesses",
+"st": "STATUS_FULL_TIME",
+"s": [
+1,
+2
+]
+},
+{
+"id": "754377",
+"utc": "2026-02-01T11:55Z",
+"h": "Everton",
+"a": "Aston Villa",
+"st": "STATUS_FULL_TIME",
+"s": [
+2,
+1
+]
+},
+{
+"id": "754375",
+"utc": "2026-02-01T11:55Z",
+"h": "Manchester United",
+"a": "Liverpool",
+"st": "STATUS_FULL_TIME",
+"s": [
+3,
+1
+]
+},
+{
+"id": "754374",
+"utc": "2026-02-01T11:55Z",
+"h": "West Ham United",
+"a": "Tottenham Hotspur",
+"st": "STATUS_FULL_TIME",
+"s": [
+1,
+2
+]
+},
+{
+"id": "754378",
+"utc": "2026-02-01T14:30Z",
+"h": "Manchester City",
+"a": "Chelsea",
+"st": "STATUS_FULL_TIME",
+"s": [
+5,
+1
+]
+},
+{
+"id": "754384",
+"utc": "2026-02-07T12:00Z",
+"h": "Leicester City",
+"a": "Manchester United",
+"st": "STATUS_FULL_TIME",
+"s": [
+0,
+2
+]
+},
+{
+"id": "754382",
+"utc": "2026-02-08T12:00Z",
+"h": "Arsenal",
+"a": "Manchester City",
+"st": "STATUS_FULL_TIME",
+"s": [
+1,
+0
+]
+},
+{
+"id": "754381",
+"utc": "2026-02-08T12:00Z",
+"h": "Liverpool",
+"a": "Aston Villa",
+"st": "STATUS_FULL_TIME",
+"s": [
+4,
+1
+]
+},
+{
+"id": "754380",
+"utc": "2026-02-08T12:00Z",
+"h": "London City Lionesses",
+"a": "Everton",
+"st": "STATUS_FULL_TIME",
+"s": [
+0,
+1
+]
+},
+{
+"id": "754379",
+"utc": "2026-02-08T12:00Z",
+"h": "West Ham United",
+"a": "Brighton & Hove Albion",
+"st": "STATUS_FULL_TIME",
+"s": [
+3,
+2
+]
+},
+{
+"id": "754383",
+"utc": "2026-02-08T14:25Z",
+"h": "Tottenham Hotspur",
+"a": "Chelsea",
+"st": "STATUS_FULL_TIME",
+"s": [
+0,
+2
+]
+},
+{
+"id": "754385",
+"utc": "2026-02-13T19:00Z",
+"h": "Manchester City",
+"a": "Leicester City",
+"st": "STATUS_FULL_TIME",
+"s": [
+6,
+0
+]
+},
+{
+"id": "754389",
+"utc": "2026-02-15T12:00Z",
+"h": "Aston Villa",
+"a": "Tottenham Hotspur",
+"st": "STATUS_FULL_TIME",
+"s": [
+3,
+7
+]
+},
+{
+"id": "754390",
+"utc": "2026-02-15T12:00Z",
+"h": "Chelsea",
+"a": "Liverpool",
+"st": "STATUS_FULL_TIME",
+"s": [
+2,
+0
+]
+},
+{
+"id": "754387",
+"utc": "2026-02-15T12:00Z",
+"h": "Everton",
+"a": "West Ham United",
+"st": "STATUS_FULL_TIME",
+"s": [
+1,
+0
+]
+},
+{
+"id": "754386",
+"utc": "2026-02-15T12:00Z",
+"h": "Manchester United",
+"a": "London City Lionesses",
+"st": "STATUS_FULL_TIME",
+"s": [
+2,
+1
+]
+},
+{
+"id": "754392",
+"utc": "2026-03-15T11:55Z",
+"h": "Aston Villa",
+"a": "Manchester City",
+"st": "STATUS_FULL_TIME",
+"s": [
+0,
+0
+]
+},
+{
+"id": "754394",
+"utc": "2026-03-15T11:55Z",
+"h": "Liverpool",
+"a": "Leicester City",
+"st": "STATUS_FULL_TIME",
+"s": [
+2,
+0
+]
+},
+{
+"id": "754395",
+"utc": "2026-03-15T11:55Z",
+"h": "London City Lionesses",
+"a": "Arsenal",
+"st": "STATUS_FULL_TIME",
+"s": [
+0,
+2
+]
+},
+{
+"id": "754396",
+"utc": "2026-03-15T11:55Z",
+"h": "Tottenham Hotspur",
+"a": "Everton",
+"st": "STATUS_FULL_TIME",
+"s": [
+1,
+2
+]
+},
+{
+"id": "754393",
+"utc": "2026-03-18T19:00Z",
+"h": "Chelsea",
+"a": "Brighton & Hove Albion",
+"st": "STATUS_FULL_TIME",
+"s": [
+2,
+1
+]
+},
+{
+"id": "754391",
+"utc": "2026-03-18T19:15Z",
+"h": "West Ham United",
+"a": "Manchester United",
+"st": "STATUS_FULL_TIME",
+"s": [
+0,
+0
+]
+},
+{
+"id": "754397",
+"utc": "2026-03-21T12:00Z",
+"h": "Arsenal",
+"a": "West Ham United",
+"st": "STATUS_FULL_TIME",
+"s": [
+5,
+0
+]
+},
+{
+"id": "754400",
+"utc": "2026-03-21T12:00Z",
+"h": "London City Lionesses",
+"a": "Chelsea",
+"st": "STATUS_FULL_TIME",
+"s": [
+1,
+1
+]
+},
+{
+"id": "754399",
+"utc": "2026-03-21T12:00Z",
+"h": "Manchester City",
+"a": "Tottenham Hotspur",
+"st": "STATUS_FULL_TIME",
+"s": [
+5,
+2
+]
+},
+{
+"id": "754398",
+"utc": "2026-03-21T12:00Z",
+"h": "Manchester United",
+"a": "Everton",
+"st": "STATUS_FULL_TIME",
+"s": [
+2,
+1
+]
+},
+{
+"id": "754401",
+"utc": "2026-03-22T12:00Z",
+"h": "Brighton & Hove Albion",
+"a": "Liverpool",
+"st": "STATUS_FULL_TIME",
+"s": [
+0,
+0
+]
+},
+{
+"id": "754402",
+"utc": "2026-03-22T14:45Z",
+"h": "Leicester City",
+"a": "Aston Villa",
+"st": "STATUS_FULL_TIME",
+"s": [
+1,
+2
+]
+},
+{
+"id": "754405",
+"utc": "2026-03-28T12:00Z",
+"h": "Everton",
+"a": "Liverpool",
+"st": "STATUS_FULL_TIME",
+"s": [
+2,
+3
+]
+},
+{
+"id": "754404",
+"utc": "2026-03-28T13:30Z",
+"h": "Manchester United",
+"a": "Manchester City",
+"st": "STATUS_FULL_TIME",
+"s": [
+0,
+3
+]
+},
+{
+"id": "754407",
+"utc": "2026-03-28T17:30Z",
+"h": "Arsenal",
+"a": "Tottenham Hotspur",
+"st": "STATUS_FULL_TIME",
+"s": [
+5,
+2
+]
+},
+{
+"id": "754406",
+"utc": "2026-03-29T11:00Z",
+"h": "Chelsea",
+"a": "Aston Villa",
+"st": "STATUS_FULL_TIME",
+"s": [
+4,
+3
+]
+},
+{
+"id": "754403",
+"utc": "2026-03-29T11:00Z",
+"h": "West Ham United",
+"a": "London City Lionesses",
+"st": "STATUS_FULL_TIME",
+"s": [
+1,
+1
+]
+},
+{
+"id": "754408",
+"utc": "2026-03-29T14:00Z",
+"h": "Leicester City",
+"a": "Brighton & Hove Albion",
+"st": "STATUS_FULL_TIME",
+"s": [
+0,
+1
+]
+},
+{
+"id": "754411",
+"utc": "2026-04-25T11:00Z",
+"h": "Brighton & Hove Albion",
+"a": "Manchester City",
+"st": "STATUS_FULL_TIME",
+"s": [
+3,
+2
+]
+},
+{
+"id": "754413",
+"utc": "2026-04-26T11:00Z",
+"h": "Everton",
+"a": "Chelsea",
+"st": "STATUS_FULL_TIME",
+"s": [
+1,
+4
+]
+},
+{
+"id": "754409",
+"utc": "2026-04-26T11:00Z",
+"h": "London City Lionesses",
+"a": "Leicester City",
+"st": "STATUS_FULL_TIME",
+"s": [
+5,
+1
+]
+},
+{
+"id": "754410",
+"utc": "2026-04-26T11:00Z",
+"h": "Tottenham Hotspur",
+"a": "Manchester United",
+"st": "STATUS_FULL_TIME",
+"s": [
+0,
+0
+]
+},
+{
+"id": "754414",
+"utc": "2026-04-26T13:00Z",
+"h": "Liverpool",
+"a": "West Ham United",
+"st": "STATUS_FULL_TIME",
+"s": [
+0,
+1
+]
+},
+{
+"id": "754373",
+"utc": "2026-04-29T18:00Z",
+"h": "Arsenal",
+"a": "Leicester City",
+"st": "STATUS_FULL_TIME",
+"s": [
+7,
+0
+]
+},
+{
+"id": "754416",
+"utc": "2026-05-02T11:00Z",
+"h": "Manchester United",
+"a": "Brighton & Hove Albion",
+"st": "STATUS_FULL_TIME",
+"s": [
+1,
+1
+]
+},
+{
+"id": "754415",
+"utc": "2026-05-03T11:00Z",
+"h": "Manchester City",
+"a": "Liverpool",
+"st": "STATUS_FULL_TIME",
+"s": [
+1,
+0
+]
+},
+{
+"id": "754419",
+"utc": "2026-05-03T11:00Z",
+"h": "Tottenham Hotspur",
+"a": "London City Lionesses",
+"st": "STATUS_FULL_TIME",
+"s": [
+2,
+1
+]
+},
+{
+"id": "754420",
+"utc": "2026-05-03T13:30Z",
+"h": "Leicester City",
+"a": "Chelsea",
+"st": "STATUS_FULL_TIME",
+"s": [
+1,
+3
+]
+},
+{
+"id": "754418",
+"utc": "2026-05-04T12:00Z",
+"h": "Aston Villa",
+"a": "West Ham United",
+"st": "STATUS_FULL_TIME",
+"s": [
+0,
+2
+]
+},
+{
+"id": "754388",
+"utc": "2026-05-06T18:45Z",
+"h": "Brighton & Hove Albion",
+"a": "Arsenal",
+"st": "STATUS_FULL_TIME",
+"s": [
+1,
+1
+]
+},
+{
+"id": "754412",
+"utc": "2026-05-09T11:00Z",
+"h": "Aston Villa",
+"a": "Arsenal",
+"st": "STATUS_FULL_TIME",
+"s": [
+0,
+3
+]
+},
+{
+"id": "754417",
+"utc": "2026-05-13T18:00Z",
+"h": "Arsenal",
+"a": "Everton",
+"st": "STATUS_FULL_TIME",
+"s": [
+1,
+0
+]
+},
+{
+"id": "754423",
+"utc": "2026-05-16T12:00Z",
+"h": "Brighton & Hove Albion",
+"a": "Tottenham Hotspur",
+"st": "STATUS_FULL_TIME",
+"s": [
+1,
+2
+]
+},
+{
+"id": "754424",
+"utc": "2026-05-16T12:00Z",
+"h": "Chelsea",
+"a": "Manchester United",
+"st": "STATUS_FULL_TIME",
+"s": [
+1,
+0
+]
+},
+{
+"id": "754425",
+"utc": "2026-05-16T12:00Z",
+"h": "Everton",
+"a": "Leicester City",
+"st": "STATUS_FULL_TIME",
+"s": [
+1,
+0
+]
+},
+{
+"id": "754426",
+"utc": "2026-05-16T12:00Z",
+"h": "Liverpool",
+"a": "Arsenal",
+"st": "STATUS_FULL_TIME",
+"s": [
+1,
+3
+]
+},
+{
+"id": "754421",
+"utc": "2026-05-16T12:00Z",
+"h": "London City Lionesses",
+"a": "Aston Villa",
+"st": "STATUS_FULL_TIME",
+"s": [
+2,
+1
+]
+},
+{
+"id": "754422",
+"utc": "2026-05-16T12:00Z",
+"h": "West Ham United",
+"a": "Manchester City",
+"st": "STATUS_FULL_TIME",
+"s": [
+1,
+4
+]
+},
+{
+"id": "401902928",
+"utc": "2026-09-04T18:00Z",
+"h": "London City Lionesses",
+"a": "Manchester United",
+"st": "STATUS_FULL_TIME",
+"s": [
+2,
+1
+]
+},
+{
+"id": "401902927",
+"utc": "2026-09-05T11:35Z",
+"h": "Chelsea",
+"a": "Aston Villa",
+"st": "STATUS_FULL_TIME",
+"s": [
+1,
+1
+]
+},
+{
+"id": "401902926",
+"utc": "2026-09-06T11:00Z",
+"h": "Brighton & Hove Albion",
+"a": "Arsenal",
+"st": "STATUS_FULL_TIME",
+"s": [
+0,
+1
+]
+},
+{
+"id": "401902925",
+"utc": "2026-09-06T11:00Z",
+"h": "Tottenham Hotspur",
+"a": "West Ham United",
+"st": "STATUS_FULL_TIME",
+"s": [
+3,
+1
+]
+},
+{
+"id": "401902923",
+"utc": "2026-09-06T13:00Z",
+"h": "Charlton Athletic",
+"a": "Liverpool",
+"st": "STATUS_FULL_TIME",
+"s": [
+0,
+4
+]
+},
+{
+"id": "401902924",
+"utc": "2026-09-06T13:00Z",
+"h": "Crystal Palace",
+"a": "Everton",
+"st": "STATUS_FULL_TIME",
+"s": [
+1,
+0
+]
+},
+{
+"id": "401902922",
+"utc": "2026-09-06T13:30Z",
+"h": "Manchester City",
+"a": "Birmingham City",
+"st": "STATUS_FULL_TIME",
+"s": [
+3,
+1
+]
+},
+{
+"id": "401902921",
+"utc": "2026-09-12T11:45Z",
+"h": "West Ham United",
+"a": "London City Lionesses",
+"st": "STATUS_FULL_TIME",
+"s": [
+2,
+1
+]
+},
+{
+"id": "401902920",
+"utc": "2026-09-13T11:00Z",
+"h": "Manchester United",
+"a": "Chelsea",
+"st": "STATUS_FULL_TIME",
+"s": [
+0,
+5
+]
+},
+{
+"id": "401902919",
+"utc": "2026-09-13T13:00Z",
+"h": "Birmingham City",
+"a": "Brighton & Hove Albion",
+"st": "STATUS_FULL_TIME",
+"s": [
+2,
+2
+]
+},
+{
+"id": "401902917",
+"utc": "2026-09-13T13:00Z",
+"h": "Everton",
+"a": "Charlton Athletic",
+"st": "STATUS_FULL_TIME",
+"s": [
+1,
+0
+]
+},
+{
+"id": "401902918",
+"utc": "2026-09-13T13:00Z",
+"h": "Liverpool",
+"a": "Tottenham Hotspur",
+"st": "STATUS_FULL_TIME",
+"s": [
+1,
+1
+]
+},
+{
+"id": "401902916",
+"utc": "2026-09-13T13:45Z",
+"h": "Arsenal",
+"a": "Crystal Palace",
+"st": "STATUS_FULL_TIME",
+"s": [
+0,
+0
+]
+},
+{
+"id": "401902915",
+"utc": "2026-09-13T17:30Z",
+"h": "Aston Villa",
+"a": "Manchester City",
+"st": "STATUS_FULL_TIME",
+"s": [
+1,
+4
+]
+},
+{
+"id": "401902914",
+"utc": "2026-09-18T18:00Z",
+"h": "Manchester City",
+"a": "Liverpool",
+"st": "STATUS_FULL_TIME",
+"s": [
+4,
+2
+]
+},
+{
+"id": "401902913",
+"utc": "2026-09-19T11:30Z",
+"h": "Charlton Athletic",
+"a": "London City Lionesses",
+"st": "STATUS_FULL_TIME",
+"s": [
+1,
+4
+]
+},
+{
+"id": "401902912",
+"utc": "2026-09-19T11:45Z",
+"h": "Chelsea",
+"a": "Birmingham City",
+"st": "STATUS_FULL_TIME",
+"s": [
+2,
+0
+]
+},
+{
+"id": "401902911",
+"utc": "2026-09-19T16:30Z",
+"h": "Arsenal",
+"a": "Manchester United",
+"st": "STATUS_FULL_TIME",
+"s": [
+1,
+1
+]
+},
+{
+"id": "401902910",
+"utc": "2026-09-20T13:00Z",
+"h": "Brighton & Hove Albion",
+"a": "Aston Villa",
+"st": "STATUS_FULL_TIME",
+"s": [
+1,
+1
+]
+},
+{
+"id": "401902909",
+"utc": "2026-09-20T13:00Z",
+"h": "Crystal Palace",
+"a": "Tottenham Hotspur",
+"st": "STATUS_FULL_TIME",
+"s": [
+0,
+7
+]
+},
+{
+"id": "401902908",
+"utc": "2026-09-20T13:00Z",
+"h": "West Ham United",
+"a": "Everton",
+"st": "STATUS_FULL_TIME",
+"s": [
+0,
+1
+]
+},
+{
+"id": "401902907",
+"utc": "2026-09-26T12:30Z",
+"h": "Charlton Athletic",
+"a": "Manchester City",
+"st": "STATUS_FULL_TIME",
+"s": [
+0,
+1
+]
+},
+{
+"id": "401902906",
+"utc": "2026-09-26T16:00Z",
+"h": "London City Lionesses",
+"a": "Brighton & Hove Albion",
+"st": "STATUS_FULL_TIME",
+"s": [
+2,
+0
+]
+},
+{
+"id": "401902905",
+"utc": "2026-09-27T12:00Z",
+"h": "Manchester United",
+"a": "West Ham United",
+"st": "STATUS_FULL_TIME",
+"s": [
+2,
+1
+]
+},
+{
+"id": "401902903",
+"utc": "2026-09-27T13:00Z",
+"h": "Birmingham City",
+"a": "Crystal Palace",
+"st": "STATUS_FULL_TIME",
+"s": [
+3,
+3
+]
+},
+{
+"id": "401902904",
+"utc": "2026-09-27T13:00Z",
+"h": "Liverpool",
+"a": "Everton",
+"st": "STATUS_FULL_TIME",
+"s": [
+2,
+0
+]
+},
+{
+"id": "401902902",
+"utc": "2026-09-27T13:00Z",
+"h": "Tottenham Hotspur",
+"a": "Aston Villa",
+"st": "STATUS_FULL_TIME",
+"s": [
+4,
+0
+]
+},
+{
+"id": "401902901",
+"utc": "2026-09-27T15:30Z",
+"h": "Chelsea",
+"a": "Arsenal",
+"st": "STATUS_FULL_TIME",
+"s": [
+1,
+0
+]
+},
+{
+"id": "401902899",
+"utc": "2026-10-03T12:30Z",
+"h": "Manchester United",
+"a": "Liverpool",
+"st": "STATUS_FULL_TIME",
+"s": [
+1,
+0
+]
+},
+{
+"id": "401902898",
+"utc": "2026-10-04T13:00Z",
+"h": "Aston Villa",
+"a": "Crystal Palace",
+"st": "STATUS_FULL_TIME",
+"s": [
+1,
+1
+]
+},
+{
+"id": "401902897",
+"utc": "2026-10-04T13:00Z",
+"h": "Brighton & Hove Albion",
+"a": "Charlton Athletic",
+"st": "STATUS_FULL_TIME",
+"s": [
+5,
+1
+]
+},
+{
+"id": "401902896",
+"utc": "2026-10-04T13:00Z",
+"h": "Everton",
+"a": "Birmingham City",
+"st": "STATUS_FULL_TIME",
+"s": [
+2,
+1
+]
+},
+{
+"id": "401902900",
+"utc": "2026-10-04T13:00Z",
+"h": "Tottenham Hotspur",
+"a": "London City Lionesses",
+"st": "STATUS_FULL_TIME",
+"s": [
+1,
+6
+]
+},
+{
+"id": "401902895",
+"utc": "2026-10-04T13:00Z",
+"h": "West Ham United",
+"a": "Chelsea",
+"st": "STATUS_FULL_TIME",
+"s": [
+0,
+3
+]
+},
+{
+"id": "401902894",
+"utc": "2026-10-04T15:30Z",
+"h": "Manchester City",
+"a": "Arsenal",
+"st": "STATUS_FULL_TIME",
+"s": [
+4,
+2
+]
+},
+{
+"id": "401902892",
+"utc": "2026-10-17T11:45Z",
+"h": "Arsenal",
+"a": "Birmingham City",
+"st": "STATUS_FULL_TIME",
+"s": [
+1,
+1
+]
+},
+{
+"id": "401902890",
+"utc": "2026-10-18T11:00Z",
+"h": "Chelsea",
+"a": "Tottenham Hotspur",
+"st": "STATUS_FULL_TIME",
+"s": [
+6,
+2
+]
+},
+{
+"id": "401902889",
+"utc": "2026-10-18T11:00Z",
+"h": "Crystal Palace",
+"a": "West Ham United",
+"st": "STATUS_FULL_TIME",
+"s": [
+0,
+1
+]
+},
+{
+"id": "401902893",
+"utc": "2026-10-18T13:00Z",
+"h": "Aston Villa",
+"a": "Liverpool",
+"st": "STATUS_FULL_TIME",
+"s": [
+2,
+1
+]
+},
+{
+"id": "401902891",
+"utc": "2026-10-18T13:00Z",
+"h": "Charlton Athletic",
+"a": "Manchester United",
+"st": "STATUS_FULL_TIME",
+"s": [
+1,
+3
+]
+},
+{
+"id": "401902888",
+"utc": "2026-10-18T13:00Z",
+"h": "London City Lionesses",
+"a": "Everton",
+"st": "STATUS_FULL_TIME",
+"s": [
+2,
+1
+]
+},
+{
+"id": "401902887",
+"utc": "2026-10-18T13:30Z",
+"h": "Manchester City",
+"a": "Brighton & Hove Albion",
+"st": "STATUS_FULL_TIME",
+"s": [
+3,
+2
+]
+},
+{
+"id": "401902880",
+"utc": "2026-10-24T11:45Z",
+"h": "Tottenham Hotspur",
+"a": "Arsenal",
+"st": "STATUS_FULL_TIME",
+"s": [
+1,
+2
+]
+},
+{
+"id": "401902884",
+"utc": "2026-10-24T16:15Z",
+"h": "Brighton & Hove Albion",
+"a": "West Ham United",
+"st": "STATUS_FULL_TIME",
+"s": [
+3,
+0
+]
+},
+{
+"id": "401902883",
+"utc": "2026-10-25T12:00Z",
+"h": "Crystal Palace",
+"a": "Chelsea",
+"st": "STATUS_FULL_TIME",
+"s": [
+1,
+3
+]
+},
+{
+"id": "401902885",
+"utc": "2026-10-25T14:00Z",
+"h": "Birmingham City",
+"a": "Charlton Athletic",
+"st": "STATUS_FULL_TIME",
+"s": [
+1,
+0
+]
+},
+{
+"id": "401902882",
+"utc": "2026-10-25T14:00Z",
+"h": "Everton",
+"a": "Aston Villa",
+"st": "STATUS_FULL_TIME",
+"s": [
+2,
+3
+]
+},
+{
+"id": "401902881",
+"utc": "2026-10-25T14:00Z",
+"h": "Liverpool",
+"a": "London City Lionesses",
+"st": "STATUS_FULL_TIME",
+"s": [
+2,
+2
+]
+},
+{
+"id": "401902886",
+"utc": "2026-10-25T18:00Z",
+"h": "Manchester United",
+"a": "Manchester City",
+"st": "STATUS_FULL_TIME",
+"s": [
+1,
+1
+]
+},
+{
+"id": "401902879",
+"utc": "2026-10-31T12:45Z",
+"h": "Everton",
+"a": "Manchester United",
+"st": "STATUS_FULL_TIME",
+"s": [
+0,
+0
+]
+},
+{
+"id": "401902878",
+"utc": "2026-11-01T12:00Z",
+"h": "Arsenal",
+"a": "Aston Villa",
+"st": "STATUS_FULL_TIME",
+"s": [
+1,
+1
+]
+},
+{
+"id": "401902874",
+"utc": "2026-11-01T12:00Z",
+"h": "London City Lionesses",
+"a": "Manchester City",
+"st": "STATUS_FULL_TIME",
+"s": [
+1,
+2
+]
+},
+{
+"id": "401902877",
+"utc": "2026-11-01T14:00Z",
+"h": "Birmingham City",
+"a": "Tottenham Hotspur",
+"st": "STATUS_FULL_TIME",
+"s": [
+1,
+4
+]
+},
+{
+"id": "401902876",
+"utc": "2026-11-01T14:00Z",
+"h": "Brighton & Hove Albion",
+"a": "Crystal Palace",
+"st": "STATUS_FULL_TIME",
+"s": [
+2,
+1
+]
+},
+{
+"id": "401902873",
+"utc": "2026-11-01T14:00Z",
+"h": "West Ham United",
+"a": "Liverpool",
+"st": "STATUS_FULL_TIME",
+"s": [
+4,
+1
+]
+},
+{
+"id": "401902875",
+"utc": "2026-11-01T14:30Z",
+"h": "Charlton Athletic",
+"a": "Chelsea",
+"st": "STATUS_FULL_TIME",
+"s": [
+0,
+6
+]
+},
+{
+"id": "401902869",
+"utc": "2026-11-07T12:45Z",
+"h": "Chelsea",
+"a": "Everton",
+"st": "STATUS_FULL_TIME",
+"s": [
+1,
+1
+]
+},
+{
+"id": "401902868",
+"utc": "2026-11-07T12:45Z",
+"h": "Manchester City",
+"a": "West Ham United",
+"st": "STATUS_FULL_TIME",
+"s": [
+5,
+0
+]
+},
+{
+"id": "401902870",
+"utc": "2026-11-08T12:00Z",
+"h": "Aston Villa",
+"a": "Manchester United",
+"st": "STATUS_FULL_TIME",
+"s": [
+0,
+1
+]
+},
+{
+"id": "401902871",
+"utc": "2026-11-08T12:00Z",
+"h": "Liverpool",
+"a": "Arsenal",
+"st": "STATUS_FULL_TIME",
+"s": [
+1,
+2
+]
+},
+{
+"id": "401902867",
+"utc": "2026-11-08T14:00Z",
+"h": "Crystal Palace",
+"a": "Charlton Athletic",
+"st": "STATUS_FULL_TIME",
+"s": [
+3,
+2
+]
+},
+{
+"id": "401902866",
+"utc": "2026-11-08T14:00Z",
+"h": "Tottenham Hotspur",
+"a": "Brighton & Hove Albion",
+"st": "STATUS_FULL_TIME",
+"s": [
+2,
+1
+]
+},
+{
+"id": "401902872",
+"utc": "2026-11-08T14:30Z",
+"h": "London City Lionesses",
+"a": "Birmingham City",
+"st": "STATUS_FULL_TIME",
+"s": [
+4,
+1
+]
+},
+{
+"id": "401902863",
+"utc": "2026-11-14T12:45Z",
+"h": "Manchester United",
+"a": "Crystal Palace",
+"st": "STATUS_FULL_TIME",
+"s": [
+2,
+0
+]
+},
+{
+"id": "401902865",
+"utc": "2026-11-14T13:30Z",
+"h": "Chelsea",
+"a": "Manchester City",
+"st": "STATUS_FULL_TIME",
+"s": [
+1,
+0
+]
+},
+{
+"id": "401902861",
+"utc": "2026-11-14T15:00Z",
+"h": "Tottenham Hotspur",
+"a": "Everton",
+"st": "STATUS_FULL_TIME",
+"s": [
+0,
+0
+]
+},
+{
+"id": "401902862",
+"utc": "2026-11-14T17:15Z",
+"h": "Brighton & Hove Albion",
+"a": "Liverpool",
+"st": "STATUS_FULL_TIME",
+"s": [
+0,
+3
+]
+},
+{
+"id": "401902859",
+"utc": "2026-11-15T14:00Z",
+"h": "Aston Villa",
+"a": "Birmingham City",
+"st": "STATUS_FULL_TIME",
+"s": [
+1,
+0
+]
+},
+{
+"id": "401902860",
+"utc": "2026-11-15T14:00Z",
+"h": "West Ham United",
+"a": "Charlton Athletic",
+"st": "STATUS_FULL_TIME",
+"s": [
+2,
+0
+]
+},
+{
+"id": "401902864",
+"utc": "2026-11-15T16:30Z",
+"h": "Arsenal",
+"a": "London City Lionesses",
+"st": "STATUS_FULL_TIME",
+"s": [
+1,
+1
+]
+},
+{
+"id": "401902853",
+"utc": "2026-11-21T12:45Z",
+"h": "Liverpool",
+"a": "Chelsea",
+"st": "STATUS_SCHEDULED"
+},
+{
+"id": "401902854",
+"utc": "2026-11-21T17:15Z",
+"h": "London City Lionesses",
+"a": "Crystal Palace",
+"st": "STATUS_SCHEDULED"
+},
+{
+"id": "401902857",
+"utc": "2026-11-22T12:00Z",
+"h": "Birmingham City",
+"a": "Manchester United",
+"st": "STATUS_SCHEDULED"
+},
+{
+"id": "401902852",
+"utc": "2026-11-22T12:00Z",
+"h": "Manchester City",
+"a": "Tottenham Hotspur",
+"st": "STATUS_SCHEDULED"
+},
+{
+"id": "401902856",
+"utc": "2026-11-22T14:00Z",
+"h": "Charlton Athletic",
+"a": "Aston Villa",
+"st": "STATUS_SCHEDULED"
+},
+{
+"id": "401902855",
+"utc": "2026-11-22T14:00Z",
+"h": "Everton",
+"a": "Brighton & Hove Albion",
+"st": "STATUS_SCHEDULED"
+},
+{
+"id": "401902858",
+"utc": "2026-11-22T14:30Z",
+"h": "Arsenal",
+"a": "West Ham United",
+"st": "STATUS_SCHEDULED"
+}
+]

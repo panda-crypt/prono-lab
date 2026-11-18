@@ -1,0 +1,2112 @@
+[
+{
+"id": "752939",
+"utc": "2025-09-06T15:00Z",
+"h": "Le Havre AC",
+"a": "Strasbourg",
+"st": "STATUS_FULL_TIME",
+"s": [
+2,
+2
+]
+},
+{
+"id": "752940",
+"utc": "2025-09-06T15:00Z",
+"h": "Montpellier",
+"a": "FC Fleury 91",
+"st": "STATUS_FULL_TIME",
+"s": [
+1,
+2
+]
+},
+{
+"id": "752943",
+"utc": "2025-09-06T15:00Z",
+"h": "Nantes",
+"a": "Saint-Étienne",
+"st": "STATUS_FULL_TIME",
+"s": [
+2,
+1
+]
+},
+{
+"id": "752942",
+"utc": "2025-09-06T15:00Z",
+"h": "Paris FC",
+"a": "Dijon",
+"st": "STATUS_FULL_TIME",
+"s": [
+2,
+0
+]
+},
+{
+"id": "752944",
+"utc": "2025-09-06T19:00Z",
+"h": "Lens",
+"a": "Paris Saint-Germain",
+"st": "STATUS_FULL_TIME",
+"s": [
+1,
+1
+]
+},
+{
+"id": "752941",
+"utc": "2025-09-07T15:30Z",
+"h": "OL Lyonnes",
+"a": "Marseille",
+"st": "STATUS_FULL_TIME",
+"s": [
+3,
+1
+]
+},
+{
+"id": "752950",
+"utc": "2025-09-19T19:00Z",
+"h": "Marseille",
+"a": "Le Havre AC",
+"st": "STATUS_FULL_TIME",
+"s": [
+1,
+2
+]
+},
+{
+"id": "752947",
+"utc": "2025-09-20T13:30Z",
+"h": "Saint-Étienne",
+"a": "OL Lyonnes",
+"st": "STATUS_FULL_TIME",
+"s": [
+0,
+2
+]
+},
+{
+"id": "752945",
+"utc": "2025-09-20T15:00Z",
+"h": "Dijon",
+"a": "Montpellier",
+"st": "STATUS_FULL_TIME",
+"s": [
+2,
+1
+]
+},
+{
+"id": "752949",
+"utc": "2025-09-20T15:00Z",
+"h": "Strasbourg",
+"a": "Lens",
+"st": "STATUS_FULL_TIME",
+"s": [
+2,
+2
+]
+},
+{
+"id": "752948",
+"utc": "2025-09-20T19:00Z",
+"h": "Paris Saint-Germain",
+"a": "Nantes",
+"st": "STATUS_FULL_TIME",
+"s": [
+5,
+2
+]
+},
+{
+"id": "752946",
+"utc": "2025-09-21T13:00Z",
+"h": "FC Fleury 91",
+"a": "Paris FC",
+"st": "STATUS_FULL_TIME",
+"s": [
+0,
+2
+]
+},
+{
+"id": "752954",
+"utc": "2025-09-26T19:00Z",
+"h": "Paris FC",
+"a": "Saint-Étienne",
+"st": "STATUS_FULL_TIME",
+"s": [
+2,
+0
+]
+},
+{
+"id": "752956",
+"utc": "2025-09-27T15:00Z",
+"h": "Dijon",
+"a": "Strasbourg",
+"st": "STATUS_FULL_TIME",
+"s": [
+0,
+4
+]
+},
+{
+"id": "752955",
+"utc": "2025-09-27T15:00Z",
+"h": "Le Havre AC",
+"a": "Montpellier",
+"st": "STATUS_FULL_TIME",
+"s": [
+3,
+2
+]
+},
+{
+"id": "752952",
+"utc": "2025-09-27T15:00Z",
+"h": "Lens",
+"a": "Nantes",
+"st": "STATUS_FULL_TIME",
+"s": [
+3,
+4
+]
+},
+{
+"id": "752951",
+"utc": "2025-09-27T15:00Z",
+"h": "Marseille",
+"a": "FC Fleury 91",
+"st": "STATUS_FULL_TIME",
+"s": [
+0,
+2
+]
+},
+{
+"id": "752953",
+"utc": "2025-09-27T19:00Z",
+"h": "OL Lyonnes",
+"a": "Paris Saint-Germain",
+"st": "STATUS_FULL_TIME",
+"s": [
+6,
+1
+]
+},
+{
+"id": "752957",
+"utc": "2025-10-03T17:00Z",
+"h": "Lens",
+"a": "OL Lyonnes",
+"st": "STATUS_FULL_TIME",
+"s": [
+1,
+8
+]
+},
+{
+"id": "752959",
+"utc": "2025-10-03T19:00Z",
+"h": "Nantes",
+"a": "Paris FC",
+"st": "STATUS_FULL_TIME",
+"s": [
+3,
+1
+]
+},
+{
+"id": "752960",
+"utc": "2025-10-04T13:00Z",
+"h": "Montpellier",
+"a": "Strasbourg",
+"st": "STATUS_FULL_TIME",
+"s": [
+2,
+0
+]
+},
+{
+"id": "752961",
+"utc": "2025-10-04T15:00Z",
+"h": "FC Fleury 91",
+"a": "Le Havre AC",
+"st": "STATUS_FULL_TIME",
+"s": [
+1,
+0
+]
+},
+{
+"id": "752962",
+"utc": "2025-10-04T15:00Z",
+"h": "Saint-Étienne",
+"a": "Marseille",
+"st": "STATUS_FULL_TIME",
+"s": [
+0,
+4
+]
+},
+{
+"id": "752958",
+"utc": "2025-10-04T19:00Z",
+"h": "Paris Saint-Germain",
+"a": "Dijon",
+"st": "STATUS_FULL_TIME",
+"s": [
+1,
+0
+]
+},
+{
+"id": "752968",
+"utc": "2025-10-17T19:00Z",
+"h": "Le Havre AC",
+"a": "Saint-Étienne",
+"st": "STATUS_FULL_TIME",
+"s": [
+0,
+0
+]
+},
+{
+"id": "752964",
+"utc": "2025-10-18T15:00Z",
+"h": "Dijon",
+"a": "FC Fleury 91",
+"st": "STATUS_FULL_TIME",
+"s": [
+1,
+1
+]
+},
+{
+"id": "752967",
+"utc": "2025-10-18T15:00Z",
+"h": "Montpellier",
+"a": "Lens",
+"st": "STATUS_FULL_TIME",
+"s": [
+3,
+1
+]
+},
+{
+"id": "752963",
+"utc": "2025-10-18T15:00Z",
+"h": "Paris FC",
+"a": "Marseille",
+"st": "STATUS_FULL_TIME",
+"s": [
+6,
+1
+]
+},
+{
+"id": "752965",
+"utc": "2025-10-18T19:00Z",
+"h": "OL Lyonnes",
+"a": "Nantes",
+"st": "STATUS_FULL_TIME",
+"s": [
+6,
+1
+]
+},
+{
+"id": "752966",
+"utc": "2025-10-19T13:00Z",
+"h": "Strasbourg",
+"a": "Paris Saint-Germain",
+"st": "STATUS_FULL_TIME",
+"s": [
+3,
+0
+]
+},
+{
+"id": "752970",
+"utc": "2025-10-31T20:00Z",
+"h": "Marseille",
+"a": "Strasbourg",
+"st": "STATUS_FULL_TIME",
+"s": [
+0,
+0
+]
+},
+{
+"id": "752971",
+"utc": "2025-11-01T16:00Z",
+"h": "FC Fleury 91",
+"a": "Lens",
+"st": "STATUS_FULL_TIME",
+"s": [
+4,
+0
+]
+},
+{
+"id": "752973",
+"utc": "2025-11-01T16:00Z",
+"h": "Nantes",
+"a": "Dijon",
+"st": "STATUS_FULL_TIME",
+"s": [
+1,
+2
+]
+},
+{
+"id": "752969",
+"utc": "2025-11-01T16:00Z",
+"h": "Paris Saint-Germain",
+"a": "Le Havre AC",
+"st": "STATUS_FULL_TIME",
+"s": [
+0,
+3
+]
+},
+{
+"id": "752972",
+"utc": "2025-11-01T16:00Z",
+"h": "Saint-Étienne",
+"a": "Montpellier",
+"st": "STATUS_FULL_TIME",
+"s": [
+4,
+2
+]
+},
+{
+"id": "752974",
+"utc": "2025-11-01T20:00Z",
+"h": "OL Lyonnes",
+"a": "Paris FC",
+"st": "STATUS_FULL_TIME",
+"s": [
+1,
+0
+]
+},
+{
+"id": "752976",
+"utc": "2025-11-07T18:00Z",
+"h": "Lens",
+"a": "Paris FC",
+"st": "STATUS_FULL_TIME",
+"s": [
+1,
+2
+]
+},
+{
+"id": "752980",
+"utc": "2025-11-07T18:00Z",
+"h": "Montpellier",
+"a": "OL Lyonnes",
+"st": "STATUS_FULL_TIME",
+"s": [
+1,
+5
+]
+},
+{
+"id": "752975",
+"utc": "2025-11-07T20:00Z",
+"h": "Dijon",
+"a": "Marseille",
+"st": "STATUS_FULL_TIME",
+"s": [
+1,
+1
+]
+},
+{
+"id": "752979",
+"utc": "2025-11-08T16:00Z",
+"h": "Nantes",
+"a": "Le Havre AC",
+"st": "STATUS_FULL_TIME",
+"s": [
+2,
+1
+]
+},
+{
+"id": "752978",
+"utc": "2025-11-08T20:00Z",
+"h": "Paris Saint-Germain",
+"a": "FC Fleury 91",
+"st": "STATUS_FULL_TIME",
+"s": [
+0,
+3
+]
+},
+{
+"id": "752977",
+"utc": "2025-11-19T16:00Z",
+"h": "Strasbourg",
+"a": "Saint-Étienne",
+"st": "STATUS_FULL_TIME",
+"s": [
+2,
+0
+]
+},
+{
+"id": "752984",
+"utc": "2025-11-21T20:00Z",
+"h": "Marseille",
+"a": "Lens",
+"st": "STATUS_FULL_TIME",
+"s": [
+2,
+0
+]
+},
+{
+"id": "752982",
+"utc": "2025-11-22T16:00Z",
+"h": "FC Fleury 91",
+"a": "Nantes",
+"st": "STATUS_FULL_TIME",
+"s": [
+1,
+2
+]
+},
+{
+"id": "752986",
+"utc": "2025-11-22T16:00Z",
+"h": "Le Havre AC",
+"a": "Dijon",
+"st": "STATUS_FULL_TIME",
+"s": [
+0,
+1
+]
+},
+{
+"id": "752983",
+"utc": "2025-11-22T16:00Z",
+"h": "Paris FC",
+"a": "Montpellier",
+"st": "STATUS_FULL_TIME",
+"s": [
+2,
+1
+]
+},
+{
+"id": "752985",
+"utc": "2025-11-22T20:00Z",
+"h": "OL Lyonnes",
+"a": "Strasbourg",
+"st": "STATUS_FULL_TIME",
+"s": [
+5,
+0
+]
+},
+{
+"id": "752981",
+"utc": "2025-11-23T14:00Z",
+"h": "Saint-Étienne",
+"a": "Paris Saint-Germain",
+"st": "STATUS_FULL_TIME",
+"s": [
+1,
+4
+]
+},
+{
+"id": "752988",
+"utc": "2025-12-05T18:00Z",
+"h": "Marseille",
+"a": "Paris Saint-Germain",
+"st": "STATUS_FULL_TIME",
+"s": [
+1,
+5
+]
+},
+{
+"id": "752987",
+"utc": "2025-12-05T20:00Z",
+"h": "Lens",
+"a": "Saint-Étienne",
+"st": "STATUS_FULL_TIME",
+"s": [
+1,
+0
+]
+},
+{
+"id": "752992",
+"utc": "2025-12-06T16:00Z",
+"h": "Dijon",
+"a": "OL Lyonnes",
+"st": "STATUS_FULL_TIME",
+"s": [
+0,
+3
+]
+},
+{
+"id": "752991",
+"utc": "2025-12-06T16:00Z",
+"h": "Montpellier",
+"a": "Nantes",
+"st": "STATUS_FULL_TIME",
+"s": [
+1,
+2
+]
+},
+{
+"id": "752990",
+"utc": "2025-12-06T16:00Z",
+"h": "Paris FC",
+"a": "Le Havre AC",
+"st": "STATUS_FULL_TIME",
+"s": [
+3,
+0
+]
+},
+{
+"id": "752989",
+"utc": "2025-12-06T16:00Z",
+"h": "Strasbourg",
+"a": "FC Fleury 91",
+"st": "STATUS_FULL_TIME",
+"s": [
+0,
+3
+]
+},
+{
+"id": "752995",
+"utc": "2025-12-12T20:00Z",
+"h": "Paris Saint-Germain",
+"a": "Montpellier",
+"st": "STATUS_FULL_TIME",
+"s": [
+2,
+2
+]
+},
+{
+"id": "752998",
+"utc": "2025-12-13T16:00Z",
+"h": "Dijon",
+"a": "Lens",
+"st": "STATUS_FULL_TIME",
+"s": [
+1,
+1
+]
+},
+{
+"id": "752996",
+"utc": "2025-12-13T16:00Z",
+"h": "FC Fleury 91",
+"a": "Saint-Étienne",
+"st": "STATUS_FULL_TIME",
+"s": [
+0,
+0
+]
+},
+{
+"id": "752997",
+"utc": "2025-12-13T16:00Z",
+"h": "Le Havre AC",
+"a": "OL Lyonnes",
+"st": "STATUS_FULL_TIME",
+"s": [
+0,
+7
+]
+},
+{
+"id": "752993",
+"utc": "2025-12-13T16:00Z",
+"h": "Strasbourg",
+"a": "Paris FC",
+"st": "STATUS_FULL_TIME",
+"s": [
+0,
+0
+]
+},
+{
+"id": "752994",
+"utc": "2025-12-14T12:00Z",
+"h": "Nantes",
+"a": "Marseille",
+"st": "STATUS_FULL_TIME",
+"s": [
+3,
+0
+]
+},
+{
+"id": "753001",
+"utc": "2025-12-20T20:00Z",
+"h": "Lens",
+"a": "Le Havre AC",
+"st": "STATUS_FULL_TIME",
+"s": [
+2,
+1
+]
+},
+{
+"id": "753003",
+"utc": "2025-12-20T20:00Z",
+"h": "Montpellier",
+"a": "Marseille",
+"st": "STATUS_FULL_TIME",
+"s": [
+0,
+3
+]
+},
+{
+"id": "752999",
+"utc": "2025-12-20T20:00Z",
+"h": "Nantes",
+"a": "Strasbourg",
+"st": "STATUS_FULL_TIME",
+"s": [
+0,
+1
+]
+},
+{
+"id": "753000",
+"utc": "2025-12-20T20:00Z",
+"h": "OL Lyonnes",
+"a": "FC Fleury 91",
+"st": "STATUS_FULL_TIME",
+"s": [
+3,
+0
+]
+},
+{
+"id": "753004",
+"utc": "2025-12-20T20:00Z",
+"h": "Paris Saint-Germain",
+"a": "Paris FC",
+"st": "STATUS_FULL_TIME",
+"s": [
+0,
+0
+]
+},
+{
+"id": "753005",
+"utc": "2025-12-20T20:00Z",
+"h": "Saint-Étienne",
+"a": "Dijon",
+"st": "STATUS_FULL_TIME",
+"s": [
+0,
+1
+]
+},
+{
+"id": "753011",
+"utc": "2026-01-14T18:00Z",
+"h": "Dijon",
+"a": "Paris Saint-Germain",
+"st": "STATUS_FULL_TIME",
+"s": [
+0,
+4
+]
+},
+{
+"id": "753008",
+"utc": "2026-01-14T18:00Z",
+"h": "Le Havre AC",
+"a": "FC Fleury 91",
+"st": "STATUS_FULL_TIME",
+"s": [
+1,
+1
+]
+},
+{
+"id": "753006",
+"utc": "2026-01-14T18:00Z",
+"h": "Marseille",
+"a": "Saint-Étienne",
+"st": "STATUS_FULL_TIME",
+"s": [
+0,
+1
+]
+},
+{
+"id": "753007",
+"utc": "2026-01-14T18:00Z",
+"h": "OL Lyonnes",
+"a": "Lens",
+"st": "STATUS_FULL_TIME",
+"s": [
+1,
+0
+]
+},
+{
+"id": "753009",
+"utc": "2026-01-14T18:00Z",
+"h": "Strasbourg",
+"a": "Montpellier",
+"st": "STATUS_FULL_TIME",
+"s": [
+2,
+1
+]
+},
+{
+"id": "753010",
+"utc": "2026-01-14T20:00Z",
+"h": "Paris FC",
+"a": "Nantes",
+"st": "STATUS_FULL_TIME",
+"s": [
+1,
+2
+]
+},
+{
+"id": "753016",
+"utc": "2026-01-17T13:00Z",
+"h": "Lens",
+"a": "Strasbourg",
+"st": "STATUS_FULL_TIME",
+"s": [
+0,
+1
+]
+},
+{
+"id": "753014",
+"utc": "2026-01-17T14:00Z",
+"h": "Saint-Étienne",
+"a": "Nantes",
+"st": "STATUS_FULL_TIME",
+"s": [
+0,
+1
+]
+},
+{
+"id": "753017",
+"utc": "2026-01-17T16:00Z",
+"h": "FC Fleury 91",
+"a": "Marseille",
+"st": "STATUS_FULL_TIME",
+"s": [
+1,
+1
+]
+},
+{
+"id": "753012",
+"utc": "2026-01-17T16:00Z",
+"h": "Montpellier",
+"a": "Dijon",
+"st": "STATUS_FULL_TIME",
+"s": [
+1,
+1
+]
+},
+{
+"id": "753015",
+"utc": "2026-01-17T20:00Z",
+"h": "Le Havre AC",
+"a": "Paris Saint-Germain",
+"st": "STATUS_FULL_TIME",
+"s": [
+0,
+4
+]
+},
+{
+"id": "753013",
+"utc": "2026-01-18T12:00Z",
+"h": "Paris FC",
+"a": "OL Lyonnes",
+"st": "STATUS_FULL_TIME",
+"s": [
+0,
+0
+]
+},
+{
+"id": "753019",
+"utc": "2026-01-30T20:00Z",
+"h": "Marseille",
+"a": "Paris FC",
+"st": "STATUS_FULL_TIME",
+"s": [
+0,
+3
+]
+},
+{
+"id": "753023",
+"utc": "2026-01-31T14:00Z",
+"h": "Saint-Étienne",
+"a": "Le Havre AC",
+"st": "STATUS_FULL_TIME",
+"s": [
+1,
+1
+]
+},
+{
+"id": "753021",
+"utc": "2026-01-31T16:00Z",
+"h": "FC Fleury 91",
+"a": "Montpellier",
+"st": "STATUS_FULL_TIME",
+"s": [
+1,
+0
+]
+},
+{
+"id": "753018",
+"utc": "2026-01-31T16:00Z",
+"h": "Nantes",
+"a": "Lens",
+"st": "STATUS_FULL_TIME",
+"s": [
+2,
+2
+]
+},
+{
+"id": "753022",
+"utc": "2026-01-31T16:00Z",
+"h": "Strasbourg",
+"a": "Dijon",
+"st": "STATUS_FULL_TIME",
+"s": [
+0,
+3
+]
+},
+{
+"id": "753020",
+"utc": "2026-02-01T14:00Z",
+"h": "Paris Saint-Germain",
+"a": "OL Lyonnes",
+"st": "STATUS_FULL_TIME",
+"s": [
+0,
+1
+]
+},
+{
+"id": "753029",
+"utc": "2026-02-07T13:00Z",
+"h": "Lens",
+"a": "FC Fleury 91",
+"st": "STATUS_FULL_TIME",
+"s": [
+0,
+2
+]
+},
+{
+"id": "753024",
+"utc": "2026-02-07T16:00Z",
+"h": "Dijon",
+"a": "Nantes",
+"st": "STATUS_FULL_TIME",
+"s": [
+1,
+1
+]
+},
+{
+"id": "753025",
+"utc": "2026-02-07T16:00Z",
+"h": "Montpellier",
+"a": "Le Havre AC",
+"st": "STATUS_FULL_TIME",
+"s": [
+1,
+2
+]
+},
+{
+"id": "753027",
+"utc": "2026-02-07T20:05Z",
+"h": "Paris FC",
+"a": "Paris Saint-Germain",
+"st": "STATUS_FULL_TIME",
+"s": [
+0,
+3
+]
+},
+{
+"id": "753028",
+"utc": "2026-02-08T14:00Z",
+"h": "OL Lyonnes",
+"a": "Saint-Étienne",
+"st": "STATUS_FULL_TIME",
+"s": [
+4,
+0
+]
+},
+{
+"id": "753026",
+"utc": "2026-02-08T14:15Z",
+"h": "Strasbourg",
+"a": "Marseille",
+"st": "STATUS_FULL_TIME",
+"s": [
+2,
+4
+]
+},
+{
+"id": "753034",
+"utc": "2026-02-20T20:00Z",
+"h": "Paris Saint-Germain",
+"a": "Lens",
+"st": "STATUS_FULL_TIME",
+"s": [
+3,
+0
+]
+},
+{
+"id": "753030",
+"utc": "2026-02-21T14:00Z",
+"h": "Saint-Étienne",
+"a": "Strasbourg",
+"st": "STATUS_FULL_TIME",
+"s": [
+0,
+2
+]
+},
+{
+"id": "753032",
+"utc": "2026-02-21T16:00Z",
+"h": "FC Fleury 91",
+"a": "Dijon",
+"st": "STATUS_FULL_TIME",
+"s": [
+0,
+0
+]
+},
+{
+"id": "753031",
+"utc": "2026-02-21T16:00Z",
+"h": "Nantes",
+"a": "Montpellier",
+"st": "STATUS_FULL_TIME",
+"s": [
+2,
+2
+]
+},
+{
+"id": "753035",
+"utc": "2026-02-21T20:00Z",
+"h": "Marseille",
+"a": "OL Lyonnes",
+"st": "STATUS_FULL_TIME",
+"s": [
+2,
+6
+]
+},
+{
+"id": "753033",
+"utc": "2026-02-22T14:00Z",
+"h": "Le Havre AC",
+"a": "Paris FC",
+"st": "STATUS_FULL_TIME",
+"s": [
+0,
+4
+]
+},
+{
+"id": "753041",
+"utc": "2026-03-10T18:00Z",
+"h": "OL Lyonnes",
+"a": "Le Havre AC",
+"st": "STATUS_FULL_TIME",
+"s": [
+3,
+0
+]
+},
+{
+"id": "753038",
+"utc": "2026-03-11T15:15Z",
+"h": "Paris FC",
+"a": "Strasbourg",
+"st": "STATUS_FULL_TIME",
+"s": [
+3,
+0
+]
+},
+{
+"id": "753036",
+"utc": "2026-03-11T15:15Z",
+"h": "Paris Saint-Germain",
+"a": "Marseille",
+"st": "STATUS_FULL_TIME",
+"s": [
+2,
+1
+]
+},
+{
+"id": "753039",
+"utc": "2026-03-11T18:00Z",
+"h": "Dijon",
+"a": "Saint-Étienne",
+"st": "STATUS_FULL_TIME",
+"s": [
+2,
+0
+]
+},
+{
+"id": "753037",
+"utc": "2026-03-11T18:00Z",
+"h": "Lens",
+"a": "Montpellier",
+"st": "STATUS_FULL_TIME",
+"s": [
+2,
+1
+]
+},
+{
+"id": "753040",
+"utc": "2026-03-11T18:00Z",
+"h": "Nantes",
+"a": "FC Fleury 91",
+"st": "STATUS_FULL_TIME",
+"s": [
+2,
+0
+]
+},
+{
+"id": "753043",
+"utc": "2026-03-21T14:00Z",
+"h": "Saint-Étienne",
+"a": "Paris FC",
+"st": "STATUS_FULL_TIME",
+"s": [
+0,
+3
+]
+},
+{
+"id": "753042",
+"utc": "2026-03-21T20:00Z",
+"h": "FC Fleury 91",
+"a": "OL Lyonnes",
+"st": "STATUS_FULL_TIME",
+"s": [
+0,
+2
+]
+},
+{
+"id": "753046",
+"utc": "2026-03-22T14:00Z",
+"h": "Le Havre AC",
+"a": "Marseille",
+"st": "STATUS_FULL_TIME",
+"s": [
+2,
+2
+]
+},
+{
+"id": "753045",
+"utc": "2026-03-22T14:00Z",
+"h": "Lens",
+"a": "Dijon",
+"st": "STATUS_FULL_TIME",
+"s": [
+0,
+1
+]
+},
+{
+"id": "753044",
+"utc": "2026-03-22T14:00Z",
+"h": "Strasbourg",
+"a": "Nantes",
+"st": "STATUS_FULL_TIME",
+"s": [
+0,
+3
+]
+},
+{
+"id": "753047",
+"utc": "2026-03-22T17:00Z",
+"h": "Montpellier",
+"a": "Paris Saint-Germain",
+"st": "STATUS_FULL_TIME",
+"s": [
+2,
+3
+]
+},
+{
+"id": "753049",
+"utc": "2026-03-28T16:00Z",
+"h": "Saint-Étienne",
+"a": "Lens",
+"st": "STATUS_FULL_TIME",
+"s": [
+2,
+1
+]
+},
+{
+"id": "753053",
+"utc": "2026-03-28T17:00Z",
+"h": "Dijon",
+"a": "Le Havre AC",
+"st": "STATUS_FULL_TIME",
+"s": [
+2,
+1
+]
+},
+{
+"id": "753051",
+"utc": "2026-03-28T17:00Z",
+"h": "Paris FC",
+"a": "FC Fleury 91",
+"st": "STATUS_FULL_TIME",
+"s": [
+2,
+1
+]
+},
+{
+"id": "753050",
+"utc": "2026-03-28T17:00Z",
+"h": "Strasbourg",
+"a": "OL Lyonnes",
+"st": "STATUS_FULL_TIME",
+"s": [
+2,
+2
+]
+},
+{
+"id": "753048",
+"utc": "2026-03-28T17:30Z",
+"h": "Marseille",
+"a": "Montpellier",
+"st": "STATUS_FULL_TIME",
+"s": [
+1,
+2
+]
+},
+{
+"id": "753052",
+"utc": "2026-03-28T20:00Z",
+"h": "Nantes",
+"a": "Paris Saint-Germain",
+"st": "STATUS_FULL_TIME",
+"s": [
+1,
+2
+]
+},
+{
+"id": "753054",
+"utc": "2026-04-22T14:30Z",
+"h": "Paris Saint-Germain",
+"a": "Saint-Étienne",
+"st": "STATUS_FULL_TIME",
+"s": [
+2,
+0
+]
+},
+{
+"id": "753059",
+"utc": "2026-04-22T16:45Z",
+"h": "FC Fleury 91",
+"a": "Strasbourg",
+"st": "STATUS_FULL_TIME",
+"s": [
+3,
+1
+]
+},
+{
+"id": "753057",
+"utc": "2026-04-22T16:45Z",
+"h": "Le Havre AC",
+"a": "Lens",
+"st": "STATUS_FULL_TIME",
+"s": [
+0,
+1
+]
+},
+{
+"id": "753056",
+"utc": "2026-04-22T16:45Z",
+"h": "Marseille",
+"a": "Nantes",
+"st": "STATUS_FULL_TIME",
+"s": [
+0,
+2
+]
+},
+{
+"id": "753055",
+"utc": "2026-04-22T16:45Z",
+"h": "Montpellier",
+"a": "Paris FC",
+"st": "STATUS_FULL_TIME",
+"s": [
+0,
+2
+]
+},
+{
+"id": "753058",
+"utc": "2026-04-22T16:45Z",
+"h": "OL Lyonnes",
+"a": "Dijon",
+"st": "STATUS_FULL_TIME",
+"s": [
+4,
+0
+]
+},
+{
+"id": "753065",
+"utc": "2026-04-25T19:00Z",
+"h": "Dijon",
+"a": "Paris FC",
+"st": "STATUS_FULL_TIME",
+"s": [
+1,
+2
+]
+},
+{
+"id": "753064",
+"utc": "2026-04-25T19:00Z",
+"h": "FC Fleury 91",
+"a": "Paris Saint-Germain",
+"st": "STATUS_FULL_TIME",
+"s": [
+0,
+2
+]
+},
+{
+"id": "753060",
+"utc": "2026-04-25T19:00Z",
+"h": "Lens",
+"a": "Marseille",
+"st": "STATUS_FULL_TIME",
+"s": [
+0,
+1
+]
+},
+{
+"id": "753063",
+"utc": "2026-04-25T19:00Z",
+"h": "Montpellier",
+"a": "Saint-Étienne",
+"st": "STATUS_FULL_TIME",
+"s": [
+1,
+0
+]
+},
+{
+"id": "753061",
+"utc": "2026-04-25T19:00Z",
+"h": "Strasbourg",
+"a": "Le Havre AC",
+"st": "STATUS_FULL_TIME",
+"s": [
+2,
+3
+]
+},
+{
+"id": "753062",
+"utc": "2026-04-29T17:00Z",
+"h": "Nantes",
+"a": "OL Lyonnes",
+"st": "STATUS_FULL_TIME",
+"s": [
+1,
+1
+]
+},
+{
+"id": "753067",
+"utc": "2026-05-06T15:00Z",
+"h": "Le Havre AC",
+"a": "Nantes",
+"st": "STATUS_FULL_TIME",
+"s": [
+3,
+3
+]
+},
+{
+"id": "753071",
+"utc": "2026-05-06T15:00Z",
+"h": "Marseille",
+"a": "Dijon",
+"st": "STATUS_FULL_TIME",
+"s": [
+0,
+1
+]
+},
+{
+"id": "753066",
+"utc": "2026-05-06T15:00Z",
+"h": "OL Lyonnes",
+"a": "Montpellier",
+"st": "STATUS_FULL_TIME",
+"s": [
+3,
+1
+]
+},
+{
+"id": "753069",
+"utc": "2026-05-06T15:00Z",
+"h": "Paris FC",
+"a": "Lens",
+"st": "STATUS_FULL_TIME",
+"s": [
+6,
+2
+]
+},
+{
+"id": "753070",
+"utc": "2026-05-06T15:00Z",
+"h": "Paris Saint-Germain",
+"a": "Strasbourg",
+"st": "STATUS_FULL_TIME",
+"s": [
+2,
+0
+]
+},
+{
+"id": "753068",
+"utc": "2026-05-06T15:00Z",
+"h": "Saint-Étienne",
+"a": "FC Fleury 91",
+"st": "STATUS_FULL_TIME",
+"s": [
+1,
+1
+]
+},
+{
+"id": "401871470",
+"utc": "2026-05-16T16:00Z",
+"h": "OL Lyonnes",
+"a": "Nantes",
+"st": "STATUS_FULL_TIME",
+"s": [
+8,
+0
+]
+},
+{
+"id": "401871802",
+"utc": "2026-05-16T19:00Z",
+"h": "Paris FC",
+"a": "Paris Saint-Germain",
+"st": "STATUS_FULL_TIME",
+"s": [
+1,
+0
+]
+},
+{
+"id": "401871784",
+"utc": "2026-05-29T19:00Z",
+"h": "OL Lyonnes",
+"a": "Paris FC",
+"st": "STATUS_FULL_TIME",
+"s": [
+5,
+0
+]
+},
+{
+"id": "401885672",
+"utc": "2026-09-04T19:00Z",
+"h": "FC Fleury 91",
+"a": "OL Lyonnes",
+"st": "STATUS_FULL_TIME",
+"s": [
+1,
+7
+]
+},
+{
+"id": "401885709",
+"utc": "2026-09-05T16:00Z",
+"h": "Montpellier",
+"a": "Toulouse",
+"st": "STATUS_FULL_TIME",
+"s": [
+5,
+1
+]
+},
+{
+"id": "401885708",
+"utc": "2026-09-05T16:00Z",
+"h": "Strasbourg",
+"a": "Saint-Malo",
+"st": "STATUS_FULL_TIME",
+"s": [
+3,
+2
+]
+},
+{
+"id": "401888034",
+"utc": "2026-09-05T18:00Z",
+"h": "Lens",
+"a": "Paris Saint-Germain",
+"st": "STATUS_FULL_TIME",
+"s": [
+0,
+2
+]
+},
+{
+"id": "401885671",
+"utc": "2026-09-05T19:00Z",
+"h": "Marseille",
+"a": "Le Havre AC",
+"st": "STATUS_FULL_TIME",
+"s": [
+1,
+0
+]
+},
+{
+"id": "401885670",
+"utc": "2026-09-06T13:00Z",
+"h": "Paris FC",
+"a": "Nantes",
+"st": "STATUS_FULL_TIME",
+"s": [
+2,
+0
+]
+},
+{
+"id": "401885667",
+"utc": "2026-09-11T19:00Z",
+"h": "Paris Saint-Germain",
+"a": "Strasbourg",
+"st": "STATUS_FULL_TIME",
+"s": [
+2,
+0
+]
+},
+{
+"id": "401885668",
+"utc": "2026-09-12T11:30Z",
+"h": "OL Lyonnes",
+"a": "Paris FC",
+"st": "STATUS_FULL_TIME",
+"s": [
+7,
+1
+]
+},
+{
+"id": "401888033",
+"utc": "2026-09-12T16:00Z",
+"h": "Marseille",
+"a": "Lens",
+"st": "STATUS_FULL_TIME",
+"s": [
+2,
+1
+]
+},
+{
+"id": "401885669",
+"utc": "2026-09-12T16:00Z",
+"h": "Nantes",
+"a": "FC Fleury 91",
+"st": "STATUS_FULL_TIME",
+"s": [
+1,
+1
+]
+},
+{
+"id": "401885706",
+"utc": "2026-09-12T16:00Z",
+"h": "Saint-Malo",
+"a": "Montpellier",
+"st": "STATUS_FULL_TIME",
+"s": [
+1,
+0
+]
+},
+{
+"id": "401885707",
+"utc": "2026-09-12T16:00Z",
+"h": "Toulouse",
+"a": "Le Havre AC",
+"st": "STATUS_FULL_TIME",
+"s": [
+1,
+2
+]
+},
+{
+"id": "401885666",
+"utc": "2026-09-18T17:00Z",
+"h": "Le Havre AC",
+"a": "OL Lyonnes",
+"st": "STATUS_FULL_TIME",
+"s": [
+1,
+8
+]
+},
+{
+"id": "401885663",
+"utc": "2026-09-18T17:00Z",
+"h": "Strasbourg",
+"a": "Paris FC",
+"st": "STATUS_FULL_TIME",
+"s": [
+0,
+2
+]
+},
+{
+"id": "401885664",
+"utc": "2026-09-18T19:00Z",
+"h": "Paris Saint-Germain",
+"a": "Nantes",
+"st": "STATUS_FULL_TIME",
+"s": [
+1,
+0
+]
+},
+{
+"id": "401888032",
+"utc": "2026-09-19T16:00Z",
+"h": "Lens",
+"a": "Toulouse",
+"st": "STATUS_FULL_TIME",
+"s": [
+2,
+2
+]
+},
+{
+"id": "401885705",
+"utc": "2026-09-19T16:00Z",
+"h": "Saint-Malo",
+"a": "FC Fleury 91",
+"st": "STATUS_FULL_TIME",
+"s": [
+0,
+2
+]
+},
+{
+"id": "401885665",
+"utc": "2026-09-19T19:00Z",
+"h": "Montpellier",
+"a": "Marseille",
+"st": "STATUS_FULL_TIME",
+"s": [
+0,
+0
+]
+},
+{
+"id": "401885703",
+"utc": "2026-10-03T16:00Z",
+"h": "Le Havre AC",
+"a": "Saint-Malo",
+"st": "STATUS_FULL_TIME",
+"s": [
+2,
+0
+]
+},
+{
+"id": "401885704",
+"utc": "2026-10-03T16:00Z",
+"h": "OL Lyonnes",
+"a": "Toulouse",
+"st": "STATUS_FULL_TIME",
+"s": [
+5,
+0
+]
+},
+{
+"id": "401885661",
+"utc": "2026-10-03T16:30Z",
+"h": "Nantes",
+"a": "Montpellier",
+"st": "STATUS_FULL_TIME",
+"s": [
+1,
+1
+]
+},
+{
+"id": "401885660",
+"utc": "2026-10-03T16:30Z",
+"h": "Strasbourg",
+"a": "Marseille",
+"st": "STATUS_FULL_TIME",
+"s": [
+3,
+3
+]
+},
+{
+"id": "401888031",
+"utc": "2026-10-03T19:00Z",
+"h": "Paris FC",
+"a": "Lens",
+"st": "STATUS_FULL_TIME",
+"s": [
+4,
+1
+]
+},
+{
+"id": "401885662",
+"utc": "2026-10-04T13:00Z",
+"h": "FC Fleury 91",
+"a": "Paris Saint-Germain",
+"st": "STATUS_FULL_TIME",
+"s": [
+1,
+3
+]
+},
+{
+"id": "401888030",
+"utc": "2026-10-17T16:00Z",
+"h": "Lens",
+"a": "Strasbourg",
+"st": "STATUS_FULL_TIME",
+"s": [
+1,
+3
+]
+},
+{
+"id": "401885658",
+"utc": "2026-10-17T16:00Z",
+"h": "Montpellier",
+"a": "Le Havre AC",
+"st": "STATUS_FULL_TIME",
+"s": [
+1,
+1
+]
+},
+{
+"id": "401885701",
+"utc": "2026-10-17T16:00Z",
+"h": "Saint-Malo",
+"a": "Nantes",
+"st": "STATUS_FULL_TIME",
+"s": [
+0,
+2
+]
+},
+{
+"id": "401885702",
+"utc": "2026-10-17T16:00Z",
+"h": "Toulouse",
+"a": "Paris FC",
+"st": "STATUS_FULL_TIME",
+"s": [
+0,
+4
+]
+},
+{
+"id": "401885657",
+"utc": "2026-10-17T19:05Z",
+"h": "Paris Saint-Germain",
+"a": "OL Lyonnes",
+"st": "STATUS_FULL_TIME",
+"s": [
+0,
+4
+]
+},
+{
+"id": "401885659",
+"utc": "2026-10-18T11:00Z",
+"h": "Marseille",
+"a": "FC Fleury 91",
+"st": "STATUS_FULL_TIME",
+"s": [
+2,
+2
+]
+},
+{
+"id": "401885655",
+"utc": "2026-10-23T19:05Z",
+"h": "Paris Saint-Germain",
+"a": "Montpellier",
+"st": "STATUS_FULL_TIME",
+"s": [
+1,
+0
+]
+},
+{
+"id": "401888029",
+"utc": "2026-10-24T16:00Z",
+"h": "Le Havre AC",
+"a": "Lens",
+"st": "STATUS_FULL_TIME",
+"s": [
+0,
+0
+]
+},
+{
+"id": "401885654",
+"utc": "2026-10-24T16:00Z",
+"h": "Nantes",
+"a": "Strasbourg",
+"st": "STATUS_FULL_TIME",
+"s": [
+3,
+2
+]
+},
+{
+"id": "401885656",
+"utc": "2026-10-24T19:00Z",
+"h": "OL Lyonnes",
+"a": "Marseille",
+"st": "STATUS_FULL_TIME",
+"s": [
+5,
+0
+]
+},
+{
+"id": "401885651",
+"utc": "2026-10-30T20:00Z",
+"h": "Marseille",
+"a": "Nantes",
+"st": "STATUS_FULL_TIME",
+"s": [
+1,
+0
+]
+},
+{
+"id": "401888028",
+"utc": "2026-10-31T17:00Z",
+"h": "Lens",
+"a": "FC Fleury 91",
+"st": "STATUS_FULL_TIME",
+"s": [
+1,
+1
+]
+},
+{
+"id": "401885652",
+"utc": "2026-10-31T17:00Z",
+"h": "Montpellier",
+"a": "OL Lyonnes",
+"st": "STATUS_FULL_TIME",
+"s": [
+2,
+5
+]
+},
+{
+"id": "401885653",
+"utc": "2026-10-31T17:00Z",
+"h": "Strasbourg",
+"a": "Le Havre AC",
+"st": "STATUS_FULL_TIME",
+"s": [
+0,
+0
+]
+},
+{
+"id": "401885698",
+"utc": "2026-10-31T17:00Z",
+"h": "Toulouse",
+"a": "Saint-Malo",
+"st": "STATUS_FULL_TIME",
+"s": [
+3,
+1
+]
+},
+{
+"id": "401885650",
+"utc": "2026-11-01T13:30Z",
+"h": "Paris FC",
+"a": "Paris Saint-Germain",
+"st": "STATUS_FULL_TIME",
+"s": [
+1,
+1
+]
+},
+{
+"id": "401885697",
+"utc": "2026-11-06T18:00Z",
+"h": "Nantes",
+"a": "Toulouse",
+"st": "STATUS_FULL_TIME",
+"s": [
+1,
+1
+]
+},
+{
+"id": "401885647",
+"utc": "2026-11-06T18:00Z",
+"h": "Paris FC",
+"a": "Montpellier",
+"st": "STATUS_FULL_TIME",
+"s": [
+5,
+0
+]
+},
+{
+"id": "401885648",
+"utc": "2026-11-06T20:00Z",
+"h": "Paris Saint-Germain",
+"a": "Le Havre AC",
+"st": "STATUS_FULL_TIME",
+"s": [
+4,
+0
+]
+},
+{
+"id": "401885649",
+"utc": "2026-11-07T17:00Z",
+"h": "FC Fleury 91",
+"a": "Strasbourg",
+"st": "STATUS_FULL_TIME",
+"s": [
+2,
+1
+]
+},
+{
+"id": "401888027",
+"utc": "2026-11-07T17:00Z",
+"h": "Lens",
+"a": "OL Lyonnes",
+"st": "STATUS_FULL_TIME",
+"s": [
+1,
+7
+]
+},
+{
+"id": "401885696",
+"utc": "2026-11-07T20:00Z",
+"h": "Saint-Malo",
+"a": "Marseille",
+"st": "STATUS_FULL_TIME",
+"s": [
+1,
+2
+]
+},
+{
+"id": "401885700",
+"utc": "2026-11-11T16:00Z",
+"h": "FC Fleury 91",
+"a": "Toulouse",
+"st": "STATUS_FULL_TIME",
+"s": [
+7,
+0
+]
+},
+{
+"id": "401888026",
+"utc": "2026-11-13T18:00Z",
+"h": "Nantes",
+"a": "Lens",
+"st": "STATUS_FULL_TIME",
+"s": [
+2,
+0
+]
+},
+{
+"id": "401885645",
+"utc": "2026-11-14T14:00Z",
+"h": "Le Havre AC",
+"a": "Paris FC",
+"st": "STATUS_FULL_TIME",
+"s": [
+1,
+2
+]
+},
+{
+"id": "401885694",
+"utc": "2026-11-14T17:00Z",
+"h": "OL Lyonnes",
+"a": "Saint-Malo",
+"st": "STATUS_FULL_TIME",
+"s": [
+1,
+0
+]
+},
+{
+"id": "401885695",
+"utc": "2026-11-14T17:00Z",
+"h": "Strasbourg",
+"a": "Toulouse",
+"st": "STATUS_FULL_TIME",
+"s": [
+3,
+1
+]
+},
+{
+"id": "401885646",
+"utc": "2026-11-14T17:30Z",
+"h": "Montpellier",
+"a": "FC Fleury 91",
+"st": "STATUS_FULL_TIME",
+"s": [
+0,
+1
+]
+},
+{
+"id": "401885644",
+"utc": "2026-11-14T20:00Z",
+"h": "Marseille",
+"a": "Paris Saint-Germain",
+"st": "STATUS_FULL_TIME",
+"s": [
+0,
+2
+]
+},
+{
+"id": "401885693",
+"utc": "2026-11-20T20:00Z",
+"h": "Toulouse",
+"a": "Marseille",
+"st": "STATUS_SCHEDULED"
+},
+{
+"id": "401888025",
+"utc": "2026-11-21T15:00Z",
+"h": "Lens",
+"a": "Montpellier",
+"st": "STATUS_SCHEDULED"
+},
+{
+"id": "401885642",
+"utc": "2026-11-21T17:00Z",
+"h": "Le Havre AC",
+"a": "Nantes",
+"st": "STATUS_SCHEDULED"
+},
+{
+"id": "401885692",
+"utc": "2026-11-21T20:00Z",
+"h": "Paris Saint-Germain",
+"a": "Saint-Malo",
+"st": "STATUS_SCHEDULED"
+},
+{
+"id": "401885641",
+"utc": "2026-11-22T14:00Z",
+"h": "OL Lyonnes",
+"a": "Strasbourg",
+"st": "STATUS_SCHEDULED"
+},
+{
+"id": "401885643",
+"utc": "2026-11-22T14:00Z",
+"h": "Paris FC",
+"a": "FC Fleury 91",
+"st": "STATUS_SCHEDULED"
+}
+]

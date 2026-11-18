@@ -1,0 +1,3711 @@
+[
+{
+"id": "748986",
+"utc": "2025-08-30T10:00Z",
+"h": "Athletic Club",
+"a": "Tenerife",
+"st": "STATUS_FULL_TIME",
+"s": [
+0,
+0
+]
+},
+{
+"id": "748992",
+"utc": "2025-08-30T10:00Z",
+"h": "Levante",
+"a": "Granada",
+"st": "STATUS_FULL_TIME",
+"s": [
+1,
+2
+]
+},
+{
+"id": "748989",
+"utc": "2025-08-30T16:00Z",
+"h": "Deportivo",
+"a": "FC Badalona",
+"st": "STATUS_FULL_TIME",
+"s": [
+0,
+0
+]
+},
+{
+"id": "748987",
+"utc": "2025-08-30T18:00Z",
+"h": "Barcelona",
+"a": "Alhama",
+"st": "STATUS_FULL_TIME",
+"s": [
+8,
+0
+]
+},
+{
+"id": "748990",
+"utc": "2025-08-31T10:00Z",
+"h": "Eibar",
+"a": "Sevilla",
+"st": "STATUS_FULL_TIME",
+"s": [
+0,
+1
+]
+},
+{
+"id": "748991",
+"utc": "2025-08-31T10:00Z",
+"h": "Espanyol",
+"a": "Atlético Madrid",
+"st": "STATUS_FULL_TIME",
+"s": [
+0,
+5
+]
+},
+{
+"id": "748993",
+"utc": "2025-08-31T16:00Z",
+"h": "Madrid CFF",
+"a": "Real Sociedad",
+"st": "STATUS_FULL_TIME",
+"s": [
+2,
+2
+]
+},
+{
+"id": "748988",
+"utc": "2025-08-31T18:00Z",
+"h": "Dux Logroño",
+"a": "Real Madrid",
+"st": "STATUS_FULL_TIME",
+"s": [
+2,
+2
+]
+},
+{
+"id": "748995",
+"utc": "2025-09-05T18:00Z",
+"h": "Atlético Madrid",
+"a": "Real Madrid",
+"st": "STATUS_FULL_TIME",
+"s": [
+2,
+1
+]
+},
+{
+"id": "748997",
+"utc": "2025-09-06T10:00Z",
+"h": "Espanyol",
+"a": "Deportivo",
+"st": "STATUS_FULL_TIME",
+"s": [
+1,
+1
+]
+},
+{
+"id": "748998",
+"utc": "2025-09-06T10:00Z",
+"h": "Sevilla",
+"a": "Tenerife",
+"st": "STATUS_FULL_TIME",
+"s": [
+0,
+4
+]
+},
+{
+"id": "748999",
+"utc": "2025-09-06T16:00Z",
+"h": "Madrid CFF",
+"a": "Eibar",
+"st": "STATUS_FULL_TIME",
+"s": [
+1,
+0
+]
+},
+{
+"id": "748994",
+"utc": "2025-09-06T18:00Z",
+"h": "Dux Logroño",
+"a": "Real Sociedad",
+"st": "STATUS_FULL_TIME",
+"s": [
+0,
+1
+]
+},
+{
+"id": "748996",
+"utc": "2025-09-07T10:00Z",
+"h": "Athletic Club",
+"a": "Barcelona",
+"st": "STATUS_FULL_TIME",
+"s": [
+1,
+8
+]
+},
+{
+"id": "749001",
+"utc": "2025-09-07T10:00Z",
+"h": "Granada",
+"a": "FC Badalona",
+"st": "STATUS_FULL_TIME",
+"s": [
+0,
+2
+]
+},
+{
+"id": "749000",
+"utc": "2025-09-07T17:00Z",
+"h": "Levante",
+"a": "Alhama",
+"st": "STATUS_FULL_TIME",
+"s": [
+0,
+0
+]
+},
+{
+"id": "749004",
+"utc": "2025-09-12T18:00Z",
+"h": "Barcelona",
+"a": "Dux Logroño",
+"st": "STATUS_FULL_TIME",
+"s": [
+4,
+0
+]
+},
+{
+"id": "749005",
+"utc": "2025-09-13T10:00Z",
+"h": "Real Sociedad",
+"a": "Sevilla",
+"st": "STATUS_FULL_TIME",
+"s": [
+3,
+0
+]
+},
+{
+"id": "749009",
+"utc": "2025-09-13T15:00Z",
+"h": "Tenerife",
+"a": "Espanyol",
+"st": "STATUS_FULL_TIME",
+"s": [
+0,
+0
+]
+},
+{
+"id": "749002",
+"utc": "2025-09-13T18:00Z",
+"h": "Alhama",
+"a": "Granada",
+"st": "STATUS_FULL_TIME",
+"s": [
+1,
+1
+]
+},
+{
+"id": "749008",
+"utc": "2025-09-14T10:00Z",
+"h": "Deportivo",
+"a": "Athletic Club",
+"st": "STATUS_FULL_TIME",
+"s": [
+1,
+0
+]
+},
+{
+"id": "749007",
+"utc": "2025-09-14T14:00Z",
+"h": "Eibar",
+"a": "FC Badalona",
+"st": "STATUS_FULL_TIME",
+"s": [
+0,
+0
+]
+},
+{
+"id": "749006",
+"utc": "2025-09-14T16:00Z",
+"h": "Real Madrid",
+"a": "Madrid CFF",
+"st": "STATUS_FULL_TIME",
+"s": [
+2,
+1
+]
+},
+{
+"id": "749003",
+"utc": "2025-09-14T18:00Z",
+"h": "Atlético Madrid",
+"a": "Levante",
+"st": "STATUS_FULL_TIME",
+"s": [
+4,
+0
+]
+},
+{
+"id": "749011",
+"utc": "2025-09-20T10:00Z",
+"h": "Espanyol",
+"a": "Athletic Club",
+"st": "STATUS_FULL_TIME",
+"s": [
+1,
+1
+]
+},
+{
+"id": "749010",
+"utc": "2025-09-20T10:00Z",
+"h": "Granada",
+"a": "Eibar",
+"st": "STATUS_FULL_TIME",
+"s": [
+3,
+1
+]
+},
+{
+"id": "749013",
+"utc": "2025-09-20T14:00Z",
+"h": "FC Badalona",
+"a": "Dux Logroño",
+"st": "STATUS_FULL_TIME",
+"s": [
+0,
+0
+]
+},
+{
+"id": "749015",
+"utc": "2025-09-20T16:30Z",
+"h": "Real Sociedad",
+"a": "Levante",
+"st": "STATUS_FULL_TIME",
+"s": [
+2,
+1
+]
+},
+{
+"id": "749012",
+"utc": "2025-09-21T10:00Z",
+"h": "Alhama",
+"a": "Tenerife",
+"st": "STATUS_FULL_TIME",
+"s": [
+0,
+4
+]
+},
+{
+"id": "749017",
+"utc": "2025-09-21T10:00Z",
+"h": "Madrid CFF",
+"a": "Atlético Madrid",
+"st": "STATUS_FULL_TIME",
+"s": [
+1,
+1
+]
+},
+{
+"id": "749014",
+"utc": "2025-09-21T14:00Z",
+"h": "Sevilla",
+"a": "Barcelona",
+"st": "STATUS_FULL_TIME",
+"s": [
+0,
+5
+]
+},
+{
+"id": "749016",
+"utc": "2025-09-21T16:30Z",
+"h": "Real Madrid",
+"a": "Deportivo",
+"st": "STATUS_FULL_TIME",
+"s": [
+4,
+0
+]
+},
+{
+"id": "749018",
+"utc": "2025-09-27T10:00Z",
+"h": "Dux Logroño",
+"a": "Alhama",
+"st": "STATUS_FULL_TIME",
+"s": [
+2,
+4
+]
+},
+{
+"id": "749023",
+"utc": "2025-09-27T10:00Z",
+"h": "FC Badalona",
+"a": "Real Sociedad",
+"st": "STATUS_FULL_TIME",
+"s": [
+0,
+2
+]
+},
+{
+"id": "749019",
+"utc": "2025-09-27T16:30Z",
+"h": "Barcelona",
+"a": "Espanyol",
+"st": "STATUS_FULL_TIME",
+"s": [
+2,
+0
+]
+},
+{
+"id": "749020",
+"utc": "2025-09-28T10:00Z",
+"h": "Athletic Club",
+"a": "Sevilla",
+"st": "STATUS_FULL_TIME",
+"s": [
+1,
+1
+]
+},
+{
+"id": "749022",
+"utc": "2025-09-28T10:00Z",
+"h": "Granada",
+"a": "Atlético Madrid",
+"st": "STATUS_FULL_TIME",
+"s": [
+0,
+4
+]
+},
+{
+"id": "749024",
+"utc": "2025-09-28T10:00Z",
+"h": "Levante",
+"a": "Eibar",
+"st": "STATUS_FULL_TIME",
+"s": [
+0,
+1
+]
+},
+{
+"id": "749021",
+"utc": "2025-09-28T14:00Z",
+"h": "Deportivo",
+"a": "Madrid CFF",
+"st": "STATUS_FULL_TIME",
+"s": [
+1,
+2
+]
+},
+{
+"id": "749025",
+"utc": "2025-09-28T15:30Z",
+"h": "Tenerife",
+"a": "Real Madrid",
+"st": "STATUS_FULL_TIME",
+"s": [
+0,
+0
+]
+},
+{
+"id": "749027",
+"utc": "2025-10-04T10:00Z",
+"h": "Atlético Madrid",
+"a": "Athletic Club",
+"st": "STATUS_FULL_TIME",
+"s": [
+1,
+1
+]
+},
+{
+"id": "749031",
+"utc": "2025-10-04T10:00Z",
+"h": "Real Sociedad",
+"a": "Tenerife",
+"st": "STATUS_FULL_TIME",
+"s": [
+1,
+2
+]
+},
+{
+"id": "749029",
+"utc": "2025-10-04T13:00Z",
+"h": "Eibar",
+"a": "Barcelona",
+"st": "STATUS_FULL_TIME",
+"s": [
+0,
+4
+]
+},
+{
+"id": "749032",
+"utc": "2025-10-04T15:00Z",
+"h": "Real Madrid",
+"a": "FC Badalona",
+"st": "STATUS_FULL_TIME",
+"s": [
+3,
+0
+]
+},
+{
+"id": "749030",
+"utc": "2025-10-04T16:30Z",
+"h": "Sevilla",
+"a": "Espanyol",
+"st": "STATUS_FULL_TIME",
+"s": [
+1,
+0
+]
+},
+{
+"id": "749028",
+"utc": "2025-10-05T10:00Z",
+"h": "Alhama",
+"a": "Deportivo",
+"st": "STATUS_FULL_TIME",
+"s": [
+3,
+1
+]
+},
+{
+"id": "749026",
+"utc": "2025-10-05T14:00Z",
+"h": "Dux Logroño",
+"a": "Granada",
+"st": "STATUS_FULL_TIME",
+"s": [
+1,
+1
+]
+},
+{
+"id": "749033",
+"utc": "2025-10-05T16:30Z",
+"h": "Madrid CFF",
+"a": "Levante",
+"st": "STATUS_FULL_TIME",
+"s": [
+2,
+0
+]
+},
+{
+"id": "749039",
+"utc": "2025-10-11T10:00Z",
+"h": "FC Badalona",
+"a": "Madrid CFF",
+"st": "STATUS_FULL_TIME",
+"s": [
+1,
+0
+]
+},
+{
+"id": "749038",
+"utc": "2025-10-11T10:00Z",
+"h": "Granada",
+"a": "Real Sociedad",
+"st": "STATUS_FULL_TIME",
+"s": [
+2,
+2
+]
+},
+{
+"id": "749037",
+"utc": "2025-10-11T14:30Z",
+"h": "Espanyol",
+"a": "Alhama",
+"st": "STATUS_FULL_TIME",
+"s": [
+3,
+0
+]
+},
+{
+"id": "749036",
+"utc": "2025-10-11T17:00Z",
+"h": "Deportivo",
+"a": "Dux Logroño",
+"st": "STATUS_FULL_TIME",
+"s": [
+2,
+2
+]
+},
+{
+"id": "749035",
+"utc": "2025-10-12T10:00Z",
+"h": "Atlético Madrid",
+"a": "Barcelona",
+"st": "STATUS_FULL_TIME",
+"s": [
+0,
+6
+]
+},
+{
+"id": "749040",
+"utc": "2025-10-12T10:00Z",
+"h": "Levante",
+"a": "Sevilla",
+"st": "STATUS_FULL_TIME",
+"s": [
+0,
+1
+]
+},
+{
+"id": "749041",
+"utc": "2025-10-12T10:00Z",
+"h": "Tenerife",
+"a": "Eibar",
+"st": "STATUS_FULL_TIME",
+"s": [
+0,
+1
+]
+},
+{
+"id": "749034",
+"utc": "2025-10-12T15:00Z",
+"h": "Athletic Club",
+"a": "Real Madrid",
+"st": "STATUS_FULL_TIME",
+"s": [
+1,
+4
+]
+},
+{
+"id": "749042",
+"utc": "2025-10-18T14:00Z",
+"h": "Alhama",
+"a": "Athletic Club",
+"st": "STATUS_FULL_TIME",
+"s": [
+0,
+0
+]
+},
+{
+"id": "749044",
+"utc": "2025-10-18T16:30Z",
+"h": "Dux Logroño",
+"a": "Espanyol",
+"st": "STATUS_FULL_TIME",
+"s": [
+0,
+2
+]
+},
+{
+"id": "749045",
+"utc": "2025-10-19T10:00Z",
+"h": "Deportivo",
+"a": "Atlético Madrid",
+"st": "STATUS_FULL_TIME",
+"s": [
+1,
+1
+]
+},
+{
+"id": "749046",
+"utc": "2025-10-19T10:00Z",
+"h": "Eibar",
+"a": "Real Sociedad",
+"st": "STATUS_FULL_TIME",
+"s": [
+0,
+3
+]
+},
+{
+"id": "749048",
+"utc": "2025-10-19T10:00Z",
+"h": "Sevilla",
+"a": "Madrid CFF",
+"st": "STATUS_FULL_TIME",
+"s": [
+1,
+3
+]
+},
+{
+"id": "749047",
+"utc": "2025-10-19T14:00Z",
+"h": "Real Madrid",
+"a": "Levante",
+"st": "STATUS_FULL_TIME",
+"s": [
+4,
+0
+]
+},
+{
+"id": "749049",
+"utc": "2025-10-19T15:00Z",
+"h": "Tenerife",
+"a": "FC Badalona",
+"st": "STATUS_FULL_TIME",
+"s": [
+2,
+2
+]
+},
+{
+"id": "749043",
+"utc": "2025-10-19T16:00Z",
+"h": "Barcelona",
+"a": "Granada",
+"st": "STATUS_FULL_TIME",
+"s": [
+2,
+0
+]
+},
+{
+"id": "749054",
+"utc": "2025-11-01T11:00Z",
+"h": "Atlético Madrid",
+"a": "Alhama",
+"st": "STATUS_FULL_TIME",
+"s": [
+4,
+0
+]
+},
+{
+"id": "749057",
+"utc": "2025-11-01T11:00Z",
+"h": "FC Badalona",
+"a": "Sevilla",
+"st": "STATUS_FULL_TIME",
+"s": [
+0,
+0
+]
+},
+{
+"id": "749051",
+"utc": "2025-11-01T11:00Z",
+"h": "Levante",
+"a": "Tenerife",
+"st": "STATUS_FULL_TIME",
+"s": [
+2,
+4
+]
+},
+{
+"id": "749055",
+"utc": "2025-11-01T15:00Z",
+"h": "Eibar",
+"a": "Deportivo",
+"st": "STATUS_FULL_TIME",
+"s": [
+1,
+0
+]
+},
+{
+"id": "749050",
+"utc": "2025-11-01T15:00Z",
+"h": "Madrid CFF",
+"a": "Granada",
+"st": "STATUS_FULL_TIME",
+"s": [
+0,
+1
+]
+},
+{
+"id": "749056",
+"utc": "2025-11-01T17:30Z",
+"h": "Espanyol",
+"a": "Real Madrid",
+"st": "STATUS_FULL_TIME",
+"s": [
+0,
+1
+]
+},
+{
+"id": "749053",
+"utc": "2025-11-02T11:00Z",
+"h": "Athletic Club",
+"a": "Dux Logroño",
+"st": "STATUS_FULL_TIME",
+"s": [
+0,
+0
+]
+},
+{
+"id": "749052",
+"utc": "2025-11-02T15:00Z",
+"h": "Real Sociedad",
+"a": "Barcelona",
+"st": "STATUS_FULL_TIME",
+"s": [
+1,
+0
+]
+},
+{
+"id": "749058",
+"utc": "2025-11-08T15:30Z",
+"h": "Athletic Club",
+"a": "Eibar",
+"st": "STATUS_FULL_TIME",
+"s": [
+2,
+0
+]
+},
+{
+"id": "749065",
+"utc": "2025-11-08T18:00Z",
+"h": "Real Madrid",
+"a": "Alhama",
+"st": "STATUS_FULL_TIME",
+"s": [
+5,
+0
+]
+},
+{
+"id": "749064",
+"utc": "2025-11-09T11:00Z",
+"h": "Barcelona",
+"a": "Deportivo",
+"st": "STATUS_FULL_TIME",
+"s": [
+8,
+0
+]
+},
+{
+"id": "749063",
+"utc": "2025-11-09T11:00Z",
+"h": "Dux Logroño",
+"a": "Atlético Madrid",
+"st": "STATUS_FULL_TIME",
+"s": [
+0,
+5
+]
+},
+{
+"id": "749060",
+"utc": "2025-11-09T11:00Z",
+"h": "FC Badalona",
+"a": "Levante",
+"st": "STATUS_FULL_TIME",
+"s": [
+1,
+1
+]
+},
+{
+"id": "749061",
+"utc": "2025-11-09T11:00Z",
+"h": "Granada",
+"a": "Sevilla",
+"st": "STATUS_FULL_TIME",
+"s": [
+0,
+2
+]
+},
+{
+"id": "749062",
+"utc": "2025-11-09T15:00Z",
+"h": "Espanyol",
+"a": "Real Sociedad",
+"st": "STATUS_FULL_TIME",
+"s": [
+2,
+3
+]
+},
+{
+"id": "749059",
+"utc": "2025-11-09T15:00Z",
+"h": "Madrid CFF",
+"a": "Tenerife",
+"st": "STATUS_FULL_TIME",
+"s": [
+0,
+2
+]
+},
+{
+"id": "749069",
+"utc": "2025-11-14T18:30Z",
+"h": "Deportivo",
+"a": "Levante",
+"st": "STATUS_FULL_TIME",
+"s": [
+1,
+0
+]
+},
+{
+"id": "749072",
+"utc": "2025-11-15T11:00Z",
+"h": "Alhama",
+"a": "Madrid CFF",
+"st": "STATUS_FULL_TIME",
+"s": [
+1,
+4
+]
+},
+{
+"id": "749070",
+"utc": "2025-11-15T15:00Z",
+"h": "Barcelona",
+"a": "Real Madrid",
+"st": "STATUS_FULL_TIME",
+"s": [
+4,
+0
+]
+},
+{
+"id": "749071",
+"utc": "2025-11-16T11:00Z",
+"h": "Atlético Madrid",
+"a": "FC Badalona",
+"st": "STATUS_FULL_TIME",
+"s": [
+2,
+0
+]
+},
+{
+"id": "749067",
+"utc": "2025-11-16T11:00Z",
+"h": "Real Sociedad",
+"a": "Athletic Club",
+"st": "STATUS_FULL_TIME",
+"s": [
+1,
+1
+]
+},
+{
+"id": "749073",
+"utc": "2025-11-16T12:00Z",
+"h": "Tenerife",
+"a": "Granada",
+"st": "STATUS_FULL_TIME",
+"s": [
+2,
+2
+]
+},
+{
+"id": "749066",
+"utc": "2025-11-16T15:00Z",
+"h": "Sevilla",
+"a": "Dux Logroño",
+"st": "STATUS_FULL_TIME",
+"s": [
+1,
+0
+]
+},
+{
+"id": "749068",
+"utc": "2025-11-16T17:30Z",
+"h": "Eibar",
+"a": "Espanyol",
+"st": "STATUS_FULL_TIME",
+"s": [
+1,
+2
+]
+},
+{
+"id": "749076",
+"utc": "2025-11-22T11:00Z",
+"h": "Granada",
+"a": "Athletic Club",
+"st": "STATUS_FULL_TIME",
+"s": [
+1,
+5
+]
+},
+{
+"id": "749080",
+"utc": "2025-11-22T11:00Z",
+"h": "Sevilla",
+"a": "Deportivo",
+"st": "STATUS_FULL_TIME",
+"s": [
+3,
+1
+]
+},
+{
+"id": "749075",
+"utc": "2025-11-22T15:00Z",
+"h": "FC Badalona",
+"a": "Espanyol",
+"st": "STATUS_FULL_TIME",
+"s": [
+1,
+1
+]
+},
+{
+"id": "749077",
+"utc": "2025-11-22T17:00Z",
+"h": "Madrid CFF",
+"a": "Dux Logroño",
+"st": "STATUS_FULL_TIME",
+"s": [
+1,
+0
+]
+},
+{
+"id": "749079",
+"utc": "2025-11-23T11:00Z",
+"h": "Real Sociedad",
+"a": "Alhama",
+"st": "STATUS_FULL_TIME",
+"s": [
+3,
+1
+]
+},
+{
+"id": "749081",
+"utc": "2025-11-23T12:00Z",
+"h": "Tenerife",
+"a": "Atlético Madrid",
+"st": "STATUS_FULL_TIME",
+"s": [
+2,
+1
+]
+},
+{
+"id": "749078",
+"utc": "2025-11-23T15:00Z",
+"h": "Real Madrid",
+"a": "Eibar",
+"st": "STATUS_FULL_TIME",
+"s": [
+3,
+0
+]
+},
+{
+"id": "749074",
+"utc": "2025-11-23T17:00Z",
+"h": "Levante",
+"a": "Barcelona",
+"st": "STATUS_FULL_TIME",
+"s": [
+0,
+4
+]
+},
+{
+"id": "749082",
+"utc": "2025-12-06T11:00Z",
+"h": "Atlético Madrid",
+"a": "Sevilla",
+"st": "STATUS_FULL_TIME",
+"s": [
+2,
+2
+]
+},
+{
+"id": "749088",
+"utc": "2025-12-06T11:00Z",
+"h": "Deportivo",
+"a": "Granada",
+"st": "STATUS_FULL_TIME",
+"s": [
+2,
+0
+]
+},
+{
+"id": "749085",
+"utc": "2025-12-06T14:00Z",
+"h": "Barcelona",
+"a": "Tenerife",
+"st": "STATUS_FULL_TIME",
+"s": [
+2,
+0
+]
+},
+{
+"id": "749087",
+"utc": "2025-12-06T16:00Z",
+"h": "Espanyol",
+"a": "Madrid CFF",
+"st": "STATUS_FULL_TIME",
+"s": [
+2,
+5
+]
+},
+{
+"id": "749086",
+"utc": "2025-12-06T18:00Z",
+"h": "Real Madrid",
+"a": "Real Sociedad",
+"st": "STATUS_FULL_TIME",
+"s": [
+1,
+0
+]
+},
+{
+"id": "749084",
+"utc": "2025-12-07T11:00Z",
+"h": "Alhama",
+"a": "FC Badalona",
+"st": "STATUS_FULL_TIME",
+"s": [
+0,
+1
+]
+},
+{
+"id": "749083",
+"utc": "2025-12-07T11:00Z",
+"h": "Athletic Club",
+"a": "Levante",
+"st": "STATUS_FULL_TIME",
+"s": [
+1,
+0
+]
+},
+{
+"id": "749089",
+"utc": "2025-12-07T15:00Z",
+"h": "Dux Logroño",
+"a": "Eibar",
+"st": "STATUS_FULL_TIME",
+"s": [
+0,
+1
+]
+},
+{
+"id": "749091",
+"utc": "2025-12-13T11:00Z",
+"h": "Granada",
+"a": "Real Madrid",
+"st": "STATUS_FULL_TIME",
+"s": [
+0,
+3
+]
+},
+{
+"id": "749096",
+"utc": "2025-12-13T11:00Z",
+"h": "Levante",
+"a": "Espanyol",
+"st": "STATUS_FULL_TIME",
+"s": [
+0,
+1
+]
+},
+{
+"id": "749092",
+"utc": "2025-12-13T14:00Z",
+"h": "FC Badalona",
+"a": "Barcelona",
+"st": "STATUS_FULL_TIME",
+"s": [
+1,
+5
+]
+},
+{
+"id": "749093",
+"utc": "2025-12-13T16:00Z",
+"h": "Sevilla",
+"a": "Alhama",
+"st": "STATUS_FULL_TIME",
+"s": [
+2,
+1
+]
+},
+{
+"id": "749095",
+"utc": "2025-12-13T18:00Z",
+"h": "Madrid CFF",
+"a": "Athletic Club",
+"st": "STATUS_FULL_TIME",
+"s": [
+0,
+2
+]
+},
+{
+"id": "749090",
+"utc": "2025-12-14T11:00Z",
+"h": "Eibar",
+"a": "Atlético Madrid",
+"st": "STATUS_FULL_TIME",
+"s": [
+2,
+2
+]
+},
+{
+"id": "749094",
+"utc": "2025-12-14T11:00Z",
+"h": "Real Sociedad",
+"a": "Deportivo",
+"st": "STATUS_FULL_TIME",
+"s": [
+3,
+0
+]
+},
+{
+"id": "749097",
+"utc": "2025-12-14T11:00Z",
+"h": "Tenerife",
+"a": "Dux Logroño",
+"st": "STATUS_FULL_TIME",
+"s": [
+1,
+1
+]
+},
+{
+"id": "749105",
+"utc": "2026-01-10T11:00Z",
+"h": "Alhama",
+"a": "Eibar",
+"st": "STATUS_FULL_TIME",
+"s": [
+0,
+1
+]
+},
+{
+"id": "749098",
+"utc": "2026-01-10T11:00Z",
+"h": "Atlético Madrid",
+"a": "Real Sociedad",
+"st": "STATUS_FULL_TIME",
+"s": [
+5,
+5
+]
+},
+{
+"id": "749099",
+"utc": "2026-01-10T14:00Z",
+"h": "Athletic Club",
+"a": "FC Badalona",
+"st": "STATUS_FULL_TIME",
+"s": [
+0,
+0
+]
+},
+{
+"id": "749100",
+"utc": "2026-01-10T16:00Z",
+"h": "Real Madrid",
+"a": "Sevilla",
+"st": "STATUS_FULL_TIME",
+"s": [
+2,
+0
+]
+},
+{
+"id": "749104",
+"utc": "2026-01-10T18:00Z",
+"h": "Barcelona",
+"a": "Madrid CFF",
+"st": "STATUS_FULL_TIME",
+"s": [
+12,
+1
+]
+},
+{
+"id": "749102",
+"utc": "2026-01-11T11:00Z",
+"h": "Deportivo",
+"a": "Tenerife",
+"st": "STATUS_FULL_TIME",
+"s": [
+1,
+1
+]
+},
+{
+"id": "749103",
+"utc": "2026-01-11T11:00Z",
+"h": "Dux Logroño",
+"a": "Levante",
+"st": "STATUS_FULL_TIME",
+"s": [
+2,
+3
+]
+},
+{
+"id": "749101",
+"utc": "2026-01-11T11:00Z",
+"h": "Espanyol",
+"a": "Granada",
+"st": "STATUS_FULL_TIME",
+"s": [
+0,
+2
+]
+},
+{
+"id": "749120",
+"utc": "2026-01-13T18:00Z",
+"h": "Real Madrid",
+"a": "Athletic Club",
+"st": "STATUS_FULL_TIME",
+"s": [
+0,
+1
+]
+},
+{
+"id": "749116",
+"utc": "2026-01-14T18:00Z",
+"h": "Barcelona",
+"a": "Atlético Madrid",
+"st": "STATUS_FULL_TIME",
+"s": [
+5,
+0
+]
+},
+{
+"id": "749110",
+"utc": "2026-01-17T11:00Z",
+"h": "Granada",
+"a": "Dux Logroño",
+"st": "STATUS_FULL_TIME",
+"s": [
+1,
+0
+]
+},
+{
+"id": "749108",
+"utc": "2026-01-17T11:00Z",
+"h": "Levante",
+"a": "Real Madrid",
+"st": "STATUS_FULL_TIME",
+"s": [
+1,
+2
+]
+},
+{
+"id": "749112",
+"utc": "2026-01-17T15:30Z",
+"h": "Atlético Madrid",
+"a": "Espanyol",
+"st": "STATUS_FULL_TIME",
+"s": [
+0,
+1
+]
+},
+{
+"id": "749111",
+"utc": "2026-01-17T17:30Z",
+"h": "Eibar",
+"a": "Madrid CFF",
+"st": "STATUS_FULL_TIME",
+"s": [
+1,
+3
+]
+},
+{
+"id": "749106",
+"utc": "2026-01-18T11:00Z",
+"h": "Alhama",
+"a": "Barcelona",
+"st": "STATUS_FULL_TIME",
+"s": [
+0,
+2
+]
+},
+{
+"id": "749109",
+"utc": "2026-01-18T11:00Z",
+"h": "FC Badalona",
+"a": "Deportivo",
+"st": "STATUS_FULL_TIME",
+"s": [
+1,
+0
+]
+},
+{
+"id": "749113",
+"utc": "2026-01-18T11:00Z",
+"h": "Tenerife",
+"a": "Athletic Club",
+"st": "STATUS_FULL_TIME",
+"s": [
+5,
+0
+]
+},
+{
+"id": "749107",
+"utc": "2026-01-18T15:00Z",
+"h": "Sevilla",
+"a": "Real Sociedad",
+"st": "STATUS_FULL_TIME",
+"s": [
+0,
+2
+]
+},
+{
+"id": "749114",
+"utc": "2026-01-25T11:00Z",
+"h": "Espanyol",
+"a": "Tenerife",
+"st": "STATUS_FULL_TIME",
+"s": [
+0,
+0
+]
+},
+{
+"id": "749119",
+"utc": "2026-01-25T11:00Z",
+"h": "Real Sociedad",
+"a": "Eibar",
+"st": "STATUS_FULL_TIME",
+"s": [
+3,
+0
+]
+},
+{
+"id": "749118",
+"utc": "2026-01-25T11:00Z",
+"h": "Sevilla",
+"a": "Levante",
+"st": "STATUS_FULL_TIME",
+"s": [
+4,
+2
+]
+},
+{
+"id": "749115",
+"utc": "2026-01-25T15:00Z",
+"h": "Dux Logroño",
+"a": "Deportivo",
+"st": "STATUS_FULL_TIME",
+"s": [
+0,
+4
+]
+},
+{
+"id": "749121",
+"utc": "2026-01-25T15:00Z",
+"h": "Madrid CFF",
+"a": "FC Badalona",
+"st": "STATUS_FULL_TIME",
+"s": [
+0,
+1
+]
+},
+{
+"id": "749117",
+"utc": "2026-01-25T17:00Z",
+"h": "Granada",
+"a": "Alhama",
+"st": "STATUS_FULL_TIME",
+"s": [
+2,
+0
+]
+},
+{
+"id": "749129",
+"utc": "2026-01-31T11:00Z",
+"h": "Atlético Madrid",
+"a": "Granada",
+"st": "STATUS_FULL_TIME",
+"s": [
+1,
+1
+]
+},
+{
+"id": "749125",
+"utc": "2026-01-31T11:00Z",
+"h": "Levante",
+"a": "Madrid CFF",
+"st": "STATUS_FULL_TIME",
+"s": [
+2,
+1
+]
+},
+{
+"id": "749123",
+"utc": "2026-01-31T15:15Z",
+"h": "Athletic Club",
+"a": "Espanyol",
+"st": "STATUS_FULL_TIME",
+"s": [
+2,
+1
+]
+},
+{
+"id": "749122",
+"utc": "2026-01-31T16:00Z",
+"h": "Alhama",
+"a": "Dux Logroño",
+"st": "STATUS_FULL_TIME",
+"s": [
+0,
+4
+]
+},
+{
+"id": "749127",
+"utc": "2026-02-01T11:00Z",
+"h": "Deportivo",
+"a": "Real Madrid",
+"st": "STATUS_FULL_TIME",
+"s": [
+2,
+4
+]
+},
+{
+"id": "749126",
+"utc": "2026-02-01T11:00Z",
+"h": "FC Badalona",
+"a": "Eibar",
+"st": "STATUS_FULL_TIME",
+"s": [
+2,
+1
+]
+},
+{
+"id": "749124",
+"utc": "2026-02-01T12:00Z",
+"h": "Tenerife",
+"a": "Real Sociedad",
+"st": "STATUS_FULL_TIME",
+"s": [
+1,
+1
+]
+},
+{
+"id": "749128",
+"utc": "2026-02-01T15:30Z",
+"h": "Barcelona",
+"a": "Sevilla",
+"st": "STATUS_FULL_TIME",
+"s": [
+4,
+1
+]
+},
+{
+"id": "749136",
+"utc": "2026-02-07T11:00Z",
+"h": "Eibar",
+"a": "Granada",
+"st": "STATUS_FULL_TIME",
+"s": [
+0,
+2
+]
+},
+{
+"id": "749135",
+"utc": "2026-02-08T11:00Z",
+"h": "Levante",
+"a": "Atlético Madrid",
+"st": "STATUS_FULL_TIME",
+"s": [
+0,
+1
+]
+},
+{
+"id": "749134",
+"utc": "2026-02-08T11:00Z",
+"h": "Sevilla",
+"a": "Athletic Club",
+"st": "STATUS_FULL_TIME",
+"s": [
+4,
+0
+]
+},
+{
+"id": "749137",
+"utc": "2026-02-08T11:00Z",
+"h": "Tenerife",
+"a": "Alhama",
+"st": "STATUS_FULL_TIME",
+"s": [
+1,
+0
+]
+},
+{
+"id": "749131",
+"utc": "2026-02-08T13:00Z",
+"h": "Madrid CFF",
+"a": "Deportivo",
+"st": "STATUS_FULL_TIME",
+"s": [
+1,
+6
+]
+},
+{
+"id": "749132",
+"utc": "2026-02-08T15:00Z",
+"h": "Real Madrid",
+"a": "Espanyol",
+"st": "STATUS_FULL_TIME",
+"s": [
+3,
+0
+]
+},
+{
+"id": "749133",
+"utc": "2026-02-08T15:00Z",
+"h": "Real Sociedad",
+"a": "FC Badalona",
+"st": "STATUS_FULL_TIME",
+"s": [
+2,
+0
+]
+},
+{
+"id": "749130",
+"utc": "2026-02-08T17:00Z",
+"h": "Dux Logroño",
+"a": "Barcelona",
+"st": "STATUS_FULL_TIME",
+"s": [
+0,
+3
+]
+},
+{
+"id": "749144",
+"utc": "2026-02-14T11:00Z",
+"h": "FC Badalona",
+"a": "Tenerife",
+"st": "STATUS_FULL_TIME",
+"s": [
+0,
+2
+]
+},
+{
+"id": "749143",
+"utc": "2026-02-14T11:00Z",
+"h": "Granada",
+"a": "Levante",
+"st": "STATUS_FULL_TIME",
+"s": [
+1,
+0
+]
+},
+{
+"id": "749141",
+"utc": "2026-02-14T15:00Z",
+"h": "Deportivo",
+"a": "Sevilla",
+"st": "STATUS_FULL_TIME",
+"s": [
+0,
+4
+]
+},
+{
+"id": "749140",
+"utc": "2026-02-14T17:30Z",
+"h": "Barcelona",
+"a": "Eibar",
+"st": "STATUS_FULL_TIME",
+"s": [
+4,
+0
+]
+},
+{
+"id": "749145",
+"utc": "2026-02-15T11:00Z",
+"h": "Alhama",
+"a": "Real Madrid",
+"st": "STATUS_FULL_TIME",
+"s": [
+0,
+3
+]
+},
+{
+"id": "749138",
+"utc": "2026-02-15T11:00Z",
+"h": "Athletic Club",
+"a": "Real Sociedad",
+"st": "STATUS_FULL_TIME",
+"s": [
+0,
+2
+]
+},
+{
+"id": "749142",
+"utc": "2026-02-15T15:00Z",
+"h": "Espanyol",
+"a": "Dux Logroño",
+"st": "STATUS_FULL_TIME",
+"s": [
+1,
+1
+]
+},
+{
+"id": "749139",
+"utc": "2026-02-15T17:30Z",
+"h": "Atlético Madrid",
+"a": "Madrid CFF",
+"st": "STATUS_FULL_TIME",
+"s": [
+0,
+0
+]
+},
+{
+"id": "749153",
+"utc": "2026-02-21T11:00Z",
+"h": "Levante",
+"a": "Deportivo",
+"st": "STATUS_FULL_TIME",
+"s": [
+1,
+2
+]
+},
+{
+"id": "749150",
+"utc": "2026-02-21T11:00Z",
+"h": "Madrid CFF",
+"a": "Alhama",
+"st": "STATUS_FULL_TIME",
+"s": [
+5,
+0
+]
+},
+{
+"id": "749146",
+"utc": "2026-02-21T13:00Z",
+"h": "Dux Logroño",
+"a": "FC Badalona",
+"st": "STATUS_FULL_TIME",
+"s": [
+2,
+3
+]
+},
+{
+"id": "749148",
+"utc": "2026-02-21T17:15Z",
+"h": "Granada",
+"a": "Barcelona",
+"st": "STATUS_FULL_TIME",
+"s": [
+0,
+2
+]
+},
+{
+"id": "749147",
+"utc": "2026-02-22T11:00Z",
+"h": "Eibar",
+"a": "Athletic Club",
+"st": "STATUS_FULL_TIME",
+"s": [
+0,
+1
+]
+},
+{
+"id": "749151",
+"utc": "2026-02-22T11:00Z",
+"h": "Real Madrid",
+"a": "Tenerife",
+"st": "STATUS_FULL_TIME",
+"s": [
+2,
+0
+]
+},
+{
+"id": "749152",
+"utc": "2026-02-22T15:00Z",
+"h": "Real Sociedad",
+"a": "Espanyol",
+"st": "STATUS_FULL_TIME",
+"s": [
+2,
+1
+]
+},
+{
+"id": "749149",
+"utc": "2026-02-22T17:00Z",
+"h": "Sevilla",
+"a": "Atlético Madrid",
+"st": "STATUS_FULL_TIME",
+"s": [
+2,
+1
+]
+},
+{
+"id": "749154",
+"utc": "2026-03-14T11:00Z",
+"h": "Atlético Madrid",
+"a": "Dux Logroño",
+"st": "STATUS_FULL_TIME",
+"s": [
+5,
+0
+]
+},
+{
+"id": "749161",
+"utc": "2026-03-14T12:00Z",
+"h": "Tenerife",
+"a": "Levante",
+"st": "STATUS_FULL_TIME",
+"s": [
+4,
+0
+]
+},
+{
+"id": "749160",
+"utc": "2026-03-14T17:30Z",
+"h": "Real Sociedad",
+"a": "Real Madrid",
+"st": "STATUS_FULL_TIME",
+"s": [
+0,
+3
+]
+},
+{
+"id": "749156",
+"utc": "2026-03-15T11:00Z",
+"h": "Alhama",
+"a": "Sevilla",
+"st": "STATUS_FULL_TIME",
+"s": [
+0,
+1
+]
+},
+{
+"id": "749157",
+"utc": "2026-03-15T11:00Z",
+"h": "Deportivo",
+"a": "Barcelona",
+"st": "STATUS_FULL_TIME",
+"s": [
+0,
+2
+]
+},
+{
+"id": "749159",
+"utc": "2026-03-15T13:00Z",
+"h": "FC Badalona",
+"a": "Granada",
+"st": "STATUS_FULL_TIME",
+"s": [
+0,
+4
+]
+},
+{
+"id": "749155",
+"utc": "2026-03-15T16:00Z",
+"h": "Athletic Club",
+"a": "Madrid CFF",
+"st": "STATUS_FULL_TIME",
+"s": [
+4,
+1
+]
+},
+{
+"id": "749158",
+"utc": "2026-03-16T19:00Z",
+"h": "Espanyol",
+"a": "Eibar",
+"st": "STATUS_FULL_TIME",
+"s": [
+2,
+0
+]
+},
+{
+"id": "749168",
+"utc": "2026-03-21T11:00Z",
+"h": "Levante",
+"a": "Real Sociedad",
+"st": "STATUS_FULL_TIME",
+"s": [
+0,
+1
+]
+},
+{
+"id": "749167",
+"utc": "2026-03-21T11:00Z",
+"h": "Madrid CFF",
+"a": "Espanyol",
+"st": "STATUS_FULL_TIME",
+"s": [
+1,
+1
+]
+},
+{
+"id": "749163",
+"utc": "2026-03-21T18:00Z",
+"h": "Barcelona",
+"a": "Athletic Club",
+"st": "STATUS_FULL_TIME",
+"s": [
+7,
+1
+]
+},
+{
+"id": "749164",
+"utc": "2026-03-22T11:00Z",
+"h": "Alhama",
+"a": "Atlético Madrid",
+"st": "STATUS_FULL_TIME",
+"s": [
+1,
+2
+]
+},
+{
+"id": "749162",
+"utc": "2026-03-22T11:00Z",
+"h": "Dux Logroño",
+"a": "Tenerife",
+"st": "STATUS_FULL_TIME",
+"s": [
+0,
+1
+]
+},
+{
+"id": "749165",
+"utc": "2026-03-22T15:00Z",
+"h": "Eibar",
+"a": "Real Madrid",
+"st": "STATUS_FULL_TIME",
+"s": [
+0,
+1
+]
+},
+{
+"id": "749166",
+"utc": "2026-03-22T15:00Z",
+"h": "Sevilla",
+"a": "FC Badalona",
+"st": "STATUS_FULL_TIME",
+"s": [
+1,
+5
+]
+},
+{
+"id": "749169",
+"utc": "2026-03-23T18:30Z",
+"h": "Granada",
+"a": "Deportivo",
+"st": "STATUS_FULL_TIME",
+"s": [
+1,
+0
+]
+},
+{
+"id": "749176",
+"utc": "2026-03-28T11:00Z",
+"h": "FC Badalona",
+"a": "Alhama",
+"st": "STATUS_FULL_TIME",
+"s": [
+3,
+2
+]
+},
+{
+"id": "749172",
+"utc": "2026-03-28T15:00Z",
+"h": "Espanyol",
+"a": "Levante",
+"st": "STATUS_FULL_TIME",
+"s": [
+1,
+0
+]
+},
+{
+"id": "749171",
+"utc": "2026-03-28T17:00Z",
+"h": "Deportivo",
+"a": "Eibar",
+"st": "STATUS_FULL_TIME",
+"s": [
+2,
+1
+]
+},
+{
+"id": "749173",
+"utc": "2026-03-28T19:00Z",
+"h": "Sevilla",
+"a": "Granada",
+"st": "STATUS_FULL_TIME",
+"s": [
+0,
+1
+]
+},
+{
+"id": "749174",
+"utc": "2026-03-29T10:00Z",
+"h": "Real Sociedad",
+"a": "Dux Logroño",
+"st": "STATUS_FULL_TIME",
+"s": [
+1,
+1
+]
+},
+{
+"id": "749177",
+"utc": "2026-03-29T11:00Z",
+"h": "Tenerife",
+"a": "Madrid CFF",
+"st": "STATUS_FULL_TIME",
+"s": [
+2,
+0
+]
+},
+{
+"id": "749170",
+"utc": "2026-03-29T15:00Z",
+"h": "Athletic Club",
+"a": "Atlético Madrid",
+"st": "STATUS_FULL_TIME",
+"s": [
+1,
+2
+]
+},
+{
+"id": "749175",
+"utc": "2026-03-29T19:00Z",
+"h": "Real Madrid",
+"a": "Barcelona",
+"st": "STATUS_FULL_TIME",
+"s": [
+0,
+3
+]
+},
+{
+"id": "749183",
+"utc": "2026-04-03T10:00Z",
+"h": "Eibar",
+"a": "Tenerife",
+"st": "STATUS_FULL_TIME",
+"s": [
+0,
+0
+]
+},
+{
+"id": "749178",
+"utc": "2026-04-04T10:00Z",
+"h": "Alhama",
+"a": "Real Sociedad",
+"st": "STATUS_FULL_TIME",
+"s": [
+1,
+5
+]
+},
+{
+"id": "749184",
+"utc": "2026-04-04T10:00Z",
+"h": "Dux Logroño",
+"a": "Sevilla",
+"st": "STATUS_FULL_TIME",
+"s": [
+2,
+1
+]
+},
+{
+"id": "749182",
+"utc": "2026-04-04T10:00Z",
+"h": "Granada",
+"a": "Espanyol",
+"st": "STATUS_FULL_TIME",
+"s": [
+2,
+0
+]
+},
+{
+"id": "749179",
+"utc": "2026-04-05T10:00Z",
+"h": "Atlético Madrid",
+"a": "Deportivo",
+"st": "STATUS_FULL_TIME",
+"s": [
+2,
+0
+]
+},
+{
+"id": "749181",
+"utc": "2026-04-05T10:00Z",
+"h": "Levante",
+"a": "Athletic Club",
+"st": "STATUS_FULL_TIME",
+"s": [
+0,
+1
+]
+},
+{
+"id": "749180",
+"utc": "2026-04-05T16:00Z",
+"h": "Madrid CFF",
+"a": "Real Madrid",
+"st": "STATUS_FULL_TIME",
+"s": [
+0,
+2
+]
+},
+{
+"id": "749185",
+"utc": "2026-04-06T17:00Z",
+"h": "Barcelona",
+"a": "FC Badalona",
+"st": "STATUS_FULL_TIME",
+"s": [
+6,
+0
+]
+},
+{
+"id": "749190",
+"utc": "2026-04-22T17:00Z",
+"h": "Espanyol",
+"a": "Barcelona",
+"st": "STATUS_FULL_TIME",
+"s": [
+1,
+4
+]
+},
+{
+"id": "749186",
+"utc": "2026-04-25T10:00Z",
+"h": "Athletic Club",
+"a": "Granada",
+"st": "STATUS_FULL_TIME",
+"s": [
+1,
+2
+]
+},
+{
+"id": "749189",
+"utc": "2026-04-25T10:00Z",
+"h": "FC Badalona",
+"a": "Atlético Madrid",
+"st": "STATUS_FULL_TIME",
+"s": [
+2,
+4
+]
+},
+{
+"id": "749191",
+"utc": "2026-04-25T14:00Z",
+"h": "Eibar",
+"a": "Levante",
+"st": "STATUS_FULL_TIME",
+"s": [
+2,
+1
+]
+},
+{
+"id": "749192",
+"utc": "2026-04-26T10:00Z",
+"h": "Deportivo",
+"a": "Alhama",
+"st": "STATUS_FULL_TIME",
+"s": [
+2,
+2
+]
+},
+{
+"id": "749193",
+"utc": "2026-04-26T11:00Z",
+"h": "Tenerife",
+"a": "Sevilla",
+"st": "STATUS_FULL_TIME",
+"s": [
+3,
+0
+]
+},
+{
+"id": "749187",
+"utc": "2026-04-26T15:30Z",
+"h": "Real Sociedad",
+"a": "Madrid CFF",
+"st": "STATUS_FULL_TIME",
+"s": [
+2,
+0
+]
+},
+{
+"id": "749188",
+"utc": "2026-04-26T17:30Z",
+"h": "Real Madrid",
+"a": "Dux Logroño",
+"st": "STATUS_FULL_TIME",
+"s": [
+1,
+1
+]
+},
+{
+"id": "749200",
+"utc": "2026-05-01T10:00Z",
+"h": "Alhama",
+"a": "Espanyol",
+"st": "STATUS_FULL_TIME",
+"s": [
+3,
+1
+]
+},
+{
+"id": "749195",
+"utc": "2026-05-01T15:00Z",
+"h": "Granada",
+"a": "Tenerife",
+"st": "STATUS_FULL_TIME",
+"s": [
+1,
+1
+]
+},
+{
+"id": "749194",
+"utc": "2026-05-02T10:00Z",
+"h": "FC Badalona",
+"a": "Athletic Club",
+"st": "STATUS_FULL_TIME",
+"s": [
+0,
+1
+]
+},
+{
+"id": "749197",
+"utc": "2026-05-02T14:30Z",
+"h": "Dux Logroño",
+"a": "Madrid CFF",
+"st": "STATUS_FULL_TIME",
+"s": [
+3,
+0
+]
+},
+{
+"id": "749201",
+"utc": "2026-05-02T16:30Z",
+"h": "Sevilla",
+"a": "Real Madrid",
+"st": "STATUS_FULL_TIME",
+"s": [
+0,
+2
+]
+},
+{
+"id": "749199",
+"utc": "2026-05-03T10:00Z",
+"h": "Atlético Madrid",
+"a": "Eibar",
+"st": "STATUS_FULL_TIME",
+"s": [
+4,
+0
+]
+},
+{
+"id": "749196",
+"utc": "2026-05-03T10:00Z",
+"h": "Deportivo",
+"a": "Real Sociedad",
+"st": "STATUS_FULL_TIME",
+"s": [
+1,
+2
+]
+},
+{
+"id": "749198",
+"utc": "2026-05-06T16:45Z",
+"h": "Barcelona",
+"a": "Levante",
+"st": "STATUS_FULL_TIME",
+"s": [
+5,
+0
+]
+},
+{
+"id": "749206",
+"utc": "2026-05-09T10:00Z",
+"h": "Espanyol",
+"a": "FC Badalona",
+"st": "STATUS_FULL_TIME",
+"s": [
+1,
+1
+]
+},
+{
+"id": "749202",
+"utc": "2026-05-09T10:00Z",
+"h": "Real Sociedad",
+"a": "Granada",
+"st": "STATUS_FULL_TIME",
+"s": [
+3,
+0
+]
+},
+{
+"id": "749207",
+"utc": "2026-05-09T14:00Z",
+"h": "Eibar",
+"a": "Alhama",
+"st": "STATUS_FULL_TIME",
+"s": [
+2,
+0
+]
+},
+{
+"id": "749208",
+"utc": "2026-05-09T16:00Z",
+"h": "Athletic Club",
+"a": "Deportivo",
+"st": "STATUS_FULL_TIME",
+"s": [
+0,
+1
+]
+},
+{
+"id": "749205",
+"utc": "2026-05-10T10:00Z",
+"h": "Levante",
+"a": "Dux Logroño",
+"st": "STATUS_FULL_TIME",
+"s": [
+1,
+4
+]
+},
+{
+"id": "749203",
+"utc": "2026-05-10T15:00Z",
+"h": "Real Madrid",
+"a": "Atlético Madrid",
+"st": "STATUS_FULL_TIME",
+"s": [
+1,
+0
+]
+},
+{
+"id": "749209",
+"utc": "2026-05-10T17:00Z",
+"h": "Tenerife",
+"a": "Barcelona",
+"st": "STATUS_FULL_TIME",
+"s": [
+1,
+3
+]
+},
+{
+"id": "749204",
+"utc": "2026-05-11T17:00Z",
+"h": "Madrid CFF",
+"a": "Sevilla",
+"st": "STATUS_FULL_TIME",
+"s": [
+2,
+0
+]
+},
+{
+"id": "749210",
+"utc": "2026-05-26T17:00Z",
+"h": "Alhama",
+"a": "Levante",
+"st": "STATUS_FULL_TIME",
+"s": [
+2,
+2
+]
+},
+{
+"id": "749216",
+"utc": "2026-05-26T17:00Z",
+"h": "Dux Logroño",
+"a": "Athletic Club",
+"st": "STATUS_FULL_TIME",
+"s": [
+0,
+2
+]
+},
+{
+"id": "749213",
+"utc": "2026-05-26T17:00Z",
+"h": "FC Badalona",
+"a": "Real Madrid",
+"st": "STATUS_FULL_TIME",
+"s": [
+0,
+4
+]
+},
+{
+"id": "749214",
+"utc": "2026-05-26T17:00Z",
+"h": "Granada",
+"a": "Madrid CFF",
+"st": "STATUS_FULL_TIME",
+"s": [
+3,
+4
+]
+},
+{
+"id": "749212",
+"utc": "2026-05-26T17:00Z",
+"h": "Sevilla",
+"a": "Eibar",
+"st": "STATUS_FULL_TIME",
+"s": [
+0,
+0
+]
+},
+{
+"id": "749211",
+"utc": "2026-05-26T19:00Z",
+"h": "Atlético Madrid",
+"a": "Tenerife",
+"st": "STATUS_FULL_TIME",
+"s": [
+2,
+2
+]
+},
+{
+"id": "749217",
+"utc": "2026-05-27T17:00Z",
+"h": "Barcelona",
+"a": "Real Sociedad",
+"st": "STATUS_FULL_TIME",
+"s": [
+2,
+1
+]
+},
+{
+"id": "749215",
+"utc": "2026-05-27T19:00Z",
+"h": "Deportivo",
+"a": "Espanyol",
+"st": "STATUS_FULL_TIME",
+"s": [
+2,
+2
+]
+},
+{
+"id": "749224",
+"utc": "2026-05-31T10:00Z",
+"h": "Eibar",
+"a": "Dux Logroño",
+"st": "STATUS_FULL_TIME",
+"s": [
+2,
+1
+]
+},
+{
+"id": "749220",
+"utc": "2026-05-31T10:00Z",
+"h": "Real Madrid",
+"a": "Granada",
+"st": "STATUS_FULL_TIME",
+"s": [
+2,
+0
+]
+},
+{
+"id": "749219",
+"utc": "2026-05-31T10:00Z",
+"h": "Real Sociedad",
+"a": "Atlético Madrid",
+"st": "STATUS_FULL_TIME",
+"s": [
+2,
+0
+]
+},
+{
+"id": "749225",
+"utc": "2026-05-31T11:00Z",
+"h": "Tenerife",
+"a": "Deportivo",
+"st": "STATUS_FULL_TIME",
+"s": [
+2,
+0
+]
+},
+{
+"id": "749218",
+"utc": "2026-05-31T14:00Z",
+"h": "Athletic Club",
+"a": "Alhama",
+"st": "STATUS_FULL_TIME",
+"s": [
+4,
+1
+]
+},
+{
+"id": "749223",
+"utc": "2026-05-31T14:00Z",
+"h": "Espanyol",
+"a": "Sevilla",
+"st": "STATUS_FULL_TIME",
+"s": [
+0,
+0
+]
+},
+{
+"id": "749222",
+"utc": "2026-05-31T14:00Z",
+"h": "Levante",
+"a": "FC Badalona",
+"st": "STATUS_FULL_TIME",
+"s": [
+0,
+1
+]
+},
+{
+"id": "749221",
+"utc": "2026-05-31T14:00Z",
+"h": "Madrid CFF",
+"a": "Barcelona",
+"st": "STATUS_FULL_TIME",
+"s": [
+0,
+4
+]
+},
+{
+"id": "401882538",
+"utc": "2026-08-29T10:00Z",
+"h": "Deportivo",
+"a": "Sevilla",
+"st": "STATUS_FULL_TIME",
+"s": [
+0,
+1
+]
+},
+{
+"id": "401882533",
+"utc": "2026-08-29T10:00Z",
+"h": "Real Sociedad",
+"a": "Dux Logroño",
+"st": "STATUS_FULL_TIME",
+"s": [
+0,
+2
+]
+},
+{
+"id": "401882537",
+"utc": "2026-08-29T15:00Z",
+"h": "Eibar",
+"a": "Espanyol",
+"st": "STATUS_FULL_TIME",
+"s": [
+1,
+0
+]
+},
+{
+"id": "401882535",
+"utc": "2026-08-29T19:00Z",
+"h": "Madrid CFF",
+"a": "Granada",
+"st": "STATUS_FULL_TIME",
+"s": [
+3,
+1
+]
+},
+{
+"id": "401882539",
+"utc": "2026-08-30T10:00Z",
+"h": "Athletic Club",
+"a": "FC Badalona",
+"st": "STATUS_FULL_TIME",
+"s": [
+3,
+1
+]
+},
+{
+"id": "401882540",
+"utc": "2026-08-30T15:00Z",
+"h": "Alavés",
+"a": "Valencia",
+"st": "STATUS_FULL_TIME",
+"s": [
+2,
+0
+]
+},
+{
+"id": "401882536",
+"utc": "2026-08-30T17:00Z",
+"h": "Barcelona",
+"a": "Tenerife",
+"st": "STATUS_FULL_TIME",
+"s": [
+5,
+0
+]
+},
+{
+"id": "401882534",
+"utc": "2026-08-30T19:00Z",
+"h": "Real Madrid",
+"a": "Atlético Madrid",
+"st": "STATUS_FULL_TIME",
+"s": [
+3,
+2
+]
+},
+{
+"id": "401882529",
+"utc": "2026-09-05T10:00Z",
+"h": "Espanyol",
+"a": "FC Badalona",
+"st": "STATUS_FULL_TIME",
+"s": [
+0,
+1
+]
+},
+{
+"id": "401882525",
+"utc": "2026-09-05T10:00Z",
+"h": "Valencia",
+"a": "Madrid CFF",
+"st": "STATUS_FULL_TIME",
+"s": [
+1,
+3
+]
+},
+{
+"id": "401882526",
+"utc": "2026-09-05T18:30Z",
+"h": "Sevilla",
+"a": "Barcelona",
+"st": "STATUS_FULL_TIME",
+"s": [
+0,
+4
+]
+},
+{
+"id": "401882532",
+"utc": "2026-09-06T10:00Z",
+"h": "Atlético Madrid",
+"a": "Alavés",
+"st": "STATUS_FULL_TIME",
+"s": [
+1,
+0
+]
+},
+{
+"id": "401882531",
+"utc": "2026-09-06T10:45Z",
+"h": "Tenerife",
+"a": "Deportivo",
+"st": "STATUS_FULL_TIME",
+"s": [
+0,
+0
+]
+},
+{
+"id": "401882530",
+"utc": "2026-09-06T16:30Z",
+"h": "Dux Logroño",
+"a": "Athletic Club",
+"st": "STATUS_FULL_TIME",
+"s": [
+0,
+1
+]
+},
+{
+"id": "401882527",
+"utc": "2026-09-06T18:30Z",
+"h": "Real Madrid",
+"a": "Eibar",
+"st": "STATUS_FULL_TIME",
+"s": [
+0,
+0
+]
+},
+{
+"id": "401882528",
+"utc": "2026-09-07T17:30Z",
+"h": "Granada",
+"a": "Real Sociedad",
+"st": "STATUS_FULL_TIME",
+"s": [
+3,
+2
+]
+},
+{
+"id": "401882522",
+"utc": "2026-09-11T18:45Z",
+"h": "Deportivo",
+"a": "Real Madrid",
+"st": "STATUS_FULL_TIME",
+"s": [
+0,
+2
+]
+},
+{
+"id": "401882523",
+"utc": "2026-09-12T10:00Z",
+"h": "Athletic Club",
+"a": "Espanyol",
+"st": "STATUS_FULL_TIME",
+"s": [
+2,
+2
+]
+},
+{
+"id": "401882518",
+"utc": "2026-09-12T14:30Z",
+"h": "Madrid CFF",
+"a": "Sevilla",
+"st": "STATUS_FULL_TIME",
+"s": [
+1,
+0
+]
+},
+{
+"id": "401882519",
+"utc": "2026-09-12T17:00Z",
+"h": "Barcelona",
+"a": "Atlético Madrid",
+"st": "STATUS_FULL_TIME",
+"s": [
+4,
+2
+]
+},
+{
+"id": "401882524",
+"utc": "2026-09-13T10:00Z",
+"h": "Alavés",
+"a": "Granada",
+"st": "STATUS_FULL_TIME",
+"s": [
+1,
+0
+]
+},
+{
+"id": "401882517",
+"utc": "2026-09-13T10:00Z",
+"h": "Real Sociedad",
+"a": "Tenerife",
+"st": "STATUS_FULL_TIME",
+"s": [
+1,
+1
+]
+},
+{
+"id": "401882521",
+"utc": "2026-09-13T15:00Z",
+"h": "Dux Logroño",
+"a": "Valencia",
+"st": "STATUS_FULL_TIME",
+"s": [
+2,
+1
+]
+},
+{
+"id": "401882520",
+"utc": "2026-09-13T17:30Z",
+"h": "Eibar",
+"a": "FC Badalona",
+"st": "STATUS_FULL_TIME",
+"s": [
+1,
+4
+]
+},
+{
+"id": "401882516",
+"utc": "2026-09-18T18:00Z",
+"h": "Alavés",
+"a": "Barcelona",
+"st": "STATUS_FULL_TIME",
+"s": [
+0,
+6
+]
+},
+{
+"id": "401882510",
+"utc": "2026-09-19T10:00Z",
+"h": "FC Badalona",
+"a": "Real Sociedad",
+"st": "STATUS_FULL_TIME",
+"s": [
+0,
+0
+]
+},
+{
+"id": "401882512",
+"utc": "2026-09-19T14:00Z",
+"h": "Espanyol",
+"a": "Madrid CFF",
+"st": "STATUS_FULL_TIME",
+"s": [
+5,
+1
+]
+},
+{
+"id": "401882515",
+"utc": "2026-09-19T16:00Z",
+"h": "Atlético Madrid",
+"a": "Dux Logroño",
+"st": "STATUS_FULL_TIME",
+"s": [
+1,
+0
+]
+},
+{
+"id": "401882509",
+"utc": "2026-09-19T18:30Z",
+"h": "Real Madrid",
+"a": "Valencia",
+"st": "STATUS_FULL_TIME",
+"s": [
+3,
+1
+]
+},
+{
+"id": "401882511",
+"utc": "2026-09-20T10:00Z",
+"h": "Granada",
+"a": "Deportivo",
+"st": "STATUS_FULL_TIME",
+"s": [
+0,
+3
+]
+},
+{
+"id": "401882514",
+"utc": "2026-09-20T10:00Z",
+"h": "Tenerife",
+"a": "Sevilla",
+"st": "STATUS_FULL_TIME",
+"s": [
+1,
+3
+]
+},
+{
+"id": "401882513",
+"utc": "2026-09-20T16:00Z",
+"h": "Eibar",
+"a": "Athletic Club",
+"st": "STATUS_FULL_TIME",
+"s": [
+1,
+0
+]
+},
+{
+"id": "401882504",
+"utc": "2026-09-26T10:00Z",
+"h": "FC Badalona",
+"a": "Granada",
+"st": "STATUS_FULL_TIME",
+"s": [
+0,
+1
+]
+},
+{
+"id": "401882503",
+"utc": "2026-09-26T10:00Z",
+"h": "Real Sociedad",
+"a": "Real Madrid",
+"st": "STATUS_FULL_TIME",
+"s": [
+3,
+5
+]
+},
+{
+"id": "401882506",
+"utc": "2026-09-26T14:30Z",
+"h": "Dux Logroño",
+"a": "Barcelona",
+"st": "STATUS_FULL_TIME",
+"s": [
+0,
+2
+]
+},
+{
+"id": "401882505",
+"utc": "2026-09-26T16:30Z",
+"h": "Madrid CFF",
+"a": "Alavés",
+"st": "STATUS_FULL_TIME",
+"s": [
+1,
+0
+]
+},
+{
+"id": "401882508",
+"utc": "2026-09-27T10:00Z",
+"h": "Athletic Club",
+"a": "Atlético Madrid",
+"st": "STATUS_FULL_TIME",
+"s": [
+3,
+2
+]
+},
+{
+"id": "401882501",
+"utc": "2026-09-27T10:00Z",
+"h": "Valencia",
+"a": "Tenerife",
+"st": "STATUS_FULL_TIME",
+"s": [
+1,
+2
+]
+},
+{
+"id": "401882502",
+"utc": "2026-09-27T14:00Z",
+"h": "Sevilla",
+"a": "Eibar",
+"st": "STATUS_FULL_TIME",
+"s": [
+0,
+1
+]
+},
+{
+"id": "401882507",
+"utc": "2026-09-27T16:00Z",
+"h": "Deportivo",
+"a": "Espanyol",
+"st": "STATUS_FULL_TIME",
+"s": [
+1,
+1
+]
+},
+{
+"id": "401882498",
+"utc": "2026-10-03T10:00Z",
+"h": "Espanyol",
+"a": "Alavés",
+"st": "STATUS_FULL_TIME",
+"s": [
+1,
+0
+]
+},
+{
+"id": "401882494",
+"utc": "2026-10-03T10:00Z",
+"h": "Sevilla",
+"a": "FC Badalona",
+"st": "STATUS_FULL_TIME",
+"s": [
+3,
+3
+]
+},
+{
+"id": "401882499",
+"utc": "2026-10-03T14:00Z",
+"h": "Deportivo",
+"a": "Atlético Madrid",
+"st": "STATUS_FULL_TIME",
+"s": [
+1,
+2
+]
+},
+{
+"id": "401882495",
+"utc": "2026-10-03T16:00Z",
+"h": "Madrid CFF",
+"a": "Athletic Club",
+"st": "STATUS_FULL_TIME",
+"s": [
+2,
+2
+]
+},
+{
+"id": "401882496",
+"utc": "2026-10-04T10:00Z",
+"h": "Granada",
+"a": "Eibar",
+"st": "STATUS_FULL_TIME",
+"s": [
+0,
+0
+]
+},
+{
+"id": "401882500",
+"utc": "2026-10-04T10:00Z",
+"h": "Tenerife",
+"a": "Dux Logroño",
+"st": "STATUS_FULL_TIME",
+"s": [
+2,
+1
+]
+},
+{
+"id": "401882497",
+"utc": "2026-10-04T17:00Z",
+"h": "Barcelona",
+"a": "Real Madrid",
+"st": "STATUS_FULL_TIME",
+"s": [
+7,
+0
+]
+},
+{
+"id": "401882493",
+"utc": "2026-10-04T17:30Z",
+"h": "Valencia",
+"a": "Real Sociedad",
+"st": "STATUS_FULL_TIME",
+"s": [
+0,
+1
+]
+},
+{
+"id": "401882489",
+"utc": "2026-10-17T10:00Z",
+"h": "Dux Logroño",
+"a": "Granada",
+"st": "STATUS_FULL_TIME",
+"s": [
+2,
+3
+]
+},
+{
+"id": "401882487",
+"utc": "2026-10-17T10:00Z",
+"h": "FC Badalona",
+"a": "Tenerife",
+"st": "STATUS_FULL_TIME",
+"s": [
+0,
+4
+]
+},
+{
+"id": "401882491",
+"utc": "2026-10-17T14:30Z",
+"h": "Athletic Club",
+"a": "Valencia",
+"st": "STATUS_FULL_TIME",
+"s": [
+1,
+0
+]
+},
+{
+"id": "401882486",
+"utc": "2026-10-17T18:30Z",
+"h": "Real Madrid",
+"a": "Espanyol",
+"st": "STATUS_FULL_TIME",
+"s": [
+3,
+1
+]
+},
+{
+"id": "401882492",
+"utc": "2026-10-18T10:00Z",
+"h": "Alavés",
+"a": "Sevilla",
+"st": "STATUS_FULL_TIME",
+"s": [
+1,
+1
+]
+},
+{
+"id": "401882485",
+"utc": "2026-10-18T10:00Z",
+"h": "Real Sociedad",
+"a": "Barcelona",
+"st": "STATUS_FULL_TIME",
+"s": [
+2,
+1
+]
+},
+{
+"id": "401882488",
+"utc": "2026-10-18T14:00Z",
+"h": "Eibar",
+"a": "Deportivo",
+"st": "STATUS_FULL_TIME",
+"s": [
+2,
+3
+]
+},
+{
+"id": "401882490",
+"utc": "2026-10-18T16:00Z",
+"h": "Atlético Madrid",
+"a": "Madrid CFF",
+"st": "STATUS_FULL_TIME",
+"s": [
+4,
+0
+]
+},
+{
+"id": "401882483",
+"utc": "2026-10-23T17:30Z",
+"h": "Atlético Madrid",
+"a": "Valencia",
+"st": "STATUS_FULL_TIME",
+"s": [
+4,
+0
+]
+},
+{
+"id": "401882484",
+"utc": "2026-10-24T10:00Z",
+"h": "Athletic Club",
+"a": "Sevilla",
+"st": "STATUS_FULL_TIME",
+"s": [
+0,
+0
+]
+},
+{
+"id": "401882477",
+"utc": "2026-10-24T10:00Z",
+"h": "Real Sociedad",
+"a": "Espanyol",
+"st": "STATUS_FULL_TIME",
+"s": [
+1,
+1
+]
+},
+{
+"id": "401882478",
+"utc": "2026-10-24T14:00Z",
+"h": "Real Madrid",
+"a": "Tenerife",
+"st": "STATUS_FULL_TIME",
+"s": [
+3,
+2
+]
+},
+{
+"id": "401882481",
+"utc": "2026-10-24T16:15Z",
+"h": "Dux Logroño",
+"a": "FC Badalona",
+"st": "STATUS_FULL_TIME",
+"s": [
+1,
+0
+]
+},
+{
+"id": "401882479",
+"utc": "2026-10-24T18:30Z",
+"h": "Barcelona",
+"a": "Granada",
+"st": "STATUS_FULL_TIME",
+"s": [
+3,
+0
+]
+},
+{
+"id": "401882482",
+"utc": "2026-10-25T11:45Z",
+"h": "Deportivo",
+"a": "Alavés",
+"st": "STATUS_FULL_TIME",
+"s": [
+2,
+1
+]
+},
+{
+"id": "401882480",
+"utc": "2026-10-25T16:00Z",
+"h": "Eibar",
+"a": "Madrid CFF",
+"st": "STATUS_FULL_TIME",
+"s": [
+2,
+2
+]
+},
+{
+"id": "401882473",
+"utc": "2026-10-31T11:00Z",
+"h": "Granada",
+"a": "Atlético Madrid",
+"st": "STATUS_FULL_TIME",
+"s": [
+1,
+1
+]
+},
+{
+"id": "401882469",
+"utc": "2026-10-31T11:00Z",
+"h": "Valencia",
+"a": "Eibar",
+"st": "STATUS_FULL_TIME",
+"s": [
+2,
+1
+]
+},
+{
+"id": "401882474",
+"utc": "2026-10-31T15:00Z",
+"h": "Espanyol",
+"a": "Dux Logroño",
+"st": "STATUS_FULL_TIME",
+"s": [
+2,
+1
+]
+},
+{
+"id": "401882472",
+"utc": "2026-10-31T17:00Z",
+"h": "Madrid CFF",
+"a": "Deportivo",
+"st": "STATUS_FULL_TIME",
+"s": [
+2,
+1
+]
+},
+{
+"id": "401882476",
+"utc": "2026-11-01T11:00Z",
+"h": "Alavés",
+"a": "Real Sociedad",
+"st": "STATUS_FULL_TIME",
+"s": [
+1,
+1
+]
+},
+{
+"id": "401882471",
+"utc": "2026-11-01T11:30Z",
+"h": "FC Badalona",
+"a": "Barcelona",
+"st": "STATUS_FULL_TIME",
+"s": [
+0,
+4
+]
+},
+{
+"id": "401882470",
+"utc": "2026-11-01T18:00Z",
+"h": "Sevilla",
+"a": "Real Madrid",
+"st": "STATUS_FULL_TIME",
+"s": [
+1,
+3
+]
+},
+{
+"id": "401882475",
+"utc": "2026-11-02T20:00Z",
+"h": "Tenerife",
+"a": "Athletic Club",
+"st": "STATUS_FULL_TIME",
+"s": [
+2,
+0
+]
+},
+{
+"id": "401882461",
+"utc": "2026-11-07T11:00Z",
+"h": "Granada",
+"a": "Espanyol",
+"st": "STATUS_FULL_TIME",
+"s": [
+0,
+1
+]
+},
+{
+"id": "401882468",
+"utc": "2026-11-07T15:00Z",
+"h": "Athletic Club",
+"a": "Real Madrid",
+"st": "STATUS_FULL_TIME",
+"s": [
+1,
+1
+]
+},
+{
+"id": "401882463",
+"utc": "2026-11-07T16:00Z",
+"h": "Eibar",
+"a": "Real Sociedad",
+"st": "STATUS_FULL_TIME",
+"s": [
+1,
+2
+]
+},
+{
+"id": "401882464",
+"utc": "2026-11-08T11:00Z",
+"h": "Dux Logroño",
+"a": "Sevilla",
+"st": "STATUS_FULL_TIME",
+"s": [
+2,
+2
+]
+},
+{
+"id": "401882462",
+"utc": "2026-11-08T15:00Z",
+"h": "Barcelona",
+"a": "Madrid CFF",
+"st": "STATUS_FULL_TIME",
+"s": [
+5,
+1
+]
+},
+{
+"id": "401882467",
+"utc": "2026-11-09T18:00Z",
+"h": "Atlético Madrid",
+"a": "FC Badalona",
+"st": "STATUS_FULL_TIME",
+"s": [
+3,
+0
+]
+},
+{
+"id": "401882465",
+"utc": "2026-11-09T20:00Z",
+"h": "Deportivo",
+"a": "Valencia",
+"st": "STATUS_FULL_TIME",
+"s": [
+0,
+2
+]
+},
+{
+"id": "401882458",
+"utc": "2026-11-14T11:00Z",
+"h": "Espanyol",
+"a": "Tenerife",
+"st": "STATUS_FULL_TIME",
+"s": [
+1,
+3
+]
+},
+{
+"id": "401882460",
+"utc": "2026-11-14T17:00Z",
+"h": "Alavés",
+"a": "Eibar",
+"st": "STATUS_FULL_TIME",
+"s": [
+2,
+1
+]
+},
+{
+"id": "401882456",
+"utc": "2026-11-14T19:30Z",
+"h": "Real Madrid",
+"a": "FC Badalona",
+"st": "STATUS_FULL_TIME",
+"s": [
+3,
+3
+]
+},
+{
+"id": "401882457",
+"utc": "2026-11-15T11:00Z",
+"h": "Madrid CFF",
+"a": "Dux Logroño",
+"st": "STATUS_FULL_TIME",
+"s": [
+2,
+3
+]
+},
+{
+"id": "401882455",
+"utc": "2026-11-15T11:00Z",
+"h": "Real Sociedad",
+"a": "Athletic Club",
+"st": "STATUS_FULL_TIME",
+"s": [
+1,
+4
+]
+},
+{
+"id": "401882454",
+"utc": "2026-11-15T15:00Z",
+"h": "Sevilla",
+"a": "Atlético Madrid",
+"st": "STATUS_FULL_TIME",
+"s": [
+1,
+2
+]
+},
+{
+"id": "401882459",
+"utc": "2026-11-15T17:00Z",
+"h": "Deportivo",
+"a": "Barcelona",
+"st": "STATUS_FULL_TIME",
+"s": [
+1,
+1
+]
+},
+{
+"id": "401882453",
+"utc": "2026-11-15T17:15Z",
+"h": "Valencia",
+"a": "Granada",
+"st": "STATUS_FULL_TIME",
+"s": [
+0,
+0
+]
+},
+{
+"id": "401882446",
+"utc": "2026-11-21T11:00Z",
+"h": "FC Badalona",
+"a": "Deportivo",
+"st": "STATUS_SCHEDULED"
+},
+{
+"id": "401882450",
+"utc": "2026-11-21T16:00Z",
+"h": "Eibar",
+"a": "Atlético Madrid",
+"st": "STATUS_SCHEDULED"
+},
+{
+"id": "401882451",
+"utc": "2026-11-21T18:00Z",
+"h": "Dux Logroño",
+"a": "Alavés",
+"st": "STATUS_SCHEDULED"
+},
+{
+"id": "401882447",
+"utc": "2026-11-22T11:00Z",
+"h": "Granada",
+"a": "Real Madrid",
+"st": "STATUS_SCHEDULED"
+},
+{
+"id": "401882445",
+"utc": "2026-11-22T11:00Z",
+"h": "Real Sociedad",
+"a": "Sevilla",
+"st": "STATUS_SCHEDULED"
+},
+{
+"id": "401882452",
+"utc": "2026-11-22T16:00Z",
+"h": "Tenerife",
+"a": "Madrid CFF",
+"st": "STATUS_SCHEDULED"
+},
+{
+"id": "401882448",
+"utc": "2026-11-22T18:00Z",
+"h": "Barcelona",
+"a": "Athletic Club",
+"st": "STATUS_SCHEDULED"
+},
+{
+"id": "401882449",
+"utc": "2026-11-23T19:00Z",
+"h": "Espanyol",
+"a": "Valencia",
+"st": "STATUS_SCHEDULED"
+},
+{
+"id": "401882444",
+"utc": "2026-12-08T11:00Z",
+"h": "Athletic Club",
+"a": "Alavés",
+"st": "STATUS_SCHEDULED"
+},
+{
+"id": "401882439",
+"utc": "2026-12-08T12:00Z",
+"h": "FC Badalona",
+"a": "Valencia",
+"st": "STATUS_SCHEDULED"
+},
+{
+"id": "401882443",
+"utc": "2026-12-08T15:00Z",
+"h": "Atlético Madrid",
+"a": "Tenerife",
+"st": "STATUS_SCHEDULED"
+},
+{
+"id": "401882440",
+"utc": "2026-12-08T16:00Z",
+"h": "Barcelona",
+"a": "Espanyol",
+"st": "STATUS_SCHEDULED"
+},
+{
+"id": "401882438",
+"utc": "2026-12-08T18:00Z",
+"h": "Real Madrid",
+"a": "Madrid CFF",
+"st": "STATUS_SCHEDULED"
+},
+{
+"id": "401882442",
+"utc": "2026-12-09T17:00Z",
+"h": "Deportivo",
+"a": "Real Sociedad",
+"st": "STATUS_SCHEDULED"
+},
+{
+"id": "401882441",
+"utc": "2026-12-09T18:00Z",
+"h": "Eibar",
+"a": "Dux Logroño",
+"st": "STATUS_SCHEDULED"
+},
+{
+"id": "401882437",
+"utc": "2026-12-09T19:00Z",
+"h": "Sevilla",
+"a": "Granada",
+"st": "STATUS_SCHEDULED"
+}
+]

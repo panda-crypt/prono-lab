@@ -1,0 +1,2027 @@
+[
+{
+"id": "751508",
+"utc": "2025-09-06T12:00Z",
+"h": "Ajax Amsterdam",
+"a": "ADO Den Haag",
+"st": "STATUS_FULL_TIME",
+"s": [
+6,
+0
+]
+},
+{
+"id": "751507",
+"utc": "2025-09-06T12:00Z",
+"h": "Heerenveen",
+"a": "FC Twente",
+"st": "STATUS_FULL_TIME",
+"s": [
+1,
+3
+]
+},
+{
+"id": "751506",
+"utc": "2025-09-06T14:30Z",
+"h": "PSV Eindhoven",
+"a": "Excelsior",
+"st": "STATUS_FULL_TIME",
+"s": [
+1,
+0
+]
+},
+{
+"id": "751509",
+"utc": "2025-09-07T10:15Z",
+"h": "NAC Breda",
+"a": "Feyenoord Rotterdam",
+"st": "STATUS_FULL_TIME",
+"s": [
+1,
+3
+]
+},
+{
+"id": "751510",
+"utc": "2025-09-07T12:30Z",
+"h": "AZ Alkmaar",
+"a": "HERA United",
+"st": "STATUS_FULL_TIME",
+"s": [
+2,
+2
+]
+},
+{
+"id": "751511",
+"utc": "2025-09-07T12:30Z",
+"h": "PEC Zwolle",
+"a": "FC Utrecht",
+"st": "STATUS_FULL_TIME",
+"s": [
+1,
+2
+]
+},
+{
+"id": "751512",
+"utc": "2025-09-21T10:15Z",
+"h": "Feyenoord Rotterdam",
+"a": "Ajax Amsterdam",
+"st": "STATUS_FULL_TIME",
+"s": [
+0,
+1
+]
+},
+{
+"id": "751516",
+"utc": "2025-09-21T14:45Z",
+"h": "ADO Den Haag",
+"a": "Heerenveen",
+"st": "STATUS_FULL_TIME",
+"s": [
+2,
+2
+]
+},
+{
+"id": "751517",
+"utc": "2025-09-21T14:45Z",
+"h": "Excelsior",
+"a": "AZ Alkmaar",
+"st": "STATUS_FULL_TIME",
+"s": [
+1,
+3
+]
+},
+{
+"id": "751514",
+"utc": "2025-09-21T14:45Z",
+"h": "FC Twente",
+"a": "NAC Breda",
+"st": "STATUS_FULL_TIME",
+"s": [
+6,
+0
+]
+},
+{
+"id": "751513",
+"utc": "2025-09-21T14:45Z",
+"h": "FC Utrecht",
+"a": "PSV Eindhoven",
+"st": "STATUS_FULL_TIME",
+"s": [
+1,
+2
+]
+},
+{
+"id": "751515",
+"utc": "2025-09-21T14:45Z",
+"h": "HERA United",
+"a": "PEC Zwolle",
+"st": "STATUS_FULL_TIME",
+"s": [
+2,
+3
+]
+},
+{
+"id": "751518",
+"utc": "2025-09-28T10:15Z",
+"h": "AZ Alkmaar",
+"a": "Ajax Amsterdam",
+"st": "STATUS_FULL_TIME",
+"s": [
+0,
+0
+]
+},
+{
+"id": "751520",
+"utc": "2025-09-28T14:45Z",
+"h": "Feyenoord Rotterdam",
+"a": "ADO Den Haag",
+"st": "STATUS_FULL_TIME",
+"s": [
+2,
+0
+]
+},
+{
+"id": "751523",
+"utc": "2025-09-28T14:45Z",
+"h": "Heerenveen",
+"a": "Excelsior",
+"st": "STATUS_FULL_TIME",
+"s": [
+1,
+3
+]
+},
+{
+"id": "751519",
+"utc": "2025-09-28T14:45Z",
+"h": "NAC Breda",
+"a": "FC Utrecht",
+"st": "STATUS_FULL_TIME",
+"s": [
+1,
+3
+]
+},
+{
+"id": "751522",
+"utc": "2025-09-28T14:45Z",
+"h": "PEC Zwolle",
+"a": "FC Twente",
+"st": "STATUS_FULL_TIME",
+"s": [
+1,
+4
+]
+},
+{
+"id": "751521",
+"utc": "2025-09-28T14:45Z",
+"h": "PSV Eindhoven",
+"a": "HERA United",
+"st": "STATUS_FULL_TIME",
+"s": [
+4,
+0
+]
+},
+{
+"id": "751524",
+"utc": "2025-10-04T12:00Z",
+"h": "Ajax Amsterdam",
+"a": "Heerenveen",
+"st": "STATUS_FULL_TIME",
+"s": [
+4,
+1
+]
+},
+{
+"id": "751525",
+"utc": "2025-10-04T12:00Z",
+"h": "PSV Eindhoven",
+"a": "FC Twente",
+"st": "STATUS_FULL_TIME",
+"s": [
+1,
+3
+]
+},
+{
+"id": "751528",
+"utc": "2025-10-05T10:15Z",
+"h": "ADO Den Haag",
+"a": "AZ Alkmaar",
+"st": "STATUS_FULL_TIME",
+"s": [
+0,
+1
+]
+},
+{
+"id": "751529",
+"utc": "2025-10-05T14:45Z",
+"h": "Excelsior",
+"a": "PEC Zwolle",
+"st": "STATUS_FULL_TIME",
+"s": [
+0,
+1
+]
+},
+{
+"id": "751527",
+"utc": "2025-10-05T14:45Z",
+"h": "HERA United",
+"a": "NAC Breda",
+"st": "STATUS_FULL_TIME",
+"s": [
+1,
+1
+]
+},
+{
+"id": "751526",
+"utc": "2025-10-07T16:45Z",
+"h": "FC Utrecht",
+"a": "Feyenoord Rotterdam",
+"st": "STATUS_FULL_TIME",
+"s": [
+1,
+2
+]
+},
+{
+"id": "751534",
+"utc": "2025-10-12T10:15Z",
+"h": "AZ Alkmaar",
+"a": "Feyenoord Rotterdam",
+"st": "STATUS_FULL_TIME",
+"s": [
+1,
+4
+]
+},
+{
+"id": "751531",
+"utc": "2025-10-12T12:30Z",
+"h": "Ajax Amsterdam",
+"a": "Excelsior",
+"st": "STATUS_FULL_TIME",
+"s": [
+3,
+0
+]
+},
+{
+"id": "751532",
+"utc": "2025-10-12T12:30Z",
+"h": "FC Twente",
+"a": "FC Utrecht",
+"st": "STATUS_FULL_TIME",
+"s": [
+1,
+1
+]
+},
+{
+"id": "751535",
+"utc": "2025-10-12T12:30Z",
+"h": "Heerenveen",
+"a": "HERA United",
+"st": "STATUS_FULL_TIME",
+"s": [
+1,
+0
+]
+},
+{
+"id": "751530",
+"utc": "2025-10-12T12:30Z",
+"h": "NAC Breda",
+"a": "PSV Eindhoven",
+"st": "STATUS_FULL_TIME",
+"s": [
+0,
+5
+]
+},
+{
+"id": "751533",
+"utc": "2025-10-12T12:30Z",
+"h": "PEC Zwolle",
+"a": "ADO Den Haag",
+"st": "STATUS_FULL_TIME",
+"s": [
+2,
+1
+]
+},
+{
+"id": "751536",
+"utc": "2025-11-02T11:15Z",
+"h": "HERA United",
+"a": "Ajax Amsterdam",
+"st": "STATUS_FULL_TIME",
+"s": [
+0,
+5
+]
+},
+{
+"id": "751539",
+"utc": "2025-11-02T15:45Z",
+"h": "ADO Den Haag",
+"a": "FC Twente",
+"st": "STATUS_FULL_TIME",
+"s": [
+0,
+5
+]
+},
+{
+"id": "751538",
+"utc": "2025-11-02T15:45Z",
+"h": "Excelsior",
+"a": "FC Utrecht",
+"st": "STATUS_FULL_TIME",
+"s": [
+2,
+4
+]
+},
+{
+"id": "751540",
+"utc": "2025-11-02T15:45Z",
+"h": "Feyenoord Rotterdam",
+"a": "Heerenveen",
+"st": "STATUS_FULL_TIME",
+"s": [
+6,
+1
+]
+},
+{
+"id": "751537",
+"utc": "2025-11-02T15:45Z",
+"h": "PEC Zwolle",
+"a": "NAC Breda",
+"st": "STATUS_FULL_TIME",
+"s": [
+4,
+0
+]
+},
+{
+"id": "751541",
+"utc": "2025-11-02T15:45Z",
+"h": "PSV Eindhoven",
+"a": "AZ Alkmaar",
+"st": "STATUS_FULL_TIME",
+"s": [
+2,
+0
+]
+},
+{
+"id": "751542",
+"utc": "2025-11-08T13:00Z",
+"h": "Ajax Amsterdam",
+"a": "PSV Eindhoven",
+"st": "STATUS_FULL_TIME",
+"s": [
+2,
+1
+]
+},
+{
+"id": "751544",
+"utc": "2025-11-16T11:15Z",
+"h": "ADO Den Haag",
+"a": "HERA United",
+"st": "STATUS_FULL_TIME",
+"s": [
+0,
+1
+]
+},
+{
+"id": "751543",
+"utc": "2025-11-16T15:45Z",
+"h": "FC Twente",
+"a": "Feyenoord Rotterdam",
+"st": "STATUS_FULL_TIME",
+"s": [
+3,
+2
+]
+},
+{
+"id": "751547",
+"utc": "2025-11-16T15:45Z",
+"h": "FC Utrecht",
+"a": "AZ Alkmaar",
+"st": "STATUS_FULL_TIME",
+"s": [
+3,
+3
+]
+},
+{
+"id": "751545",
+"utc": "2025-11-16T15:45Z",
+"h": "Heerenveen",
+"a": "PEC Zwolle",
+"st": "STATUS_FULL_TIME",
+"s": [
+0,
+1
+]
+},
+{
+"id": "751546",
+"utc": "2025-11-16T15:45Z",
+"h": "NAC Breda",
+"a": "Excelsior",
+"st": "STATUS_FULL_TIME",
+"s": [
+2,
+1
+]
+},
+{
+"id": "751552",
+"utc": "2025-11-23T15:45Z",
+"h": "AZ Alkmaar",
+"a": "NAC Breda",
+"st": "STATUS_FULL_TIME",
+"s": [
+8,
+1
+]
+},
+{
+"id": "751550",
+"utc": "2025-11-23T15:45Z",
+"h": "Excelsior",
+"a": "FC Twente",
+"st": "STATUS_FULL_TIME",
+"s": [
+1,
+3
+]
+},
+{
+"id": "751549",
+"utc": "2025-11-23T15:45Z",
+"h": "Feyenoord Rotterdam",
+"a": "HERA United",
+"st": "STATUS_FULL_TIME",
+"s": [
+3,
+0
+]
+},
+{
+"id": "751551",
+"utc": "2025-11-23T15:45Z",
+"h": "PEC Zwolle",
+"a": "Ajax Amsterdam",
+"st": "STATUS_FULL_TIME",
+"s": [
+7,
+1
+]
+},
+{
+"id": "751548",
+"utc": "2025-11-23T15:45Z",
+"h": "PSV Eindhoven",
+"a": "Heerenveen",
+"st": "STATUS_FULL_TIME",
+"s": [
+6,
+0
+]
+},
+{
+"id": "751557",
+"utc": "2025-12-07T11:15Z",
+"h": "Feyenoord Rotterdam",
+"a": "PEC Zwolle",
+"st": "STATUS_FULL_TIME",
+"s": [
+1,
+0
+]
+},
+{
+"id": "751556",
+"utc": "2025-12-07T15:45Z",
+"h": "ADO Den Haag",
+"a": "PSV Eindhoven",
+"st": "STATUS_FULL_TIME",
+"s": [
+0,
+2
+]
+},
+{
+"id": "751555",
+"utc": "2025-12-07T15:45Z",
+"h": "Ajax Amsterdam",
+"a": "FC Utrecht",
+"st": "STATUS_FULL_TIME",
+"s": [
+8,
+0
+]
+},
+{
+"id": "751559",
+"utc": "2025-12-07T15:45Z",
+"h": "HERA United",
+"a": "Excelsior",
+"st": "STATUS_FULL_TIME",
+"s": [
+1,
+1
+]
+},
+{
+"id": "751558",
+"utc": "2025-12-07T15:45Z",
+"h": "NAC Breda",
+"a": "Heerenveen",
+"st": "STATUS_FULL_TIME",
+"s": [
+0,
+2
+]
+},
+{
+"id": "751560",
+"utc": "2025-12-21T11:15Z",
+"h": "HERA United",
+"a": "FC Twente",
+"st": "STATUS_FULL_TIME",
+"s": [
+0,
+0
+]
+},
+{
+"id": "751565",
+"utc": "2025-12-21T15:45Z",
+"h": "AZ Alkmaar",
+"a": "PEC Zwolle",
+"st": "STATUS_FULL_TIME",
+"s": [
+0,
+1
+]
+},
+{
+"id": "751561",
+"utc": "2025-12-21T15:45Z",
+"h": "Ajax Amsterdam",
+"a": "NAC Breda",
+"st": "STATUS_FULL_TIME",
+"s": [
+5,
+1
+]
+},
+{
+"id": "751562",
+"utc": "2025-12-21T15:45Z",
+"h": "Excelsior",
+"a": "ADO Den Haag",
+"st": "STATUS_FULL_TIME",
+"s": [
+1,
+1
+]
+},
+{
+"id": "751563",
+"utc": "2025-12-21T15:45Z",
+"h": "Heerenveen",
+"a": "FC Utrecht",
+"st": "STATUS_FULL_TIME",
+"s": [
+1,
+2
+]
+},
+{
+"id": "751564",
+"utc": "2025-12-21T15:45Z",
+"h": "PSV Eindhoven",
+"a": "Feyenoord Rotterdam",
+"st": "STATUS_FULL_TIME",
+"s": [
+1,
+1
+]
+},
+{
+"id": "751570",
+"utc": "2026-01-17T13:00Z",
+"h": "FC Twente",
+"a": "Ajax Amsterdam",
+"st": "STATUS_FULL_TIME",
+"s": [
+1,
+1
+]
+},
+{
+"id": "751571",
+"utc": "2026-01-18T11:15Z",
+"h": "NAC Breda",
+"a": "ADO Den Haag",
+"st": "STATUS_FULL_TIME",
+"s": [
+1,
+0
+]
+},
+{
+"id": "751568",
+"utc": "2026-01-18T15:45Z",
+"h": "FC Utrecht",
+"a": "HERA United",
+"st": "STATUS_FULL_TIME",
+"s": [
+2,
+2
+]
+},
+{
+"id": "751566",
+"utc": "2026-01-18T15:45Z",
+"h": "Feyenoord Rotterdam",
+"a": "Excelsior",
+"st": "STATUS_FULL_TIME",
+"s": [
+1,
+0
+]
+},
+{
+"id": "751567",
+"utc": "2026-01-18T15:45Z",
+"h": "Heerenveen",
+"a": "AZ Alkmaar",
+"st": "STATUS_FULL_TIME",
+"s": [
+3,
+2
+]
+},
+{
+"id": "751569",
+"utc": "2026-01-18T15:45Z",
+"h": "PEC Zwolle",
+"a": "PSV Eindhoven",
+"st": "STATUS_FULL_TIME",
+"s": [
+0,
+2
+]
+},
+{
+"id": "751576",
+"utc": "2026-01-25T11:15Z",
+"h": "PSV Eindhoven",
+"a": "FC Utrecht",
+"st": "STATUS_FULL_TIME",
+"s": [
+3,
+0
+]
+},
+{
+"id": "751572",
+"utc": "2026-01-25T15:45Z",
+"h": "ADO Den Haag",
+"a": "Ajax Amsterdam",
+"st": "STATUS_FULL_TIME",
+"s": [
+0,
+3
+]
+},
+{
+"id": "751573",
+"utc": "2026-01-25T15:45Z",
+"h": "AZ Alkmaar",
+"a": "FC Twente",
+"st": "STATUS_FULL_TIME",
+"s": [
+0,
+4
+]
+},
+{
+"id": "751574",
+"utc": "2026-01-25T15:45Z",
+"h": "Excelsior",
+"a": "Heerenveen",
+"st": "STATUS_FULL_TIME",
+"s": [
+2,
+4
+]
+},
+{
+"id": "751577",
+"utc": "2026-01-25T15:45Z",
+"h": "HERA United",
+"a": "Feyenoord Rotterdam",
+"st": "STATUS_FULL_TIME",
+"s": [
+0,
+1
+]
+},
+{
+"id": "751575",
+"utc": "2026-01-25T15:45Z",
+"h": "NAC Breda",
+"a": "PEC Zwolle",
+"st": "STATUS_FULL_TIME",
+"s": [
+1,
+2
+]
+},
+{
+"id": "751581",
+"utc": "2026-02-01T11:15Z",
+"h": "PEC Zwolle",
+"a": "AZ Alkmaar",
+"st": "STATUS_FULL_TIME",
+"s": [
+2,
+0
+]
+},
+{
+"id": "751578",
+"utc": "2026-02-01T15:45Z",
+"h": "Ajax Amsterdam",
+"a": "HERA United",
+"st": "STATUS_FULL_TIME",
+"s": [
+1,
+2
+]
+},
+{
+"id": "751582",
+"utc": "2026-02-01T15:45Z",
+"h": "FC Twente",
+"a": "Excelsior",
+"st": "STATUS_FULL_TIME",
+"s": [
+3,
+0
+]
+},
+{
+"id": "751583",
+"utc": "2026-02-01T15:45Z",
+"h": "FC Utrecht",
+"a": "NAC Breda",
+"st": "STATUS_FULL_TIME",
+"s": [
+1,
+0
+]
+},
+{
+"id": "751579",
+"utc": "2026-02-01T15:45Z",
+"h": "Feyenoord Rotterdam",
+"a": "PSV Eindhoven",
+"st": "STATUS_FULL_TIME",
+"s": [
+2,
+2
+]
+},
+{
+"id": "751580",
+"utc": "2026-02-01T15:45Z",
+"h": "Heerenveen",
+"a": "ADO Den Haag",
+"st": "STATUS_FULL_TIME",
+"s": [
+4,
+1
+]
+},
+{
+"id": "751553",
+"utc": "2026-02-07T15:30Z",
+"h": "FC Utrecht",
+"a": "ADO Den Haag",
+"st": "STATUS_FULL_TIME",
+"s": [
+1,
+3
+]
+},
+{
+"id": "751554",
+"utc": "2026-02-08T11:15Z",
+"h": "FC Twente",
+"a": "AZ Alkmaar",
+"st": "STATUS_FULL_TIME",
+"s": [
+4,
+1
+]
+},
+{
+"id": "751585",
+"utc": "2026-02-15T11:15Z",
+"h": "ADO Den Haag",
+"a": "Feyenoord Rotterdam",
+"st": "STATUS_FULL_TIME",
+"s": [
+1,
+1
+]
+},
+{
+"id": "751589",
+"utc": "2026-02-15T15:45Z",
+"h": "FC Twente",
+"a": "Heerenveen",
+"st": "STATUS_FULL_TIME",
+"s": [
+5,
+1
+]
+},
+{
+"id": "751587",
+"utc": "2026-02-15T15:45Z",
+"h": "PSV Eindhoven",
+"a": "PEC Zwolle",
+"st": "STATUS_FULL_TIME",
+"s": [
+3,
+0
+]
+},
+{
+"id": "751594",
+"utc": "2026-02-22T11:15Z",
+"h": "AZ Alkmaar",
+"a": "PSV Eindhoven",
+"st": "STATUS_SCHEDULED"
+},
+{
+"id": "751595",
+"utc": "2026-02-22T15:45Z",
+"h": "ADO Den Haag",
+"a": "FC Utrecht",
+"st": "STATUS_FULL_TIME",
+"s": [
+0,
+5
+]
+},
+{
+"id": "751593",
+"utc": "2026-02-22T15:45Z",
+"h": "Ajax Amsterdam",
+"a": "FC Twente",
+"st": "STATUS_FULL_TIME",
+"s": [
+0,
+0
+]
+},
+{
+"id": "751592",
+"utc": "2026-02-22T15:45Z",
+"h": "Excelsior",
+"a": "HERA United",
+"st": "STATUS_FULL_TIME",
+"s": [
+1,
+2
+]
+},
+{
+"id": "751591",
+"utc": "2026-02-22T15:45Z",
+"h": "Heerenveen",
+"a": "NAC Breda",
+"st": "STATUS_FULL_TIME",
+"s": [
+5,
+0
+]
+},
+{
+"id": "751590",
+"utc": "2026-02-22T15:45Z",
+"h": "PEC Zwolle",
+"a": "Feyenoord Rotterdam",
+"st": "STATUS_FULL_TIME",
+"s": [
+0,
+1
+]
+},
+{
+"id": "751596",
+"utc": "2026-03-11T17:45Z",
+"h": "Feyenoord Rotterdam",
+"a": "FC Twente",
+"st": "STATUS_FULL_TIME",
+"s": [
+2,
+0
+]
+},
+{
+"id": "751601",
+"utc": "2026-03-12T17:45Z",
+"h": "Excelsior",
+"a": "PSV Eindhoven",
+"st": "STATUS_FULL_TIME",
+"s": [
+0,
+6
+]
+},
+{
+"id": "751600",
+"utc": "2026-03-15T11:15Z",
+"h": "FC Utrecht",
+"a": "Ajax Amsterdam",
+"st": "STATUS_FULL_TIME",
+"s": [
+0,
+2
+]
+},
+{
+"id": "751599",
+"utc": "2026-03-15T15:45Z",
+"h": "HERA United",
+"a": "ADO Den Haag",
+"st": "STATUS_FULL_TIME",
+"s": [
+1,
+3
+]
+},
+{
+"id": "751597",
+"utc": "2026-03-15T15:45Z",
+"h": "NAC Breda",
+"a": "AZ Alkmaar",
+"st": "STATUS_FULL_TIME",
+"s": [
+2,
+3
+]
+},
+{
+"id": "751598",
+"utc": "2026-03-15T15:45Z",
+"h": "PEC Zwolle",
+"a": "Heerenveen",
+"st": "STATUS_FULL_TIME",
+"s": [
+1,
+1
+]
+},
+{
+"id": "751584",
+"utc": "2026-03-21T15:30Z",
+"h": "FC Utrecht",
+"a": "Excelsior",
+"st": "STATUS_FULL_TIME",
+"s": [
+2,
+0
+]
+},
+{
+"id": "751588",
+"utc": "2026-03-22T11:15Z",
+"h": "HERA United",
+"a": "AZ Alkmaar",
+"st": "STATUS_FULL_TIME",
+"s": [
+1,
+2
+]
+},
+{
+"id": "751586",
+"utc": "2026-03-22T11:15Z",
+"h": "NAC Breda",
+"a": "Ajax Amsterdam",
+"st": "STATUS_FULL_TIME",
+"s": [
+2,
+3
+]
+},
+{
+"id": "751603",
+"utc": "2026-03-29T10:15Z",
+"h": "Ajax Amsterdam",
+"a": "PEC Zwolle",
+"st": "STATUS_FULL_TIME",
+"s": [
+1,
+0
+]
+},
+{
+"id": "751607",
+"utc": "2026-03-29T12:30Z",
+"h": "PSV Eindhoven",
+"a": "NAC Breda",
+"st": "STATUS_FULL_TIME",
+"s": [
+4,
+1
+]
+},
+{
+"id": "751605",
+"utc": "2026-03-29T14:45Z",
+"h": "ADO Den Haag",
+"a": "Excelsior",
+"st": "STATUS_FULL_TIME",
+"s": [
+3,
+2
+]
+},
+{
+"id": "751604",
+"utc": "2026-03-29T14:45Z",
+"h": "AZ Alkmaar",
+"a": "FC Utrecht",
+"st": "STATUS_FULL_TIME",
+"s": [
+1,
+1
+]
+},
+{
+"id": "751606",
+"utc": "2026-03-29T14:45Z",
+"h": "FC Twente",
+"a": "HERA United",
+"st": "STATUS_FULL_TIME",
+"s": [
+3,
+0
+]
+},
+{
+"id": "751602",
+"utc": "2026-03-29T14:45Z",
+"h": "Heerenveen",
+"a": "Feyenoord Rotterdam",
+"st": "STATUS_FULL_TIME",
+"s": [
+2,
+1
+]
+},
+{
+"id": "751611",
+"utc": "2026-04-05T10:15Z",
+"h": "PSV Eindhoven",
+"a": "Ajax Amsterdam",
+"st": "STATUS_FULL_TIME",
+"s": [
+1,
+1
+]
+},
+{
+"id": "751609",
+"utc": "2026-04-05T14:45Z",
+"h": "FC Twente",
+"a": "ADO Den Haag",
+"st": "STATUS_FULL_TIME",
+"s": [
+0,
+1
+]
+},
+{
+"id": "751608",
+"utc": "2026-04-05T14:45Z",
+"h": "FC Utrecht",
+"a": "PEC Zwolle",
+"st": "STATUS_FULL_TIME",
+"s": [
+3,
+0
+]
+},
+{
+"id": "751613",
+"utc": "2026-04-05T14:45Z",
+"h": "Feyenoord Rotterdam",
+"a": "AZ Alkmaar",
+"st": "STATUS_FULL_TIME",
+"s": [
+3,
+3
+]
+},
+{
+"id": "751610",
+"utc": "2026-04-05T14:45Z",
+"h": "HERA United",
+"a": "Heerenveen",
+"st": "STATUS_FULL_TIME",
+"s": [
+2,
+1
+]
+},
+{
+"id": "751612",
+"utc": "2026-04-22T16:45Z",
+"h": "Excelsior",
+"a": "NAC Breda",
+"st": "STATUS_FULL_TIME",
+"s": [
+2,
+0
+]
+},
+{
+"id": "751614",
+"utc": "2026-04-26T10:15Z",
+"h": "Ajax Amsterdam",
+"a": "Feyenoord Rotterdam",
+"st": "STATUS_FULL_TIME",
+"s": [
+0,
+0
+]
+},
+{
+"id": "751619",
+"utc": "2026-04-26T14:45Z",
+"h": "AZ Alkmaar",
+"a": "ADO Den Haag",
+"st": "STATUS_FULL_TIME",
+"s": [
+1,
+1
+]
+},
+{
+"id": "751618",
+"utc": "2026-04-26T14:45Z",
+"h": "FC Utrecht",
+"a": "FC Twente",
+"st": "STATUS_FULL_TIME",
+"s": [
+2,
+0
+]
+},
+{
+"id": "751615",
+"utc": "2026-04-26T14:45Z",
+"h": "Heerenveen",
+"a": "PSV Eindhoven",
+"st": "STATUS_FULL_TIME",
+"s": [
+0,
+1
+]
+},
+{
+"id": "751616",
+"utc": "2026-04-26T14:45Z",
+"h": "NAC Breda",
+"a": "HERA United",
+"st": "STATUS_SCHEDULED"
+},
+{
+"id": "751617",
+"utc": "2026-04-26T14:45Z",
+"h": "PEC Zwolle",
+"a": "Excelsior",
+"st": "STATUS_SCHEDULED"
+},
+{
+"id": "751625",
+"utc": "2026-05-03T10:15Z",
+"h": "AZ Alkmaar",
+"a": "Heerenveen",
+"st": "STATUS_FULL_TIME",
+"s": [
+1,
+5
+]
+},
+{
+"id": "751624",
+"utc": "2026-05-03T14:45Z",
+"h": "ADO Den Haag",
+"a": "NAC Breda",
+"st": "STATUS_FULL_TIME",
+"s": [
+4,
+2
+]
+},
+{
+"id": "751623",
+"utc": "2026-05-03T14:45Z",
+"h": "Excelsior",
+"a": "Ajax Amsterdam",
+"st": "STATUS_FULL_TIME",
+"s": [
+0,
+2
+]
+},
+{
+"id": "751622",
+"utc": "2026-05-03T14:45Z",
+"h": "FC Twente",
+"a": "PEC Zwolle",
+"st": "STATUS_FULL_TIME",
+"s": [
+3,
+2
+]
+},
+{
+"id": "751620",
+"utc": "2026-05-03T14:45Z",
+"h": "Feyenoord Rotterdam",
+"a": "FC Utrecht",
+"st": "STATUS_FULL_TIME",
+"s": [
+3,
+0
+]
+},
+{
+"id": "751621",
+"utc": "2026-05-03T14:45Z",
+"h": "HERA United",
+"a": "PSV Eindhoven",
+"st": "STATUS_FULL_TIME",
+"s": [
+1,
+2
+]
+},
+{
+"id": "751626",
+"utc": "2026-05-08T18:00Z",
+"h": "Ajax Amsterdam",
+"a": "AZ Alkmaar",
+"st": "STATUS_FULL_TIME",
+"s": [
+3,
+1
+]
+},
+{
+"id": "751627",
+"utc": "2026-05-08T18:00Z",
+"h": "Excelsior",
+"a": "Feyenoord Rotterdam",
+"st": "STATUS_FULL_TIME",
+"s": [
+0,
+3
+]
+},
+{
+"id": "751630",
+"utc": "2026-05-08T18:00Z",
+"h": "FC Utrecht",
+"a": "Heerenveen",
+"st": "STATUS_FULL_TIME",
+"s": [
+5,
+1
+]
+},
+{
+"id": "751628",
+"utc": "2026-05-08T18:00Z",
+"h": "NAC Breda",
+"a": "FC Twente",
+"st": "STATUS_FULL_TIME",
+"s": [
+0,
+3
+]
+},
+{
+"id": "751629",
+"utc": "2026-05-08T18:00Z",
+"h": "PEC Zwolle",
+"a": "HERA United",
+"st": "STATUS_FULL_TIME",
+"s": [
+3,
+2
+]
+},
+{
+"id": "751631",
+"utc": "2026-05-08T18:00Z",
+"h": "PSV Eindhoven",
+"a": "ADO Den Haag",
+"st": "STATUS_FULL_TIME",
+"s": [
+2,
+0
+]
+},
+{
+"id": "751632",
+"utc": "2026-05-22T18:00Z",
+"h": "ADO Den Haag",
+"a": "PEC Zwolle",
+"st": "STATUS_FULL_TIME",
+"s": [
+3,
+0
+]
+},
+{
+"id": "751633",
+"utc": "2026-05-22T18:00Z",
+"h": "AZ Alkmaar",
+"a": "Excelsior",
+"st": "STATUS_FULL_TIME",
+"s": [
+1,
+0
+]
+},
+{
+"id": "751637",
+"utc": "2026-05-22T18:00Z",
+"h": "FC Twente",
+"a": "PSV Eindhoven",
+"st": "STATUS_FULL_TIME",
+"s": [
+1,
+2
+]
+},
+{
+"id": "751636",
+"utc": "2026-05-22T18:00Z",
+"h": "Feyenoord Rotterdam",
+"a": "NAC Breda",
+"st": "STATUS_FULL_TIME",
+"s": [
+3,
+0
+]
+},
+{
+"id": "751634",
+"utc": "2026-05-22T18:00Z",
+"h": "HERA United",
+"a": "FC Utrecht",
+"st": "STATUS_FULL_TIME",
+"s": [
+1,
+2
+]
+},
+{
+"id": "751635",
+"utc": "2026-05-22T18:00Z",
+"h": "Heerenveen",
+"a": "Ajax Amsterdam",
+"st": "STATUS_FULL_TIME",
+"s": [
+1,
+3
+]
+},
+{
+"id": "401882183",
+"utc": "2026-08-16T10:15Z",
+"h": "FC Utrecht",
+"a": "Ajax Amsterdam",
+"st": "STATUS_FULL_TIME",
+"s": [
+0,
+1
+]
+},
+{
+"id": "401882181",
+"utc": "2026-08-16T14:45Z",
+"h": "AZ Alkmaar",
+"a": "ADO Den Haag",
+"st": "STATUS_FULL_TIME",
+"s": [
+2,
+1
+]
+},
+{
+"id": "401882182",
+"utc": "2026-08-16T14:45Z",
+"h": "FC Twente",
+"a": "De Graafschap",
+"st": "STATUS_FULL_TIME",
+"s": [
+2,
+1
+]
+},
+{
+"id": "401882180",
+"utc": "2026-08-16T14:45Z",
+"h": "Heerenveen",
+"a": "Feyenoord Rotterdam",
+"st": "STATUS_FULL_TIME",
+"s": [
+1,
+2
+]
+},
+{
+"id": "401882179",
+"utc": "2026-08-16T14:45Z",
+"h": "PEC Zwolle",
+"a": "PSV Eindhoven",
+"st": "STATUS_FULL_TIME",
+"s": [
+0,
+2
+]
+},
+{
+"id": "401882178",
+"utc": "2026-08-22T12:00Z",
+"h": "PSV Eindhoven",
+"a": "FC Utrecht",
+"st": "STATUS_FULL_TIME",
+"s": [
+1,
+1
+]
+},
+{
+"id": "401882177",
+"utc": "2026-08-22T14:30Z",
+"h": "Ajax Amsterdam",
+"a": "PEC Zwolle",
+"st": "STATUS_FULL_TIME",
+"s": [
+1,
+0
+]
+},
+{
+"id": "401882176",
+"utc": "2026-08-22T14:30Z",
+"h": "Feyenoord Rotterdam",
+"a": "AZ Alkmaar",
+"st": "STATUS_FULL_TIME",
+"s": [
+1,
+2
+]
+},
+{
+"id": "401882175",
+"utc": "2026-08-23T10:15Z",
+"h": "De Graafschap",
+"a": "Heerenveen",
+"st": "STATUS_FULL_TIME",
+"s": [
+1,
+0
+]
+},
+{
+"id": "401882174",
+"utc": "2026-08-23T14:45Z",
+"h": "ADO Den Haag",
+"a": "FC Twente",
+"st": "STATUS_FULL_TIME",
+"s": [
+1,
+7
+]
+},
+{
+"id": "401882173",
+"utc": "2026-09-06T10:15Z",
+"h": "Feyenoord Rotterdam",
+"a": "PSV Eindhoven",
+"st": "STATUS_FULL_TIME",
+"s": [
+0,
+6
+]
+},
+{
+"id": "401882170",
+"utc": "2026-09-06T14:45Z",
+"h": "AZ Alkmaar",
+"a": "FC Utrecht",
+"st": "STATUS_FULL_TIME",
+"s": [
+1,
+0
+]
+},
+{
+"id": "401882171",
+"utc": "2026-09-06T14:45Z",
+"h": "Ajax Amsterdam",
+"a": "De Graafschap",
+"st": "STATUS_FULL_TIME",
+"s": [
+1,
+0
+]
+},
+{
+"id": "401882169",
+"utc": "2026-09-06T14:45Z",
+"h": "FC Twente",
+"a": "Heerenveen",
+"st": "STATUS_FULL_TIME",
+"s": [
+5,
+1
+]
+},
+{
+"id": "401882172",
+"utc": "2026-09-06T14:45Z",
+"h": "PEC Zwolle",
+"a": "ADO Den Haag",
+"st": "STATUS_FULL_TIME",
+"s": [
+2,
+4
+]
+},
+{
+"id": "401882168",
+"utc": "2026-09-13T10:15Z",
+"h": "FC Twente",
+"a": "Feyenoord Rotterdam",
+"st": "STATUS_FULL_TIME",
+"s": [
+4,
+0
+]
+},
+{
+"id": "401882166",
+"utc": "2026-09-13T14:45Z",
+"h": "AZ Alkmaar",
+"a": "PSV Eindhoven",
+"st": "STATUS_FULL_TIME",
+"s": [
+3,
+1
+]
+},
+{
+"id": "401882167",
+"utc": "2026-09-13T14:45Z",
+"h": "De Graafschap",
+"a": "ADO Den Haag",
+"st": "STATUS_FULL_TIME",
+"s": [
+2,
+3
+]
+},
+{
+"id": "401882164",
+"utc": "2026-09-13T14:45Z",
+"h": "FC Utrecht",
+"a": "PEC Zwolle",
+"st": "STATUS_FULL_TIME",
+"s": [
+3,
+4
+]
+},
+{
+"id": "401882165",
+"utc": "2026-09-13T14:45Z",
+"h": "Heerenveen",
+"a": "Ajax Amsterdam",
+"st": "STATUS_FULL_TIME",
+"s": [
+3,
+1
+]
+},
+{
+"id": "401882163",
+"utc": "2026-09-19T12:00Z",
+"h": "PSV Eindhoven",
+"a": "FC Twente",
+"st": "STATUS_FULL_TIME",
+"s": [
+0,
+4
+]
+},
+{
+"id": "401882162",
+"utc": "2026-09-19T14:30Z",
+"h": "Ajax Amsterdam",
+"a": "AZ Alkmaar",
+"st": "STATUS_FULL_TIME",
+"s": [
+5,
+1
+]
+},
+{
+"id": "401882161",
+"utc": "2026-09-19T14:30Z",
+"h": "FC Utrecht",
+"a": "Feyenoord Rotterdam",
+"st": "STATUS_FULL_TIME",
+"s": [
+0,
+3
+]
+},
+{
+"id": "401882160",
+"utc": "2026-09-20T10:15Z",
+"h": "PEC Zwolle",
+"a": "De Graafschap",
+"st": "STATUS_FULL_TIME",
+"s": [
+2,
+3
+]
+},
+{
+"id": "401882159",
+"utc": "2026-09-20T14:45Z",
+"h": "ADO Den Haag",
+"a": "Heerenveen",
+"st": "STATUS_FULL_TIME",
+"s": [
+2,
+2
+]
+},
+{
+"id": "401882158",
+"utc": "2026-09-26T12:00Z",
+"h": "PSV Eindhoven",
+"a": "De Graafschap",
+"st": "STATUS_FULL_TIME",
+"s": [
+4,
+0
+]
+},
+{
+"id": "401882157",
+"utc": "2026-09-26T14:30Z",
+"h": "Ajax Amsterdam",
+"a": "ADO Den Haag",
+"st": "STATUS_FULL_TIME",
+"s": [
+7,
+1
+]
+},
+{
+"id": "401882156",
+"utc": "2026-09-26T14:30Z",
+"h": "Feyenoord Rotterdam",
+"a": "PEC Zwolle",
+"st": "STATUS_FULL_TIME",
+"s": [
+2,
+3
+]
+},
+{
+"id": "401882155",
+"utc": "2026-09-27T10:15Z",
+"h": "AZ Alkmaar",
+"a": "FC Twente",
+"st": "STATUS_FULL_TIME",
+"s": [
+0,
+5
+]
+},
+{
+"id": "401882154",
+"utc": "2026-09-27T14:45Z",
+"h": "Heerenveen",
+"a": "FC Utrecht",
+"st": "STATUS_FULL_TIME",
+"s": [
+2,
+0
+]
+},
+{
+"id": "401882151",
+"utc": "2026-10-04T10:15Z",
+"h": "FC Twente",
+"a": "FC Utrecht",
+"st": "STATUS_FULL_TIME",
+"s": [
+2,
+0
+]
+},
+{
+"id": "401882150",
+"utc": "2026-10-04T14:45Z",
+"h": "ADO Den Haag",
+"a": "PSV Eindhoven",
+"st": "STATUS_FULL_TIME",
+"s": [
+0,
+3
+]
+},
+{
+"id": "401882153",
+"utc": "2026-10-04T14:45Z",
+"h": "De Graafschap",
+"a": "AZ Alkmaar",
+"st": "STATUS_FULL_TIME",
+"s": [
+3,
+0
+]
+},
+{
+"id": "401882152",
+"utc": "2026-10-04T14:45Z",
+"h": "Feyenoord Rotterdam",
+"a": "Ajax Amsterdam",
+"st": "STATUS_FULL_TIME",
+"s": [
+1,
+4
+]
+},
+{
+"id": "401882149",
+"utc": "2026-10-04T14:45Z",
+"h": "PEC Zwolle",
+"a": "Heerenveen",
+"st": "STATUS_FULL_TIME",
+"s": [
+2,
+2
+]
+},
+{
+"id": "401882148",
+"utc": "2026-10-18T10:15Z",
+"h": "Ajax Amsterdam",
+"a": "PSV Eindhoven",
+"st": "STATUS_FULL_TIME",
+"s": [
+1,
+4
+]
+},
+{
+"id": "401882147",
+"utc": "2026-10-18T14:45Z",
+"h": "De Graafschap",
+"a": "Feyenoord Rotterdam",
+"st": "STATUS_FULL_TIME",
+"s": [
+1,
+0
+]
+},
+{
+"id": "401882146",
+"utc": "2026-10-25T11:15Z",
+"h": "Heerenveen",
+"a": "AZ Alkmaar",
+"st": "STATUS_FULL_TIME",
+"s": [
+1,
+0
+]
+},
+{
+"id": "401882145",
+"utc": "2026-10-25T15:45Z",
+"h": "FC Utrecht",
+"a": "ADO Den Haag",
+"st": "STATUS_FULL_TIME",
+"s": [
+1,
+0
+]
+},
+{
+"id": "401882144",
+"utc": "2026-10-25T15:45Z",
+"h": "PEC Zwolle",
+"a": "FC Twente",
+"st": "STATUS_FULL_TIME",
+"s": [
+1,
+1
+]
+},
+{
+"id": "401882143",
+"utc": "2026-11-01T11:15Z",
+"h": "Ajax Amsterdam",
+"a": "FC Twente",
+"st": "STATUS_FULL_TIME",
+"s": [
+2,
+0
+]
+},
+{
+"id": "401882141",
+"utc": "2026-11-01T15:45Z",
+"h": "ADO Den Haag",
+"a": "Feyenoord Rotterdam",
+"st": "STATUS_FULL_TIME",
+"s": [
+0,
+1
+]
+},
+{
+"id": "401882140",
+"utc": "2026-11-01T15:45Z",
+"h": "AZ Alkmaar",
+"a": "PEC Zwolle",
+"st": "STATUS_FULL_TIME",
+"s": [
+0,
+2
+]
+},
+{
+"id": "401882142",
+"utc": "2026-11-01T15:45Z",
+"h": "FC Utrecht",
+"a": "De Graafschap",
+"st": "STATUS_FULL_TIME",
+"s": [
+1,
+2
+]
+},
+{
+"id": "401882139",
+"utc": "2026-11-01T15:45Z",
+"h": "PSV Eindhoven",
+"a": "Heerenveen",
+"st": "STATUS_FULL_TIME",
+"s": [
+5,
+2
+]
+},
+{
+"id": "401882136",
+"utc": "2026-11-15T11:15Z",
+"h": "ADO Den Haag",
+"a": "De Graafschap",
+"st": "STATUS_FULL_TIME",
+"s": [
+0,
+2
+]
+},
+{
+"id": "401882138",
+"utc": "2026-11-15T15:45Z",
+"h": "AZ Alkmaar",
+"a": "Ajax Amsterdam",
+"st": "STATUS_FULL_TIME",
+"s": [
+1,
+1
+]
+},
+{
+"id": "401882137",
+"utc": "2026-11-15T15:45Z",
+"h": "FC Twente",
+"a": "PSV Eindhoven",
+"st": "STATUS_FULL_TIME",
+"s": [
+0,
+1
+]
+},
+{
+"id": "401882134",
+"utc": "2026-11-15T15:45Z",
+"h": "Feyenoord Rotterdam",
+"a": "Heerenveen",
+"st": "STATUS_FULL_TIME",
+"s": [
+3,
+2
+]
+},
+{
+"id": "401882135",
+"utc": "2026-11-15T15:45Z",
+"h": "PEC Zwolle",
+"a": "FC Utrecht",
+"st": "STATUS_FULL_TIME",
+"s": [
+1,
+1
+]
+},
+{
+"id": "401882133",
+"utc": "2026-11-22T11:15Z",
+"h": "Heerenveen",
+"a": "ADO Den Haag",
+"st": "STATUS_SCHEDULED"
+},
+{
+"id": "401882130",
+"utc": "2026-11-22T15:45Z",
+"h": "De Graafschap",
+"a": "Ajax Amsterdam",
+"st": "STATUS_SCHEDULED"
+},
+{
+"id": "401882129",
+"utc": "2026-11-22T15:45Z",
+"h": "FC Utrecht",
+"a": "AZ Alkmaar",
+"st": "STATUS_SCHEDULED"
+},
+{
+"id": "401882132",
+"utc": "2026-11-22T15:45Z",
+"h": "Feyenoord Rotterdam",
+"a": "FC Twente",
+"st": "STATUS_SCHEDULED"
+},
+{
+"id": "401882131",
+"utc": "2026-11-22T15:45Z",
+"h": "PSV Eindhoven",
+"a": "PEC Zwolle",
+"st": "STATUS_SCHEDULED"
+}
+]
