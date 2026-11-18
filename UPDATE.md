@@ -23,7 +23,13 @@ Portugal, Turquie, Grèce) : le dossier `fd/` est mis à jour automatiquement de
 
 ## Étapes
 
-1. **Résultats et calendrier.** Pour chaque championnat, lire `https://statz.ai/competitions/<slug>/fixtures`
+> **Automatique depuis le 18/11/2026** : les étapes 1 (résultats et calendrier) et 2 (xG) des 5 grands championnats, ainsi que le
+> calendrier et les scores de la Ligue des champions, sont faits deux fois par jour par la tâche GitHub « Autres championnats »
+> (`fetch_statz.py`, qui lit statz.ai depuis GitHub : le bac à sable de Claude n'y a plus accès). xG dans `raw/xg_auto.json`
+> (prioritaires sur `raw/meta.py` quand ils sont plus récents). **Ne plus faire ces étapes à la main** : seulement vérifier dans
+> le journal de la tâche qu'elles ont réussi, et ajouter un score à la mi-temps quand une source fiable le donne (il est conservé).
+
+1. **Résultats et calendrier** (automatique, voir ci-dessus). Pour mémoire : `https://statz.ai/competitions/<slug>/fixtures`
    (slugs : `ligue-1`, `premier-league`, `la-liga`, `serie-a`, `bundesliga`). Si l'outil refuse l'URL,
    faire d'abord une recherche web « statz.ai <championnat> fixtures 2026/2027 » puis ouvrir le lien trouvé.
    - Ajouter le score de chaque match joué depuis la dernière mise à jour.

@@ -271,9 +271,16 @@ def load_espn(data):
 def build(generated_at, odds_at):
     data = {"generatedAt": generated_at, "version": 2, "sources": meta.SOURCES, "leagues": {}, "contextAt": context.CHECKED_AT,
             "oddsManualAt": odds_at}   # date du relevé manuel (raw/meta.py, raw/euro.py), reprise telle quelle par --auto
+    xg_auto_f = ROOT / "raw" / "xg_auto.json"      # xG lus automatiquement sur statz.ai (fetch_statz.py)
+    xg_auto = json.loads(xg_auto_f.read_text(encoding="utf-8")) if xg_auto_f.exists() else {}
     for lg, L in meta.LEAGUES.items():
         matches = parse(lg)
         names = sorted({m["h"] for m in matches} | {m["a"] for m in matches})
+        A = xg_auto.get(lg)
+        if A and A["asOf"] >= (L["xgAsOf"] or "") and all(n in A["teams"] for n in names):
+            L = dict(L, xg={n: tuple(v) for n, v in A["teams"].items()}, xgAsOf=A["asOf"])
+        elif A:
+            print(f"  ! {lg}: xG automatiques ignorés (équipes manquantes : {[n for n in names if n not in A['teams']]})")
         missing = [n for n in names if n not in L["xg"] or n not in L["prior"]]
         if missing:
             sys.exit(f"{lg}: équipes sans xG ou prior: {missing}")
