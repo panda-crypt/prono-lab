@@ -1,0 +1,22 @@
+name: Sonde Understat (temporaire)
+on:
+  push:
+    branches: [probe-us]
+permissions:
+  contents: write
+jobs:
+  probe:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Interroger
+        run: |
+          mkdir -p probe; rm -f probe/*
+          UA="Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/124 Safari/537.36"
+          curl -s --compressed -m 30 -A "$UA" "https://understat.com/league/Ligue_1/2026" -o probe/page.html -w "page %{http_code} %{size_download}\n" >> probe/status.txt
+          curl -s --compressed -m 30 -A "$UA" -H "X-Requested-With: XMLHttpRequest" -H "Referer: https://understat.com/league/Ligue_1/2026" "https://understat.com/getLeagueData/Ligue_1/2026" -o probe/api.json -w "api %{http_code} %{size_download}\n" >> probe/status.txt
+          grep -o "datesData\|teamsData\|getLeagueData" probe/page.html | sort | uniq -c >> probe/status.txt || true
+          head -c 600 probe/api.json >> probe/status.txt; echo >> probe/status.txt
+          curl -s -m 30 -A "$UA" "https://statz.ai/competitions/ligue-1/xg" -o probe/statz.html -w "statz %{http_code} %{size_download}\n" >> probe/status.txt
+          git config user.name "github-actions"; git config user.email "github-actions@users.noreply.github.com"
+          git add probe && git commit -qm "sonde" && git push -q origin HEAD:probe-us
