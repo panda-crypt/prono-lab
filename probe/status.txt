@@ -1,26 +1,2 @@
-eng1_plain 200 7172
-eng1_day 200 792
-eng1_range 400 80
-eng.w.1_plain 200 3355
-eng.w.1_day 200 2600
-eng.w.1_range 400 80
-fra.w.1_plain 200 1702
-fra.w.1_day 200 499
-fra.w.1_range 400 80
-esp.w.1_plain 200 2717
-esp.w.1_day 200 3508
-esp.w.1_range 400 80
-ger.w.1_plain 400 80
-ger.w.1_day 400 80
-ger.w.1_range 400 80
-ita.w.1_plain 400 80
-ita.w.1_day 400 80
-ita.w.1_range 400 80
-uefa.wchampions_plain 200 5019
-uefa.wchampions_day 200 655
-uefa.wchampions_range 400 80
-usa.nwsl_plain 200 1915
-usa.nwsl_day 200 3894
-usa.nwsl_range 400 80
-fra_w_future 200 2726
-leagues 404
+core 200 1448
+220
