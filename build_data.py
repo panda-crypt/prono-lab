@@ -277,8 +277,10 @@ def build(generated_at, odds_at):
         matches = parse(lg)
         names = sorted({m["h"] for m in matches} | {m["a"] for m in matches})
         A = xg_auto.get(lg)
-        if A and A["asOf"] >= (L["xgAsOf"] or "") and all(n in A["teams"] for n in names):
-            L = dict(L, xg={n: tuple(v) for n, v in A["teams"].items()}, xgAsOf=A["asOf"])
+        if A and all(n in A["teams"] for n in names):   # relevé automatique (toujours plus récent que le relevé manuel)
+            y, mo, dd = A["asOf"].split("-")
+            mois = ["janv.", "févr.", "mars", "avr.", "mai", "juin", "juil.", "août", "sept.", "oct.", "nov.", "déc."][int(mo) - 1]
+            L = dict(L, xg={n: tuple(v) for n, v in A["teams"].items()}, xgAsOf=f"{int(dd)} {mois} {y}")
         elif A:
             print(f"  ! {lg}: xG automatiques ignorés (équipes manquantes : {[n for n in names if n not in A['teams']]})")
         missing = [n for n in names if n not in L["xg"] or n not in L["prior"]]

@@ -10,7 +10,7 @@ depuis mi-novembre 2026 : la lecture se fait donc depuis GitHub.
 - raw/xg_auto.json : xG pour et contre de chaque équipe (« xG 22.8, xGA 11.5 … from 10 matches »), repris par
   build_data.py à la place de raw/meta.py quand il est plus récent.
 """
-import json, re, pathlib, datetime as dt, urllib.request, html
+import json, re, time, pathlib, datetime as dt, urllib.request, html
 
 ROOT = pathlib.Path(__file__).resolve().parent
 SLUGS = {"l1": "ligue-1", "pl": "premier-league", "liga": "la-liga", "sa": "serie-a", "bl": "bundesliga", "ucl": "champions-league"}
@@ -72,7 +72,15 @@ def update_file(lg, rows, today):
     return scored, added, moved, len(out)
 
 def xg(lg):
-    page = get(f"https://statz.ai/competitions/{SLUGS[lg]}/xg")
+    for attempt in range(3):
+        page = get(f"https://statz.ai/competitions/{SLUGS[lg]}/xg")
+        t = _xg_table(page)
+        if t: return t
+        print(f"  {lg} xG : essai {attempt + 1} sans tableau ({len(page)} caractères, ItemList={page.count('ItemList')}, xG={page.count('xG')}) : {page[:120]!r}")
+        time.sleep(5)
+    return None
+
+def _xg_table(page):
     for blob in re.findall(r'<script type="application/ld\+json">(.*?)</script>', page, re.S):
         try: d = json.loads(blob)
         except ValueError: continue
@@ -85,7 +93,7 @@ def xg(lg):
     return None
 
 def main():
-    today = dt.datetime.utcnow()
+    today = dt.datetime.now(dt.timezone.utc).replace(tzinfo=None)
     ok = True
     xa_path = ROOT / "raw" / "xg_auto.json"
     xa = json.loads(xa_path.read_text(encoding="utf-8")) if xa_path.exists() else {}
