@@ -1,0 +1,22 @@
+name: Sonde ESPN (temporaire)
+on:
+  push:
+    branches: [probe-espn]
+permissions:
+  contents: write
+jobs:
+  probe:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Interroger ESPN
+        run: |
+          mkdir -p probe
+          for c in eng.w.1 fra.w.1 esp.w.1 ger.w.1 ita.w.1 ned.w.1 por.w.1 uefa.wchampions usa.nwsl; do
+            curl -s -m 30 "https://site.api.espn.com/apis/site/v2/sports/soccer/$c/scoreboard?dates=20251101-20251130&limit=500" -o "probe/$c.json" -w "$c %{http_code} %{size_download}\n" >> probe/status.txt || echo "$c ERR" >> probe/status.txt
+          done
+          curl -s -m 30 "https://site.api.espn.com/apis/site/v2/sports/soccer/fra.w.1/scoreboard?dates=20261101-20261231&limit=500" -o probe/fra_future.json -w "fra_future %{http_code} %{size_download}\n" >> probe/status.txt
+          curl -s -m 30 "https://site.api.espn.com/apis/site/v2/sports/soccer/fifa.friendly.w/scoreboard?dates=20261101-20261231&limit=500" -o probe/intl_w.json -w "intl_w %{http_code} %{size_download}\n" >> probe/status.txt
+          cat probe/status.txt
+          git config user.name "github-actions"; git config user.email "github-actions@users.noreply.github.com"
+          git add probe && git commit -qm "sonde" && git push -q origin HEAD:probe-espn
