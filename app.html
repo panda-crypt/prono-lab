@@ -883,13 +883,17 @@ function ctxBox(m){
   const a = m.ctx.lvl === "alerte";
   return rot + `<div class="alert ${a ? "bad" : "warn"}" style="margin:0"><div><strong>${a ? "⚠ Contexte : match retiré des paris verts et des tickets" : "ℹ Contexte"}</strong>${esc(m.ctx.why)}${m.ctx.src ? ` · <a href="${esc(m.ctx.src)}" target="_blank" rel="noopener">source</a>` : ""}${m.ctx.at ? ` <span class="hint">(vérifié le ${fmtDay(m.ctx.at)} ${fmtTime(m.ctx.at)})</span>` : ""}</div></div>`;
 }
+/* Compétitions féminines « en test » : test hors échantillon du 18/11 sur 268 matchs : 58 % de bons favoris, mais trop sûr
+   de lui en haut de l'échelle (annoncé 84 %, réalisé 62 % ; 96 % → 86 %). Tant que ce n'est pas corrigé et confirmé, leurs
+   matchs ne sont ni mis en vert ni dans les tickets ; les probabilités restent affichées, avec un avertissement. */
+const isW = lg => !!(lg && DATA.leagues[lg] && DATA.leagues[lg].w);
 function topPick(m, r, lg){
   const c = calib(), g = c.grp(lg);
   const cands = TOP_KEYS.filter(k => allowedK(k, r)).map(k => {
     const pm = MARKETS[k].p(r), pc = pm * c.f[g][k], pk = marketP(m, k);
     return { k, pm, pc, pk, p: pk == null ? pc : m.rot ? Math.min(pc, pk) : (pc + pk) / 2 };
   });
-  const all = cands.slice(), t = pickOf(cands); t.safe = isSafe(t) && !ctxAlert(m) && !rotRisk(m); t.season = c.st[g][t.k] || null; t.all = all;
+  const all = cands.slice(), t = pickOf(cands); t.safe = isSafe(t) && !ctxAlert(m) && !rotRisk(m) && !isW(lg); t.season = c.st[g][t.k] || null; t.all = all;
   return t;
 }
 function goalsPick(r){
@@ -1657,7 +1661,8 @@ function renderMatchs(){
     $("dirBtn").style.display = PUB || !liveKey() ? "none" : "";
     $("dirBtn").onclick = () => refreshScores(true);
   }
-  $("mHint").textContent = FAVS ? (nFav ? `${nFav} équipe${nFav > 1 ? "s" : ""} suivie${nFav > 1 ? "s" : ""} · ${all.length} match${all.length > 1 ? "s" : ""} sur ${days} jours · touchez ★ pour ne plus suivre une équipe` : "") : all.length ? `${all.length} rencontres sur ${days} jours · ${nSafe} très probable${nSafe>1?"s":""} (vert) · ${nReco} pari${nReco>1?"s":""} à valeur (doré)` : "";
+  const wNote = !FAVS && isW(ui.lg) ? " · compétition féminine en test : probabilités affichées, mais pas encore de paris verts ni de tickets (le modèle doit d'abord prouver sa fiabilité sur ces championnats)" : "";
+  $("mHint").textContent = FAVS ? (nFav ? `${nFav} équipe${nFav > 1 ? "s" : ""} suivie${nFav > 1 ? "s" : ""} · ${all.length} match${all.length > 1 ? "s" : ""} sur ${days} jours · touchez ★ pour ne plus suivre une équipe` : "") : all.length ? `${all.length} rencontres sur ${days} jours · ${nSafe} très probable${nSafe>1?"s":""} (vert) · ${nReco} pari${nReco>1?"s":""} à valeur (doré)${wNote}` : "";
   if (!list.length){ $("mList").innerHTML = `<div class="empty">${FAVS && !nFav ? "Vous ne suivez encore aucune équipe. Ouvrez un championnat et touchez ☆ à côté du nom d'une équipe : tous ses matchs apparaîtront ici, quelle que soit la compétition." : FAVS && ui.mF === "all" ? `Aucun match de vos équipes dans les ${days} prochains jours.` : ui.mF === "live" ? "Aucun match en cours dans cette compétition." : ui.mF !== "all" && all.length ? (ui.mF === "safe" ? "Aucune issue très probable dans ce championnat pour l'instant : il faut que le modèle et les cotes donnent le meilleur pari d'un match à ${Math.round(SAFE_P*100)} % ou plus." : `Aucun pari à valeur dans ce championnat pour l'instant. ${liveKey() ? "Actualisez les cotes dans l'onglet Valeur." : PUB ? "Ils apparaissent quand les cotes relevées paient plus que le risque." : "Activez les cotes en direct dans Mes paris pour en obtenir."}`) : `Aucun match programmé dans les ${days} prochains jours. Le calendrier se met à jour avec les données.`}</div>`; }
   else {
     let html = "", day = "";
@@ -2137,7 +2142,7 @@ function ticketPool(wide){
   for (const days of wide ? [daysToEnd(2)] : [daysToEnd(1), daysToEnd(2)]){
     pool = [];
     for (const lg of Object.keys(DATA.leagues)){
-      const C = CL[lg]; if (!C) continue;
+      const C = CL[lg]; if (!C || isW(lg)) continue;   // compétitions féminines en test : pas dans les tickets
       upcoming(lg, days).filter(m => m.d > now && !lowTrj(m) && !ctxAlert(m) && !rotRisk(m)).forEach(m => {
         const r = predict(C, m.h, m.a), t = topPick(m, r, lg), H = C.T[m.h].name, A = C.T[m.a].name;
         const sel = c => { const od = oddsFor(m, c.k, c.p); return { lg, m, H, A, k: c.k, p: c.p, pk: c.pk, o: +od.o.toFixed(2), est: !!od.est, guess: !!od.guess, bk: od.bk || "" }; };
