@@ -12,14 +12,14 @@ jobs:
       - name: Interroger ESPN
         run: |
           mkdir -p probe; rm -f probe/*
-          B=https://site.api.espn.com/apis/site/v2/sports/soccer
-          q(){ curl -s --compressed -m 30 "$B/$1" -o "probe/$2.json" -w "$2 %{http_code} %{size_download}\n" >> probe/status.txt; }
-          q "eng.1/scoreboard" eng1_plain
-          q "eng.1/scoreboard?dates=20251115" eng1_day
-          q "eng.1/scoreboard?dates=20251101-20251130" eng1_range
-          for c in eng.w.1 fra.w.1 esp.w.1 ger.w.1 ita.w.1 uefa.wchampions usa.nwsl; do q "$c/scoreboard" "${c}_plain"; q "$c/scoreboard?dates=20251115" "${c}_day"; q "$c/scoreboard?dates=20251101-20251130" "${c}_range"; done
-          q "fra.w.1/scoreboard?dates=20261121" fra_w_future
-          curl -s --compressed -m 30 "https://site.api.espn.com/apis/site/v2/sports/soccer/leagues" -o probe/leagues.json -w "leagues %{http_code}\n" >> probe/status.txt
+          curl -s --compressed -m 60 "https://sports.core.api.espn.com/v2/sports/soccer/leagues?limit=1000" -o probe/core.json -w "core %{http_code} %{size_download}\n" >> probe/status.txt
+          python3 - <<'PY' >> probe/status.txt
+          import json,re
+          d=json.load(open("probe/core.json")); refs=[x["$ref"] for x in d.get("items",[])]
+          slugs=[re.search(r"leagues/([^?]+)", r).group(1) for r in refs]
+          open("probe/slugs.txt","w").write("\n".join(slugs))
+          print(len(slugs))
+          PY
           cat probe/status.txt
           git config user.name "github-actions"; git config user.email "github-actions@users.noreply.github.com"
           git add probe && git commit -qm "sonde" && git push -q origin HEAD:probe-espn
