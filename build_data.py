@@ -213,6 +213,61 @@ def load_cups(data, odds_at):
             "teams": [{"id": i, "name": owner[i][1], "lg": owner[i][0]} for i in ids], "matches": matches}
     data["sources"] = data["sources"] + cups.SOURCES
 
+def load_espn(data):
+    """Compétitions féminines (ESPN, voir fetch_espn.py) : championnats comme les « autres championnats » (buts seulement,
+    saison précédente comme point de départ) ; coupes d'Europe féminines ajustées à part des coupes masculines."""
+    from zoneinfo import ZoneInfo
+    from fetch_espn import WOMEN
+    root = ROOT / "espn"
+    if not root.exists(): return
+    paris, utc = ZoneInfo("Europe/Paris"), dt.timezone.utc
+    def when(u):
+        return dt.datetime.strptime(u[:16], "%Y-%m-%dT%H:%M").replace(tzinfo=utc).astimezone(paris).strftime("%Y-%m-%dT%H:%M")
+    SEASON = "2026-07-01"
+    loaded = {}
+    for key, (code, name, country) in WOMEN.items():
+        f = root / f"{key}.json"
+        if not f.exists(): continue
+        rows = json.loads(f.read_text(encoding="utf-8"))
+        cur = [r for r in rows if when(r["utc"]) >= SEASON]
+        prev = [r for r in rows if when(r["utc"]) < SEASON and "s" in r]
+        matches = []
+        for r in cur:
+            m = {"d": when(r["utc"]), "h": r["h"], "a": r["a"]}
+            if "s" in r: m["s"] = r["s"]
+            elif r["st"] != "STATUS_SCHEDULED": continue      # en cours ou statut inconnu : l'application suit les matchs à venir
+            if "ht" in r: m["ht"] = r["ht"]
+            matches.append(m)
+        if not matches: continue
+        matches.sort(key=lambda m: m["d"])
+        loaded[key] = (name, country, matches, prev)
+    dom_ids = {k: {t for m in v[2] for t in (m["h"], m["a"])} for k, v in loaded.items() if v[1]}
+    for key, (name, country, matches, prev) in loaded.items():
+        names = sorted({m["h"] for m in matches} | {m["a"] for m in matches})
+        if country:
+            tot = {}
+            for r in prev:
+                for t, gf, ga in ((r["h"], r["s"][0], r["s"][1]), (r["a"], r["s"][1], r["s"][0])):
+                    x = tot.setdefault(t, [0, 0, 0]); x[0] += 1; x[1] += gf; x[2] += ga
+            pg, pgf = sum(v[0] for v in tot.values()), sum(v[1] for v in tot.values())
+            data["leagues"][key] = {"name": name, "country": country, "w": True, "xgAsOf": None, "source": "espn",
+                "priorMu": round(pgf / pg, 4) if pg else 1.35,
+                "teams": [{"id": n, "name": n, "xg": {"p": 0, "f": 0, "a": 0},
+                           "prior": ({"p": tot[n][0], "f": tot[n][1], "a": tot[n][2]} if n in tot else None)} for n in names],
+                "matches": matches}
+        else:
+            def dom(n):
+                for k, ids in dom_ids.items():
+                    if n in ids: return {"lg": k, "id": n}
+                return None
+            teams = []
+            for n in names:
+                d = dom(n)
+                teams.append({"id": n, "name": n, "country": loaded[d["lg"]][1] if d else None, "dom": d})
+            data["leagues"][key] = {"name": name, "type": "euro", "w": True, "coefAsOf": None, "teams": teams, "matches": matches}
+    if loaded:
+        data["sources"] = data["sources"] + [["ESPN (compétitions féminines : résultats et calendrier)", "https://www.espn.com/soccer/competitions"]]
+
 def build(generated_at, odds_at):
     data = {"generatedAt": generated_at, "version": 2, "sources": meta.SOURCES, "leagues": {}, "contextAt": context.CHECKED_AT,
             "oddsManualAt": odds_at}   # date du relevé manuel (raw/meta.py, raw/euro.py), reprise telle quelle par --auto
@@ -256,6 +311,7 @@ def build(generated_at, odds_at):
     attach_fd_big(data, fx_at)
     load_fd(data, fx_at or generated_at[:10])
     load_cups(data, odds_at)
+    load_espn(data)
     return data
 
 if __name__ == "__main__":

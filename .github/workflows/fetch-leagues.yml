@@ -9,7 +9,7 @@ on:
   workflow_dispatch:
   push:
     branches: [main]
-    paths: [".github/workflows/fetch-leagues.yml"]
+    paths: [".github/workflows/fetch-leagues.yml", "fetch_espn.py"]
 
 permissions:
   contents: write
@@ -37,17 +37,19 @@ jobs:
           done
           curl -sSfL --retry 3 -o fd/fixtures.csv.tmp "https://www.football-data.co.uk/fixtures.csv" && mv fd/fixtures.csv.tmp fd/fixtures.csv || echo "::warning::calendrier indisponible"
           echo "fichiers récupérés : $ok"; ls -la fd
+      - name: Compétitions féminines (ESPN)
+        run: python3 fetch_espn.py || echo "::warning::ESPN indisponible (fichiers précédents conservés)"
       - name: Reconstruire les données et publier
         run: |
           git config user.name "github-actions"; git config user.email "github-actions@users.noreply.github.com"
           for i in 1 2 3; do
             git pull -q --rebase --autostash origin main || { git rebase --abort; git reset -q --hard origin/main; }
-            # rien de neuf dans fd/ (ni modifié ni nouveau fichier) : pas de reconstruction, pas de commit
-            if git diff HEAD --quiet -- fd && [ -z "$(git ls-files --others --exclude-standard -- fd)" ]; then echo "fd/ inchangé : rien à publier"; exit 0; fi
+            # rien de neuf dans fd/ ni espn/ (ni modifié ni nouveau fichier) : pas de reconstruction, pas de commit
+            if git diff HEAD --quiet -- fd espn && [ -z "$(git ls-files --others --exclude-standard -- fd espn)" ]; then echo "fd/ et espn/ inchangés : rien à publier"; exit 0; fi
             if grep -q "def load_fd" build_data.py; then python3 build_data.py --auto || exit 1; fi
-            git add fd data.json
+            git add fd espn data.json
             git diff --cached --quiet && { echo "rien de nouveau"; exit 0; }
-            git commit -qm "Autres championnats : résultats et calendrier du $(TZ=Europe/Paris date +%d/%m)"
+            git commit -qm "Autres championnats et compétitions féminines : résultats et calendrier du $(TZ=Europe/Paris date +%d/%m)"
             git push -q origin HEAD:main && exit 0
             git reset -q --soft HEAD~1; sleep 5
           done

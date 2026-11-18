@@ -933,9 +933,10 @@ function cupLambdas(C, hid, aid, neutral){
   return [g * Math.exp(k), g * Math.exp(-k)];
 }
 const EURO_PRIOR = { m:[Math.log(1.45),0.2], h:[0.12,0.08], a:[0.45,0.3], b:[0.8,0.3], kU:[0,0.4], kC:[0,0.4] }, EURO_TAU = 0.3;
-function euroFit(before){
-  const comps = Object.keys(DATA.leagues).filter(k => DATA.leagues[k].type === "euro");
-  const coef = DATA.uefaCountry || {}, logs = Object.values(coef).map(Math.log), ml = logs.reduce((a,b)=>a+b,0) / Math.max(1, logs.length);
+// w = coupes d'Europe féminines, ajustées à part des masculines (sans coefficient UEFA par pays)
+function euroFit(before, w){
+  const comps = Object.keys(DATA.leagues).filter(k => DATA.leagues[k].type === "euro" && !!DATA.leagues[k].w === !!w);
+  const coef = w ? {} : DATA.uefaCountry || {}, logs = Object.values(coef).map(Math.log), ml = logs.reduce((a,b)=>a+b,0) / Math.max(1, logs.length);
   const domC = {};
   const domOf = d => {
     if (!d || !DATA.leagues[d.lg]) return null;
@@ -952,7 +953,8 @@ function euroFit(before){
   const P = { m:EURO_PRIOR.m[0], h:EURO_PRIOR.h[0], a:EURO_PRIOR.a[0], b:EURO_PRIOR.b[0], kU:0, kC:0 };
   const keys = Object.keys(P), mA = {}, vA = {}; keys.forEach(k => { mA[k] = 0; vA[k] = 0; });
   const team = Object.values(T);
-  const sOf = t => P.a*t.z + (t.dom != null ? P.b*t.dom : (t.comp === "ucl" ? P.kU : t.comp === "uecl" ? P.kC : 0)) + t.u;
+  const isU = c => c === "ucl" || c === "uwcl", isC = c => c === "uecl" || c === "uwec";
+  const sOf = t => P.a*t.z + (t.dom != null ? P.b*t.dom : (isU(t.comp) ? P.kU : isC(t.comp) ? P.kC : 0)) + t.u;
   const lr = 0.03, b1 = 0.9, b2 = 0.999;
   for (let it = 1; it <= 700; it++){
     const g = {}; keys.forEach(k => g[k] = (P[k] - EURO_PRIOR[k][0]) / EURO_PRIOR[k][1]**2);
@@ -964,7 +966,7 @@ function euroFit(before){
       const gs = 0.5*(eh - ea);
       [[H, gs], [A, -gs]].forEach(([t, gg]) => {
         g.a += gg*t.z; t.gu += gg;
-        if (t.dom != null) g.b += gg*t.dom; else if (t.comp === "ucl") g.kU += gg; else if (t.comp === "uecl") g.kC += gg;
+        if (t.dom != null) g.b += gg*t.dom; else if (isU(t.comp)) g.kU += gg; else if (isC(t.comp)) g.kC += gg;
       });
     });
     const c1 = 1 - b1**it, c2 = 1 - b2**it;
@@ -1501,13 +1503,15 @@ function backtest(){
     recs.push({ lg, pr, out, brier: pr.reduce((s,p,i)=>s+(p-(i===out?1:0))**2,0), ok: pr.indexOf(Math.max(...pr)) === out, o25: r.o25, over: m.s[0]+m.s[1] > 2, btts: r.btts, bt: m.s[0] > 0 && m.s[1] > 0, q: r, sc: m.s, m });
   };
   // Coupes d'Europe : ajustement refait avant chaque journée, avec uniquement les matchs antérieurs
-  const eu = Object.entries(DATA.leagues).filter(([,L]) => L.type === "euro").flatMap(([lg,L]) => L.matches.filter(m => m.s).map(m => ({ lg, m })));
-  [...new Set(eu.map(x => x.m.d.slice(0,10)))].sort().forEach(day => {
-    const before = day + "T00:00";
-    if (eu.filter(x => x.m.d < before).length < 30) return;
-    const E = euroFit(before);
-    eu.filter(x => x.m.d.slice(0,10) === day).forEach(({ lg, m }) => { const [lh, la] = euroLambdas(E, m.h, m.a, false); rec(lg, scoreMatrix(lh, la), m); });
-  });
+  for (const w of [false, true]){
+    const eu = Object.entries(DATA.leagues).filter(([,L]) => L.type === "euro" && !!L.w === w).flatMap(([lg,L]) => L.matches.filter(m => m.s).map(m => ({ lg, m })));
+    [...new Set(eu.map(x => x.m.d.slice(0,10)))].sort().forEach(day => {
+      const before = day + "T00:00";
+      if (eu.filter(x => x.m.d < before).length < 30) return;
+      const E = euroFit(before, w);
+      eu.filter(x => x.m.d.slice(0,10) === day).forEach(({ lg, m }) => { const [lh, la] = euroLambdas(E, m.h, m.a, false); rec(lg, scoreMatrix(lh, la), m); });
+    });
+  }
   for (const [lg, L] of Object.entries(DATA.leagues)){
     if (L.type === "euro" || L.type === "cup") continue;   // coupes nationales : pas de test (forces tirées des championnats)
     const pl = L.matches.filter(m => m.s);
@@ -1554,8 +1558,10 @@ function computeAll(){
   applyScores();
   CL = {};
   for (const [lg, L] of Object.entries(DATA.leagues)) if (L.type !== "euro" && L.type !== "cup") CL[lg] = computeLeague(L);
-  const euroKeys = Object.keys(DATA.leagues).filter(k => DATA.leagues[k].type === "euro");
-  if (euroKeys.length){ const E = euroFit(); euroKeys.forEach(k => CL[k] = computeEuroComp(DATA.leagues[k], E)); }
+  for (const w of [false, true]){
+    const euroKeys = Object.keys(DATA.leagues).filter(k => DATA.leagues[k].type === "euro" && !!DATA.leagues[k].w === w);
+    if (euroKeys.length){ const E = euroFit(undefined, w); euroKeys.forEach(k => CL[k] = computeEuroComp(DATA.leagues[k], E)); }
+  }
   for (const [lg, L] of Object.entries(DATA.leagues)) if (L.type === "cup") CL[lg] = computeCup(L);
   markRotation();
   BT = null;
