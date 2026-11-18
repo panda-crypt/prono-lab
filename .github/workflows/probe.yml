@@ -11,12 +11,15 @@ jobs:
       - uses: actions/checkout@v4
       - name: Interroger ESPN
         run: |
-          mkdir -p probe
-          for c in eng.w.1 fra.w.1 esp.w.1 ger.w.1 ita.w.1 ned.w.1 por.w.1 uefa.wchampions usa.nwsl; do
-            curl -s -m 30 "https://site.api.espn.com/apis/site/v2/sports/soccer/$c/scoreboard?dates=20251101-20251130&limit=500" -o "probe/$c.json" -w "$c %{http_code} %{size_download}\n" >> probe/status.txt || echo "$c ERR" >> probe/status.txt
-          done
-          curl -s -m 30 "https://site.api.espn.com/apis/site/v2/sports/soccer/fra.w.1/scoreboard?dates=20261101-20261231&limit=500" -o probe/fra_future.json -w "fra_future %{http_code} %{size_download}\n" >> probe/status.txt
-          curl -s -m 30 "https://site.api.espn.com/apis/site/v2/sports/soccer/fifa.friendly.w/scoreboard?dates=20261101-20261231&limit=500" -o probe/intl_w.json -w "intl_w %{http_code} %{size_download}\n" >> probe/status.txt
+          mkdir -p probe; rm -f probe/*
+          B=https://site.api.espn.com/apis/site/v2/sports/soccer
+          q(){ curl -s --compressed -m 30 "$B/$1" -o "probe/$2.json" -w "$2 %{http_code} %{size_download}\n" >> probe/status.txt; }
+          q "eng.1/scoreboard" eng1_plain
+          q "eng.1/scoreboard?dates=20251115" eng1_day
+          q "eng.1/scoreboard?dates=20251101-20251130" eng1_range
+          for c in eng.w.1 fra.w.1 esp.w.1 ger.w.1 ita.w.1 uefa.wchampions usa.nwsl; do q "$c/scoreboard" "${c}_plain"; q "$c/scoreboard?dates=20251115" "${c}_day"; q "$c/scoreboard?dates=20251101-20251130" "${c}_range"; done
+          q "fra.w.1/scoreboard?dates=20261121" fra_w_future
+          curl -s --compressed -m 30 "https://site.api.espn.com/apis/site/v2/sports/soccer/leagues" -o probe/leagues.json -w "leagues %{http_code}\n" >> probe/status.txt
           cat probe/status.txt
           git config user.name "github-actions"; git config user.email "github-actions@users.noreply.github.com"
           git add probe && git commit -qm "sonde" && git push -q origin HEAD:probe-espn
