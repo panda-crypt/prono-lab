@@ -81,16 +81,19 @@ def xg(lg):
     return None
 
 def _xg_table(page):
-    for blob in re.findall(r'<script type="application/ld\+json">(.*?)</script>', page, re.S):
-        try: d = json.loads(blob)
-        except ValueError: continue
-        if isinstance(d, dict) and d.get("@type") == "ItemList" and "xG" in d.get("name", ""):
-            teams = {}
-            for it in d.get("itemListElement", []):
-                m = re.search(r"xG ([\d.]+), xGA ([\d.]+).*?from (\d+) match", it.get("description", ""))
-                if m: teams[html.unescape(it["name"])] = [int(m.group(3)), float(m.group(1)), float(m.group(2))]
-            return teams
-    return None
+    """Tableau xG complet : la page en contient plusieurs (général, domicile, extérieur…) ; le général est celui qui compte
+    le plus de matchs. Colonnes : rang, équipe, matchs, buts, xG, écart, buts encaissés, xGA, …"""
+    best = None
+    for tb in re.findall(r"<table\b.*?</table>", page, re.S):
+        rows = {}
+        for tr in re.findall(r"<tr\b.*?</tr>", tb, re.S):
+            c = [html.unescape(re.sub(r"<[^>]+>", "", x)).strip() for x in re.findall(r"<td\b[^>]*>(.*?)</td>", tr, re.S)]
+            if len(c) < 8 or not c[0].isdigit(): continue
+            try: rows[c[1]] = [int(c[2]), float(c[4]), float(c[7])]
+            except ValueError: continue
+        if len(rows) >= 16 and (best is None or sum(v[0] for v in rows.values()) > sum(v[0] for v in best.values())):
+            best = rows
+    return best
 
 def main():
     today = dt.datetime.now(dt.timezone.utc).replace(tzinfo=None)
