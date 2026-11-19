@@ -1225,28 +1225,44 @@
 "utc": "2026-11-18T17:45Z",
 "h": "BK Häcken",
 "a": "Manchester City",
-"st": "STATUS_SCHEDULED"
+"st": "STATUS_FULL_TIME",
+"s": [
+0,
+2
+]
 },
 {
 "id": "401916981",
 "utc": "2026-11-18T17:45Z",
 "h": "Real Madrid",
 "a": "Internazionale",
-"st": "STATUS_SCHEDULED"
+"st": "STATUS_FULL_TIME",
+"s": [
+3,
+1
+]
 },
 {
 "id": "401916980",
 "utc": "2026-11-18T20:00Z",
 "h": "Chelsea",
 "a": "Paris Saint-Germain",
-"st": "STATUS_SCHEDULED"
+"st": "STATUS_FULL_TIME",
+"s": [
+1,
+0
+]
 },
 {
 "id": "401916979",
 "utc": "2026-11-18T20:00Z",
 "h": "Juventus",
 "a": "OH Leuven",
-"st": "STATUS_SCHEDULED"
+"st": "STATUS_FULL_TIME",
+"s": [
+2,
+0
+]
 },
 {
 "id": "401916978",

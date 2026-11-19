@@ -137,3 +137,4 @@
 29 Nov 2026|15:15|Deportivo La Coruña|FC Barcelona|
 29 Nov 2026|17:30|Celta de Vigo|Villarreal|
 29 Nov 2026|20:00|Real Sociedad|Sevilla|
+30 Nov 2026|20:00|Espanyol|Getafe|
