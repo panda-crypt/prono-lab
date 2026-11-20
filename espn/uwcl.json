@@ -1269,34 +1269,54 @@
 "utc": "2026-11-19T17:45Z",
 "h": "Austria Vienna",
 "a": "Bayern Munich",
-"st": "STATUS_SCHEDULED"
+"st": "STATUS_FULL_TIME",
+"s": [
+0,
+4
+]
 },
 {
 "id": "401916977",
 "utc": "2026-11-19T17:45Z",
 "h": "Paris FC",
 "a": "HB Køge",
-"st": "STATUS_SCHEDULED"
+"st": "STATUS_FULL_TIME",
+"s": [
+2,
+1
+]
 },
 {
 "id": "401916976",
 "utc": "2026-11-19T20:00Z",
 "h": "Arsenal",
 "a": "OL Lyonnes",
-"st": "STATUS_SCHEDULED"
+"st": "STATUS_FULL_TIME",
+"s": [
+0,
+2
+]
 },
 {
 "id": "401916975",
 "utc": "2026-11-19T20:00Z",
 "h": "Barcelona",
 "a": "Servette",
-"st": "STATUS_SCHEDULED"
+"st": "STATUS_FULL_TIME",
+"s": [
+6,
+0
+]
 },
 {
 "id": "401916974",
 "utc": "2026-11-19T20:00Z",
 "h": "Benfica",
 "a": "Roma",
-"st": "STATUS_SCHEDULED"
+"st": "STATUS_FULL_TIME",
+"s": [
+2,
+3
+]
 }
 ]
