@@ -71,3 +71,21 @@
 5 Nov 2026|21:00|Sturm Graz|Celje|2-3
 5 Nov 2026|21:00|Benfica|Lech Poznań|3-1
 5 Nov 2026|21:00|Sunderland|GNK Dinamo|0-2 (0-2)
+26 Nov 2026|18:45|Beşiktaş|Hapoel Beer-Sheva|
+26 Nov 2026|18:45|Salzburg|Ararat-Armenia|
+26 Nov 2026|18:45|Viktoria Plzeň|Benfica|
+26 Nov 2026|18:45|GNK Dinamo|Leverkusen|
+26 Nov 2026|18:45|Olympiacos|Milan|
+26 Nov 2026|18:45|Marseille|Levski Sofia|
+26 Nov 2026|18:45|Union SG|Lech Poznań|
+26 Nov 2026|18:45|Celta|Bournemouth|
+26 Nov 2026|21:00|Sparta Praha|AZ Alkmaar|
+26 Nov 2026|21:00|Crystal Palace|Real Sociedad|
+26 Nov 2026|21:00|Ferencváros|Celje|
+26 Nov 2026|21:00|Juventus|Omonia|
+26 Nov 2026|21:00|N.E.C. Nijmegen|Rennes|
+26 Nov 2026|21:00|OFI Crete|Anderlecht|
+26 Nov 2026|21:00|Lyon|Lillestrøm|
+26 Nov 2026|21:00|Torreense|Celtic|
+26 Nov 2026|21:00|Sunderland|Jagiellonia|
+26 Nov 2026|21:00|Hoffenheim|Sturm Graz|
