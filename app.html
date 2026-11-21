@@ -2199,7 +2199,7 @@ function ticketStake(t){
   }
   // espérance proche de zéro (entre −5 % et +2 %) : petite mise de loisir fixe, qui ne grossit pas avec la sûreté
   const st = Math.min(bank * s.max / 100, Math.max(0.5, Math.floor(bank * 0.005 * 2) / 2));
-  return { stake: st, why: "Mise de loisir : 0,5 % de la bankroll (espérance proche de zéro, pas un placement)" };
+  return { stake: st, why: t.ev > 0.02 ? "Mise de loisir : 0,5 % de la bankroll (espérance positive selon le modèle seul, à prendre avec prudence : pas un placement)" : "Mise de loisir : 0,5 % de la bankroll (espérance proche de zéro, pas un placement)" };
 }
 const RISK = P => P >= 0.75 ? ["good","Très sûr","var(--good)"] : P >= 0.55 ? ["good","Sûr","var(--good)"] : P >= 0.35 ? ["warn","Moyen","var(--warn)"] : P >= 0.15 ? ["bad","Risqué","var(--bad)"] : ["bad","Très risqué","var(--bad)"];
 function buildTickets(){
