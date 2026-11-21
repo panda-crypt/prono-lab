@@ -2072,7 +2072,11 @@
 "utc": "2026-11-20T20:00Z",
 "h": "Toulouse",
 "a": "Marseille",
-"st": "STATUS_SCHEDULED"
+"st": "STATUS_FULL_TIME",
+"s": [
+1,
+1
+]
 },
 {
 "id": "401888025",
@@ -2107,6 +2111,48 @@
 "utc": "2026-11-22T14:00Z",
 "h": "Paris FC",
 "a": "FC Fleury 91",
+"st": "STATUS_SCHEDULED"
+},
+{
+"id": "401885640",
+"utc": "2026-12-12T16:00Z",
+"h": "FC Fleury 91",
+"a": "Le Havre AC",
+"st": "STATUS_SCHEDULED"
+},
+{
+"id": "401885598",
+"utc": "2026-12-12T16:00Z",
+"h": "Montpellier",
+"a": "Strasbourg",
+"st": "STATUS_SCHEDULED"
+},
+{
+"id": "401885599",
+"utc": "2026-12-12T16:00Z",
+"h": "Nantes",
+"a": "OL Lyonnes",
+"st": "STATUS_SCHEDULED"
+},
+{
+"id": "401885597",
+"utc": "2026-12-12T16:00Z",
+"h": "Paris FC",
+"a": "Marseille",
+"st": "STATUS_SCHEDULED"
+},
+{
+"id": "401888024",
+"utc": "2026-12-12T16:00Z",
+"h": "Saint-Malo",
+"a": "Lens",
+"st": "STATUS_SCHEDULED"
+},
+{
+"id": "401885691",
+"utc": "2026-12-12T16:00Z",
+"h": "Toulouse",
+"a": "Paris Saint-Germain",
 "st": "STATUS_SCHEDULED"
 }
 ]

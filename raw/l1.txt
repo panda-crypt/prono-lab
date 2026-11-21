@@ -88,7 +88,7 @@
 8 Nov 2026|16:15|Le Havre|Lorient|0-2
 8 Nov 2026|16:15|Le Mans|Monaco|1-1 (0-1)
 8 Nov 2026|19:45|Lens|Olympique Marseille|1-2 (1-1)
-20 Nov 2026|19:45|Troyes|Le Havre|
+20 Nov 2026|19:45|Troyes|Le Havre|3-1
 21 Nov 2026|16:15|Nice|Paris Saint Germain|
 21 Nov 2026|19:45|LOSC Lille|Olympique Lyonnais|
 21 Nov 2026|19:45|Lens|Toulouse|

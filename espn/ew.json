@@ -2283,5 +2283,12 @@
 "h": "Tottenham Hotspur",
 "a": "Charlton Athletic",
 "st": "STATUS_SCHEDULED"
+},
+{
+"id": "401902848",
+"utc": "2026-12-12T12:45Z",
+"h": "Chelsea",
+"a": "London City Lionesses",
+"st": "STATUS_SCHEDULED"
 }
 ]

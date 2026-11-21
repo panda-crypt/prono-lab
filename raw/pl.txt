@@ -119,3 +119,11 @@
 29 Nov 2026|14:05|Sunderland|Tottenham Hotspur|
 29 Nov 2026|16:30|Arsenal|Manchester City|
 1 Dec 2026|20:00|Coventry City|Ipswich Town|
+2 Dec 2026|19:30|Chelsea|Crystal Palace|
+2 Dec 2026|19:30|Hull City|Nottingham Forest|
+2 Dec 2026|19:30|Liverpool|Sunderland|
+2 Dec 2026|19:30|Manchester City|Leeds United|
+2 Dec 2026|20:15|AFC Bournemouth|Brighton & Hove Albion|
+2 Dec 2026|20:15|Aston Villa|Everton|
+2 Dec 2026|20:15|Brentford|Arsenal|
+2 Dec 2026|20:15|Newcastle United|Manchester United|

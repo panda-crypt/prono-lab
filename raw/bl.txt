@@ -79,7 +79,7 @@
 8 Nov 2026|14:30|FC Köln|Bayer 04 Leverkusen|1-2
 8 Nov 2026|16:30|SC Freiburg|FC Union Berlin|2-0
 8 Nov 2026|18:30|TSG Hoffenheim|Schalke 04|2-1
-20 Nov 2026|19:30|FC Bayern München|FC Köln|
+20 Nov 2026|19:30|FC Bayern München|FC Köln|1-1
 21 Nov 2026|14:30|Bayer 04 Leverkusen|Paderborn|
 21 Nov 2026|14:30|Borussia Mönchengladbach|Borussia Dortmund|
 21 Nov 2026|14:30|Eintracht Frankfurt|TSG Hoffenheim|
