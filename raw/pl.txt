@@ -98,13 +98,13 @@
 8 Nov 2026|14:00|Ipswich Town|AFC Bournemouth|1-2 (0-1)
 8 Nov 2026|14:00|Sunderland|Chelsea|1-0 (1-0)
 8 Nov 2026|16:30|Manchester United|Aston Villa|4-4 (2-2)
-21 Nov 2026|12:30|Manchester City|Fulham|
-21 Nov 2026|15:00|AFC Bournemouth|Nottingham Forest|
-21 Nov 2026|15:00|Aston Villa|Sunderland|
-21 Nov 2026|15:00|Chelsea|Leeds United|
-21 Nov 2026|15:00|Coventry City|Crystal Palace|
-21 Nov 2026|15:00|Tottenham Hotspur|Ipswich Town|
-21 Nov 2026|17:30|Newcastle United|Arsenal|
+21 Nov 2026|12:30|Manchester City|Fulham|1-1
+21 Nov 2026|15:00|AFC Bournemouth|Nottingham Forest|2-0
+21 Nov 2026|15:00|Aston Villa|Sunderland|0-0
+21 Nov 2026|15:00|Chelsea|Leeds United|1-4
+21 Nov 2026|15:00|Coventry City|Crystal Palace|3-2
+21 Nov 2026|15:00|Tottenham Hotspur|Ipswich Town|2-0
+21 Nov 2026|17:30|Newcastle United|Arsenal|0-0
 22 Nov 2026|14:00|Hull City|Brighton & Hove Albion|
 22 Nov 2026|16:30|Liverpool|Manchester United|
 23 Nov 2026|20:00|Brentford|Everton|

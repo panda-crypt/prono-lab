@@ -80,12 +80,12 @@
 8 Nov 2026|16:30|SC Freiburg|FC Union Berlin|2-0
 8 Nov 2026|18:30|TSG Hoffenheim|Schalke 04|2-1
 20 Nov 2026|19:30|FC Bayern München|FC Köln|1-1
-21 Nov 2026|14:30|Bayer 04 Leverkusen|Paderborn|
-21 Nov 2026|14:30|Borussia Mönchengladbach|Borussia Dortmund|
-21 Nov 2026|14:30|Eintracht Frankfurt|TSG Hoffenheim|
-21 Nov 2026|14:30|Elversberg|SC Freiburg|
-21 Nov 2026|14:30|FC Union Berlin|RB Leipzig|
-21 Nov 2026|17:30|Schalke 04|VfB Stuttgart|
+21 Nov 2026|14:30|Bayer 04 Leverkusen|Paderborn|4-0
+21 Nov 2026|14:30|Borussia Mönchengladbach|Borussia Dortmund|0-1
+21 Nov 2026|14:30|Eintracht Frankfurt|TSG Hoffenheim|1-0
+21 Nov 2026|14:30|Elversberg|SC Freiburg|0-1
+21 Nov 2026|14:30|FC Union Berlin|RB Leipzig|1-5
+21 Nov 2026|17:30|Schalke 04|VfB Stuttgart|0-0
 22 Nov 2026|14:30|FC Augsburg|FSV Mainz 05|
 22 Nov 2026|16:30|Werder Bremen|Hamburger SV|
 27 Nov 2026|19:30|Werder Bremen|Borussia Mönchengladbach|

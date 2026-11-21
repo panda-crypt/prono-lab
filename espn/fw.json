@@ -2083,14 +2083,18 @@
 "utc": "2026-11-21T15:00Z",
 "h": "Lens",
 "a": "Montpellier",
-"st": "STATUS_SCHEDULED"
+"st": "STATUS_FULL_TIME",
+"s": [
+0,
+1
+]
 },
 {
 "id": "401885642",
 "utc": "2026-11-21T17:00Z",
 "h": "Le Havre AC",
 "a": "Nantes",
-"st": "STATUS_SCHEDULED"
+"st": "STATUS_FIRST_HALF"
 },
 {
 "id": "401885692",

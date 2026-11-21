@@ -2226,14 +2226,18 @@
 "utc": "2026-11-21T12:45Z",
 "h": "Liverpool",
 "a": "Chelsea",
-"st": "STATUS_SCHEDULED"
+"st": "STATUS_FULL_TIME",
+"s": [
+0,
+0
+]
 },
 {
 "id": "401902854",
 "utc": "2026-11-21T17:15Z",
 "h": "London City Lionesses",
 "a": "Crystal Palace",
-"st": "STATUS_SCHEDULED"
+"st": "STATUS_FIRST_HALF"
 },
 {
 "id": "401902857",
