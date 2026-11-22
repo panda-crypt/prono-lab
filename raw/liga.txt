@@ -121,8 +121,8 @@
 20 Nov 2026|20:00|Athletic Club|Espanyol|0-1
 21 Nov 2026|13:00|Deportivo Alavés|Deportivo La Coruña|3-1
 21 Nov 2026|15:15|Rayo Vallecano|Valencia|0-1
-21 Nov 2026|17:30|Sevilla|Real Betis|0-0
-21 Nov 2026|20:00|Real Madrid|Celta de Vigo|
+21 Nov 2026|17:30|Sevilla|Real Betis|1-1
+21 Nov 2026|20:00|Real Madrid|Celta de Vigo|2-1
 22 Nov 2026|13:00|FC Barcelona|Villarreal|
 22 Nov 2026|15:15|Racing Santander|Real Sociedad|
 22 Nov 2026|17:30|Osasuna|Málaga|

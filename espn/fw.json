@@ -2094,14 +2094,22 @@
 "utc": "2026-11-21T17:00Z",
 "h": "Le Havre AC",
 "a": "Nantes",
-"st": "STATUS_FIRST_HALF"
+"st": "STATUS_FULL_TIME",
+"s": [
+2,
+4
+]
 },
 {
 "id": "401885692",
 "utc": "2026-11-21T20:00Z",
 "h": "Paris Saint-Germain",
 "a": "Saint-Malo",
-"st": "STATUS_SCHEDULED"
+"st": "STATUS_FULL_TIME",
+"s": [
+1,
+0
+]
 },
 {
 "id": "401885641",

@@ -2237,7 +2237,11 @@
 "utc": "2026-11-21T17:15Z",
 "h": "London City Lionesses",
 "a": "Crystal Palace",
-"st": "STATUS_FIRST_HALF"
+"st": "STATUS_FULL_TIME",
+"s": [
+6,
+2
+]
 },
 {
 "id": "401902857",
@@ -2293,6 +2297,34 @@
 "utc": "2026-12-12T12:45Z",
 "h": "Chelsea",
 "a": "London City Lionesses",
+"st": "STATUS_SCHEDULED"
+},
+{
+"id": "401902847",
+"utc": "2026-12-13T12:00Z",
+"h": "Crystal Palace",
+"a": "Manchester City",
+"st": "STATUS_SCHEDULED"
+},
+{
+"id": "401902850",
+"utc": "2026-12-13T12:00Z",
+"h": "Manchester United",
+"a": "Brighton & Hove Albion",
+"st": "STATUS_SCHEDULED"
+},
+{
+"id": "401902849",
+"utc": "2026-12-13T14:00Z",
+"h": "Birmingham City",
+"a": "Liverpool",
+"st": "STATUS_SCHEDULED"
+},
+{
+"id": "401902845",
+"utc": "2026-12-13T14:00Z",
+"h": "West Ham United",
+"a": "Aston Villa",
 "st": "STATUS_SCHEDULED"
 }
 ]

@@ -110,8 +110,8 @@
 8 Nov 2026|19:45|Fiorentina|Juventus|2-2 (1-1)
 21 Nov 2026|14:00|Como|Cagliari|2-0
 21 Nov 2026|14:00|Lazio|Lecce|3-0
-21 Nov 2026|17:00|Parma|Roma|0-0
-21 Nov 2026|19:45|Napoli|Torino|
+21 Nov 2026|17:00|Parma|Roma|1-5
+21 Nov 2026|19:45|Napoli|Torino|1-0
 22 Nov 2026|11:30|Juventus|Venezia|
 22 Nov 2026|14:00|Bologna|Udinese|
 22 Nov 2026|14:00|Sassuolo|Genoa|
