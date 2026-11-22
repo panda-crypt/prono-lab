@@ -3634,21 +3634,29 @@
 "utc": "2026-11-22T11:00Z",
 "h": "Granada",
 "a": "Real Madrid",
-"st": "STATUS_SCHEDULED"
+"st": "STATUS_FULL_TIME",
+"s": [
+1,
+5
+]
 },
 {
 "id": "401882445",
 "utc": "2026-11-22T11:00Z",
 "h": "Real Sociedad",
 "a": "Sevilla",
-"st": "STATUS_SCHEDULED"
+"st": "STATUS_FULL_TIME",
+"s": [
+1,
+0
+]
 },
 {
 "id": "401882452",
 "utc": "2026-11-22T16:00Z",
 "h": "Tenerife",
 "a": "Madrid CFF",
-"st": "STATUS_SCHEDULED"
+"st": "STATUS_SECOND_HALF"
 },
 {
 "id": "401882448",

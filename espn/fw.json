@@ -2116,14 +2116,22 @@
 "utc": "2026-11-22T14:00Z",
 "h": "OL Lyonnes",
 "a": "Strasbourg",
-"st": "STATUS_SCHEDULED"
+"st": "STATUS_FULL_TIME",
+"s": [
+5,
+2
+]
 },
 {
 "id": "401885643",
 "utc": "2026-11-22T14:00Z",
 "h": "Paris FC",
 "a": "FC Fleury 91",
-"st": "STATUS_SCHEDULED"
+"st": "STATUS_FULL_TIME",
+"s": [
+2,
+1
+]
 },
 {
 "id": "401885640",

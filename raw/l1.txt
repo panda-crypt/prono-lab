@@ -94,8 +94,8 @@
 21 Nov 2026|19:45|Lens|Toulouse|1-1
 21 Nov 2026|19:45|Monaco|Auxerre|1-1
 21 Nov 2026|19:45|Strasbourg|Brest|0-1
-22 Nov 2026|14:00|Paris|Angers SCO|
-22 Nov 2026|16:15|Lorient|Rennes|
+22 Nov 2026|14:00|Paris|Angers SCO|4-0
+22 Nov 2026|16:15|Lorient|Rennes|1-1
 22 Nov 2026|19:45|Olympique Marseille|Le Mans|
 27 Nov 2026|19:45|Brest|Paris|
 28 Nov 2026|16:15|Angers SCO|Lens|

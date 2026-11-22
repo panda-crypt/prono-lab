@@ -2248,35 +2248,55 @@
 "utc": "2026-11-22T12:00Z",
 "h": "Birmingham City",
 "a": "Manchester United",
-"st": "STATUS_SCHEDULED"
+"st": "STATUS_FULL_TIME",
+"s": [
+1,
+2
+]
 },
 {
 "id": "401902852",
 "utc": "2026-11-22T12:00Z",
 "h": "Manchester City",
 "a": "Tottenham Hotspur",
-"st": "STATUS_SCHEDULED"
+"st": "STATUS_FULL_TIME",
+"s": [
+1,
+3
+]
 },
 {
 "id": "401902856",
 "utc": "2026-11-22T14:00Z",
 "h": "Charlton Athletic",
 "a": "Aston Villa",
-"st": "STATUS_SCHEDULED"
+"st": "STATUS_FULL_TIME",
+"s": [
+1,
+1
+]
 },
 {
 "id": "401902855",
 "utc": "2026-11-22T14:00Z",
 "h": "Everton",
 "a": "Brighton & Hove Albion",
-"st": "STATUS_SCHEDULED"
+"st": "STATUS_FULL_TIME",
+"s": [
+0,
+1
+]
 },
 {
 "id": "401902858",
 "utc": "2026-11-22T14:30Z",
 "h": "Arsenal",
 "a": "West Ham United",
-"st": "STATUS_SCHEDULED"
+"st": "STATUS_FULL_TIME",
+"s": [
+0,
+0
+]
 },
 {
 "id": "401902851",
