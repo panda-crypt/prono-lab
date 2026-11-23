@@ -128,3 +128,9 @@
 2 Dec 2026|20:15|Brentford|Arsenal|
 2 Dec 2026|20:15|Newcastle United|Manchester United|
 3 Dec 2026|20:00|Tottenham Hotspur|Fulham|
+5 Dec 2026|12:30|Chelsea|Liverpool|
+5 Dec 2026|15:00|AFC Bournemouth|Hull City|
+5 Dec 2026|15:00|Aston Villa|Crystal Palace|
+5 Dec 2026|15:00|Leeds United|Ipswich Town|
+5 Dec 2026|15:00|Manchester United|Coventry City|
+5 Dec 2026|17:30|Nottingham Forest|Brighton & Hove Albion|

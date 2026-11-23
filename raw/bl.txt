@@ -98,3 +98,9 @@
 29 Nov 2026|16:30|TSG Hoffenheim|FC Augsburg|
 29 Nov 2026|18:30|Borussia Dortmund|Bayer 04 Leverkusen|
 4 Dec 2026|19:30|FC Bayern München|Paderborn|
+5 Dec 2026|14:30|Bayer 04 Leverkusen|Borussia Mönchengladbach|
+5 Dec 2026|14:30|FC Augsburg|FC Köln|
+5 Dec 2026|14:30|FC Union Berlin|Hamburger SV|
+5 Dec 2026|14:30|RB Leipzig|FSV Mainz 05|
+5 Dec 2026|14:30|SC Freiburg|TSG Hoffenheim|
+5 Dec 2026|17:30|Eintracht Frankfurt|Werder Bremen|

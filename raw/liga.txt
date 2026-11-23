@@ -141,3 +141,6 @@
 2 Dec 2026|18:00|Real Sociedad|Real Madrid|
 2 Dec 2026|20:30|FC Barcelona|Atlético Madrid|
 4 Dec 2026|20:00|Deportivo Alavés|Espanyol|
+5 Dec 2026|13:00|Racing Santander|Deportivo La Coruña|
+5 Dec 2026|15:15|Rayo Vallecano|Levante|
+5 Dec 2026|17:30|Villarreal|Real Sociedad|
