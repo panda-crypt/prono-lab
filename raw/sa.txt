@@ -115,8 +115,8 @@
 22 Nov 2026|11:30|Juventus|Venezia|4-0
 22 Nov 2026|14:00|Bologna|Udinese|1-1
 22 Nov 2026|14:00|Sassuolo|Genoa|0-2
-22 Nov 2026|17:00|AC Milan|Frosinone|2-1
-22 Nov 2026|19:45|Atalanta|Inter|
+22 Nov 2026|17:00|AC Milan|Frosinone|5-1
+22 Nov 2026|19:45|Atalanta|Inter|4-4
 23 Nov 2026|19:45|Monza|Fiorentina|
 27 Nov 2026|19:45|Venezia|Bologna|
 28 Nov 2026|14:00|Frosinone|Parma|
@@ -128,3 +128,4 @@
 29 Nov 2026|19:45|Como|Juventus|
 30 Nov 2026|17:30|Lecce|Atalanta|
 30 Nov 2026|19:45|Cagliari|AC Milan|
+4 Dec 2026|19:45|Bologna|Roma|

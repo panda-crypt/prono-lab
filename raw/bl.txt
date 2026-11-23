@@ -87,7 +87,7 @@
 21 Nov 2026|14:30|FC Union Berlin|RB Leipzig|1-5
 21 Nov 2026|17:30|Schalke 04|VfB Stuttgart|0-0
 22 Nov 2026|14:30|FC Augsburg|FSV Mainz 05|3-1
-22 Nov 2026|16:30|Werder Bremen|Hamburger SV|0-0
+22 Nov 2026|16:30|Werder Bremen|Hamburger SV|4-0
 27 Nov 2026|19:30|Werder Bremen|Borussia Mönchengladbach|
 28 Nov 2026|14:30|FC Köln|Elversberg|
 28 Nov 2026|14:30|FSV Mainz 05|FC Union Berlin|
@@ -97,3 +97,4 @@
 29 Nov 2026|14:30|SC Freiburg|RB Leipzig|
 29 Nov 2026|16:30|TSG Hoffenheim|FC Augsburg|
 29 Nov 2026|18:30|Borussia Dortmund|Bayer 04 Leverkusen|
+4 Dec 2026|19:30|FC Bayern München|Paderborn|

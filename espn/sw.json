@@ -3656,14 +3656,22 @@
 "utc": "2026-11-22T16:00Z",
 "h": "Tenerife",
 "a": "Madrid CFF",
-"st": "STATUS_SECOND_HALF"
+"st": "STATUS_FULL_TIME",
+"s": [
+0,
+3
+]
 },
 {
 "id": "401882448",
 "utc": "2026-11-22T18:00Z",
 "h": "Barcelona",
 "a": "Athletic Club",
-"st": "STATUS_SCHEDULED"
+"st": "STATUS_FULL_TIME",
+"s": [
+6,
+0
+]
 },
 {
 "id": "401882449",

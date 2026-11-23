@@ -125,8 +125,8 @@
 21 Nov 2026|20:00|Real Madrid|Celta de Vigo|2-1
 22 Nov 2026|13:00|FC Barcelona|Villarreal|3-2
 22 Nov 2026|15:15|Racing Santander|Real Sociedad|3-2
-22 Nov 2026|17:30|Osasuna|Málaga|0-0
-22 Nov 2026|20:00|Getafe|Atlético Madrid|
+22 Nov 2026|17:30|Osasuna|Málaga|1-0
+22 Nov 2026|20:00|Getafe|Atlético Madrid|0-3
 23 Nov 2026|20:00|Levante|Elche|
 27 Nov 2026|20:00|Levante|Racing Santander|
 28 Nov 2026|13:00|Real Betis|Rayo Vallecano|
@@ -140,3 +140,4 @@
 30 Nov 2026|20:00|Espanyol|Getafe|
 2 Dec 2026|18:00|Real Sociedad|Real Madrid|
 2 Dec 2026|20:30|FC Barcelona|Atlético Madrid|
+4 Dec 2026|20:00|Deportivo Alavés|Espanyol|

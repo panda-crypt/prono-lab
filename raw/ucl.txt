@@ -89,3 +89,12 @@
 25 Nov 2026|20:00|Paris Saint Germain|Roma|
 25 Nov 2026|20:00|Shakhtar Donetsk|Fenerbahçe|
 25 Nov 2026|20:00|Sporting CP|Manchester United|
+8 Dec 2026|17:45|Viking|Feyenoord|
+8 Dec 2026|17:45|Villarreal|Sabah|
+8 Dec 2026|20:00|AEK Athens|Galatasaray|
+8 Dec 2026|20:00|Aston Villa|Paris Saint Germain|
+8 Dec 2026|20:00|FC Barcelona|Manchester City|
+8 Dec 2026|20:00|FC Bayern München|Slavia Praha|
+8 Dec 2026|20:00|Manchester United|RB Leipzig|
+8 Dec 2026|20:00|Napoli|Club Brugge|
+8 Dec 2026|20:00|Roma|Sporting CP|

@@ -2005,27 +2005,43 @@
 "utc": "2026-11-22T15:45Z",
 "h": "De Graafschap",
 "a": "Ajax Amsterdam",
-"st": "STATUS_SECOND_HALF"
+"st": "STATUS_FULL_TIME",
+"s": [
+0,
+5
+]
 },
 {
 "id": "401882129",
 "utc": "2026-11-22T15:45Z",
 "h": "FC Utrecht",
 "a": "AZ Alkmaar",
-"st": "STATUS_SECOND_HALF"
+"st": "STATUS_FULL_TIME",
+"s": [
+1,
+3
+]
 },
 {
 "id": "401882132",
 "utc": "2026-11-22T15:45Z",
 "h": "Feyenoord Rotterdam",
 "a": "FC Twente",
-"st": "STATUS_SECOND_HALF"
+"st": "STATUS_FULL_TIME",
+"s": [
+0,
+1
+]
 },
 {
 "id": "401882131",
 "utc": "2026-11-22T15:45Z",
 "h": "PSV Eindhoven",
 "a": "PEC Zwolle",
-"st": "STATUS_SECOND_HALF"
+"st": "STATUS_FULL_TIME",
+"s": [
+0,
+0
+]
 }
 ]

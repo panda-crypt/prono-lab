@@ -106,7 +106,7 @@
 21 Nov 2026|15:00|Tottenham Hotspur|Ipswich Town|2-0
 21 Nov 2026|17:30|Newcastle United|Arsenal|2-2
 22 Nov 2026|14:00|Hull City|Brighton & Hove Albion|2-0
-22 Nov 2026|16:30|Liverpool|Manchester United|2-0
+22 Nov 2026|16:30|Liverpool|Manchester United|4-0
 23 Nov 2026|20:00|Brentford|Everton|
 27 Nov 2026|20:00|Nottingham Forest|Chelsea|
 28 Nov 2026|15:00|Leeds United|Coventry City|
