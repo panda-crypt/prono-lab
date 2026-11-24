@@ -3678,7 +3678,11 @@
 "utc": "2026-11-23T19:00Z",
 "h": "Espanyol",
 "a": "Valencia",
-"st": "STATUS_SCHEDULED"
+"st": "STATUS_FULL_TIME",
+"s": [
+2,
+0
+]
 },
 {
 "id": "401882444",

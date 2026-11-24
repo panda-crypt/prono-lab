@@ -117,7 +117,7 @@
 22 Nov 2026|14:00|Sassuolo|Genoa|0-2
 22 Nov 2026|17:00|AC Milan|Frosinone|5-1
 22 Nov 2026|19:45|Atalanta|Inter|4-4
-23 Nov 2026|19:45|Monza|Fiorentina|
+23 Nov 2026|19:45|Monza|Fiorentina|3-0
 27 Nov 2026|19:45|Venezia|Bologna|
 28 Nov 2026|14:00|Frosinone|Parma|
 28 Nov 2026|17:00|Torino|Lazio|
@@ -131,3 +131,6 @@
 4 Dec 2026|19:45|Bologna|Roma|
 5 Dec 2026|14:00|Monza|Como|
 5 Dec 2026|17:00|Frosinone|Inter|
+5 Dec 2026|19:45|Napoli|Lecce|
+6 Dec 2026|11:30|Genoa|Torino|
+6 Dec 2026|14:00|Lazio|Atalanta|

@@ -107,7 +107,7 @@
 21 Nov 2026|17:30|Newcastle United|Arsenal|2-2
 22 Nov 2026|14:00|Hull City|Brighton & Hove Albion|2-0
 22 Nov 2026|16:30|Liverpool|Manchester United|4-0
-23 Nov 2026|20:00|Brentford|Everton|
+23 Nov 2026|20:00|Brentford|Everton|4-0
 27 Nov 2026|20:00|Nottingham Forest|Chelsea|
 28 Nov 2026|15:00|Leeds United|Coventry City|
 28 Nov 2026|15:00|Manchester United|Brentford|
@@ -134,3 +134,6 @@
 5 Dec 2026|15:00|Leeds United|Ipswich Town|
 5 Dec 2026|15:00|Manchester United|Coventry City|
 5 Dec 2026|17:30|Nottingham Forest|Brighton & Hove Albion|
+5 Dec 2026|20:00|Brentford|Manchester City|
+6 Dec 2026|14:00|Everton|Fulham|
+6 Dec 2026|14:00|Newcastle United|Sunderland|
