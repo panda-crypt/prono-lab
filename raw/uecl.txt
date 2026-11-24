@@ -53,3 +53,21 @@
 5 Nov 2026|21:00|Panathinaikos|CSKA Sofia|2-1
 5 Nov 2026|21:00|Riga|Jablonec|1-1
 5 Nov 2026|21:00|Universitatea Craiova|Egnatia|2-0
+26 Nov 2026|16:30|Kairat Almaty|Mjällby|
+26 Nov 2026|18:45|Ajax|Thun|
+26 Nov 2026|18:45|Brighton|Universitatea Craiova|
+26 Nov 2026|18:45|Iberia Tbilisi|Getafe|
+26 Nov 2026|18:45|Jablonec|Lugano|
+26 Nov 2026|18:45|Kauno Žalgiris|Riga|
+26 Nov 2026|18:45|Hearts|Monaco|
+26 Nov 2026|18:45|Egnatia|Lincoln Red Imps|
+26 Nov 2026|18:45|Pafos|Midtjylland|
+26 Nov 2026|18:45|Brann|Aarhus|
+26 Nov 2026|21:00|Nordsjælland|Panathinaikos|
+26 Nov 2026|21:00|Borac|Atalanta|
+26 Nov 2026|21:00|Hajduk Split|Sint-Truidense|
+26 Nov 2026|21:00|Inter Escaldes|Copenhagen|
+26 Nov 2026|21:00|Gent|Crvena Zvezda|
+26 Nov 2026|21:00|CSKA Sofia|Trabzonspor|
+26 Nov 2026|21:00|Braga|KuPS Kuopio|
+26 Nov 2026|21:00|Freiburg|Twente|
