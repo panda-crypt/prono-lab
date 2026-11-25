@@ -71,15 +71,15 @@
 4 Nov 2026|20:00|RB Leipzig|Manchester City|2-3 (0-1)
 4 Nov 2026|20:00|Slavia Praha|Arsenal|1-2
 4 Nov 2026|20:00|Viking|Sabah|4-1
-24 Nov 2026|17:45|Bodø / Glimt|LASK Linz|
-24 Nov 2026|17:45|Galatasaray|Aston Villa|
-24 Nov 2026|20:00|Arsenal|Borussia Dortmund|
-24 Nov 2026|20:00|Como|AEK Athens|
-24 Nov 2026|20:00|Feyenoord|Porto|
-24 Nov 2026|20:00|Manchester City|Napoli|
-24 Nov 2026|20:00|RB Leipzig|Lens|
-24 Nov 2026|20:00|Real Madrid|PSV|
-24 Nov 2026|20:00|Slovan Bratislava|Real Betis|
+24 Nov 2026|17:45|Bodø / Glimt|LASK Linz|1-0
+24 Nov 2026|17:45|Galatasaray|Aston Villa|1-0
+24 Nov 2026|20:00|Arsenal|Borussia Dortmund|1-1
+24 Nov 2026|20:00|Como|AEK Athens|1-0
+24 Nov 2026|20:00|Feyenoord|Porto|0-1
+24 Nov 2026|20:00|Manchester City|Napoli|2-2
+24 Nov 2026|20:00|RB Leipzig|Lens|3-1
+24 Nov 2026|20:00|Real Madrid|PSV|5-1
+24 Nov 2026|20:00|Slovan Bratislava|Real Betis|0-2
 25 Nov 2026|17:45|Sabah|FC Barcelona|
 25 Nov 2026|17:45|Slavia Praha|Villarreal|
 25 Nov 2026|20:00|Atlético Madrid|Viking|

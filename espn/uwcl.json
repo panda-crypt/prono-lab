@@ -1318,5 +1318,68 @@
 2,
 3
 ]
+},
+{
+"id": "401916972",
+"utc": "2026-12-16T20:00Z",
+"h": "Bayern Munich",
+"a": "Barcelona",
+"st": "STATUS_SCHEDULED"
+},
+{
+"id": "401916970",
+"utc": "2026-12-16T20:00Z",
+"h": "HB Køge",
+"a": "Benfica",
+"st": "STATUS_SCHEDULED"
+},
+{
+"id": "401916971",
+"utc": "2026-12-16T20:00Z",
+"h": "Internazionale",
+"a": "Arsenal",
+"st": "STATUS_SCHEDULED"
+},
+{
+"id": "401916969",
+"utc": "2026-12-16T20:00Z",
+"h": "Manchester City",
+"a": "Austria Vienna",
+"st": "STATUS_SCHEDULED"
+},
+{
+"id": "401916968",
+"utc": "2026-12-16T20:00Z",
+"h": "OH Leuven",
+"a": "Chelsea",
+"st": "STATUS_SCHEDULED"
+},
+{
+"id": "401916967",
+"utc": "2026-12-16T20:00Z",
+"h": "OL Lyonnes",
+"a": "BK Häcken",
+"st": "STATUS_SCHEDULED"
+},
+{
+"id": "401916966",
+"utc": "2026-12-16T20:00Z",
+"h": "Paris Saint-Germain",
+"a": "Juventus",
+"st": "STATUS_SCHEDULED"
+},
+{
+"id": "401916973",
+"utc": "2026-12-16T20:00Z",
+"h": "Roma",
+"a": "Real Madrid",
+"st": "STATUS_SCHEDULED"
+},
+{
+"id": "401916965",
+"utc": "2026-12-16T20:00Z",
+"h": "Servette",
+"a": "Paris FC",
+"st": "STATUS_SCHEDULED"
 }
 ]
