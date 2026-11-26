@@ -3741,59 +3741,59 @@
 "st": "STATUS_SCHEDULED"
 },
 {
-"id": "401882436",
-"utc": "2026-12-13T20:00Z",
-"h": "Alavés",
-"a": "Real Madrid",
-"st": "STATUS_SCHEDULED"
-},
-{
-"id": "401882434",
-"utc": "2026-12-13T20:00Z",
-"h": "Dux Logroño",
-"a": "Deportivo",
-"st": "STATUS_SCHEDULED"
-},
-{
-"id": "401882433",
-"utc": "2026-12-13T20:00Z",
-"h": "Espanyol",
-"a": "Sevilla",
-"st": "STATUS_SCHEDULED"
-},
-{
-"id": "401882432",
-"utc": "2026-12-13T20:00Z",
-"h": "Granada",
-"a": "Athletic Club",
-"st": "STATUS_SCHEDULED"
-},
-{
 "id": "401882431",
-"utc": "2026-12-13T20:00Z",
+"utc": "2026-12-12T14:30Z",
 "h": "Madrid CFF",
 "a": "FC Badalona",
 "st": "STATUS_SCHEDULED"
 },
 {
+"id": "401882429",
+"utc": "2026-12-12T15:30Z",
+"h": "Valencia",
+"a": "Barcelona",
+"st": "STATUS_SCHEDULED"
+},
+{
+"id": "401882436",
+"utc": "2026-12-12T19:30Z",
+"h": "Alavés",
+"a": "Real Madrid",
+"st": "STATUS_SCHEDULED"
+},
+{
+"id": "401882432",
+"utc": "2026-12-13T11:00Z",
+"h": "Granada",
+"a": "Athletic Club",
+"st": "STATUS_SCHEDULED"
+},
+{
 "id": "401882430",
-"utc": "2026-12-13T20:00Z",
+"utc": "2026-12-13T11:00Z",
 "h": "Real Sociedad",
 "a": "Atlético Madrid",
 "st": "STATUS_SCHEDULED"
 },
 {
+"id": "401882433",
+"utc": "2026-12-13T15:00Z",
+"h": "Espanyol",
+"a": "Sevilla",
+"st": "STATUS_SCHEDULED"
+},
+{
 "id": "401882435",
-"utc": "2026-12-13T20:00Z",
+"utc": "2026-12-13T16:30Z",
 "h": "Tenerife",
 "a": "Eibar",
 "st": "STATUS_SCHEDULED"
 },
 {
-"id": "401882429",
-"utc": "2026-12-13T20:00Z",
-"h": "Valencia",
-"a": "Barcelona",
+"id": "401882434",
+"utc": "2026-12-13T17:30Z",
+"h": "Dux Logroño",
+"a": "Deportivo",
 "st": "STATUS_SCHEDULED"
 },
 {
