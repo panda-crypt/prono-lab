@@ -8,5 +8,11 @@ Clés : noms des équipes exactement comme dans raw/<championnat>.txt.
 """
 CHECKED_AT = "2026-11-25T08:45"   # date et heure de Paris de la dernière vérification
 CONTEXT = {
-    "l1": {}, "pl": {}, "liga": {}, "sa": {}, "bl": {}, "ucl": {}, "uel": {}, "uecl": {},
+    "l1": {}, "pl": {}, "liga": {}, "sa": {},
+    "bl": {
+        ("Hamburger SV", "FC Bayern München"): {"lvl": "alerte",
+            "why": "Bayern : Kane forfait (cheville, plusieurs mois), Neuer et Davies annoncés indisponibles, Olise incertain (relevé le 27/11 à 3h, avant-matchs du 26/11)",
+            "src": "https://www.sportsmole.co.uk/football/hamburger-sv/bundesliga-title-race/preview/hamburger-sv-vs-bayern-prediction-team-news-lineups_609927.html"},
+    },
+    "ucl": {}, "uel": {}, "uecl": {},
 }

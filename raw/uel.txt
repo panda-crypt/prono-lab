@@ -75,8 +75,8 @@
 26 Nov 2026|18:45|Salzburg|Ararat-Armenia|
 26 Nov 2026|18:45|Viktoria Plzeň|Benfica|
 26 Nov 2026|18:45|GNK Dinamo|Leverkusen|
-26 Nov 2026|18:45|Olympiacos|Milan|
-26 Nov 2026|18:45|Marseille|Levski Sofia|
+26 Nov 2026|18:45|Olympiacos|Milan|2-4 (1-0)
+26 Nov 2026|18:45|Marseille|Levski Sofia|1-0 (1-0)
 26 Nov 2026|18:45|Union SG|Lech Poznań|
 26 Nov 2026|18:45|Celta|Bournemouth|
 26 Nov 2026|21:00|Sparta Praha|AZ Alkmaar|
