@@ -88,7 +88,7 @@
 21 Nov 2026|17:30|Schalke 04|VfB Stuttgart|0-0
 22 Nov 2026|14:30|FC Augsburg|FSV Mainz 05|3-1
 22 Nov 2026|16:30|Werder Bremen|Hamburger SV|4-0
-27 Nov 2026|19:30|Werder Bremen|Borussia Mönchengladbach|
+27 Nov 2026|19:30|Werder Bremen|Borussia Mönchengladbach|3-3
 28 Nov 2026|14:30|FC Köln|Elversberg|
 28 Nov 2026|14:30|FSV Mainz 05|FC Union Berlin|
 28 Nov 2026|14:30|Hamburger SV|FC Bayern München|

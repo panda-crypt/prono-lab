@@ -2043,5 +2043,12 @@
 0,
 0
 ]
+},
+{
+"id": "401882127",
+"utc": "2026-12-19T13:00Z",
+"h": "ADO Den Haag",
+"a": "PEC Zwolle",
+"st": "STATUS_SCHEDULED"
 }
 ]
