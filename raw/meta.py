@@ -129,5 +129,5 @@ LEAGUES = {
 SOURCES = [
   ["statz.ai — résultats, calendrier et xG des 5 championnats", "https://statz.ai/competitions"],
   ["Wikipédia — classements finaux 2025-26", "https://en.wikipedia.org/wiki/2025%E2%80%9326_Premier_League"],
-  ["OddsPortal — relevé manuel des cotes 1/N/2 des 5 championnats (aucun en cours depuis le 31/10 : cotes moyennes de football-data.co.uk)", "https://www.oddsportal.com/football/"],
+  ["gainblers — relevé manuel des cotes 1/N/2 des 5 championnats (Betway et Bet365, relevé du 27/11 ; sinon cotes moyennes de football-data.co.uk quand elles sont plus récentes)", "https://gainblers.com/es/pronosticos/futbol/"],
 ]
