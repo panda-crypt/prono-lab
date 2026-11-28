@@ -119,7 +119,7 @@
 22 Nov 2026|19:45|Atalanta|Inter|4-4
 23 Nov 2026|19:45|Monza|Fiorentina|3-0
 27 Nov 2026|19:45|Venezia|Bologna|0-0
-28 Nov 2026|14:00|Frosinone|Parma|
+28 Nov 2026|14:00|Frosinone|Parma|0-0
 28 Nov 2026|17:00|Torino|Lazio|
 28 Nov 2026|19:45|Inter|Genoa|
 29 Nov 2026|11:30|Udinese|Fiorentina|
